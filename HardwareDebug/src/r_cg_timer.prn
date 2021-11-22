@@ -1,0 +1,456 @@
+RL78 Family Assembler V1.10.00.01 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RL Compiler RL78 Assembler Source
+00000000                        2  #@  CC-RL Version : V1.10.00 [20 Nov 2020]
+00000000                        3  #@  Commmand :
+00000000                        4  #@   -cpu=S3
+00000000                        5  #@   -c
+00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+00000000                        7  #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src
+00000000                        8  #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
+00000000                        9  #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
+00000000                       10  #@   -character_set=utf8
+00000000                       11  #@   -lang=c99
+00000000                       12  #@   -g
+00000000                       13  #@   -asmopt=-prn_path=src
+00000000                       14  #@   -asm_path=src/
+00000000                       15  #@   -pass_source
+00000000                       16  #@   -o src/r_cg_timer.obj
+00000000                       17  #@   ../src/r_cg_timer.c
+00000000                       18  #@  compiled at Mon Nov 22 10:16:18 2021
+00000000                       19  
+00000000                       20  	.PUBLIC _R_TAU0_Create
+00000000                       21  	.PUBLIC _R_TAU0_Channel0_Start
+00000000                       22  	.PUBLIC _R_TAU0_Channel0_Stop
+00000000                       23  	.PUBLIC _R_TAU0_Channel1_Start
+00000000                       24  	.PUBLIC _R_TAU0_Channel1_Stop
+00000000                       25  	.PUBLIC _R_TAU0_Channel2_Start
+00000000                       26  	.PUBLIC _R_TAU0_Channel2_Stop
+00000000                       27  
+00000000                       28  	.SECTION .textf,TEXTF
+00000000                       29  _R_TAU0_Create:
+00000000                       30  	.STACK _R_TAU0_Create = 4
+00000000                       31  	;***        1 : /***********************************************************************************************************************
+00000000                       32  	;***        2 : * DISCLAIMER
+00000000                       33  	;***        3 : * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
+00000000                       34  	;***        4 : * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
+00000000                       35  	;***        5 : * applicable laws, including copyright laws. 
+00000000                       36  	;***        6 : * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
+00000000                       37  	;***        7 : * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+00000000                       38  	;***        8 : * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
+00000000                       39  	;***        9 : * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
+00000000                       40  	;***       10 : * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
+00000000                       41  	;***       11 : * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+00000000                       42  	;***       12 : * Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
+00000000                       43  	;***       13 : * of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+00000000                       44  	;***       14 : * following link:
+00000000                       45  	;***       15 : * http://www.renesas.com/disclaimer
+00000000                       46  	;***       16 : *
+00000000                       47  	;***       17 : * Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+00000000                       48  	;***       18 : ***********************************************************************************************************************/
+00000000                       49  	;***       19 : 
+00000000                       50  	;***       20 : /***********************************************************************************************************************
+00000000                       51  	;***       21 : * File Name    : r_cg_timer.c
+00000000                       52  	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+00000000                       53  	;***       23 : * Device(s)    : R5F104ML
+00000000                       54  	;***       24 : * Tool-Chain   : CCRL
+00000000                       55  	;***       25 : * Description  : This file implements device driver for TAU module.
+00000000                       56  	;***       26 : * Creation Date: 17/11/2021
+00000000                       57  	;***       27 : ***********************************************************************************************************************/
+00000000                       58  	;***       28 : 
+00000000                       59  	;***       29 : /***********************************************************************************************************************
+00000000                       60  	;***       30 : Includes
+00000000                       61  	;***       31 : ***********************************************************************************************************************/
+00000000                       62  	;***       32 : #include "r_cg_macrodriver.h"
+00000000                       63  	;***       33 : #include "r_cg_timer.h"
+00000000                       64  	;***       34 : /* Start user code for include. Do not edit comment generated here */
+00000000                       65  	;***       35 : /* End user code. Do not edit comment generated here */
+00000000                       66  	;***       36 : #include "r_cg_userdefine.h"
+00000000                       67  	;***       37 : 
+00000000                       68  	;***       38 : /***********************************************************************************************************************
+00000000                       69  	;***       39 : Pragma directive
+00000000                       70  	;***       40 : ***********************************************************************************************************************/
+00000000                       71  	;***       41 : /* Start user code for pragma. Do not edit comment generated here */
+00000000                       72  	;***       42 : /* End user code. Do not edit comment generated here */
+00000000                       73  	;***       43 : 
+00000000                       74  	;***       44 : /***********************************************************************************************************************
+00000000                       75  	;***       45 : Global variables and functions
+00000000                       76  	;***       46 : ***********************************************************************************************************************/
+00000000                       77  	;***       47 : /* Start user code for global. Do not edit comment generated here */
+00000000                       78  	;***       48 : /* End user code. Do not edit comment generated here */
+00000000                       79  	;***       49 : 
+00000000                       80  	;***       50 : /***********************************************************************************************************************
+00000000                       81  	;***       51 : * Function Name: R_TAU0_Create
+00000000                       82  	;***       52 : * Description  : This function initializes the TAU0 module.
+00000000                       83  	;***       53 : * Arguments    : None
+00000000                       84  	;***       54 : * Return Value : None
+00000000                       85  	;***       55 : ***********************************************************************************************************************/
+00000000                       86  	;***       56 : void R_TAU0_Create(void)
+00000000                       87  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 56
+00000000 34F000                88  	movw de, #0x00F0
+00000003 36F000                89  	movw hl, #0x00F0
+00000006 F6                    90  	clrw ax
+00000007                       91  	;***       57 : {
+00000007                       92  	;***       58 :     TAU0EN = 1U;    /* supplies input clock */
+00000007                       93  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 58
+00000007 7182                  94  	set1 [hl].0
+00000009 12                    95  	movw bc, ax
+0000000A                       96  	;***       59 :     TPS0 = _0000_TAU_CKM0_FCLK_0 | _0000_TAU_CKM1_FCLK_0 | _0000_TAU_CKM2_FCLK_1 | _0000_TAU_CKM3_FCLK_8;
+0000000A                       97  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 59
+0000000A BAC6                  98  	movw [de+0xC6], ax
+0000000C 300F0A                99  	movw ax, #0x0A0F
+0000000F                      100  	;***       60 :     /* Stop all channels */
+0000000F                      101  	;***       61 :     TT0 = _0001_TAU_CH0_STOP_TRG_ON | _0002_TAU_CH1_STOP_TRG_ON | _0004_TAU_CH2_STOP_TRG_ON |
+0000000F                      102  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 61
+0000000F BAC4                 103  	movw [de+0xC4], ax
+00000011                      104  	;***       62 :           _0008_TAU_CH3_STOP_TRG_ON | _0200_TAU_CH1_H8_STOP_TRG_ON | _0800_TAU_CH3_H8_STOP_TRG_ON;
+00000011                      105  	;***       63 :     /* Mask channel 0 interrupt */
+00000011                      106  	;***       64 :     TMMK00 = 1U;    /* disable INTTM00 interrupt */
+00000011                      107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 64
+00000011 714AE6               108  	set1 0xFFFE6.4
+00000014                      109  	;***       65 :     TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+00000014                      110  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 65
+00000014 714BE2               111  	clr1 0xFFFE2.4
+00000017                      112  	;***       66 :     /* Mask channel 1 interrupt */
+00000017                      113  	;***       67 :     TMMK01 = 1U;    /* disable INTTM01 interrupt */
+00000017                      114  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 67
+00000017 715AE6               115  	set1 0xFFFE6.5
+0000001A                      116  	;***       68 :     TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
+0000001A                      117  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 68
+0000001A 715BE2               118  	clr1 0xFFFE2.5
+0000001D                      119  	;***       69 :     /* Mask channel 1 higher 8 bits interrupt */
+0000001D                      120  	;***       70 :     TMMK01H = 1U;    /* disable INTTM01H interrupt */
+0000001D                      121  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 70
+0000001D 717AE5               122  	set1 0xFFFE5.7
+00000020                      123  	;***       71 :     TMIF01H = 0U;    /* clear INTTM01H interrupt flag */
+00000020                      124  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 71
+00000020 717BE1               125  	clr1 0xFFFE1.7
+00000023                      126  	;***       72 :     /* Mask channel 2 interrupt */
+00000023                      127  	;***       73 :     TMMK02 = 1U;    /* disable INTTM02 interrupt */
+00000023                      128  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 73
+00000023 716AE6               129  	set1 0xFFFE6.6
+00000026                      130  	;***       74 :     TMIF02 = 0U;    /* clear INTTM02 interrupt flag */
+00000026                      131  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 74
+00000026 716BE2               132  	clr1 0xFFFE2.6
+00000029                      133  	;***       75 :     /* Mask channel 3 interrupt */
+00000029                      134  	;***       76 :     TMMK03 = 1U;    /* disable INTTM03 interrupt */
+00000029                      135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 76
+00000029 717AE6               136  	set1 0xFFFE6.7
+0000002C                      137  	;***       77 :     TMIF03 = 0U;    /* clear INTTM03 interrupt flag */
+0000002C                      138  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 77
+0000002C 717BE2               139  	clr1 0xFFFE2.7
+0000002F                      140  	;***       78 :     /* Mask channel 3 higher 8 bits interrupt */
+0000002F                      141  	;***       79 :     TMMK03H = 1U;    /* disable INTTM03H interrupt */
+0000002F                      142  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 79
+0000002F 712AE6               143  	set1 0xFFFE6.2
+00000032                      144  	;***       80 :     TMIF03H = 0U;    /* clear INTTM03H interrupt flag */
+00000032                      145  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 80
+00000032 712BE2               146  	clr1 0xFFFE2.2
+00000035                      147  	;***       81 :     /* Set INTTM00 low priority */
+00000035                      148  	;***       82 :     TMPR100 = 1U;
+00000035                      149  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 82
+00000035 714AEE               150  	set1 0xFFFEE.4
+00000038                      151  	;***       83 :     TMPR000 = 1U;
+00000038                      152  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 83
+00000038 714AEA               153  	set1 0xFFFEA.4
+0000003B                      154  	;***       84 :     /* Set INTTM01 low priority */
+0000003B                      155  	;***       85 :     TMPR101 = 1U;
+0000003B                      156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 85
+0000003B 715AEE               157  	set1 0xFFFEE.5
+0000003E                      158  	;***       86 :     TMPR001 = 1U;
+0000003E                      159  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 86
+0000003E 715AEA               160  	set1 0xFFFEA.5
+00000041                      161  	;***       87 :     /* Set INTTM02 low priority */
+00000041                      162  	;***       88 :     TMPR102 = 1U;
+00000041                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 88
+00000041 716AEE               164  	set1 0xFFFEE.6
+00000044                      165  	;***       89 :     TMPR002 = 1U;
+00000044                      166  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 89
+00000044 716AEA               167  	set1 0xFFFEA.6
+00000047 13                   168  	movw ax, bc
+00000048                      169  	;***       90 :     /* Channel 0 used as interval timer */
+00000048                      170  	;***       91 :     TMR00 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE |
+00000048                      171  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 91
+00000048 BAA0                 172  	movw [de+0xA0], ax
+0000004A                      173  	;***       92 :             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
+0000004A                      174  	;***       93 :     TDR00 = _7CFF_TAU_TDR00_VALUE;
+0000004A                      175  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 93
+0000004A C918FF7C             176  	movw 0xFFF18, #0x7CFF
+0000004E                      177  	;***       94 :     TO0 &= ~_0001_TAU_CH0_OUTPUT_VALUE_1;
+0000004E                      178  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 94
+0000004E AAC8                 179  	movw ax, [de+0xC8]
+00000050 08                   180  	xch a, x
+00000051 5CFE                 181  	and a, #0xFE
+00000053 08                   182  	xch a, x
+00000054 BAC8                 183  	movw [de+0xC8], ax
+00000056                      184  	;***       95 :     TOE0 &= ~_0001_TAU_CH0_OUTPUT_ENABLE;
+00000056                      185  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 95
+00000056 AACA                 186  	movw ax, [de+0xCA]
+00000058 08                   187  	xch a, x
+00000059 5CFE                 188  	and a, #0xFE
+0000005B 08                   189  	xch a, x
+0000005C BACA                 190  	movw [de+0xCA], ax
+0000005E 13                   191  	movw ax, bc
+0000005F                      192  	;***       96 :     /* Channel 1 used as interval timer */
+0000005F                      193  	;***       97 :     TMR01 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_16BITS_MODE |
+0000005F                      194  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 97
+0000005F BAA2                 195  	movw [de+0xA2], ax
+00000061                      196  	;***       98 :             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
+00000061                      197  	;***       99 :     TDR01 = _0C7F_TAU_TDR01_VALUE;
+00000061                      198  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 99
+00000061 C91A7F0C             199  	movw 0xFFF1A, #0x0C7F
+00000065                      200  	;***      100 :     TOM0 &= ~_0002_TAU_CH1_OUTPUT_COMBIN;
+00000065                      201  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 100
+00000065 AACE                 202  	movw ax, [de+0xCE]
+00000067 08                   203  	xch a, x
+00000068 5CFD                 204  	and a, #0xFD
+0000006A 08                   205  	xch a, x
+0000006B BACE                 206  	movw [de+0xCE], ax
+0000006D                      207  	;***      101 :     TOL0 &= ~_0002_TAU_CH1_OUTPUT_LEVEL_L;
+0000006D                      208  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 101
+0000006D AACC                 209  	movw ax, [de+0xCC]
+0000006F 08                   210  	xch a, x
+00000070 5CFD                 211  	and a, #0xFD
+00000072 08                   212  	xch a, x
+00000073 BACC                 213  	movw [de+0xCC], ax
+00000075                      214  	;***      102 :     TO0 &= ~_0002_TAU_CH1_OUTPUT_VALUE_1;
+00000075                      215  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 102
+00000075 AAC8                 216  	movw ax, [de+0xC8]
+00000077 08                   217  	xch a, x
+00000078 5CFD                 218  	and a, #0xFD
+0000007A 08                   219  	xch a, x
+0000007B BAC8                 220  	movw [de+0xC8], ax
+0000007D                      221  	;***      103 :     TOE0 &= ~_0002_TAU_CH1_OUTPUT_ENABLE;
+0000007D                      222  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 103
+0000007D AACA                 223  	movw ax, [de+0xCA]
+0000007F 08                   224  	xch a, x
+00000080 5CFD                 225  	and a, #0xFD
+00000082 08                   226  	xch a, x
+00000083 BACA                 227  	movw [de+0xCA], ax
+00000085 13                   228  	movw ax, bc
+00000086                      229  	;***      104 :     /* Channel 2 used as interval timer */
+00000086                      230  	;***      105 :     TMR02 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE |
+00000086                      231  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 105
+00000086 BAA4                 232  	movw [de+0xA4], ax
+00000088                      233  	;***      106 :             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
+00000088                      234  	;***      107 :     TDR02 = _0C7F_TAU_TDR02_VALUE;
+00000088                      235  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 107
+00000088 CB647F0C             236  	movw 0xFFF64, #0x0C7F
+0000008C                      237  	;***      108 :     TOM0 &= ~_0004_TAU_CH2_OUTPUT_COMBIN;
+0000008C                      238  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 108
+0000008C AACE                 239  	movw ax, [de+0xCE]
+0000008E 08                   240  	xch a, x
+0000008F 5CFB                 241  	and a, #0xFB
+00000091 08                   242  	xch a, x
+00000092 BACE                 243  	movw [de+0xCE], ax
+00000094                      244  	;***      109 :     TOL0 &= ~_0004_TAU_CH2_OUTPUT_LEVEL_L;
+00000094                      245  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 109
+00000094 AACC                 246  	movw ax, [de+0xCC]
+00000096 08                   247  	xch a, x
+00000097 5CFB                 248  	and a, #0xFB
+00000099 08                   249  	xch a, x
+0000009A BACC                 250  	movw [de+0xCC], ax
+0000009C                      251  	;***      110 :     TO0 &= ~_0004_TAU_CH2_OUTPUT_VALUE_1;
+0000009C                      252  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 110
+0000009C AAC8                 253  	movw ax, [de+0xC8]
+0000009E 08                   254  	xch a, x
+0000009F 5CFB                 255  	and a, #0xFB
+000000A1 08                   256  	xch a, x
+000000A2 BAC8                 257  	movw [de+0xC8], ax
+000000A4                      258  	;***      111 :     TOE0 &= ~_0004_TAU_CH2_OUTPUT_ENABLE;
+000000A4                      259  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 111
+000000A4 AACA                 260  	movw ax, [de+0xCA]
+000000A6 08                   261  	xch a, x
+000000A7 5CFB                 262  	and a, #0xFB
+000000A9 08                   263  	xch a, x
+000000AA BACA                 264  	movw [de+0xCA], ax
+000000AC D7                   265  	ret
+000000AD                      266  _R_TAU0_Channel0_Start:
+000000AD                      267  	.STACK _R_TAU0_Channel0_Start = 4
+000000AD                      268  	;***      112 : }
+000000AD                      269  	;***      113 : 
+000000AD                      270  	;***      114 : /***********************************************************************************************************************
+000000AD                      271  	;***      115 : * Function Name: R_TAU0_Channel0_Start
+000000AD                      272  	;***      116 : * Description  : This function starts TAU0 channel 0 counter.
+000000AD                      273  	;***      117 : * Arguments    : None
+000000AD                      274  	;***      118 : * Return Value : None
+000000AD                      275  	;***      119 : ***********************************************************************************************************************/
+000000AD                      276  	;***      120 : void R_TAU0_Channel0_Start(void)
+000000AD                      277  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 120
+000000AD 34B201               278  	movw de, #0x01B2
+000000B0                      279  	;***      121 : {
+000000B0                      280  	;***      122 :     TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+000000B0                      281  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 122
+000000B0 714BE2               282  	clr1 0xFFFE2.4
+000000B3                      283  	;***      123 :     TMMK00 = 0U;    /* enable INTTM00 interrupt */
+000000B3                      284  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 123
+000000B3 714BE6               285  	clr1 0xFFFE6.4
+000000B6                      286  	;***      124 :     TS0 |= _0001_TAU_CH0_START_TRG_ON;
+000000B6                      287  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 124
+000000B6 A9                   288  	movw ax, [de]
+000000B7 08                   289  	xch a, x
+000000B8 6C01                 290  	or a, #0x01
+000000BA 08                   291  	xch a, x
+000000BB B9                   292  	movw [de], ax
+000000BC D7                   293  	ret
+000000BD                      294  _R_TAU0_Channel0_Stop:
+000000BD                      295  	.STACK _R_TAU0_Channel0_Stop = 4
+000000BD                      296  	;***      125 : }
+000000BD                      297  	;***      126 : 
+000000BD                      298  	;***      127 : /***********************************************************************************************************************
+000000BD                      299  	;***      128 : * Function Name: R_TAU0_Channel0_Stop
+000000BD                      300  	;***      129 : * Description  : This function stops TAU0 channel 0 counter.
+000000BD                      301  	;***      130 : * Arguments    : None
+000000BD                      302  	;***      131 : * Return Value : None
+000000BD                      303  	;***      132 : ***********************************************************************************************************************/
+000000BD                      304  	;***      133 : void R_TAU0_Channel0_Stop(void)
+000000BD                      305  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 133
+000000BD 34B401               306  	movw de, #0x01B4
+000000C0                      307  	;***      134 : {
+000000C0                      308  	;***      135 :     TT0 |= _0001_TAU_CH0_STOP_TRG_ON;
+000000C0                      309  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 135
+000000C0 A9                   310  	movw ax, [de]
+000000C1 08                   311  	xch a, x
+000000C2 6C01                 312  	or a, #0x01
+000000C4 08                   313  	xch a, x
+000000C5 B9                   314  	movw [de], ax
+000000C6                      315  	;***      136 :     /* Mask channel 0 interrupt */
+000000C6                      316  	;***      137 :     TMMK00 = 1U;    /* disable INTTM00 interrupt */
+000000C6                      317  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 137
+000000C6 714AE6               318  	set1 0xFFFE6.4
+000000C9                      319  	;***      138 :     TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+000000C9                      320  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 138
+000000C9 714BE2               321  	clr1 0xFFFE2.4
+000000CC D7                   322  	ret
+000000CD                      323  _R_TAU0_Channel1_Start:
+000000CD                      324  	.STACK _R_TAU0_Channel1_Start = 4
+000000CD                      325  	;***      139 : }
+000000CD                      326  	;***      140 : 
+000000CD                      327  	;***      141 : /***********************************************************************************************************************
+000000CD                      328  	;***      142 : * Function Name: R_TAU0_Channel1_Start
+000000CD                      329  	;***      143 : * Description  : This function starts TAU0 channel 1 counter.
+000000CD                      330  	;***      144 : * Arguments    : None
+000000CD                      331  	;***      145 : * Return Value : None
+000000CD                      332  	;***      146 : ***********************************************************************************************************************/
+000000CD                      333  	;***      147 : void R_TAU0_Channel1_Start(void)
+000000CD                      334  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 147
+000000CD 34B201               335  	movw de, #0x01B2
+000000D0                      336  	;***      148 : {
+000000D0                      337  	;***      149 :     TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
+000000D0                      338  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 149
+000000D0 715BE2               339  	clr1 0xFFFE2.5
+000000D3                      340  	;***      150 :     TMMK01 = 0U;    /* enable INTTM01 interrupt */
+000000D3                      341  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 150
+000000D3 715BE6               342  	clr1 0xFFFE6.5
+000000D6                      343  	;***      151 :     TS0 |= _0002_TAU_CH1_START_TRG_ON;
+000000D6                      344  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 151
+000000D6 A9                   345  	movw ax, [de]
+000000D7 08                   346  	xch a, x
+000000D8 6C02                 347  	or a, #0x02
+000000DA 08                   348  	xch a, x
+000000DB B9                   349  	movw [de], ax
+000000DC D7                   350  	ret
+000000DD                      351  _R_TAU0_Channel1_Stop:
+000000DD                      352  	.STACK _R_TAU0_Channel1_Stop = 4
+000000DD                      353  	;***      152 : }
+000000DD                      354  	;***      153 : 
+000000DD                      355  	;***      154 : /***********************************************************************************************************************
+000000DD                      356  	;***      155 : * Function Name: R_TAU0_Channel1_Stop
+000000DD                      357  	;***      156 : * Description  : This function stops TAU0 channel 1 counter.
+000000DD                      358  	;***      157 : * Arguments    : None
+000000DD                      359  	;***      158 : * Return Value : None
+000000DD                      360  	;***      159 : ***********************************************************************************************************************/
+000000DD                      361  	;***      160 : void R_TAU0_Channel1_Stop(void)
+000000DD                      362  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 160
+000000DD 34B401               363  	movw de, #0x01B4
+000000E0                      364  	;***      161 : {
+000000E0                      365  	;***      162 :     TT0 |= _0002_TAU_CH1_STOP_TRG_ON;
+000000E0                      366  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 162
+000000E0 A9                   367  	movw ax, [de]
+000000E1 08                   368  	xch a, x
+000000E2 6C02                 369  	or a, #0x02
+000000E4 08                   370  	xch a, x
+000000E5 B9                   371  	movw [de], ax
+000000E6                      372  	;***      163 :     /* Mask channel 1 interrupt */
+000000E6                      373  	;***      164 :     TMMK01 = 1U;    /* disable INTTM01 interrupt */
+000000E6                      374  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 164
+000000E6 715AE6               375  	set1 0xFFFE6.5
+000000E9                      376  	;***      165 :     TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
+000000E9                      377  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 165
+000000E9 715BE2               378  	clr1 0xFFFE2.5
+000000EC D7                   379  	ret
+000000ED                      380  _R_TAU0_Channel2_Start:
+000000ED                      381  	.STACK _R_TAU0_Channel2_Start = 4
+000000ED                      382  	;***      166 : }
+000000ED                      383  	;***      167 : 
+000000ED                      384  	;***      168 : /***********************************************************************************************************************
+000000ED                      385  	;***      169 : * Function Name: R_TAU0_Channel2_Start
+000000ED                      386  	;***      170 : * Description  : This function starts TAU0 channel 2 counter.
+000000ED                      387  	;***      171 : * Arguments    : None
+000000ED                      388  	;***      172 : * Return Value : None
+000000ED                      389  	;***      173 : ***********************************************************************************************************************/
+000000ED                      390  	;***      174 : void R_TAU0_Channel2_Start(void)
+000000ED                      391  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 174
+000000ED 34B201               392  	movw de, #0x01B2
+000000F0                      393  	;***      175 : {
+000000F0                      394  	;***      176 :     TMIF02 = 0U;    /* clear INTTM02 interrupt flag */
+000000F0                      395  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 176
+000000F0 716BE2               396  	clr1 0xFFFE2.6
+000000F3                      397  	;***      177 :     TMMK02 = 0U;    /* enable INTTM02 interrupt */
+000000F3                      398  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 177
+000000F3 716BE6               399  	clr1 0xFFFE6.6
+000000F6                      400  	;***      178 :     TS0 |= _0004_TAU_CH2_START_TRG_ON;
+000000F6                      401  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 178
+000000F6 A9                   402  	movw ax, [de]
+000000F7 08                   403  	xch a, x
+000000F8 6C04                 404  	or a, #0x04
+000000FA 08                   405  	xch a, x
+000000FB B9                   406  	movw [de], ax
+000000FC D7                   407  	ret
+000000FD                      408  _R_TAU0_Channel2_Stop:
+000000FD                      409  	.STACK _R_TAU0_Channel2_Stop = 4
+000000FD                      410  	;***      179 : }
+000000FD                      411  	;***      180 : 
+000000FD                      412  	;***      181 : /***********************************************************************************************************************
+000000FD                      413  	;***      182 : * Function Name: R_TAU0_Channel2_Stop
+000000FD                      414  	;***      183 : * Description  : This function stops TAU0 channel 2 counter.
+000000FD                      415  	;***      184 : * Arguments    : None
+000000FD                      416  	;***      185 : * Return Value : None
+000000FD                      417  	;***      186 : ***********************************************************************************************************************/
+000000FD                      418  	;***      187 : void R_TAU0_Channel2_Stop(void)
+000000FD                      419  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 187
+000000FD 34B401               420  	movw de, #0x01B4
+00000100                      421  	;***      188 : {
+00000100                      422  	;***      189 :     TT0 |= _0004_TAU_CH2_STOP_TRG_ON;
+00000100                      423  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 189
+00000100 A9                   424  	movw ax, [de]
+00000101 08                   425  	xch a, x
+00000102 6C04                 426  	or a, #0x04
+00000104 08                   427  	xch a, x
+00000105 B9                   428  	movw [de], ax
+00000106                      429  	;***      190 :     /* Mask channel 2 interrupt */
+00000106                      430  	;***      191 :     TMMK02 = 1U;    /* disable INTTM02 interrupt */
+00000106                      431  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 191
+00000106 716AE6               432  	set1 0xFFFE6.6
+00000109                      433  	;***      192 :     TMIF02 = 0U;    /* clear INTTM02 interrupt flag */
+00000109                      434  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_timer.c", 192
+00000109 716BE2               435  	clr1 0xFFFE2.6
+0000010C D7                   436  	ret
+0000010D                      437  	;***      193 : }
+0000010D                      438  	;***      194 : 
+0000010D                      439  	;***      195 : /* Start user code for adding. Do not edit comment generated here */
+0000010D                      440  	;***      196 : /* End user code. Do not edit comment generated here */
+
+Section List
+Attr     Size                Name
+
+TEXTF               269 (0000010D) .textf
+
+Command Line Parameter
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\r_cg_timer.asm.cmd 
+
+Command File Parameter
+-cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_timer.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_timer.asm 
+

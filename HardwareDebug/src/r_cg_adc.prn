@@ -1,0 +1,276 @@
+RL78 Family Assembler V1.10.00.01 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RL Compiler RL78 Assembler Source
+00000000                        2  #@  CC-RL Version : V1.10.00 [20 Nov 2020]
+00000000                        3  #@  Commmand :
+00000000                        4  #@   -cpu=S3
+00000000                        5  #@   -c
+00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+00000000                        7  #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src
+00000000                        8  #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
+00000000                        9  #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
+00000000                       10  #@   -character_set=utf8
+00000000                       11  #@   -lang=c99
+00000000                       12  #@   -g
+00000000                       13  #@   -asmopt=-prn_path=src
+00000000                       14  #@   -asm_path=src/
+00000000                       15  #@   -pass_source
+00000000                       16  #@   -o src/r_cg_adc.obj
+00000000                       17  #@   ../src/r_cg_adc.c
+00000000                       18  #@  compiled at Mon Nov 22 10:16:12 2021
+00000000                       19  
+00000000                       20  	.PUBLIC _R_ADC_Create
+00000000                       21  	.PUBLIC _R_ADC_Start
+00000000                       22  	.PUBLIC _R_ADC_Stop
+00000000                       23  	.PUBLIC _R_ADC_Set_OperationOn
+00000000                       24  	.PUBLIC _R_ADC_Set_OperationOff
+00000000                       25  	.PUBLIC _R_ADC_Get_Result
+00000000                       26  	.PUBLIC _R_ADC_Set_ADChannel
+00000000                       27  
+00000000                       28  	.SECTION .textf,TEXTF
+00000000                       29  _R_ADC_Create:
+00000000                       30  	.STACK _R_ADC_Create = 4
+00000000                       31  	;***        1 : /***********************************************************************************************************************
+00000000                       32  	;***        2 : * DISCLAIMER
+00000000                       33  	;***        3 : * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
+00000000                       34  	;***        4 : * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
+00000000                       35  	;***        5 : * applicable laws, including copyright laws. 
+00000000                       36  	;***        6 : * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
+00000000                       37  	;***        7 : * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+00000000                       38  	;***        8 : * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
+00000000                       39  	;***        9 : * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
+00000000                       40  	;***       10 : * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
+00000000                       41  	;***       11 : * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+00000000                       42  	;***       12 : * Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
+00000000                       43  	;***       13 : * of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+00000000                       44  	;***       14 : * following link:
+00000000                       45  	;***       15 : * http://www.renesas.com/disclaimer
+00000000                       46  	;***       16 : *
+00000000                       47  	;***       17 : * Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+00000000                       48  	;***       18 : ***********************************************************************************************************************/
+00000000                       49  	;***       19 : 
+00000000                       50  	;***       20 : /***********************************************************************************************************************
+00000000                       51  	;***       21 : * File Name    : r_cg_adc.c
+00000000                       52  	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+00000000                       53  	;***       23 : * Device(s)    : R5F104ML
+00000000                       54  	;***       24 : * Tool-Chain   : CCRL
+00000000                       55  	;***       25 : * Description  : This file implements device driver for ADC module.
+00000000                       56  	;***       26 : * Creation Date: 17/11/2021
+00000000                       57  	;***       27 : ***********************************************************************************************************************/
+00000000                       58  	;***       28 : 
+00000000                       59  	;***       29 : /***********************************************************************************************************************
+00000000                       60  	;***       30 : Includes
+00000000                       61  	;***       31 : ***********************************************************************************************************************/
+00000000                       62  	;***       32 : #include "r_cg_macrodriver.h"
+00000000                       63  	;***       33 : #include "r_cg_adc.h"
+00000000                       64  	;***       34 : /* Start user code for include. Do not edit comment generated here */
+00000000                       65  	;***       35 : /* End user code. Do not edit comment generated here */
+00000000                       66  	;***       36 : #include "r_cg_userdefine.h"
+00000000                       67  	;***       37 : 
+00000000                       68  	;***       38 : /***********************************************************************************************************************
+00000000                       69  	;***       39 : Pragma directive
+00000000                       70  	;***       40 : ***********************************************************************************************************************/
+00000000                       71  	;***       41 : /* Start user code for pragma. Do not edit comment generated here */
+00000000                       72  	;***       42 : /* End user code. Do not edit comment generated here */
+00000000                       73  	;***       43 : 
+00000000                       74  	;***       44 : /***********************************************************************************************************************
+00000000                       75  	;***       45 : Global variables and functions
+00000000                       76  	;***       46 : ***********************************************************************************************************************/
+00000000                       77  	;***       47 : /* Start user code for global. Do not edit comment generated here */
+00000000                       78  	;***       48 : /* End user code. Do not edit comment generated here */
+00000000                       79  	;***       49 : 
+00000000                       80  	;***       50 : /***********************************************************************************************************************
+00000000                       81  	;***       51 : * Function Name: R_ADC_Create
+00000000                       82  	;***       52 : * Description  : This function initializes the AD converter.
+00000000                       83  	;***       53 : * Arguments    : None
+00000000                       84  	;***       54 : * Return Value : None
+00000000                       85  	;***       55 : ***********************************************************************************************************************/
+00000000                       86  	;***       56 : void R_ADC_Create(void)
+00000000                       87  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 56
+00000000 301000                88  	movw ax, #0x0010
+00000003 14                    89  	movw de, ax
+00000004                       90  	;***       57 : {    
+00000004                       91  	;***       58 :     ADCEN = 1U;  /* supply AD clock */
+00000004                       92  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 58
+00000004 04E000                93  	addw ax, #0x00E0
+00000007 16                    94  	movw hl, ax
+00000008 510F                  95  	mov a, #0x0F
+0000000A 71D2                  96  	set1 [hl].5
+0000000C                       97  	;***       59 :     ADM0 = _00_AD_ADM0_INITIALVALUE;  /* disable AD conversion and clear ADM0 register */
+0000000C                       98  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 59
+0000000C CE3000                99  	mov 0xFFF30, #0x00
+0000000F                      100  	;***       60 :     ADMK = 1U;  /* disable INTAD interrupt */
+0000000F                      101  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 60
+0000000F 710AE7               102  	set1 0xFFFE7.0
+00000012                      103  	;***       61 :     ADIF = 0U;  /* clear INTAD interrupt flag */
+00000012                      104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 61
+00000012 710BE3               105  	clr1 0xFFFE3.0
+00000015                      106  	;***       62 :     /* Set INTAD low priority */
+00000015                      107  	;***       63 :     ADPR1 = 1U;
+00000015                      108  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 63
+00000015 710AEF               109  	set1 0xFFFEF.0
+00000018                      110  	;***       64 :     ADPR0 = 1U;
+00000018                      111  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 64
+00000018 710AEB               112  	set1 0xFFFEB.0
+0000001B                      113  	;***       65 :     /* The reset status of ADPC is analog input, so it's unnecessary to set. */
+0000001B                      114  	;***       66 :     /* Set ANI0 - ANI3 pin as analog input */
+0000001B                      115  	;***       67 :     PM2 |= 0x0FU;
+0000001B                      116  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 67
+0000001B 6F22FF               117  	or a, !0xFF22
+0000001E 9E22                 118  	mov 0xFFF22, a
+00000020                      119  	;***       68 :     ADM0 = _00_AD_CONVERSION_CLOCK_64 | _00_AD_TIME_MODE_NORMAL_1 | _00_AD_OPERMODE_SELECT;
+00000020                      120  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 68
+00000020 CE3000               121  	mov 0xFFF30, #0x00
+00000023                      122  	;***       69 :     ADM1 = _00_AD_TRIGGER_SOFTWARE | _20_AD_CONVMODE_ONESELECT;
+00000023                      123  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 69
+00000023 CE3220               124  	mov 0xFFF32, #0x20
+00000026                      125  	;***       70 :     ADM2 = _00_AD_POSITIVE_VDD | _00_AD_NEGATIVE_VSS | _00_AD_AREA_MODE_1 | _00_AD_RESOLUTION_10BIT;          
+00000026                      126  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 70
+00000026 CA0000               127  	mov [de+0x00], #0x00
+00000029                      128  	;***       71 :     ADUL = _FF_AD_ADUL_VALUE;
+00000029                      129  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 71
+00000029 CA01FF               130  	mov [de+0x01], #0xFF
+0000002C                      131  	;***       72 :     ADLL = _00_AD_ADLL_VALUE;
+0000002C                      132  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 72
+0000002C CA0200               133  	mov [de+0x02], #0x00
+0000002F                      134  	;***       73 :     ADS = _01_AD_INPUT_CHANNEL_1;
+0000002F                      135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 73
+0000002F CE3101               136  	mov 0xFFF31, #0x01
+00000032 D7                   137  	ret
+00000033                      138  _R_ADC_Start:
+00000033                      139  	.STACK _R_ADC_Start = 4
+00000033                      140  	;***       74 : }
+00000033                      141  	;***       75 : 
+00000033                      142  	;***       76 : /***********************************************************************************************************************
+00000033                      143  	;***       77 : * Function Name: R_ADC_Start
+00000033                      144  	;***       78 : * Description  : This function starts the AD converter.
+00000033                      145  	;***       79 : * Arguments    : None
+00000033                      146  	;***       80 : * Return Value : None
+00000033                      147  	;***       81 : ***********************************************************************************************************************/
+00000033                      148  	;***       82 : void R_ADC_Start(void)
+00000033                      149  	;***       83 : {
+00000033                      150  	;***       84 :     ADIF = 0U;  /* clear INTAD interrupt flag */
+00000033                      151  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 84
+00000033 710BE3               152  	clr1 0xFFFE3.0
+00000036                      153  	;***       85 :     ADMK = 0U;  /* enable INTAD interrupt */
+00000036                      154  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 85
+00000036 710BE7               155  	clr1 0xFFFE7.0
+00000039                      156  	;***       86 :     ADCS = 1U;  /* enable AD conversion */
+00000039                      157  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 86
+00000039 717A30               158  	set1 0xFFF30.7
+0000003C D7                   159  	ret
+0000003D                      160  _R_ADC_Stop:
+0000003D                      161  	.STACK _R_ADC_Stop = 4
+0000003D                      162  	;***       87 : }
+0000003D                      163  	;***       88 : 
+0000003D                      164  	;***       89 : /***********************************************************************************************************************
+0000003D                      165  	;***       90 : * Function Name: R_ADC_Stop
+0000003D                      166  	;***       91 : * Description  : This function stops the AD converter.
+0000003D                      167  	;***       92 : * Arguments    : None
+0000003D                      168  	;***       93 : * Return Value : None
+0000003D                      169  	;***       94 : ***********************************************************************************************************************/
+0000003D                      170  	;***       95 : void R_ADC_Stop(void)
+0000003D                      171  	;***       96 : {
+0000003D                      172  	;***       97 :     ADCS = 0U;  /* disable AD conversion */
+0000003D                      173  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 97
+0000003D 717B30               174  	clr1 0xFFF30.7
+00000040                      175  	;***       98 :     ADMK = 1U;  /* disable INTAD interrupt */
+00000040                      176  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 98
+00000040 710AE7               177  	set1 0xFFFE7.0
+00000043                      178  	;***       99 :     ADIF = 0U;  /* clear INTAD interrupt flag */
+00000043                      179  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 99
+00000043 710BE3               180  	clr1 0xFFFE3.0
+00000046 D7                   181  	ret
+00000047                      182  _R_ADC_Set_OperationOn:
+00000047                      183  	.STACK _R_ADC_Set_OperationOn = 4
+00000047                      184  	;***      100 : }
+00000047                      185  	;***      101 : 
+00000047                      186  	;***      102 : /***********************************************************************************************************************
+00000047                      187  	;***      103 : * Function Name: R_ADC_Set_OperationOn
+00000047                      188  	;***      104 : * Description  : This function enables comparator operation.
+00000047                      189  	;***      105 : * Arguments    : None
+00000047                      190  	;***      106 : * Return Value : None
+00000047                      191  	;***      107 : ***********************************************************************************************************************/
+00000047                      192  	;***      108 : void R_ADC_Set_OperationOn(void)
+00000047                      193  	;***      109 : {
+00000047                      194  	;***      110 :     ADCE = 1U;  /* enable AD comparator */
+00000047                      195  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 110
+00000047 710A30               196  	set1 0xFFF30.0
+0000004A D7                   197  	ret
+0000004B                      198  _R_ADC_Set_OperationOff:
+0000004B                      199  	.STACK _R_ADC_Set_OperationOff = 4
+0000004B                      200  	;***      111 : }
+0000004B                      201  	;***      112 : 
+0000004B                      202  	;***      113 : /***********************************************************************************************************************
+0000004B                      203  	;***      114 : * Function Name: R_ADC_Set_OperationOff
+0000004B                      204  	;***      115 : * Description  : This function stops comparator operation.
+0000004B                      205  	;***      116 : * Arguments    : None
+0000004B                      206  	;***      117 : * Return Value : None
+0000004B                      207  	;***      118 : ***********************************************************************************************************************/
+0000004B                      208  	;***      119 : void R_ADC_Set_OperationOff(void)
+0000004B                      209  	;***      120 : {
+0000004B                      210  	;***      121 :     ADCE = 0U;  /* disable AD comparator */
+0000004B                      211  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 121
+0000004B 710B30               212  	clr1 0xFFF30.0
+0000004E D7                   213  	ret
+0000004F                      214  _R_ADC_Get_Result:
+0000004F                      215  	.STACK _R_ADC_Get_Result = 4
+0000004F                      216  	;***      122 : }
+0000004F                      217  	;***      123 : 
+0000004F                      218  	;***      124 : /***********************************************************************************************************************
+0000004F                      219  	;***      125 : * Function Name: R_ADC_Get_Result
+0000004F                      220  	;***      126 : * Description  : This function returns the conversion result in the buffer.
+0000004F                      221  	;***      127 : * Arguments    : buffer -
+0000004F                      222  	;***      128 : *                    the address where to write the conversion result
+0000004F                      223  	;***      129 : * Return Value : None
+0000004F                      224  	;***      130 : ***********************************************************************************************************************/
+0000004F                      225  	;***      131 : void R_ADC_Get_Result(uint16_t * const buffer)
+0000004F                      226  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 131
+0000004F 14                   227  	movw de, ax
+00000050                      228  	;***      132 : {
+00000050                      229  	;***      133 :     *buffer = (uint16_t)(ADCR >> 6U);
+00000050                      230  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 133
+00000050 AD1E                 231  	movw ax, 0xFFF1E
+00000052 316E                 232  	shrw ax, 0x06
+00000054 B9                   233  	movw [de], ax
+00000055 D7                   234  	ret
+00000056                      235  _R_ADC_Set_ADChannel:
+00000056                      236  	.STACK _R_ADC_Set_ADChannel = 4
+00000056                      237  	;***      134 : }
+00000056                      238  	;***      135 : 
+00000056                      239  	;***      136 : /* Start user code for adding. Do not edit comment generated here */
+00000056                      240  	;***      137 : MD_STATUS R_ADC_Set_ADChannel(ad_channel_t channel){
+00000056                      241  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 137
+00000056 4C15                 242  	cmp a, #0x15
+00000058                      243  	;***      138 : 	if(channel > 20)
+00000058                      244  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 138
+00000058 DC00                 245  	bc $.BB@LABEL@7_2
+0000005A                      246  .BB@LABEL@7_1:	; bb8
+0000005A                      247  	;***      139 : 		return MD_ARGERROR;
+0000005A                      248  	;***      140 : 	ADS = channel;
+0000005A                      249  	;***      141 : 	return MD_OK;
+0000005A                      250  	;***      142 : }
+0000005A                      251  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 142
+0000005A 308100               252  	movw ax, #0x0081
+0000005D D7                   253  	ret
+0000005E                      254  .BB@LABEL@7_2:	; if_break_bb
+0000005E                      255  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 140
+0000005E 9E31                 256  	mov 0xFFF31, a
+00000060                      257  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_adc.c", 141
+00000060 F6                   258  	clrw ax
+00000061 D7                   259  	ret
+00000062                      260  	;***      143 : /* End user code. Do not edit comment generated here */
+
+Section List
+Attr     Size                Name
+
+TEXTF                98 (00000062) .textf
+
+Command Line Parameter
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\r_cg_adc.asm.cmd 
+
+Command File Parameter
+-cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_adc.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_adc.asm 
+

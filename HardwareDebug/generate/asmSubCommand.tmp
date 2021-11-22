@@ -1,0 +1,6 @@
+-cpu=S3
+-c
+-dev="D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF"
+-MAKEUD="D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\generate"
+-character_set=utf8
+-g
