@@ -170,15 +170,15 @@ extern struct UART_Buffer_s{
 	uint8_t set_number;
 	uint32_t set_value;
 }g_control_buffer;
-typedef enum Control_header{
+enum Control_header{
 	OK, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_INVALID, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR
-}alarm_t;
+};
 enum UART_header_e{
 	 H_READ = 82, H_SET = 83, H_ALARM = 65, H_ERROR = 69
 };
-extern alarm_t g_alarm;
+extern enum Control_header g_alarm;
 
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_end, g_uart2_send;
@@ -192,7 +192,7 @@ extern float g_cvcc_current, g_cvcc_voltge;
 extern void adc_int_handle(void);
 extern void setting_default(void);
 extern void main_20211111(void);
-extern void sendToRasPi(enum UART_header_e head, alarm_t type, float value);
+extern void sendToRasPi(enum UART_header_e head, enum Control_header type, float value);
 extern float measureFlowSensor(uint32_t s);
 //extern int overVoltage1Check(void);
 extern void callAlarm(int _error);

@@ -11,5 +11,6 @@
 void electrolyticOperationON(void);
 void electrolyticOperationOFF(void);
 void waitReset(void);
+void solenoidCheck(void);
 
 #endif /* MAIN_H_ */

@@ -410,8 +410,6 @@ static void r_uart2_callback_receiveend(void)
 //	R_UART2_Start();
 	R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
 	if(g_rx_data[0] > 6){
-//		R_UART2_Stop();
-//		R_UART2_Start();
 		g_uart2_fault = 1;
 	}else{
 		g_uart2_fault = 0;

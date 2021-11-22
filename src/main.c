@@ -23,7 +23,7 @@ struct Timer_Setting_s g_timerSetting = {1000, 15};
 struct Number_Setting_s g_numberSetting;
 
 float g_cvcc_current, g_cvcc_voltge;
-alarm_t g_alarm;
+enum Control_header g_alarm;
 float g_flow_value;
 uint32_t g_neutralization_time = 0;
 volatile uint8_t g_electrolytic_flag = 0;
@@ -76,7 +76,7 @@ void code_20211029(void){
 }
 #endif
 //----------------------Begin code 11112021--------------------------------------
-void sendToRasPi(enum UART_header_e head, alarm_t type, float value){
+void sendToRasPi(enum UART_header_e head, enum Control_header type, float value){
 	uint8_t state = g_uart2_send;
 	g_control_buffer.head = head;
 	g_control_buffer.set_number = type;
@@ -134,7 +134,7 @@ void ElectrolyticOperation(void){
 	uint16_t _time_count = 0;
 	do{
 		_time_count = 0;
-		while((g_cvcc_voltge>=g_numberSetting.upperVoltage2)&(_time_count < 10000)){
+		while((g_cvcc_voltge>=g_numberSetting.upperVoltage2)&(_time_count < g_timerSetting.t12_overVoltage2Time)){
 			_time_count++;
 			delay_ms(1);
 		}
@@ -144,7 +144,7 @@ void ElectrolyticOperation(void){
 	}while(_time_count == 10000);
 	//-----------Voltage 3 check----------------
 	_time_count = 0;
-	while((g_cvcc_voltge>=g_numberSetting.upperVoltage3)&(_time_count < 10000)){
+	while((g_cvcc_voltge>=g_numberSetting.upperVoltage3)&(_time_count < g_timerSetting.t13_overVoltage3Time)){
 		_time_count++;
 		delay_ms(1);
 	}
@@ -180,14 +180,29 @@ void ElectrolyticOperation(void){
 			//TODO: Wait to reset
 		}
 	}
-	//-----------Solenoid Valve Error---------------
-	O_SUPPLY_WATER_PIN = ON; 	//SV1
-	O_SPOUT_WATER_PIN = ON;		// SV2 On
+
+}
+void solenoidCheck(void){
+	uint32_t _time_count = 0;
+	if((g_flow_value <= 0.1f)&(_time_count == g_timerSetting.t17_solenoidLeakageStartTime*1000)){
+		_time_count++;
+		delay_ms(1);
+	}
+	if(_time_count == g_timerSetting.t17_solenoidLeakageStartTime*1000){
+		sendToRasPi(H_ALARM, SOLENOID_VALVE_ERROR, 1);
+	}
 }
 void main_20211111(void){
 	InitialOperationModeStart();
 	WaterSupplyOperation();
-	ElectrolyticOperation();
+	do{
+		ElectrolyticOperation();
+	}while((I_ALKALI_H_PIN == 0U)|(I_ACID_H_PIN == 0U));
+	electrolyticOperationOFF();
+	O_CVCC_ON_PIN = ON;
+	O_PUMP_SALT_PIN = OFF; 		//SP1
+	delay(5);
+	O_SUPPLY_WATER_PIN = OFF;	// SV1 On
 }
 
 void waitReset(void){
