@@ -39,6 +39,12 @@ void setting_default(void){
 	g_numberSetting.lowerCurrent = 4.0;
 	g_numberSetting.upperFlow = 1.2;
 	g_numberSetting.lowerFlow = 0.2;
+	g_timerSetting.t2_flowSensorStartTime = 30000;
+	g_timerSetting.t3_flowSensorMonitorTime = 23000;
+	g_timerSetting.t11_overVoltage1Time = 10000;
+	g_timerSetting.t12_overVoltage2Time = 10000;
+	g_timerSetting.t13_overVoltage3Time = 20000;
+	g_timerSetting.t17_solenoidLeakageStartTime = 5000;
 }
 #ifdef RENAN_CODE
 void renanCode(void){
@@ -192,6 +198,7 @@ void solenoidCheck(void){
 		sendToRasPi(H_ALARM, SOLENOID_VALVE_ERROR, 1);
 	}
 }
+// Newest
 void main_20211111(void){
 	InitialOperationModeStart();
 	WaterSupplyOperation();

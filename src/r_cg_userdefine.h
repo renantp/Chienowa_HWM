@@ -125,10 +125,10 @@ extern uint16_t	param_FilterAlertCoef;
 extern uint32_t	param_FilterChangeMinute;
 
 extern struct Timer_Setting_s{
-	uint32_t t2_flowSensorStartTime;
-	uint32_t t3_flowSensorMonitorTime;
-	uint32_t t6_drainageOffTime;
-	uint32_t t11_overVoltage1Time;
+	uint32_t t2_flowSensorStartTime; // 4 byte
+	uint32_t t3_flowSensorMonitorTime; // 4 byte
+	uint32_t t6_drainageOffTime; // 4 byte
+	uint32_t t11_overVoltage1Time; // 4 byte
 	uint32_t t12_overVoltage2Time;
 	uint32_t t13_overVoltage3Time;
 	uint32_t t14_lowVoltageStartTime;
@@ -166,9 +166,9 @@ extern union Alarm_register{
 	}raw;
 }g_alarm_u;
 extern struct UART_Buffer_s{
-	uint8_t head;
-	uint8_t set_number;
-	uint32_t set_value;
+	uint8_t head; // 1 byte
+	uint8_t set_number; // 1 byte
+	uint32_t set_value; // 4 byte
 }g_control_buffer;
 enum Control_header{
 	OK, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,

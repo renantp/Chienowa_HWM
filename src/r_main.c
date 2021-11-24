@@ -119,27 +119,11 @@ void main(void)
     	if(ns_delay_ms(&_stamp[1], 1000)){
     		O_CTRL_OUT_PIN = led_st&0x01;
     		led_st = led_st == 0?0xff:0x00;
-//    		uint32_t buf[3] = {H_ALARM, 0x11100100, 0xffffffff};
-//    	    uint8_t state = g_uart2_send;
-//    	    R_UART2_Send((uint8_t *)buf, sizeof(uint32_t)*3);
-//			while(state == g_uart2_send);
-//			g_rx_data[0]= g_rx_data[1]=g_rx_data[2]= 0x00;
-//			g_control_buffer.head = H_ALARM;
-//			g_control_buffer.set_number = 4;
-//			g_control_buffer.set_value = 1;
-//			R_UART2_Send((uint8_t *)&g_control_buffer, sizeof(struct UART_Buffer_s));
-//			while(state == g_uart2_send);
-			sendToRasPi(H_ALARM, OVER_CURRENT, 1);
-//			R_UART2_Receive((uint8_t *)rx_data, 12);
-//			data_f = (float)rx_data[0];
-////			data_f_test.refined.b[0] = rx_data[0]>>24;
-////			data_f_test.refined.b[1] = rx_data[0]>>16;
-////			data_f_test.refined.b[2] = rx_data[0]>>8;
-////			data_f_test.refined.b[3] = rx_data[0];
-//			data_f_test.refined.b[0] = rx_data[0];
-//			data_f_test.refined.b[1] = rx_data[0]>>8;
-//			data_f_test.refined.b[2] = rx_data[0]>>16;
-//			data_f_test.refined.b[3] = rx_data[0]>>24;
+    	    uint8_t state = g_uart2_send;
+    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(g_timerSetting));
+			while(state == g_uart2_send){
+				R_WDT_Restart();
+			}
     		if(led_st == 0x00){
     		}else{
     		}

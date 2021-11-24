@@ -69,7 +69,7 @@ _start:
 	; setting the stack pointer
 	;--------------------------------------------------
 $IF (__RENESAS_VERSION__ >= 0x01010000)
-	MOVW	SP,#LOWW(__STACK_ADDR_START)
+ 	MOVW	SP,#LOWW(__STACK_ADDR_START)
 $ELSE	; for CC-RL V1.00
 	MOVW	SP,#LOWW(_stacktop)
 $ENDIF

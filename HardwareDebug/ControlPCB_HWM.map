@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W3.03.00 )             22-Nov-2021 14:17:37
+Renesas Optimizing Linker (W3.03.00 )             23-Nov-2021 09:22:37
 
 *** Options ***
 
@@ -73,9 +73,9 @@ SECTION                            START      END         SIZE   ALIGN
 .text
                                   00000121  0000043a       31a   1
 .textf
-                                  0000043b  00001856      141c   1
+                                  0000043b  0000189b      1461   1
 .RLIB
-                                  00001857  00001d5f       509   1
+                                  0000189c  00001da4       509   1
 .const
                                   00003000  00003001         2   2
 .monitor2
@@ -93,7 +93,7 @@ SECTION                            START      END         SIZE   ALIGN
 
 RAMDATA SECTION:  0000013b Byte(s)
 ROMDATA SECTION:  000002e3 Byte(s)
-PROGRAM SECTION:  00001c3f Byte(s)
+PROGRAM SECTION:  00001c84 Byte(s)
 
 *** Symbol List ***
 
@@ -207,323 +207,323 @@ FILE=.\src\interupt_handle.obj
   _adc_int_handle
                                   000005fa        41   func ,g         1
 FILE=.\src\main.obj
-                                  0000063b  00000dc5       78b
+                                  0000063b  00000df8       7be
   _setting_default
-                                  0000063b        49   func ,g         1
+                                  0000063b        7c   func ,g         1
   _sendToRasPi
-                                  00000684        33   func ,g         8
+                                  000006b7        33   func ,g         7
   _InitialOperationModeStart
-                                  000006b7        5e   func ,g         1
+                                  000006ea        5e   func ,g         1
   _WaterSupplyOperation
-                                  00000715        b8   func ,g         1
+                                  00000748        b8   func ,g         1
   _ElectrolyticOperation
-                                  000007cd       281   func ,g         1
+                                  00000800       281   func ,g         1
   _solenoidCheck
-                                  00000a4e        76   func ,g         0
+                                  00000a81        76   func ,g         0
   _main_20211111
-                                  00000ac4        2e   func ,g         0
+                                  00000af7        2e   func ,g         0
   _waitReset
-                                  00000af2         e   func ,g         2
+                                  00000b25         e   func ,g         2
   _electrolyticOperationON
-                                  00000b00         a   func ,g         1
+                                  00000b33         a   func ,g         1
   _electrolyticOperationOFF
-                                  00000b0a         a   func ,g         8
+                                  00000b3d         a   func ,g         8
   _overVoltage1Error
-                                  00000b14         1   func ,g         0
+                                  00000b47         1   func ,g         0
   _overVoltage2Error
-                                  00000b15         1   func ,g         0
+                                  00000b48         1   func ,g         0
   _overVoltage3Error
-                                  00000b16        85   func ,g         0
+                                  00000b49        85   func ,g         0
   _lowVoltageError
-                                  00000b9b        95   func ,g         0
+                                  00000bce        95   func ,g         0
   _currentError
-                                  00000c30        e0   func ,g         0
+                                  00000c63        e0   func ,g         0
   _solenoidValueError
-                                  00000d10         1   func ,g         0
+                                  00000d43         1   func ,g         0
   _callAlarm
-                                  00000d11         4   func ,g         0
+                                  00000d44         4   func ,g         0
   _measureFlowSensor
-                                  00000d15        b1   func ,g         1
+                                  00000d48        b1   func ,g         1
 FILE=.\src\r_cg_adc.obj
-                                  00000dc6  00000e27        62
+                                  00000df9  00000e5a        62
   _R_ADC_Create
-                                  00000dc6        33   func ,g         2
+                                  00000df9        33   func ,g         2
   _R_ADC_Start
-                                  00000df9         a   func ,g         2
+                                  00000e2c         a   func ,g         2
   _R_ADC_Stop
-                                  00000e03         a   func ,g         0
+                                  00000e36         a   func ,g         0
   _R_ADC_Set_OperationOn
-                                  00000e0d         4   func ,g         1
+                                  00000e40         4   func ,g         1
   _R_ADC_Set_OperationOff
-                                  00000e11         4   func ,g         0
+                                  00000e44         4   func ,g         0
   _R_ADC_Get_Result
-                                  00000e15         7   func ,g         2
+                                  00000e48         7   func ,g         2
   _R_ADC_Set_ADChannel
-                                  00000e1c         c   func ,g         0
+                                  00000e4f         c   func ,g         0
 FILE=.\src\r_cg_cgc.obj
-                                  00000e28  00000e3d        16
+                                  00000e5b  00000e70        16
   _R_CGC_Create
-                                  00000e28        16   func ,g         1
+                                  00000e5b        16   func ,g         1
 FILE=.\src\r_cg_cgc_user.obj
-                                  00000e3e  00000e40         3
+                                  00000e71  00000e73         3
   _R_CGC_Get_ResetSource
-                                  00000e3e         3   func ,g         1
+                                  00000e71         3   func ,g         1
 FILE=.\src\r_cg_dac.obj
-                                  00000e41  00000e73        33
+                                  00000e74  00000ea6        33
   _R_DAC_Create
-                                  00000e41        1d   func ,g         1
+                                  00000e74        1d   func ,g         1
   _R_DAC0_Start
-                                  00000e5e         4   func ,g         0
+                                  00000e91         4   func ,g         0
   _R_DAC0_Stop
-                                  00000e62         4   func ,g         0
+                                  00000e95         4   func ,g         0
   _R_DAC0_Set_ConversionValue
-                                  00000e66         3   func ,g         0
+                                  00000e99         3   func ,g         0
   _R_DAC1_Start
-                                  00000e69         4   func ,g         0
+                                  00000e9c         4   func ,g         0
   _R_DAC1_Stop
-                                  00000e6d         4   func ,g         0
+                                  00000ea0         4   func ,g         0
   _R_DAC1_Set_ConversionValue
-                                  00000e71         3   func ,g         0
+                                  00000ea4         3   func ,g         0
 FILE=.\src\r_cg_port.obj
-                                  00000e74  00000eb9        46
+                                  00000ea7  00000eec        46
   _R_PORT_Create
-                                  00000e74        46   func ,g         1
+                                  00000ea7        46   func ,g         1
 FILE=.\src\r_cg_port_user.obj
-                                  00000eba  00000eba         1
+                                  00000eed  00000eed         1
   _R_PORT_Create_UserInit
-                                  00000eba         1   func ,g         1
+                                  00000eed         1   func ,g         1
 FILE=.\src\r_cg_rtc.obj
-                                  00000ebb  00000ff8       13e
+                                  00000eee  0000102b       13e
   _R_RTC_Create
-                                  00000ebb        27   func ,g         2
+                                  00000eee        27   func ,g         2
   _R_RTC_Start
-                                  00000ee2         4   func ,g         1
+                                  00000f15         4   func ,g         1
   _R_RTC_Stop
-                                  00000ee6         4   func ,g         0
+                                  00000f19         4   func ,g         0
   _R_RTC_Get_CounterValue
-                                  00000eea        51   func ,g         0
+                                  00000f1d        51   func ,g         0
   _R_RTC_Set_CounterValue
-                                  00000f3b        be   func ,g         1
+                                  00000f6e        be   func ,g         1
 FILE=.\src\r_cg_serial.obj
-                                  00000ff9  000014eb       4f3
+                                  0000102c  0000151e       4f3
   _R_CSI01_Receive
-                                  00000ff9        1a   func ,g         0
+                                  0000102c        1a   func ,g         0
   _R_CSI01_Send
-                                  00001013        26   func ,g         0
+                                  00001046        26   func ,g         0
   _R_SAU0_Create
-                                  00001039        17   func ,g         2
+                                  0000106c        17   func ,g         2
   _R_UART1_Create
-                                  00001050        7e   func ,g         2
+                                  00001083        7e   func ,g         2
   _R_UART1_Start
-                                  000010ce        26   func ,g         1
+                                  00001101        26   func ,g         1
   _R_UART1_Stop
-                                  000010f4        1e   func ,g         0
+                                  00001127        1e   func ,g         0
   _R_UART1_Receive
-                                  00001112        18   func ,g         0
+                                  00001145        18   func ,g         0
   _R_UART1_Send
-                                  0000112a        29   func ,g         0
+                                  0000115d        29   func ,g         0
   _R_CSI00_Create
-                                  00001153        53   func ,g         2
+                                  00001186        53   func ,g         2
   _R_CSI00_Start
-                                  000011a6        26   func ,g         1
+                                  000011d9        26   func ,g         1
   _R_CSI00_Stop
-                                  000011cc        18   func ,g         0
+                                  000011ff        18   func ,g         0
   _R_CSI00_Send
-                                  000011e4        28   func ,g         0
+                                  00001217        28   func ,g         0
   _R_CSI01_Create
-                                  0000120c        5a   func ,g         3
+                                  0000123f        5a   func ,g         3
   _R_CSI01_Start
-                                  00001266        26   func ,g         1
+                                  00001299        26   func ,g         1
   _R_CSI01_Stop
-                                  0000128c        18   func ,g         1
+                                  000012bf        18   func ,g         1
   _R_CSI01_Send_Receive
-                                  000012a4        36   func ,g         1
+                                  000012d7        36   func ,g         1
   _R_SAU1_Create
-                                  000012da        14   func ,g         2
+                                  0000130d        14   func ,g         2
   _R_UART2_Create
-                                  000012ee        7e   func ,g         2
+                                  00001321        7e   func ,g         2
   _R_UART2_Start
-                                  0000136c        26   func ,g         2
+                                  0000139f        26   func ,g         2
   _R_UART2_Stop
-                                  00001392        1e   func ,g         1
+                                  000013c5        1e   func ,g         1
   _R_UART2_Receive
-                                  000013b0        18   func ,g         3
+                                  000013e3        18   func ,g         3
   _R_UART2_Send
-                                  000013c8        29   func ,g         1
+                                  000013fb        29   func ,g         2
   _R_UART3_Create
-                                  000013f1        76   func ,g         2
+                                  00001424        76   func ,g         2
   _R_UART3_Start
-                                  00001467        26   func ,g         1
+                                  0000149a        26   func ,g         1
   _R_UART3_Stop
-                                  0000148d        1e   func ,g         0
+                                  000014c0        1e   func ,g         0
   _R_UART3_Receive
-                                  000014ab        18   func ,g         0
+                                  000014de        18   func ,g         0
   _R_UART3_Send
-                                  000014c3        29   func ,g         0
+                                  000014f6        29   func ,g         0
 FILE=.\src\r_cg_serial_user.obj
-                                  000014ec  00001522        37
+                                  0000151f  00001555        37
   _r_uart1_callback_receiveend@1
-                                  000014ec         1   func ,l         1
-  _r_uart1_callback_softwareoverrun@1
-                                  000014ed         1   func ,l         1
-  _r_uart1_callback_sendend@1
-                                  000014ee         1   func ,l         1
-  _r_uart1_callback_error@1
-                                  000014ef         1   func ,l         1
-  _r_csi00_callback_sendend@1
-                                  000014f0         1   func ,l         1
-  _r_csi01_callback_receiveend@1
-                                  000014f1         7   func ,l         1
-  _r_csi01_callback_error@1
-                                  000014f8         1   func ,l         1
-  _r_csi01_callback_sendend@1
-                                  000014f9         4   func ,l         1
-  _r_uart2_callback_receiveend@1
-                                  000014fd        1c   func ,l         1
-  _r_uart2_callback_softwareoverrun@1
-                                  00001519         1   func ,l         1
-  _r_uart2_callback_sendend@1
-                                  0000151a         4   func ,l         1
-  _r_uart2_callback_error@1
-                                  0000151e         1   func ,l         1
-  _r_uart3_callback_receiveend@1
                                   0000151f         1   func ,l         1
-  _r_uart3_callback_softwareoverrun@1
+  _r_uart1_callback_softwareoverrun@1
                                   00001520         1   func ,l         1
-  _r_uart3_callback_sendend@1
+  _r_uart1_callback_sendend@1
                                   00001521         1   func ,l         1
-  _r_uart3_callback_error@1
+  _r_uart1_callback_error@1
                                   00001522         1   func ,l         1
+  _r_csi00_callback_sendend@1
+                                  00001523         1   func ,l         1
+  _r_csi01_callback_receiveend@1
+                                  00001524         7   func ,l         1
+  _r_csi01_callback_error@1
+                                  0000152b         1   func ,l         1
+  _r_csi01_callback_sendend@1
+                                  0000152c         4   func ,l         1
+  _r_uart2_callback_receiveend@1
+                                  00001530        1c   func ,l         1
+  _r_uart2_callback_softwareoverrun@1
+                                  0000154c         1   func ,l         1
+  _r_uart2_callback_sendend@1
+                                  0000154d         4   func ,l         1
+  _r_uart2_callback_error@1
+                                  00001551         1   func ,l         1
+  _r_uart3_callback_receiveend@1
+                                  00001552         1   func ,l         1
+  _r_uart3_callback_softwareoverrun@1
+                                  00001553         1   func ,l         1
+  _r_uart3_callback_sendend@1
+                                  00001554         1   func ,l         1
+  _r_uart3_callback_error@1
+                                  00001555         1   func ,l         1
 FILE=.\src\r_cg_timer.obj
-                                  00001523  0000162f       10d
+                                  00001556  00001662       10d
   _R_TAU0_Create
-                                  00001523        ad   func ,g         2
+                                  00001556        ad   func ,g         2
   _R_TAU0_Channel0_Start
-                                  000015d0        10   func ,g         1
+                                  00001603        10   func ,g         1
   _R_TAU0_Channel0_Stop
-                                  000015e0        10   func ,g         0
+                                  00001613        10   func ,g         0
   _R_TAU0_Channel1_Start
-                                  000015f0        10   func ,g         0
+                                  00001623        10   func ,g         0
   _R_TAU0_Channel1_Stop
-                                  00001600        10   func ,g         0
+                                  00001633        10   func ,g         0
   _R_TAU0_Channel2_Start
-                                  00001610        10   func ,g         0
+                                  00001643        10   func ,g         0
   _R_TAU0_Channel2_Stop
-                                  00001620        10   func ,g         0
+                                  00001653        10   func ,g         0
 FILE=.\src\r_cg_wdt.obj
-                                  00001630  00001644        15
+                                  00001663  00001677        15
   _R_WDT_Create
-                                  00001630        11   func ,g         1
+                                  00001663        11   func ,g         1
   _R_WDT_Restart
-                                  00001641         4   func ,g         6
+                                  00001674         4   func ,g         7
 FILE=.\src\r_main.obj
-                                  00001645  0000172d        e9
+                                  00001678  00001772        fb
   _main
-                                  00001645        9e   func ,g         1
+                                  00001678        b0   func ,g         1
   _R_MAIN_UserInit
-                                  000016e3        4b   func ,g         1
+                                  00001728        4b   func ,g         1
 FILE=.\src\r_systeminit.obj
-                                  0000172e  00001764        37
+                                  00001773  000017a9        37
   _R_Systeminit
-                                  0000172e        32   func ,g         1
+                                  00001773        32   func ,g         1
   _hdwinit
-                                  00001760         5   func ,g         1
+                                  000017a5         5   func ,g         1
 FILE=.\src\usr_timer.obj
-                                  00001765  00001856        f2
+                                  000017aa  0000189b        f2
   _delay_ms
-                                  00001765        68   func ,g         b
+                                  000017aa        68   func ,g         b
   _delay
-                                  000017cd         f   func ,g         5
+                                  00001812         f   func ,g         5
   _ns_delay_ms
-                                  000017dc        35   func ,g         3
+                                  00001821        35   func ,g         3
   _non_block_delay
-                                  00001811         2   func ,g         0
+                                  00001856         2   func ,g         0
   _mTask
-                                  00001813        44   func ,g         0
+                                  00001858        44   func ,g         0
 
 SECTION=.RLIB
 FILE=memcpy
-                                  00001857  00001867        11
+                                  0000189c  000018ac        11
   _memcpy
-                                  00001857         0   none ,g         1
+                                  0000189c         0   none ,g         1
 FILE=memset
-                                  00001868  00001875         e
+                                  000018ad  000018ba         e
   _memset
-                                  00001868         0   none ,g         2
+                                  000018ad         0   none ,g         2
 FILE=_COM_faddsub
-                                  00001876  000019b0       13b
+                                  000018bb  000019f5       13b
   __COM_fsub
-                                  000018d2         0   none ,g         0
+                                  00001917         0   none ,g         0
   __COM_fadd
-                                  000018da         0   none ,g         1
+                                  0000191f         0   none ,g         1
 FILE=_COM_fdiv
-                                  000019b1  00001ade       12e
+                                  000019f6  00001b23       12e
   __COM_fdiv
-                                  00001a10         0   none ,g         1
+                                  00001a55         0   none ,g         1
 FILE=_COM_fge
-                                  00001adf  00001af4        16
+                                  00001b24  00001b39        16
   __COM_fge
-                                  00001adf         0   none ,g         5
+                                  00001b24         0   none ,g         5
 FILE=_COM_fgt
-                                  00001af5  00001b0a        16
+                                  00001b3a  00001b4f        16
   __COM_fgt
-                                  00001af5         0   none ,g         4
+                                  00001b3a         0   none ,g         4
 FILE=_COM_fle
-                                  00001b0b  00001b20        16
+                                  00001b50  00001b65        16
   __COM_fle
-                                  00001b0b         0   none ,g         2
+                                  00001b50         0   none ,g         2
 FILE=_COM_flt
-                                  00001b21  00001b36        16
+                                  00001b66  00001b7b        16
   __COM_flt
-                                  00001b21         0   none ,g         5
+                                  00001b66         0   none ,g         5
 FILE=_COM_fmul
-                                  00001b37  00001c23        ed
+                                  00001b7c  00001c68        ed
   __COM_fmul
-                                  00001b82         0   none ,g         8
+                                  00001bc7         0   none ,g         8
 FILE=_COM_ftoul
-                                  00001c24  00001c2f         c
+                                  00001c69  00001c74         c
   __COM_ftoul
-                                  00001c24         0   none ,g         1
+                                  00001c69         0   none ,g         1
 FILE=_COM_funordered
-                                  00001c30  00001c3a         b
+                                  00001c75  00001c7f         b
   __COM_funordered
-                                  00001c30         0   none ,g         9
+                                  00001c75         0   none ,g         9
 FILE=_COM_ultof
-                                  00001c3b  00001c40         6
+                                  00001c80  00001c85         6
   __COM_ultof
-                                  00001c3b         0   none ,g         7
+                                  00001c80         0   none ,g         7
 FILE=_REL_fcmp
-                                  00001c41  00001c78        38
+                                  00001c86  00001cbd        38
   __REL_fcmp
-                                  00001c41         0   none ,g         4
+                                  00001c86         0   none ,g         4
 FILE=_REL_fordered_core
-                                  00001c79  00001c94        1c
+                                  00001cbe  00001cd9        1c
   __REL_fordered_core
-                                  00001c79         0   none ,g         5
+                                  00001cbe         0   none ,g         5
 FILE=_REL_ftol
-                                  00001c95  00001cc9        35
+                                  00001cda  00001d0e        35
   __REL_ftol
-                                  00001c95         0   none ,g         1
+                                  00001cda         0   none ,g         1
 FILE=_REL_f_inf
-                                  00001cca  00001cd1         8
+                                  00001d0f  00001d16         8
   __REL_f_inf
-                                  00001cca         0   none ,g         5
+                                  00001d0f         0   none ,g         5
 FILE=_REL_f_norm
-                                  00001cd2  00001ce1        10
+                                  00001d17  00001d26        10
   __REL_f_norm
-                                  00001cd2         0   none ,g         3
+                                  00001d17         0   none ,g         3
 FILE=_REL_f_round
-                                  00001ce2  00001cf4        13
+                                  00001d27  00001d39        13
   __REL_f_round
-                                  00001ce2         0   none ,g         4
+                                  00001d27         0   none ,g         4
 FILE=_REL_ltof
-                                  00001cf5  00001d3e        4a
+                                  00001d3a  00001d83        4a
   __REL_ltof
-                                  00001cf5         0   none ,g         1
+                                  00001d3a         0   none ,g         1
 FILE=_COM_lshr
-                                  00001d3f  00001d5f        21
+                                  00001d84  00001da4        21
   __COM_lshr
-                                  00001d49         0   none ,g         1
+                                  00001d8e         0   none ,g         1
 
 SECTION=.const
 FILE=.\src\EEPROM.obj
@@ -685,7 +685,7 @@ FILE=.\src\r_cg_serial_user.obj
   _g_uart1_end
                                   000f4778         1   data ,g         0
   _g_uart2_send
-                                  000f4779         1   data ,g         3
+                                  000f4779         1   data ,g         5
   _g_uart2_receive
                                   000f477a         1   data ,g         1
   _g_rx_data
@@ -813,7 +813,7 @@ SECTION=.dataR
 FILE=.\src\main.obj
                                   000f47f2  000f481a        29
   _g_timerSetting
-                                  000f47f2        24   data ,g         8
+                                  000f47f2        24   data ,g        15
     struct Timer_Setting_s {
                                                   24
       _g_timerSetting.t2_flowSensorStartTime
@@ -863,7 +863,7 @@ FILE=rlink_generates_05
   __s.textf
                                   0000043b         0   none ,g         0
   __e.textf
-                                  00001857         0   none ,g         0
+                                  0000189c         0   none ,g         0
   __s.const
                                   00003000         0   none ,g         0
   __e.const
@@ -897,9 +897,9 @@ FILE=rlink_generates_05
   __e.sdataR
                                   000ffe20         0   none ,g         0
   __s.RLIB
-                                  00001857         0   none ,g         0
+                                  0000189c         0   none ,g         0
   __e.RLIB
-                                  00001d60         0   none ,g         0
+                                  00001da5         0   none ,g         0
   __s.SLIB
                                   000000c4         0   none ,g         0
   __e.SLIB
@@ -1039,7 +1039,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
 0003 EEPROM
      SECTION=.textf
                  _EEPROM_Init
-                                 0000047f 0022(0000164d:.textf)
+                                 0000047f 0022(00001681:.textf)
                  _rEE_Status
                                  000004aa 0003(00000561:.textf)
                  _sEE_WriteEnable
@@ -1093,64 +1093,63 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                  000f4704 0004(00000603:.textf)
                                           0004(0000060a:.textf)
                                           0004(0000062e:.textf)
-                                          0005(000007dc:.textf)
-                                          0005(00000b1c:.textf)
-                                          0005(00000bb0:.textf)
-                                          0005(00000c33:.textf)
-                                          0005(00000ce2:.textf)
+                                          0005(0000080f:.textf)
+                                          0005(00000b4f:.textf)
+                                          0005(00000be3:.textf)
+                                          0005(00000c66:.textf)
+                                          0005(00000d15:.textf)
 0005 main
      SECTION=.textf
                  _setting_default
-                                 0000063b 0022(00001651:.textf)
+                                 0000063b 0022(00001685:.textf)
                  _sendToRasPi
-                                 00000684 0005(000007a2:.textf)
-                                          0005(0000081f:.textf)
-                                          0005(000008fa:.textf)
-                                          0005(00000976:.textf)
-                                          0005(000009de:.textf)
-                                          0005(00000a44:.textf)
-                                          0005(00000ac1:.textf)
-                                          0022(000016da:.textf)
+                                 000006b7 0005(000007d5:.textf)
+                                          0005(00000852:.textf)
+                                          0005(0000092d:.textf)
+                                          0005(000009a9:.textf)
+                                          0005(00000a11:.textf)
+                                          0005(00000a77:.textf)
+                                          0005(00000af4:.textf)
                  _InitialOperationModeStart
-                                 000006b7 0005(00000ac5:.textf)
+                                 000006ea 0005(00000af8:.textf)
                  _WaterSupplyOperation
-                                 00000715 0005(00000ac8:.textf)
+                                 00000748 0005(00000afb:.textf)
                  _ElectrolyticOperation
-                                 000007cd 0005(00000acb:.textf)
+                                 00000800 0005(00000afe:.textf)
                  _solenoidCheck
-                                 00000a4e
+                                 00000a81
                  _main_20211111
-                                 00000ac4
+                                 00000af7
                  _waitReset
-                                 00000af2 0005(00000b96:.textf)
-                                          0005(00000d0e:.textf)
+                                 00000b25 0005(00000bc9:.textf)
+                                          0005(00000d41:.textf)
                  _electrolyticOperationON
-                                 00000b00 0005(00000900:.textf)
+                                 00000b33 0005(00000933:.textf)
                  _electrolyticOperationOFF
-                                 00000b0a 0005(00000811:.textf)
-                                          0005(000008fd:.textf)
-                                          0005(00000979:.textf)
-                                          0005(00000a49:.textf)
-                                          0005(00000ae0:.textf)
-                                          0005(00000b91:.textf)
-                                          0005(00000c2b:.textf)
-                                          0005(00000d09:.textf)
+                                 00000b3d 0005(00000844:.textf)
+                                          0005(00000930:.textf)
+                                          0005(000009ac:.textf)
+                                          0005(00000a7c:.textf)
+                                          0005(00000b13:.textf)
+                                          0005(00000bc4:.textf)
+                                          0005(00000c5e:.textf)
+                                          0005(00000d3c:.textf)
                  _overVoltage1Error
-                                 00000b14
+                                 00000b47
                  _overVoltage2Error
-                                 00000b15
+                                 00000b48
                  _overVoltage3Error
-                                 00000b16
+                                 00000b49
                  _lowVoltageError
-                                 00000b9b
+                                 00000bce
                  _currentError
-                                 00000c30
+                                 00000c63
                  _solenoidValueError
-                                 00000d10
+                                 00000d43
                  _callAlarm
-                                 00000d11
+                                 00000d44
                  _measureFlowSensor
-                                 00000d15 0005(00000739:.textf)
+                                 00000d48 0005(0000076c:.textf)
      SECTION=.bss
                  _g_numberSetting
                                  000f4708 0005(0000063f:.textf)
@@ -1163,250 +1162,264 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0005(00000662:.textf)
                                           0005(00000666:.textf)
                                           0005(00000669:.textf)
-                                          0005(0000066f:.textf)
-                                          0005(00000675:.textf)
-                                          0005(0000067b:.textf)
                                           0005(00000681:.textf)
-                                          0005(00000747:.textf)
-                                          0005(0000074d:.textf)
+                                          0005(00000687:.textf)
+                                          0005(0000068d:.textf)
+                                          0005(00000693:.textf)
+                                          0005(0000077a:.textf)
                                           0005(00000780:.textf)
-                                          0005(00000783:.textf)
-                                          0005(000007fb:.textf)
-                                          0005(000007ff:.textf)
-                                          0005(0000082d:.textf)
-                                          0005(00000833:.textf)
-                                          0005(0000089a:.textf)
-                                          0005(000008a0:.textf)
-                                          0005(00000915:.textf)
-                                          0005(0000091b:.textf)
-                                          0005(0000097c:.textf)
-                                          0005(00000980:.textf)
-                                          0005(00000996:.textf)
-                                          0005(0000099c:.textf)
-                                          0005(000009e1:.textf)
-                                          0005(000009e7:.textf)
-                                          0005(00000c58:.textf)
-                                          0005(00000c5c:.textf)
-                                          0005(00000c6c:.textf)
-                                          0005(00000c6f:.textf)
-                                          0005(00000c88:.textf)
-                                          0005(00000c8c:.textf)
-                                          0005(00000c9c:.textf)
+                                          0005(000007b3:.textf)
+                                          0005(000007b6:.textf)
+                                          0005(0000082e:.textf)
+                                          0005(00000832:.textf)
+                                          0005(00000860:.textf)
+                                          0005(00000866:.textf)
+                                          0005(000008cd:.textf)
+                                          0005(000008d3:.textf)
+                                          0005(00000948:.textf)
+                                          0005(0000094e:.textf)
+                                          0005(000009af:.textf)
+                                          0005(000009b3:.textf)
+                                          0005(000009c9:.textf)
+                                          0005(000009cf:.textf)
+                                          0005(00000a14:.textf)
+                                          0005(00000a1a:.textf)
+                                          0005(00000c8b:.textf)
+                                          0005(00000c8f:.textf)
+                                          0005(00000c9f:.textf)
                                           0005(00000ca2:.textf)
+                                          0005(00000cbb:.textf)
+                                          0005(00000cbf:.textf)
+                                          0005(00000ccf:.textf)
+                                          0005(00000cd5:.textf)
                  _g_cvcc_current
-                                 000f4728 0005(00000984:.textf)
-                                          0005(0000098a:.textf)
-                                          0005(000009ed:.textf)
-                                          0005(000009f3:.textf)
-                                          0005(00000c50:.textf)
-                                          0005(00000c55:.textf)
-                                          0005(00000cf8:.textf)
-                                          0005(00000cfe:.textf)
+                                 000f4728 0005(000009b7:.textf)
+                                          0005(000009bd:.textf)
+                                          0005(00000a20:.textf)
+                                          0005(00000a26:.textf)
+                                          0005(00000c83:.textf)
+                                          0005(00000c88:.textf)
+                                          0005(00000d2b:.textf)
+                                          0005(00000d31:.textf)
                  _g_cvcc_voltge
                                  000f472c 0004(00000622:.textf)
                                           0004(00000626:.textf)
-                                          0005(000007f4:.textf)
-                                          0005(000007f8:.textf)
-                                          0005(00000839:.textf)
-                                          0005(0000083f:.textf)
-                                          0005(000008a6:.textf)
-                                          0005(000008ac:.textf)
-                                          0005(00000921:.textf)
-                                          0005(00000927:.textf)
-                                          0005(00000b32:.textf)
-                                          0005(00000b38:.textf)
-                                          0005(00000bc6:.textf)
-                                          0005(00000bcc:.textf)
+                                          0005(00000827:.textf)
+                                          0005(0000082b:.textf)
+                                          0005(0000086c:.textf)
+                                          0005(00000872:.textf)
+                                          0005(000008d9:.textf)
+                                          0005(000008df:.textf)
+                                          0005(00000954:.textf)
+                                          0005(0000095a:.textf)
+                                          0005(00000b65:.textf)
+                                          0005(00000b6b:.textf)
+                                          0005(00000bf9:.textf)
+                                          0005(00000bff:.textf)
                  _g_alarm
-                                 000f4730 0005(00000798:.textf)
-                                          0005(000007c0:.textf)
-                                          0005(0000080d:.textf)
-                                          0005(00000c84:.textf)
+                                 000f4730 0005(000007cb:.textf)
+                                          0005(000007f3:.textf)
+                                          0005(00000840:.textf)
+                                          0005(00000cb7:.textf)
                  _g_flow_value
-                                 000f4732 0005(0000073e:.textf)
-                                          0005(00000744:.textf)
-                                          0005(00000a68:.textf)
-                                          0005(00000a6b:.textf)
+                                 000f4732 0005(00000771:.textf)
+                                          0005(00000777:.textf)
+                                          0005(00000a9b:.textf)
+                                          0005(00000a9e:.textf)
      SECTION=.dataR
                  _g_timerSetting
-                                 000f47f2 0005(00000823:.textf)
-                                          0005(0000082a:.textf)
-                                          0005(00000890:.textf)
-                                          0005(00000897:.textf)
-                                          0005(00000a51:.textf)
-                                          0005(00000a5d:.textf)
-                                          0005(00000a97:.textf)
-                                          0005(00000aa3:.textf)
+                                 000f47f2 0005(0000066c:.textf)
+                                          0005(0000066f:.textf)
+                                          0005(00000672:.textf)
+                                          0005(00000675:.textf)
+                                          0005(00000678:.textf)
+                                          0005(0000067b:.textf)
+                                          0005(00000699:.textf)
+                                          0005(0000069f:.textf)
+                                          0005(000006a5:.textf)
+                                          0005(000006a8:.textf)
+                                          0005(000006ae:.textf)
+                                          0005(000006b4:.textf)
+                                          0005(00000856:.textf)
+                                          0005(0000085d:.textf)
+                                          0005(000008c3:.textf)
+                                          0005(000008ca:.textf)
+                                          0005(00000a84:.textf)
+                                          0005(00000a90:.textf)
+                                          0005(00000aca:.textf)
+                                          0005(00000ad6:.textf)
+                                          0022(0000170f:.textf)
                  _g_neutralization_time
-                                 000f4816 0005(00000903:.textf)
-                                          0005(00000908:.textf)
+                                 000f4816 0005(00000936:.textf)
+                                          0005(0000093b:.textf)
                  _g_electrolytic_flag
-                                 000f481a 0005(00000b07:.textf)
-                                          0005(00000b11:.textf)
+                                 000f481a 0005(00000b3a:.textf)
+                                          0005(00000b44:.textf)
      SECTION=.data
 0006 r_cg_adc
      SECTION=.textf
                  _R_ADC_Create
-                                 00000dc6 0022(00001723:.textf)
-                                          0023(00001749:.textf)
+                                 00000df9 0022(00001768:.textf)
+                                          0023(0000178e:.textf)
                  _R_ADC_Start
-                                 00000df9 0004(00000638:.textf)
-                                          0022(0000172b:.textf)
+                                 00000e2c 0004(00000638:.textf)
+                                          0022(00001770:.textf)
                  _R_ADC_Stop
-                                 00000e03
+                                 00000e36
                  _R_ADC_Set_OperationOn
-                                 00000e0d 0022(00001727:.textf)
+                                 00000e40 0022(0000176c:.textf)
                  _R_ADC_Set_OperationOff
-                                 00000e11
+                                 00000e44
                  _R_ADC_Get_Result
-                                 00000e15 0004(00000606:.textf)
+                                 00000e48 0004(00000606:.textf)
                                           0004(00000631:.textf)
                  _R_ADC_Set_ADChannel
-                                 00000e1c
+                                 00000e4f
 0007 r_cg_adc_user
      SECTION=.text
 0008 r_cg_cgc
      SECTION=.textf
                  _R_CGC_Create
-                                 00000e28 0023(00001739:.textf)
+                                 00000e5b 0023(0000177e:.textf)
 0009 r_cg_cgc_user
      SECTION=.textf
                  _R_CGC_Get_ResetSource
-                                 00000e3e 0023(00001735:.textf)
+                                 00000e71 0023(0000177a:.textf)
 0010 r_cg_dac
      SECTION=.textf
                  _R_DAC_Create
-                                 00000e41 0023(00001759:.textf)
+                                 00000e74 0023(0000179e:.textf)
                  _R_DAC0_Start
-                                 00000e5e
+                                 00000e91
                  _R_DAC0_Stop
-                                 00000e62
+                                 00000e95
                  _R_DAC0_Set_ConversionValue
-                                 00000e66
+                                 00000e99
                  _R_DAC1_Start
-                                 00000e69
+                                 00000e9c
                  _R_DAC1_Stop
-                                 00000e6d
+                                 00000ea0
                  _R_DAC1_Set_ConversionValue
-                                 00000e71
+                                 00000ea4
 0011 r_cg_dac_user
 0012 r_cg_port
      SECTION=.textf
                  _R_PORT_Create
-                                 00000e74 0023(0000173d:.textf)
+                                 00000ea7 0023(00001782:.textf)
 0013 r_cg_port_user
      SECTION=.textf
                  _R_PORT_Create_UserInit
-                                 00000eba 0022(00001703:.textf)
+                                 00000eed 0022(00001748:.textf)
 0014 r_cg_rtc
      SECTION=.textf
                  _R_RTC_Create
-                                 00000ebb 0022(000016ff:.textf)
-                                          0023(00001755:.textf)
+                                 00000eee 0022(00001744:.textf)
+                                          0023(0000179a:.textf)
                  _R_RTC_Start
-                                 00000ee2 0022(00001671:.textf)
+                                 00000f15 0022(000016a5:.textf)
                  _R_RTC_Stop
-                                 00000ee6
+                                 00000f19
                  _R_RTC_Get_CounterValue
-                                 00000eea
+                                 00000f1d
                  _R_RTC_Set_CounterValue
-                                 00000f3b 0022(0000166b:.textf)
+                                 00000f6e 0022(0000169f:.textf)
 0015 r_cg_rtc_user
      SECTION=.bss
                  _g_rtc
-                                 000f4736 0022(00001655:.textf)
-                                          0022(00001659:.textf)
-                                          0022(00001664:.textf)
+                                 000f4736 0022(00001689:.textf)
+                                          0022(0000168d:.textf)
+                                          0022(00001698:.textf)
 0016 r_cg_serial
      SECTION=.textf
                  _R_CSI01_Receive
-                                 00000ff9
+                                 0000102c
                  _R_CSI01_Send
-                                 00001013
+                                 00001046
                  _R_SAU0_Create
-                                 00001039 0022(000016eb:.textf)
-                                          0023(00001741:.textf)
+                                 0000106c 0022(00001730:.textf)
+                                          0023(00001786:.textf)
                  _R_UART1_Create
-                                 00001050 0016(00001048:.textf)
-                                          0022(000016f3:.textf)
+                                 00001083 0016(0000107b:.textf)
+                                          0022(00001738:.textf)
                  _R_UART1_Start
-                                 000010ce 0022(00001717:.textf)
+                                 00001101 0022(0000175c:.textf)
                  _R_UART1_Stop
-                                 000010f4
+                                 00001127
                  _R_UART1_Receive
-                                 00001112
+                                 00001145
                  _R_UART1_Send
-                                 0000112a
+                                 0000115d
                  _R_CSI00_Create
-                                 00001153 0016(0000104b:.textf)
-                                          0022(0000170b:.textf)
+                                 00001186 0016(0000107e:.textf)
+                                          0022(00001750:.textf)
                  _R_CSI00_Start
-                                 000011a6 0022(0000171f:.textf)
+                                 000011d9 0022(00001764:.textf)
                  _R_CSI00_Stop
-                                 000011cc
+                                 000011ff
                  _R_CSI00_Send
-                                 000011e4
+                                 00001217
                  _R_CSI01_Create
-                                 0000120c 0003(00000482:.textf)
-                                          0016(0000104e:.textf)
-                                          0022(00001707:.textf)
+                                 0000123f 0003(00000482:.textf)
+                                          0016(00001081:.textf)
+                                          0022(0000174c:.textf)
                  _R_CSI01_Start
-                                 00001266 0003(000005bf:.textf)
+                                 00001299 0003(000005bf:.textf)
                  _R_CSI01_Stop
-                                 0000128c 0017(000014f5:.textf)
+                                 000012bf 0017(00001528:.textf)
                  _R_CSI01_Send_Receive
-                                 000012a4 0003(000005ce:.textf)
+                                 000012d7 0003(000005ce:.textf)
                  _R_SAU1_Create
-                                 000012da 0022(000016ef:.textf)
-                                          0023(00001745:.textf)
+                                 0000130d 0022(00001734:.textf)
+                                          0023(0000178a:.textf)
                  _R_UART2_Create
-                                 000012ee 0016(000012e9:.textf)
-                                          0022(000016f7:.textf)
+                                 00001321 0016(0000131c:.textf)
+                                          0022(0000173c:.textf)
                  _R_UART2_Start
-                                 0000136c 0022(0000169d:.textf)
-                                          0022(0000171b:.textf)
+                                 0000139f 0022(000016d1:.textf)
+                                          0022(00001760:.textf)
                  _R_UART2_Stop
-                                 00001392 0022(00001691:.textf)
+                                 000013c5 0022(000016c5:.textf)
                  _R_UART2_Receive
-                                 000013b0 0005(000007b6:.textf)
-                                          0017(00001504:.textf)
-                                          0022(0000167b:.textf)
+                                 000013e3 0005(000007e9:.textf)
+                                          0017(00001537:.textf)
+                                          0022(000016af:.textf)
                  _R_UART2_Send
-                                 000013c8 0005(000006aa:.textf)
+                                 000013fb 0005(000006dd:.textf)
+                                          0022(00001712:.textf)
                  _R_UART3_Create
-                                 000013f1 0016(000012ec:.textf)
-                                          0022(000016fb:.textf)
+                                 00001424 0016(0000131f:.textf)
+                                          0022(00001740:.textf)
                  _R_UART3_Start
-                                 00001467 0022(00001713:.textf)
+                                 0000149a 0022(00001758:.textf)
                  _R_UART3_Stop
-                                 0000148d
+                                 000014c0
                  _R_UART3_Receive
-                                 000014ab
+                                 000014de
                  _R_UART3_Send
-                                 000014c3
+                                 000014f6
      SECTION=.bss
                  _gp_uart1_tx_address
-                                 000f473e 0016(00001139:.textf)
-                                          0016(00001142:.textf)
-                                          0016(0000114a:.textf)
+                                 000f473e 0016(0000116c:.textf)
+                                          0016(00001175:.textf)
+                                          0016(0000117d:.textf)
                                           0017(00000216:.text)
                                           0017(0000021e:.text)
                  _g_uart1_tx_count
-                                 000f4740 0016(0000113d:.textf)
-                                          0016(0000114d:.textf)
+                                 000f4740 0016(00001170:.textf)
+                                          0016(00001180:.textf)
                                           0017(000001ff:.text)
                                           0017(00000221:.text)
                  _gp_uart1_rx_address
-                                 000f4742 0016(00001126:.textf)
+                                 000f4742 0016(00001159:.textf)
                                           0017(000001ca:.text)
                                           0017(000001ce:.text)
                  _g_uart1_rx_count
-                                 000f4744 0016(0000111e:.textf)
+                                 000f4744 0016(00001151:.textf)
                                           0017(000001c2:.text)
                                           0017(000001d1:.text)
                                           0017(000001d7:.text)
                  _g_uart1_rx_length
-                                 000f4746 0016(00001122:.textf)
+                                 000f4746 0016(00001155:.textf)
                                           0017(000001bf:.text)
                                           0017(000001d4:.text)
                  _gp_csi00_rx_address
@@ -1416,93 +1429,93 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _g_csi00_rx_count
                                  000f474c
                  _gp_csi00_tx_address
-                                 000f474e 0016(0000102a:.textf)
-                                          0016(000011f6:.textf)
-                                          0016(000011fb:.textf)
-                                          0016(00001203:.textf)
+                                 000f474e 0016(0000105d:.textf)
+                                          0016(00001229:.textf)
+                                          0016(0000122e:.textf)
+                                          0016(00001236:.textf)
                                           0017(0000025f:.text)
                                           0017(00000267:.text)
                  _g_csi00_send_length
                                  000f4750
                  _g_csi00_tx_count
-                                 000f4752 0016(000011f2:.textf)
-                                          0016(00001206:.textf)
+                                 000f4752 0016(00001225:.textf)
+                                          0016(00001239:.textf)
                                           0017(00000252:.text)
                                           0017(0000026a:.text)
                  _gp_csi01_rx_address
-                                 000f4754 0016(0000100c:.textf)
-                                          0016(000012b8:.textf)
+                                 000f4754 0016(0000103f:.textf)
+                                          0016(000012eb:.textf)
                                           0017(000002a3:.text)
                                           0017(000002bd:.text)
                                           0017(000002cd:.text)
                  _g_csi01_rx_length
-                                 000f4756 0016(00001004:.textf)
+                                 000f4756 0016(00001037:.textf)
                  _g_csi01_rx_count
-                                 000f4758 0016(00001008:.textf)
+                                 000f4758 0016(0000103b:.textf)
                  _gp_csi01_tx_address
-                                 000f475a 0016(00001025:.textf)
-                                          0016(00001030:.textf)
-                                          0016(000012b4:.textf)
-                                          0016(000012be:.textf)
-                                          0016(000012d0:.textf)
+                                 000f475a 0016(00001058:.textf)
+                                          0016(00001063:.textf)
+                                          0016(000012e7:.textf)
+                                          0016(000012f1:.textf)
+                                          0016(00001303:.textf)
                                           0017(000002d0:.text)
                                           0017(000002e1:.text)
                  _g_csi01_send_length
                                  000f475c
                  _g_csi01_tx_count
-                                 000f475e 0016(00001021:.textf)
-                                          0016(00001033:.textf)
-                                          0016(000012b0:.textf)
-                                          0016(000012d3:.textf)
+                                 000f475e 0016(00001054:.textf)
+                                          0016(00001066:.textf)
+                                          0016(000012e3:.textf)
+                                          0016(00001306:.textf)
                                           0017(00000296:.text)
                                           0017(0000029d:.text)
                                           0017(000002e4:.text)
                  _gp_uart2_tx_address
-                                 000f4760 0016(000013d7:.textf)
-                                          0016(000013e0:.textf)
-                                          0016(000013e8:.textf)
+                                 000f4760 0016(0000140a:.textf)
+                                          0016(00001413:.textf)
+                                          0016(0000141b:.textf)
                                           0017(00000374:.text)
                                           0017(0000037c:.text)
                  _g_uart2_tx_count
-                                 000f4762 0016(000013db:.textf)
-                                          0016(000013eb:.textf)
+                                 000f4762 0016(0000140e:.textf)
+                                          0016(0000141e:.textf)
                                           0017(0000035d:.text)
                                           0017(0000037f:.text)
                  _gp_uart2_rx_address
-                                 000f4764 0016(000013c4:.textf)
+                                 000f4764 0016(000013f7:.textf)
                                           0017(00000328:.text)
                                           0017(0000032c:.text)
                  _g_uart2_rx_count
-                                 000f4766 0016(000013bc:.textf)
+                                 000f4766 0016(000013ef:.textf)
                                           0017(00000320:.text)
                                           0017(0000032f:.text)
                                           0017(00000335:.text)
                  _g_uart2_rx_length
-                                 000f4768 0016(000013c0:.textf)
+                                 000f4768 0016(000013f3:.textf)
                                           0017(0000031d:.text)
                                           0017(00000332:.text)
                  _gp_uart3_tx_address
-                                 000f476a 0016(000014d2:.textf)
-                                          0016(000014db:.textf)
-                                          0016(000014e3:.textf)
+                                 000f476a 0016(00001505:.textf)
+                                          0016(0000150e:.textf)
+                                          0016(00001516:.textf)
                                           0017(00000404:.text)
                                           0017(0000040c:.text)
                  _g_uart3_tx_count
-                                 000f476c 0016(000014d6:.textf)
-                                          0016(000014e6:.textf)
+                                 000f476c 0016(00001509:.textf)
+                                          0016(00001519:.textf)
                                           0017(000003ed:.text)
                                           0017(0000040f:.text)
                  _gp_uart3_rx_address
-                                 000f476e 0016(000014bf:.textf)
+                                 000f476e 0016(000014f2:.textf)
                                           0017(000003b8:.text)
                                           0017(000003bc:.text)
                  _g_uart3_rx_count
-                                 000f4770 0016(000014b7:.textf)
+                                 000f4770 0016(000014ea:.textf)
                                           0017(000003b0:.text)
                                           0017(000003bf:.text)
                                           0017(000003c5:.text)
                  _g_uart3_rx_length
-                                 000f4772 0016(000014bb:.textf)
+                                 000f4772 0016(000014ee:.textf)
                                           0017(000003ad:.text)
                                           0017(000003c2:.text)
 0017 r_cg_serial_user
@@ -1512,47 +1525,49 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _g_csi_err
                                  000f4775
                  _g_csi_send_end
-                                 000f4776 0017(000014fa:.textf)
+                                 000f4776 0017(0000152d:.textf)
                  _g_csi_rev_end
                                  000f4777 0003(000004ac:.textf)
-                                          0017(000014f2:.textf)
-                                          0022(0000164a:.textf)
+                                          0017(00001525:.textf)
+                                          0022(0000167e:.textf)
                  _g_uart1_end
                                  000f4778
                  _g_uart2_send
-                                 000f4779 0005(00000695:.textf)
-                                          0005(000006b0:.textf)
-                                          0017(0000151b:.textf)
+                                 000f4779 0005(000006c8:.textf)
+                                          0005(000006e3:.textf)
+                                          0017(0000154e:.textf)
+                                          0022(00001708:.textf)
+                                          0022(00001718:.textf)
                  _g_uart2_receive
-                                 000f477a 0017(00001516:.textf)
+                                 000f477a 0017(00001549:.textf)
                  _g_rx_data
-                                 000f477b 0017(00001501:.textf)
-                                          0017(00001508:.textf)
-                                          0022(00001678:.textf)
+                                 000f477b 0017(00001534:.textf)
+                                          0017(0000153b:.textf)
+                                          0022(000016ac:.textf)
                  _g_uart2_fault
-                                 000f479b 0017(0000150e:.textf)
-                                          0017(00001513:.textf)
-                                          0022(0000168b:.textf)
-                                          0022(000016a1:.textf)
+                                 000f479b 0017(00001541:.textf)
+                                          0017(00001546:.textf)
+                                          0022(000016bf:.textf)
+                                          0022(000016d5:.textf)
      SECTION=.text
      SECTION=.textf
 0018 r_cg_timer
      SECTION=.textf
                  _R_TAU0_Create
-                                 00001523 0022(000016e7:.textf)
-                                          0023(0000174d:.textf)
+                                 00001556 0022(0000172c:.textf)
+                                          0023(00001792:.textf)
                  _R_TAU0_Channel0_Start
-                                 000015d0 0022(0000170f:.textf)
+                                 00001603 0022(00001754:.textf)
                  _R_TAU0_Channel0_Stop
-                                 000015e0
+                                 00001613
                  _R_TAU0_Channel1_Start
-                                 000015f0
+                                 00001623
                  _R_TAU0_Channel1_Stop
-                                 00001600
+                                 00001633
                  _R_TAU0_Channel2_Start
-                                 00001610
+                                 00001643
                  _R_TAU0_Channel2_Stop
-                                 00001620
+                                 00001653
 0019 r_cg_timer_user
      SECTION=.bss
                  _timer0_ch0_flag
@@ -1562,54 +1577,55 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _timer0_ch2_flag
                                  000f479e 0019(00000435:.text)
                  _g_systemTime
-                                 000f47a0 0005(00000d1a:.textf)
-                                          0005(00000d1f:.textf)
+                                 000f47a0 0005(00000d4d:.textf)
+                                          0005(00000d52:.textf)
                                           0019(00000417:.text)
                                           0019(0000041f:.text)
                                           0019(00000422:.text)
                                           0019(00000426:.text)
-                                          0024(0000176b:.textf)
-                                          0024(00001770:.textf)
-                                          0024(0000179f:.textf)
-                                          0024(000017a6:.textf)
-                                          0024(000017ad:.textf)
+                                          0024(000017b0:.textf)
                                           0024(000017b5:.textf)
-                                          0024(000017e1:.textf)
-                                          0024(000017e6:.textf)
-                                          0024(00001802:.textf)
-                                          0024(00001808:.textf)
-                                          0024(0000181b:.textf)
-                                          0024(00001820:.textf)
-                                          0024(00001849:.textf)
-                                          0024(0000184f:.textf)
+                                          0024(000017e4:.textf)
+                                          0024(000017eb:.textf)
+                                          0024(000017f2:.textf)
+                                          0024(000017fa:.textf)
+                                          0024(00001826:.textf)
+                                          0024(0000182b:.textf)
+                                          0024(00001847:.textf)
+                                          0024(0000184d:.textf)
+                                          0024(00001860:.textf)
+                                          0024(00001865:.textf)
+                                          0024(0000188e:.textf)
+                                          0024(00001894:.textf)
      SECTION=.text
 0020 r_cg_wdt
      SECTION=.textf
                  _R_WDT_Create
-                                 00001630 0023(00001751:.textf)
+                                 00001663 0023(00001796:.textf)
                  _R_WDT_Restart
-                                 00001641 0005(000006fc:.textf)
-                                          0005(000007ba:.textf)
-                                          0005(00000afa:.textf)
-                                          0005(00000d85:.textf)
-                                          0022(000016de:.textf)
-                                          0024(000017d9:.textf)
+                                 00001674 0005(0000072f:.textf)
+                                          0005(000007ed:.textf)
+                                          0005(00000b2d:.textf)
+                                          0005(00000db8:.textf)
+                                          0022(0000171d:.textf)
+                                          0022(00001723:.textf)
+                                          0024(0000181e:.textf)
 0021 r_cg_wdt_user
      SECTION=.text
 0022 r_main
      SECTION=.textf
                  _main
-                                 00001645 0001(00000175:.text)
+                                 00001678 0001(00000175:.text)
                  _R_MAIN_UserInit
-                                 000016e3 0022(00001646:.textf)
+                                 00001728 0022(0000167a:.textf)
      SECTION=.bss
                  __stamp
-                                 000f47a4 0022(00001684:.textf)
-                                          0022(000016b4:.textf)
+                                 000f47a4 0022(000016b8:.textf)
+                                          0022(000016e8:.textf)
                  _g_e_status
                                  000f47b0
                  _flow_p
-                                 000f47b1 0022(000016ac:.textf)
+                                 000f47b1 0022(000016e0:.textf)
                  _salt_h_p
                                  000f47b2
                  _g_eeprom_wren
@@ -1627,26 +1643,26 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _data_f_test
                                  000f47e8
                  _g_control_buffer
-                                 000f47ec 0005(0000068e:.textf)
-                                          0005(00000692:.textf)
-                                          0005(0000069c:.textf)
-                                          0005(000006a1:.textf)
-                                          0005(000006a7:.textf)
-                                          0005(000007a5:.textf)
-                                          0005(000007a8:.textf)
-                                          0005(000007b3:.textf)
+                                 000f47ec 0005(000006c1:.textf)
+                                          0005(000006c5:.textf)
+                                          0005(000006cf:.textf)
+                                          0005(000006d4:.textf)
+                                          0005(000006da:.textf)
+                                          0005(000007d8:.textf)
+                                          0005(000007db:.textf)
+                                          0005(000007e6:.textf)
      SECTION=.dataR
                  _g_error
-                                 000f481c 0005(00000af3:.textf)
-                                          0005(00000b8e:.textf)
-                                          0005(00000c26:.textf)
-                                          0005(00000d06:.textf)
-                                          0005(00000d12:.textf)
+                                 000f481c 0005(00000b26:.textf)
+                                          0005(00000bc1:.textf)
+                                          0005(00000c59:.textf)
+                                          0005(00000d39:.textf)
+                                          0005(00000d45:.textf)
                  _g_adc_ch
                                  000f481e
                  _led_st
-                                 000f4820 0022(000016bf:.textf)
-                                          0022(000016d1:.textf)
+                                 000f4820 0022(000016f3:.textf)
+                                          0022(00001705:.textf)
                  _e_send
                                  000f4821
                  _e_data
@@ -1657,169 +1673,169 @@ No   Unit Name   Global.Symbol   Location External Infomation
 0023 r_systeminit
      SECTION=.textf
                  _R_Systeminit
-                                 0000172e 0023(00001764:.textf)
+                                 00001773 0023(000017a9:.textf)
                  _hdwinit
-                                 00001760 0001(0000012d:.text)
+                                 000017a5 0001(0000012d:.text)
 0024 usr_timer
      SECTION=.textf
                  _delay_ms
-                                 00001765 0005(00000728:.textf)
-                                          0005(00000874:.textf)
-                                          0005(000008e1:.textf)
-                                          0005(0000095f:.textf)
-                                          0005(00000a2b:.textf)
-                                          0005(00000a93:.textf)
-                                          0005(00000b7d:.textf)
-                                          0005(00000c15:.textf)
-                                          0005(00000cde:.textf)
-                                          0022(00001699:.textf)
-                                          0024(000017d6:.textf)
+                                 000017aa 0005(0000075b:.textf)
+                                          0005(000008a7:.textf)
+                                          0005(00000914:.textf)
+                                          0005(00000992:.textf)
+                                          0005(00000a5e:.textf)
+                                          0005(00000ac6:.textf)
+                                          0005(00000bb0:.textf)
+                                          0005(00000c48:.textf)
+                                          0005(00000d11:.textf)
+                                          0022(000016cd:.textf)
+                                          0024(0000181b:.textf)
                  _delay
-                                 000017cd 0005(0000071d:.textf)
-                                          0005(00000731:.textf)
-                                          0005(000007ca:.textf)
-                                          0005(00000aeb:.textf)
-                                          0005(00000ba9:.textf)
+                                 00001812 0005(00000750:.textf)
+                                          0005(00000764:.textf)
+                                          0005(000007fd:.textf)
+                                          0005(00000b1e:.textf)
+                                          0005(00000bdc:.textf)
                  _ns_delay_ms
-                                 000017dc 0005(00000d4d:.textf)
-                                          0022(00001687:.textf)
-                                          0022(000016b7:.textf)
+                                 00001821 0005(00000d80:.textf)
+                                          0022(000016bb:.textf)
+                                          0022(000016eb:.textf)
                  _non_block_delay
-                                 00001811
+                                 00001856
                  _mTask
-                                 00001813
+                                 00001858
 0025 memcpy
      SECTION=.RLIB
                  _memcpy
-                                 00001857 0022(00001667:.textf)
+                                 0000189c 0022(0000169b:.textf)
 0026 memset
      SECTION=.RLIB
                  _memset
-                                 00001868 0003(000004fa:.textf)
+                                 000018ad 0003(000004fa:.textf)
                                           0003(00000552:.textf)
 0027 _COM_faddsub
      SECTION=.RLIB
                  __COM_fsub
-                                 000018d2
+                                 00001917
                  __COM_fadd
-                                 000018da 0005(00000d72:.textf)
+                                 0000191f 0005(00000da5:.textf)
 0028 _COM_fdiv
      SECTION=.RLIB
                  __COM_fdiv
-                                 00001a10 0005(00000dc0:.textf)
+                                 00001a55 0005(00000df3:.textf)
 0029 _COM_fge
      SECTION=.RLIB
                  __COM_fge
-                                 00001adf 0005(00000804:.textf)
-                                          0005(0000098f:.textf)
-                                          0005(00000b5b:.textf)
-                                          0005(00000bf3:.textf)
-                                          0005(00000cc3:.textf)
+                                 00001b24 0005(00000837:.textf)
+                                          0005(000009c2:.textf)
+                                          0005(00000b8e:.textf)
+                                          0005(00000c26:.textf)
+                                          0005(00000cf6:.textf)
 0030 _COM_fgt
      SECTION=.RLIB
                  __COM_fgt
-                                 00001af5 0005(0000093f:.textf)
-                                          0005(000009bd:.textf)
-                                          0005(00000c65:.textf)
-                                          0005(00000c95:.textf)
+                                 00001b3a 0005(00000972:.textf)
+                                          0005(000009f0:.textf)
+                                          0005(00000c98:.textf)
+                                          0005(00000cc8:.textf)
 0031 _COM_fle
      SECTION=.RLIB
                  __COM_fle
-                                 00001b0b 0005(0000076b:.textf)
-                                          0005(00000a7b:.textf)
+                                 00001b50 0005(0000079e:.textf)
+                                          0005(00000aae:.textf)
 0032 _COM_flt
      SECTION=.RLIB
                  __COM_flt
-                                 00001b21 0005(0000078f:.textf)
-                                          0005(0000085b:.textf)
-                                          0005(000008c8:.textf)
-                                          0005(00000a0b:.textf)
-                                          0005(00000c7b:.textf)
+                                 00001b66 0005(000007c2:.textf)
+                                          0005(0000088e:.textf)
+                                          0005(000008fb:.textf)
+                                          0005(00000a3e:.textf)
+                                          0005(00000cae:.textf)
 0033 _COM_fmul
      SECTION=.RLIB
                  __COM_fmul
-                                 00001b82 0004(0000061a:.textf)
-                                          0005(000007ec:.textf)
-                                          0005(00000b2c:.textf)
-                                          0005(00000bc0:.textf)
-                                          0005(00000c43:.textf)
-                                          0005(00000cf2:.textf)
-                                          0005(00000d97:.textf)
-                                          0005(00000da5:.textf)
+                                 00001bc7 0004(0000061a:.textf)
+                                          0005(0000081f:.textf)
+                                          0005(00000b5f:.textf)
+                                          0005(00000bf3:.textf)
+                                          0005(00000c76:.textf)
+                                          0005(00000d25:.textf)
+                                          0005(00000dca:.textf)
+                                          0005(00000dd8:.textf)
 0034 _COM_ftoul
      SECTION=.RLIB
                  __COM_ftoul
-                                 00001c24 0005(0000068a:.textf)
+                                 00001c69 0005(000006bd:.textf)
 0035 _COM_funordered
      SECTION=.RLIB
                  __COM_funordered
-                                 00001c30 0005(00000758:.textf)
-                                          0005(00000848:.textf)
-                                          0005(000008b5:.textf)
-                                          0005(0000092c:.textf)
-                                          0005(000009aa:.textf)
-                                          0005(000009f8:.textf)
-                                          0005(00000b48:.textf)
-                                          0005(00000bde:.textf)
-                                          0005(00000cb0:.textf)
+                                 00001c75 0005(0000078b:.textf)
+                                          0005(0000087b:.textf)
+                                          0005(000008e8:.textf)
+                                          0005(0000095f:.textf)
+                                          0005(000009dd:.textf)
+                                          0005(00000a2b:.textf)
+                                          0005(00000b7b:.textf)
+                                          0005(00000c11:.textf)
+                                          0005(00000ce3:.textf)
 0036 _COM_ultof
      SECTION=.RLIB
                  __COM_ultof
-                                 00001c3b 0004(0000060e:.textf)
-                                          0005(000007e0:.textf)
-                                          0005(00000b20:.textf)
-                                          0005(00000bb4:.textf)
-                                          0005(00000c37:.textf)
-                                          0005(00000ce6:.textf)
-                                          0005(00000db5:.textf)
+                                 00001c80 0004(0000060e:.textf)
+                                          0005(00000813:.textf)
+                                          0005(00000b53:.textf)
+                                          0005(00000be7:.textf)
+                                          0005(00000c6a:.textf)
+                                          0005(00000d19:.textf)
+                                          0005(00000de8:.textf)
 0037 _REL_fcmp
      SECTION=.RLIB
                  __REL_fcmp
-                                 00001c41 0029(00001ae9:.RLIB)
-                                          0030(00001aff:.RLIB)
-                                          0031(00001b15:.RLIB)
-                                          0032(00001b2b:.RLIB)
+                                 00001c86 0029(00001b2e:.RLIB)
+                                          0030(00001b44:.RLIB)
+                                          0031(00001b5a:.RLIB)
+                                          0032(00001b70:.RLIB)
 0038 _REL_fordered_core
      SECTION=.RLIB
                  __REL_fordered_core
-                                 00001c79 0029(00001ae2:.RLIB)
-                                          0030(00001af8:.RLIB)
-                                          0031(00001b0e:.RLIB)
-                                          0032(00001b24:.RLIB)
-                                          0035(00001c33:.RLIB)
+                                 00001cbe 0029(00001b27:.RLIB)
+                                          0030(00001b3d:.RLIB)
+                                          0031(00001b53:.RLIB)
+                                          0032(00001b69:.RLIB)
+                                          0035(00001c78:.RLIB)
 0039 _REL_ftol
      SECTION=.RLIB
                  __REL_ftol
-                                 00001c95 0034(00001c2a:.RLIB)
+                                 00001cda 0034(00001c6f:.RLIB)
 0040 _REL_f_inf
      SECTION=.RLIB
                  __REL_f_inf
-                                 00001cca 0027(00001969:.RLIB)
-                                          0028(000019fa:.RLIB)
-                                          0028(00001a9a:.RLIB)
-                                          0033(00001b54:.RLIB)
-                                          0033(00001bf7:.RLIB)
+                                 00001d0f 0027(000019ae:.RLIB)
+                                          0028(00001a3f:.RLIB)
+                                          0028(00001adf:.RLIB)
+                                          0033(00001b99:.RLIB)
+                                          0033(00001c3c:.RLIB)
 0041 _REL_f_norm
      SECTION=.RLIB
                  __REL_f_norm
-                                 00001cd2 0028(000019db:.RLIB)
-                                          0028(00001a06:.RLIB)
-                                          0033(00001b75:.RLIB)
+                                 00001d17 0028(00001a20:.RLIB)
+                                          0028(00001a4b:.RLIB)
+                                          0033(00001bba:.RLIB)
 0042 _REL_f_round
      SECTION=.RLIB
                  __REL_f_round
-                                 00001ce2 0027(00001976:.RLIB)
-                                          0027(000019ae:.RLIB)
-                                          0028(00001adc:.RLIB)
-                                          0033(00001c04:.RLIB)
+                                 00001d27 0027(000019bb:.RLIB)
+                                          0027(000019f3:.RLIB)
+                                          0028(00001b21:.RLIB)
+                                          0033(00001c49:.RLIB)
 0043 _REL_ltof
      SECTION=.RLIB
                  __REL_ltof
-                                 00001cf5 0036(00001c3e:.RLIB)
+                                 00001d3a 0036(00001c83:.RLIB)
 0044 _COM_lshr
      SECTION=.RLIB
                  __COM_lshr
-                                 00001d49 0039(00001cc1:.RLIB)
+                                 00001d8e 0039(00001d06:.RLIB)
 0045 rlink_generates_01
      SECTION=.option_byte
 0046 rlink_generates_02
@@ -1870,11 +1886,11 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  __s.textf
                                  0000043b
                  __e.textf
-                                 00001857
+                                 0000189c
                  __s.RLIB
-                                 00001857
+                                 0000189c
                  __e.RLIB
-                                 00001d60
+                                 00001da5
                  __s.const
                                  00003000
                  __e.const
