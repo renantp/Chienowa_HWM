@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements device driver for DAC module.
-* Creation Date: 17/11/2021
+* Creation Date: 24/11/2021
 ***********************************************************************************************************************/
 
 #ifndef DAC_H

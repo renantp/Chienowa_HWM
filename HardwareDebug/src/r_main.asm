@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Tue Nov 23 09:22:34 2021
+#@  compiled at Wed Nov 24 15:37:40 2021
 
 	.EXTERN _g_rtc
 	.EXTERN _g_timerSetting
@@ -100,7 +100,7 @@ _main:
 	;***       23 : * Device(s)    : R5F104ML
 	;***       24 : * Tool-Chain   : CCRL
 	;***       25 : * Description  : This file implements main function.
-	;***       26 : * Creation Date: 17/11/2021
+	;***       26 : * Creation Date: 24/11/2021
 	;***       27 : ***********************************************************************************************************************/
 	;***       28 : 
 	;***       29 : /***********************************************************************************************************************
@@ -280,138 +280,120 @@ _main:
 	clrb a
 .BB@LABEL@1_8:	; bb46
 	mov !LOWW(_led_st), a
-	;***      122 : //    		uint32_t buf[3] = {H_ALARM, 0x11100100, 0xffffffff};
-	;***      123 :     	    uint8_t state = g_uart2_send;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 123
+	;***      122 :     	    uint8_t state = g_uart2_send;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 122
 	mov a, !LOWW(_g_uart2_send)
 	mov [sp+0x00], a
-	;***      124 :     	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(g_timerSetting));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 124
+	;***      123 :     	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(g_timerSetting));
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 123
 	mov c, #0x24
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_R_UART2_Send
 .BB@LABEL@1_9:	; bb53
 	mov a, [sp+0x00]
-	;***      125 : 			while(state == g_uart2_send){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 125
+	;***      124 : 			while(state == g_uart2_send){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 124
 	cmp a, !LOWW(_g_uart2_send)
 	bnz $.BB@LABEL@1_11
 .BB@LABEL@1_10:	; bb52
-	;***      126 : 				R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 126
+	;***      125 : 				R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 125
 	call !!_R_WDT_Restart
 	br $.BB@LABEL@1_9
 .BB@LABEL@1_11:	; if_break_bb69
-	;***      127 : 			}
-	;***      128 : //			g_rx_data[0]= g_rx_data[1]=g_rx_data[2]= 0x00;
-	;***      129 : //			g_control_buffer.head = H_ALARM;
-	;***      130 : //			g_control_buffer.set_number = 4;
-	;***      131 : //			g_control_buffer.set_value = 1;
-	;***      132 : //			R_UART2_Send((uint8_t *)&g_control_buffer, sizeof(struct UART_Buffer_s));
-	;***      133 : //			while(state == g_uart2_send);
-	;***      134 : //			sendToRasPi(H_ALARM, OVER_CURRENT, 3);
-	;***      135 : //			R_UART2_Receive((uint8_t *)rx_data, 12);
-	;***      136 : //			data_f = (float)rx_data[0];
-	;***      137 : ////			data_f_test.refined.b[0] = rx_data[0]>>24;
-	;***      138 : ////			data_f_test.refined.b[1] = rx_data[0]>>16;
-	;***      139 : ////			data_f_test.refined.b[2] = rx_data[0]>>8;
-	;***      140 : ////			data_f_test.refined.b[3] = rx_data[0];
-	;***      141 : //			data_f_test.refined.b[0] = rx_data[0];
-	;***      142 : //			data_f_test.refined.b[1] = rx_data[0]>>8;
-	;***      143 : //			data_f_test.refined.b[2] = rx_data[0]>>16;
-	;***      144 : //			data_f_test.refined.b[3] = rx_data[0]>>24;
-	;***      145 :     		if(led_st == 0x00){
-	;***      146 :     		}else{
-	;***      147 :     		}
-	;***      148 :     	}
-	;***      149 : //--------------------------------End testing code---------------------------------------------------------
-	;***      150 : //    	main_20211111();
-	;***      151 :     	R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 151
+	;***      126 : 			}
+	;***      127 :     		if(led_st == 0x00){
+	;***      128 :     		}else{
+	;***      129 :     		}
+	;***      130 :     	}
+	;***      131 : //--------------------------------End testing code---------------------------------------------------------
+	;***      132 : //    	main_20211111();
+	;***      133 :     	R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 133
 	call !!_R_WDT_Restart
 	br $.BB@LABEL@1_1
 _R_MAIN_UserInit:
 	.STACK _R_MAIN_UserInit = 4
-	;***      152 :     }
-	;***      153 :     /* End user code. Do not edit comment generated here */
-	;***      154 : }
-	;***      155 : 
-	;***      156 : /***********************************************************************************************************************
-	;***      157 : * Function Name: R_MAIN_UserInit
-	;***      158 : * Description  : This function adds user code before implementing main function.
-	;***      159 : * Arguments    : None
-	;***      160 : * Return Value : None
-	;***      161 : ***********************************************************************************************************************/
-	;***      162 : void R_MAIN_UserInit(void)
-	;***      163 : {
-	;***      164 :     /* Start user code. Do not edit comment generated here */
-	;***      165 :     EI();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 165
+	;***      134 :     }
+	;***      135 :     /* End user code. Do not edit comment generated here */
+	;***      136 : }
+	;***      137 : 
+	;***      138 : /***********************************************************************************************************************
+	;***      139 : * Function Name: R_MAIN_UserInit
+	;***      140 : * Description  : This function adds user code before implementing main function.
+	;***      141 : * Arguments    : None
+	;***      142 : * Return Value : None
+	;***      143 : ***********************************************************************************************************************/
+	;***      144 : void R_MAIN_UserInit(void)
+	;***      145 : {
+	;***      146 :     /* Start user code. Do not edit comment generated here */
+	;***      147 :     EI();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 147
 	ei
-	;***      166 :     R_TAU0_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 166
+	;***      148 :     R_TAU0_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 148
 	call !!_R_TAU0_Create
-	;***      167 :     R_SAU0_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 167
+	;***      149 :     R_SAU0_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 149
 	call !!_R_SAU0_Create
-	;***      168 :     R_SAU1_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 168
+	;***      150 :     R_SAU1_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 150
 	call !!_R_SAU1_Create
-	;***      169 :     R_UART1_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 169
+	;***      151 :     R_UART1_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 151
 	call !!_R_UART1_Create
-	;***      170 :     R_UART2_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 170
+	;***      152 :     R_UART2_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 152
 	call !!_R_UART2_Create
-	;***      171 :     R_UART3_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 171
+	;***      153 :     R_UART3_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 153
 	call !!_R_UART3_Create
-	;***      172 :     R_RTC_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 172
+	;***      154 :     R_RTC_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 154
 	call !!_R_RTC_Create
-	;***      173 :     R_PORT_Create_UserInit();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 173
+	;***      155 :     R_PORT_Create_UserInit();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 155
 	call !!_R_PORT_Create_UserInit
-	;***      174 :     R_CSI01_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 174
+	;***      156 :     R_CSI01_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 156
 	call !!_R_CSI01_Create
-	;***      175 :     R_CSI00_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 175
+	;***      157 :     R_CSI00_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 157
 	call !!_R_CSI00_Create
-	;***      176 : 
-	;***      177 :     R_TAU0_Channel0_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 177
+	;***      158 : 
+	;***      159 :     R_TAU0_Channel0_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 159
 	call !!_R_TAU0_Channel0_Start
-	;***      178 :     R_UART3_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 178
+	;***      160 :     R_UART3_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 160
 	call !!_R_UART3_Start
-	;***      179 :     R_UART1_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 179
+	;***      161 :     R_UART1_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 161
 	call !!_R_UART1_Start
-	;***      180 :     R_UART2_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 180
+	;***      162 :     R_UART2_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 162
 	call !!_R_UART2_Start
-	;***      181 :     R_CSI00_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 181
+	;***      163 :     R_CSI00_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 163
 	call !!_R_CSI00_Start
-	;***      182 : //    R_CSI01_Start();
-	;***      183 : 
-	;***      184 : 
-	;***      185 :     R_ADC_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 185
+	;***      164 : //    R_CSI01_Start();
+	;***      165 : 
+	;***      166 : 
+	;***      167 :     R_ADC_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 167
 	call !!_R_ADC_Create
-	;***      186 :     R_ADC_Set_OperationOn();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 186
+	;***      168 :     R_ADC_Set_OperationOn();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 168
 	call !!_R_ADC_Set_OperationOn
-	;***      187 : //    R_ADC_Set_ADChannel(ADCHANNEL0);
-	;***      188 :     R_ADC_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 188
+	;***      169 : //    R_ADC_Set_ADChannel(ADCHANNEL0);
+	;***      170 :     R_ADC_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 170
 	br !!_R_ADC_Start
-	;***      189 :     /* End user code. Do not edit comment generated here */
-	;***      190 : }
-	;***      191 : 
-	;***      192 : /* Start user code for adding. Do not edit comment generated here */
-	;***      193 : /* End user code. Do not edit comment generated here */
+	;***      171 :     /* End user code. Do not edit comment generated here */
+	;***      172 : }
+	;***      173 : 
+	;***      174 : /* Start user code for adding. Do not edit comment generated here */
+	;***      175 : /* End user code. Do not edit comment generated here */
 	.SECTION .data,DATA
 	.ALIGN 2
 _g_error:

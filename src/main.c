@@ -99,35 +99,30 @@ void InitialOperationModeStart(void){
 		R_WDT_Restart();
 	}while((I_ACID_L_PIN == I_ON)|(I_ALKALI_L_PIN == I_ON));
 }
+uint8_t FlowSensorCheck(void){
+	delay(15);
+	g_flow_value = measureFlowSensor(5);
+	if((g_flow_value < g_numberSetting.upperFlow)
+			&(g_flow_value > g_numberSetting.lowerFlow)){
+		return 1;
+	}else{
+		sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, 1);
+		return 0;
+	}
+}
 void WaterSupplyOperation(void){
 	O_SPOUT_WATER_PIN = ON;		// SV2 On
 	delay(30);
 	O_SUPPLY_WATER_PIN = ON;	// SV1 On
 	delay_ms(500);
 	O_SPOUT_WATER_PIN = OFF;	// SV2 Off
-	do{
-		delay(15);
-		g_flow_value = measureFlowSensor(5);
-		if((g_flow_value < g_numberSetting.upperFlow)
-				&(g_flow_value > g_numberSetting.lowerFlow)){
-			break;
-		}else{
-			g_alarm = FLOW_SENSOR_ERROR;
-			sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, 1);
-			while(g_control_buffer.set_value != 0){
-				R_UART2_Receive((uint8_t *)&g_control_buffer, sizeof(struct UART_Buffer_s));
-				R_WDT_Restart();
-			}
-			g_alarm = OK;
-		}
-	}while(1);
+	while(FlowSensorCheck() != 1){
+		//TODO: Adjust
+
+	}
 	delay(10);
 }
-void ElectrolyticOperation(void){
-	O_SUPPLY_WATER_PIN = ON; //SV1
-	O_CVCC_ON_PIN = ON;
-	O_PUMP_SALT_PIN = ON; //SP1
-	//-----------Voltage 1 check----------------
+void Voltage1Check(void){
 	g_cvcc_voltge = (float)g_adc_value[1]/512;
 	if(g_cvcc_voltge>=g_numberSetting.upperVoltage1){
 		//Alarm
@@ -136,7 +131,8 @@ void ElectrolyticOperation(void){
 		sendToRasPi(H_ALARM, OVER_VOLTAGE_1, 1);
 		//TODO: Wait to reset
 	}
-	//-----------Voltage 2 check----------------
+}
+void Voltage2Check(void){
 	uint16_t _time_count = 0;
 	do{
 		_time_count = 0;
@@ -148,8 +144,9 @@ void ElectrolyticOperation(void){
 			sendToRasPi(H_ALARM, OVER_VOLTAGE_2, 1);
 		}
 	}while(_time_count == 10000);
-	//-----------Voltage 3 check----------------
-	_time_count = 0;
+}
+void Voltage3Check(void){
+	uint16_t _time_count = 0;
 	while((g_cvcc_voltge>=g_numberSetting.upperVoltage3)&(_time_count < g_timerSetting.t13_overVoltage3Time)){
 		_time_count++;
 		delay_ms(1);
@@ -159,10 +156,11 @@ void ElectrolyticOperation(void){
 		electrolyticOperationOFF();
 		//TODO: Wait to reset
 	}
-	//----------Low voltage error--------------
+}
+void LowVoltageCheck(void){
 	electrolyticOperationON();
 	while(g_neutralization_time > 60000);
-	_time_count = 0;
+	uint16_t _time_count = 0;
 	while((g_cvcc_voltge <= g_numberSetting.lowerVoltage)&(_time_count < 10000)){
 		_time_count++;
 		delay_ms(1);
@@ -172,10 +170,11 @@ void ElectrolyticOperation(void){
 		electrolyticOperationOFF();
 		//TODO: Wait to reset
 	}
-	//----------Current Error------------------
+}
+void LowCurrentCheck(void){
 	if((g_cvcc_current<=g_numberSetting.lowerCurrent)|(g_cvcc_current>=g_numberSetting.upperCurrent)){
 		sendToRasPi(H_ALARM, CURRENT_INVALID, 1);
-		_time_count = 0;
+		uint16_t _time_count = 0;
 		while((g_cvcc_current >= g_numberSetting.upperCurrent)&(_time_count < 10000)){
 			delay_ms(1);
 			_time_count++;
@@ -186,7 +185,30 @@ void ElectrolyticOperation(void){
 			//TODO: Wait to reset
 		}
 	}
-
+}
+void ElectrolyticOperation(void){
+	do{
+		O_SUPPLY_WATER_PIN = ON; //SV1
+		O_CVCC_ON_PIN = ON;
+		O_PUMP_SALT_PIN = ON; //SP1
+		//-----------Voltage 1 check----------------
+		Voltage1Check();
+		//-----------Voltage 2 check----------------
+		Voltage2Check();
+		//-----------Voltage 3 check----------------
+		Voltage3Check();
+		//----------Low voltage error check--------------
+		LowVoltageCheck();
+		//----------Current Error check------------------
+		LowCurrentCheck();
+		//----------CVCC Alarm Input---------------------
+		if(I_CVCC_ALARM_IN == 0U){
+			sendToRasPi(H_ALARM, CVCC_ALARM, 1);
+			electrolyticOperationOFF();
+			//TODO: Wait Reset
+		}
+	}while((I_ACID_H_PIN == 0)|(I_ALKALI_H_PIN == 0));
+	O_CVCC_ON_PIN = GPIO_ON;
 }
 void solenoidCheck(void){
 	uint32_t _time_count = 0;

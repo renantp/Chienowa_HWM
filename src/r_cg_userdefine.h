@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file includes user definition.
-* Creation Date: 17/11/2021
+* Creation Date: 24/11/2021
 ***********************************************************************************************************************/
 
 #ifndef _USER_DEF_H
@@ -38,6 +38,8 @@ User definitions
 #define OFF (0U)
 #define I_ON (0U)
 #define I_OFF (1U)
+#define GPIO_ON (1U)
+#define GPIO_OFF (0U)
 
 #define O_SUPPLY_WATER_PIN (P1_bit.no7) // Valve SV1
 
@@ -69,8 +71,8 @@ User definitions
 #define O_SPOUT_ALK_PIN	(P7_bit.no7) // Valve SV4
 
 #define O_CVCC_ON_PIN		(P14_bit.no2) // CVCC On
-#define I_CVCC_ALARM_IN	(P13_bit.no0)
-#define O_CVCC_ALARM_RS	(P0_bit.no4)
+#define I_CVCC_ALARM_IN	(P0_bit.no4)
+#define O_CVCC_ALARM_RS	(P13_bit.no0)
 #define I_FLOW_PLUSE_PIN	(P0_bit.no1)
 #define O_RS485_MODE_PIN	(P0_bit.no0)
 
@@ -173,7 +175,7 @@ extern struct UART_Buffer_s{
 enum Control_header{
 	OK, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_INVALID, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR
+	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM
 };
 enum UART_header_e{
 	 H_READ = 82, H_SET = 83, H_ALARM = 65, H_ERROR = 69

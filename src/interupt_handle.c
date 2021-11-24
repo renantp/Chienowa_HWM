@@ -15,6 +15,7 @@ void adc_int_handle(void){
 	switch (ADS) {
 		case _00_AD_INPUT_CHANNEL_0:
 			R_ADC_Get_Result(&g_adc_value[0]);
+			g_cvcc_current = (float)g_adc_value[0]/512;
 			ADS = _01_AD_INPUT_CHANNEL_1;
 			break;
 		case _01_AD_INPUT_CHANNEL_1:
