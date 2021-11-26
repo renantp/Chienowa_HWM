@@ -126,8 +126,14 @@ void main(void)
 				R_WDT_Restart();
 			}
     		if(led_st == 0x00){
+//    			O_HS_ICL_PIN = 0;
+//    			O_HS_IDA_PIN = 1;
+    			handSensorLED(RED);
     			O_CVCC_ALARM_RS = 1;
     		}else{
+//    			O_HS_ICL_PIN = 1;
+//				O_HS_IDA_PIN = 0;
+    			handSensorLED(WHITE);
     			O_CVCC_ALARM_RS = 0;
     		}
     	}

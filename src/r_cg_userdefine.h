@@ -41,6 +41,8 @@ User definitions
 #define GPIO_ON (1U)
 #define GPIO_OFF (0U)
 
+#define O_HS_IDA_PIN	(P1_bit.no5)
+#define O_HS_ICL_PIN	(P1_bit.no6)
 #define O_SUPPLY_WATER_PIN (P1_bit.no7) // Valve SV1
 
 #define O_CTRL_OUT_PIN	(P3_bit.no1)
@@ -90,41 +92,41 @@ User definitions
 #define FLOW_PULSE_PIN	(P0_bit.no1)
 
 /* Parameter temporary */
-extern uint16_t	param_AlarmActive;
-extern uint16_t	param_WaterDelayTime;	// 0-5000: 0-5sec
-extern uint16_t	param_AcidSpoutTime;	// 0-180000: 0-180sec
-extern uint16_t	param_AlkaSpoutTime;	// 0-180000: 0-180sec
-extern uint16_t	param_WaterSpoutTime;	// 0-180000: 0-180sec
-extern uint16_t	param_AcidMaxTime;		// 120000-600000: 120-600sec
-extern uint16_t	param_AlkaMaxTime;		// 120000-600000: 120-600sec
-extern uint16_t	param_KraanWashTime;	// 0-86400000: 0-24hour
-extern uint16_t	param_DrainHour;		// 0-168: 0-168hour
-extern uint16_t	param_SpoutMode;		// 0-2: SPOUTMODE_WASH/ACID/ALKA
-extern uint16_t	param_CvccAmpr;
-extern uint16_t	param_FlowRateMin;		// 1000-5000: 1000mL/min - 5000mL/min
-extern uint16_t	param_FlowRateMax;		// 1000-5000: 1000mL/min - 5000mL/min
-extern uint16_t	param_TrialMode;		// TRIALMODE_xxx
-extern uint16_t	param_FlowExcessSec;
-extern uint16_t	param_FlowErrorSec;		// flow rate error continuous time (sec)
-extern uint16_t	param_CvccVoltMax1;
-extern uint16_t	param_CvccVoltMax2;
-extern uint16_t	param_CvccVoltMax3;
-extern uint16_t	param_CvccOverVoltSec1;
-extern uint16_t	param_CvccOverVoltSec2;
-extern uint16_t	param_CvccOverVoltSec3;
-extern uint16_t	param_CvccVoltNeglectSec3;
-extern uint16_t	param_CvccVoltMin;
-extern uint16_t	param_CvccUnderVoltSec;
-extern uint16_t	param_CvccCurrDriftMax;
-extern uint16_t	param_CvccCurrDriftMin;
-extern uint16_t	param_CvccCurrMarginMax;
-extern uint16_t	param_CvccCurrMarginMin;
-extern uint16_t	param_CvccCurrMarginSec;
-extern uint16_t	param_LeakFlowSec;
-extern uint16_t	param_LeakFlowMin;
-extern uint16_t	param_ElectrolyzeMinute;	// electrolyze continue time limit (minute)
-extern uint16_t	param_FilterAlertCoef;
-extern uint32_t	param_FilterChangeMinute;
+//extern uint16_t	param_AlarmActive;
+//extern uint16_t	param_WaterDelayTime;	// 0-5000: 0-5sec
+//extern uint16_t	param_AcidSpoutTime;	// 0-180000: 0-180sec
+//extern uint16_t	param_AlkaSpoutTime;	// 0-180000: 0-180sec
+//extern uint16_t	param_WaterSpoutTime;	// 0-180000: 0-180sec
+//extern uint16_t	param_AcidMaxTime;		// 120000-600000: 120-600sec
+//extern uint16_t	param_AlkaMaxTime;		// 120000-600000: 120-600sec
+//extern uint16_t	param_KraanWashTime;	// 0-86400000: 0-24hour
+//extern uint16_t	param_DrainHour;		// 0-168: 0-168hour
+//extern uint16_t	param_SpoutMode;		// 0-2: SPOUTMODE_WASH/ACID/ALKA
+//extern uint16_t	param_CvccAmpr;
+//extern uint16_t	param_FlowRateMin;		// 1000-5000: 1000mL/min - 5000mL/min
+//extern uint16_t	param_FlowRateMax;		// 1000-5000: 1000mL/min - 5000mL/min
+//extern uint16_t	param_TrialMode;		// TRIALMODE_xxx
+//extern uint16_t	param_FlowExcessSec;
+//extern uint16_t	param_FlowErrorSec;		// flow rate error continuous time (sec)
+//extern uint16_t	param_CvccVoltMax1;
+//extern uint16_t	param_CvccVoltMax2;
+//extern uint16_t	param_CvccVoltMax3;
+//extern uint16_t	param_CvccOverVoltSec1;
+//extern uint16_t	param_CvccOverVoltSec2;
+//extern uint16_t	param_CvccOverVoltSec3;
+//extern uint16_t	param_CvccVoltNeglectSec3;
+//extern uint16_t	param_CvccVoltMin;
+//extern uint16_t	param_CvccUnderVoltSec;
+//extern uint16_t	param_CvccCurrDriftMax;
+//extern uint16_t	param_CvccCurrDriftMin;
+//extern uint16_t	param_CvccCurrMarginMax;
+//extern uint16_t	param_CvccCurrMarginMin;
+//extern uint16_t	param_CvccCurrMarginSec;
+//extern uint16_t	param_LeakFlowSec;
+//extern uint16_t	param_LeakFlowMin;
+//extern uint16_t	param_ElectrolyzeMinute;	// electrolyze continue time limit (minute)
+//extern uint16_t	param_FilterAlertCoef;
+//extern uint32_t	param_FilterChangeMinute;
 
 extern struct Timer_Setting_s{
 	uint32_t t2_flowSensorStartTime; // 4 byte
@@ -211,6 +213,11 @@ union byte_to_float{
 	}refined;
 	float raw;
 };
+/* Hand Sensor Function */
+enum HS_COLOR{
+	BLACK, RED, WHITE, BLUE
+};
+void handSensorLED(enum HS_COLOR color);
 char CRC8(const char *data,int length);
 /* End user code. Do not edit comment generated here */
 #endif

@@ -29,7 +29,7 @@ Change in next version
 
 •	UART: OK
 
-•	RS485/RS232: Have signal
+•	RS485/RS232: OK
 
 •	EEPROM: OK
 

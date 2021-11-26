@@ -30,7 +30,26 @@ volatile uint8_t g_electrolytic_flag = 0;
 
 //void electrolyticOperationON(void);
 //void electrolyticOperationOFF(void);
-
+void handSensorLED(enum HS_COLOR color){
+	switch (color) {
+		case RED:
+			O_HS_ICL_PIN = 1;
+			O_HS_IDA_PIN = 0;
+			break;
+		case BLUE:
+			O_HS_ICL_PIN = 0;
+			O_HS_IDA_PIN = 0;
+			break;
+		case WHITE:
+			O_HS_ICL_PIN = 0;
+			O_HS_IDA_PIN = 1;
+			break;
+		default:
+			O_HS_ICL_PIN = 1;
+			O_HS_IDA_PIN = 1;
+			break;
+	}
+}
 void setting_default(void){
 	g_numberSetting.upperVoltage1 = 23.2;
 	g_numberSetting.upperVoltage2 = 18.4;
@@ -257,6 +276,7 @@ void waterTankFullCheck(void){
 	//TODO: Hand Sensor Off
 
 }
+
 // Newest
 void main_20211111(void){
 	InitialOperationModeStart();
