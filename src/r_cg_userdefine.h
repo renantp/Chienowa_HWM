@@ -136,6 +136,7 @@ extern struct Timer_Setting_s{
 	uint32_t t14_lowVoltageStartTime;
 	uint32_t t15_lowVoltageDelayTime;
 	uint32_t t17_solenoidLeakageStartTime;
+	char crc;
 }g_timerSetting;
 extern struct Number_Setting_s{
 	float upperVoltage1;
@@ -146,6 +147,7 @@ extern struct Number_Setting_s{
 	float lowerCurrent;
 	float upperFlow;
 	float lowerFlow;
+	char crc;
 }g_numberSetting;
 extern union Alarm_register{
 	struct{
@@ -209,5 +211,6 @@ union byte_to_float{
 	}refined;
 	float raw;
 };
+char CRC8(const char *data,int length);
 /* End user code. Do not edit comment generated here */
 #endif

@@ -282,7 +282,7 @@
           <P01 Name="P01/ANI16/TO00/RxD1/TRGCLKB/TRJIO0" AltFunc="P01" TTL="true" Point="I/O" />
           <P02 Name="P02/ANI17/SO10/TXD1" DIN="true" Nch="true" AltFunc="TXD1" Point="I/O" />
           <P03 Name="P03/ANI16/SI10/RXD1/SDA10" Nch="true" DIN="true" TTL="true" AltFunc="RXD1" Point="I/O" />
-          <P04 Name="P04/_SCK10/SCL10" TTL="true" Nch="true" AltFunc="" Point="I/O" />
+          <P04 Name="P04/_SCK10/SCL10" TTL="true" Nch="true" AltFunc="P04" Point="I/O" />
           <P05 Name="P05" AltFunc="P05" Point="I/O" />
           <P06 Name="P06" AltFunc="P06" Point="I/O" />
         </Port0>
@@ -361,7 +361,7 @@
           <P124 Chip="RL78G14_40pin,RL78G14_44pin,RL78G14_48pin,RL78G14_49pin,RL78G14_52pin,RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P124/XT2/EXCLKS" AltFunc="EXCLKS" Point="I" />
         </Port12>
         <Port13>
-          <P130 Chip="RL78G14_48pin,RL78G14_52pin,RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P130" AltFunc="" Point="O" />
+          <P130 Chip="RL78G14_48pin,RL78G14_52pin,RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P130" AltFunc="P130" Point="O" />
           <P137 Name="P137/INTP0" AltFunc="" Point="I" />
         </Port13>
         <Port14 Pullup="true">
@@ -1753,23 +1753,23 @@
         <cg_security2 Name="cg_security2" Value="00" />
         <pior1_value Name="pior1_value" Value="00" />
         <cg_security1 Name="cg_security1" Value="00" />
-        <gtraceused Name="gtraceused" Value="" />
+        <cg_onchip Name="cg_onchip" Value="" />
         <cg_security9 Name="cg_security9" Value="00" />
+        <lvi_option Name="lvi_option" Value="FF" />
         <cg_security6 Name="cg_security6" Value="00" />
         <cg_crc_area Name="cg_crc_area" Value="00" />
         <cg_iawctl_value Name="cg_iawctl_value" Value="00" />
         <cg_security0 Name="cg_security0" Value="00" />
-        <cg_security3 Name="cg_security3" Value="00" />
+        <cg_security7 Name="cg_security7" Value="00" />
         <ocdstart Name="ocdstart" Value="7FE00" />
         <cg_pms_value Name="cg_pms_value" Value="00" />
-        <rrm Name="rrm" Value="7FE00" />
+        <cg_security3 Name="cg_security3" Value="00" />
         <cg_security4 Name="cg_security4" Value="00" />
         <pior_value Name="pior_value" Value="00" />
         <cg_ocd_ram_size Name="cg_ocd_ram_size" Value="512" />
+        <rrm Name="rrm" Value="7FE00" />
         <cg_option Name="cg_option" Value="84" />
-        <cg_onchip Name="cg_onchip" Value="" />
-        <cg_security7 Name="cg_security7" Value="00" />
-        <lvi_option Name="lvi_option" Value="FF" />
+        <gtraceused Name="gtraceused" Value="" />
       </GlobleUserTag>
     </TAG>
   </DIR>
@@ -1931,7 +1931,7 @@
           <setting name="Output_value" value="0" />
         </P03>
         <P04>
-          <setting name="Operation" value="unused" />
+          <setting name="Operation" value="input" />
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />
@@ -2352,7 +2352,7 @@
       </PortP12>
       <PortP13>
         <P130>
-          <setting name="Operation" value="unused" />
+          <setting name="Operation" value="output" />
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />

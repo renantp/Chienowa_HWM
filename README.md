@@ -2,7 +2,9 @@
 Control PCBA Version 1.10 Test Report
 Problem in this version
 Change in next version
+
 1.	Component:
+
 •	Capacitor C6, C7, C17, C18 are TMK325ABJ476MM but we buy EDH476M050A9HAA -> Do not fit the footprint -> Change footprint to EDH476M050A9HAA
 
 •	Diode zener D42 is BZX84B5V1LYFHT116 but we buy RB160M-30TR -> Don’t fit the footprint -> Replace footprint to RB160M-30TR
@@ -14,6 +16,7 @@ Change in next version
 •	NC7SZ05P5X output is open-drain (Flow sensor signal) -> Add pull-up resistor
 
 2.	Schematic
+
 •	Some pin is open-drain (P60-P63) -> Can not output directly 5V to drive TLP241 -> Change the wiring, all pin will be sink output.
 
 •	IC21 - ICL3232CVZ (RS232) did not connect to 5V power supply -> Fix the schematic
@@ -23,6 +26,7 @@ Change in next version
 •	P130 can only OUTPUT -> Change CVCC_ALARM_IN to CVCC_ALARM_RESET and vice versa
 
 3.	Peripheral connection:
+
 •	UART: OK
 
 •	RS485/RS232: Have signal

@@ -120,12 +120,15 @@ void main(void)
     		O_CTRL_OUT_PIN = led_st&0x01;
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_send;
+    	    g_timerSetting.crc = CRC8((char *)&g_timerSetting, sizeof(g_timerSetting)-1);
     	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(g_timerSetting));
 			while(state == g_uart2_send){
 				R_WDT_Restart();
 			}
     		if(led_st == 0x00){
+    			O_CVCC_ALARM_RS = 1;
     		}else{
+    			O_CVCC_ALARM_RS = 0;
     		}
     	}
 //--------------------------------End testing code---------------------------------------------------------

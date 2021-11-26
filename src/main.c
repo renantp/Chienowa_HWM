@@ -126,7 +126,6 @@ void Voltage1Check(void){
 	g_cvcc_voltge = (float)g_adc_value[1]/512;
 	if(g_cvcc_voltge>=g_numberSetting.upperVoltage1){
 		//Alarm
-		g_alarm = OVER_VOLTAGE_1;
 		electrolyticOperationOFF();
 		sendToRasPi(H_ALARM, OVER_VOLTAGE_1, 1);
 		//TODO: Wait to reset
@@ -137,39 +136,45 @@ void Voltage2Check(void){
 	do{
 		_time_count = 0;
 		while((g_cvcc_voltge>=g_numberSetting.upperVoltage2)&(_time_count < g_timerSetting.t12_overVoltage2Time)){
-			_time_count++;
 			delay_ms(1);
+			_time_count++;
+			if(_time_count == g_timerSetting.t12_overVoltage2Time){
+				sendToRasPi(H_ALARM, OVER_VOLTAGE_2, 1);
+			}
+			R_WDT_Restart();
 		}
-		if(_time_count == 10000){
-			sendToRasPi(H_ALARM, OVER_VOLTAGE_2, 1);
-		}
-	}while(_time_count == 10000);
+	}while(_time_count == g_timerSetting.t12_overVoltage2Time);
 }
 void Voltage3Check(void){
 	uint16_t _time_count = 0;
 	while((g_cvcc_voltge>=g_numberSetting.upperVoltage3)&(_time_count < g_timerSetting.t13_overVoltage3Time)){
-		_time_count++;
 		delay_ms(1);
+		_time_count++;
+		if(_time_count == g_timerSetting.t13_overVoltage3Time){
+			sendToRasPi(H_ALARM, OVER_VOLTAGE_3, 1);
+			electrolyticOperationOFF();
+			//TODO: Wait to reset
+		}
+		R_WDT_Restart();
 	}
-	if(_time_count == 10000){
-		sendToRasPi(H_ALARM, OVER_VOLTAGE_3, 1);
-		electrolyticOperationOFF();
-		//TODO: Wait to reset
-	}
+
 }
 void LowVoltageCheck(void){
 	electrolyticOperationON();
-	while(g_neutralization_time > 60000);
+//	while(g_neutralization_time > 60000);
+	delay(60);
 	uint16_t _time_count = 0;
-	while((g_cvcc_voltge <= g_numberSetting.lowerVoltage)&(_time_count < 10000)){
-		_time_count++;
+	while((g_cvcc_voltge <= g_numberSetting.lowerVoltage)&(_time_count < g_timerSetting.t15_lowVoltageDelayTime)){
 		delay_ms(1);
+		_time_count++;
+		if(_time_count == g_timerSetting.t15_lowVoltageDelayTime){
+			sendToRasPi(H_ALARM, UNDER_VOLTAGE, 1);
+			electrolyticOperationOFF();
+			//TODO: Wait to reset
+		}
+		R_WDT_Restart();
 	}
-	if(_time_count == 10000){
-		sendToRasPi(H_ALARM, UNDER_VOLTAGE, 1);
-		electrolyticOperationOFF();
-		//TODO: Wait to reset
-	}
+
 }
 void LowCurrentCheck(void){
 	if((g_cvcc_current<=g_numberSetting.lowerCurrent)|(g_cvcc_current>=g_numberSetting.upperCurrent)){
@@ -220,6 +225,38 @@ void solenoidCheck(void){
 		sendToRasPi(H_ALARM, SOLENOID_VALVE_ERROR, 1);
 	}
 }
+void saltWaterTankFullCheck(void){
+	if(I_SALT_H_PIN == 1){
+		sendToRasPi(H_ALARM, SALT_WATER_FULL_ERROR, 1);
+		electrolyticOperationOFF();
+		//TODO: Fault in the flowchart
+	}
+}
+void saltWaterTankEmptyCheck(void){
+	if(I_SALT_L_PIN == 0){
+		sendToRasPi(H_ALARM, SALT_WATER_EMPTY_ERROR, 1);
+		//TODO: Control OFF
+	}
+}
+void acidWaterTankSkipCheck(void){
+	if(((I_ACID_L_PIN == 0)&((I_ACID_M_PIN == 1)|(I_ACID_H_PIN == 1)))|
+			((I_ACID_M_PIN == 0)&(I_ACID_H_PIN == 1))){
+		sendToRasPi(H_ALARM, ACID_ERROR, 1);
+		//TODO: Control OFF
+	}
+}
+void alkalineWaterTankSkipCheck(void){
+	if(((I_ALKALI_L_PIN == 0)&((I_ALKALI_M_PIN == 1)|(I_ALKALI_H_PIN == 1)))|
+			((I_ALKALI_M_PIN == 0)&(I_ALKALI_H_PIN == 1))){
+		sendToRasPi(H_ALARM, ALKALINE_ERROR, 1);
+		//TODO: Control OFF
+	}
+}
+void waterTankFullCheck(void){
+	electrolyticOperationOFF();
+	//TODO: Hand Sensor Off
+
+}
 // Newest
 void main_20211111(void){
 	InitialOperationModeStart();
@@ -251,74 +288,6 @@ void electrolyticOperationOFF(void){
 	O_PUMP_SALT_PIN = OFF; //SP1
 	g_electrolytic_flag = 0;
 }
-void overVoltage1Error(void){
-
-}
-void overVoltage2Error(void){
-
-}
-void overVoltage3Error(void){
-	uint16_t _time_count = 0;
-
-	g_cvcc_voltge = (float)g_adc_value[1]/512;
-	_time_count = 0;
-	while((g_cvcc_voltge < 2.0)&(_time_count < 1000)){
-		_time_count++;
-		delay_ms(10);
-		g_cvcc_voltge = (float)g_adc_value[1]/512;
-	}
-	if(_time_count == 1000){
-		//Alarm
-		g_error = 1;
-		electrolyticOperationOFF();
-		waitReset();
-	}
-}
-void lowVoltageError(void){
-	uint16_t _time_count;
-	O_SUPPLY_WATER_PIN = ON; //SV1
-	O_CVCC_ON_PIN = ON;
-	O_PUMP_SALT_PIN = ON; //SP1
-	delay(60);
-
-	g_cvcc_voltge = (float)g_adc_value[1]/512;
-	_time_count = 0;
-	while((g_cvcc_voltge < 0.2)&(_time_count < 1000)){
-		_time_count++;
-		delay_ms(10);
-		g_cvcc_voltge = (float)g_adc_value[1]/512;
-	}
-	if(_time_count == 1000){
-		//Alarm
-		g_error = 1;
-		electrolyticOperationOFF();
-	}
-}
-void currentError(void){
-	uint16_t _time_count;
-	g_cvcc_current = (float)g_adc_value[0]/512;
-	if((g_cvcc_current<g_numberSetting.lowerCurrent)|(g_cvcc_current>g_numberSetting.upperCurrent)){
-		//Alarm
-		g_alarm = CURRENT_INVALID;
-	}
-	while((g_cvcc_current<g_numberSetting.lowerCurrent)|(g_cvcc_current>g_numberSetting.upperCurrent)){
-		_time_count++;
-		delay_ms(10);
-		g_cvcc_current = (float)g_adc_value[0]/512;
-	}
-	if(_time_count == 6000){
-		//Alarm
-		g_error = 1;
-		electrolyticOperationOFF();
-		waitReset();
-	}
-}
-void solenoidValueError(void){
-
-}
-void callAlarm(int _error){
-	g_error = _error;
-}
 float measureFlowSensor(uint32_t s){
 	uint32_t stamp_flow_sensor = g_systemTime;
 	float flow_pluse = 0.0;
@@ -334,4 +303,23 @@ float measureFlowSensor(uint32_t s){
 	float flow_value = (flow_pluse*0.7*60)/(1000*s); // L/minutes
 	return flow_value;
 }
-
+char CRC8(const char *data,int length)
+{
+   char crc = 0x00;
+   char extract;
+   char sum;
+   for(int i=0;i<length;i++)
+   {
+      extract = *data;
+      for (char tempI = 8; tempI; tempI--)
+      {
+         sum = (crc ^ extract) & 0x01;
+         crc >>= 1;
+         if (sum)
+            crc ^= 0x8C;
+         extract >>= 1;
+      }
+      data++;
+   }
+   return crc;
+}
