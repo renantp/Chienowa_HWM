@@ -25,11 +25,13 @@ Change in next version
 
 •	P130 can only OUTPUT -> Change CVCC_ALARM_IN to CVCC_ALARM_RESET and vice versa
 
+•	RS485 optional resistor swap needed -> A/Y to 5V, B/Z to GND
+
 3.	Peripheral connection:
 
 •	UART: OK
 
-•	RS485/RS232: OK
+•	RS485/RS232: BUG - Shift byte, first byte of array was wrong.
 
 •	EEPROM: OK
 
