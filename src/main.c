@@ -59,7 +59,7 @@ void setting_default(void){
 	g_numberSetting.upperFlow = 1.2;
 	g_numberSetting.lowerFlow = 0.2;
 	g_timerSetting.t2_flowSensorStartTime = 30000;
-	g_timerSetting.t3_flowSensorMonitorTime = 23000;
+	g_timerSetting.t3_flowSensorMonitorTime = 5000;
 	g_timerSetting.t11_overVoltage1Time = 10000;
 	g_timerSetting.t12_overVoltage2Time = 10000;
 	g_timerSetting.t13_overVoltage3Time = 20000;
@@ -100,6 +100,7 @@ void code_20211029(void){
 	overVoltage1Error();
 }
 #endif
+
 //----------------------Begin code 11112021--------------------------------------
 void sendToRasPi(enum UART_header_e head, enum Control_header type, float value){
 	uint8_t state = g_uart2_send;
@@ -109,6 +110,10 @@ void sendToRasPi(enum UART_header_e head, enum Control_header type, float value)
 	R_UART2_Send((uint8_t *)&g_control_buffer, sizeof(struct UART_Buffer_s));
 	while(state == g_uart2_send);
 }
+/**
+ * InitialOperationModeStart
+ * 30/11/2021: Checked!
+ */
 void InitialOperationModeStart(void){
 	OPTION_1_PIN = I_ACID_L_PIN == I_ON ? ON:OFF;	// Turn on SV5 if ACID tank empty
 	OPTION_2_PIN = I_ALKALI_L_PIN == I_ON ? ON:OFF;	// Turn on SV6 if ALK tank empty
@@ -118,9 +123,14 @@ void InitialOperationModeStart(void){
 		R_WDT_Restart();
 	}while((I_ACID_L_PIN == I_ON)|(I_ALKALI_L_PIN == I_ON));
 }
-uint8_t FlowSensorCheck(void){
+/**
+ * FlowSensorCheck
+ * 30/11/2021: Checked!
+ * @return 0 is Error, 1 is OK
+ */
+uint8_t FlowSensorCheck(uint32_t *_time){
 	delay(15);
-	g_flow_value = measureFlowSensor(5);
+	g_flow_value = measureFlowSensor(*_time);
 	if((g_flow_value < g_numberSetting.upperFlow)
 			&(g_flow_value > g_numberSetting.lowerFlow)){
 		return 1;
@@ -129,15 +139,20 @@ uint8_t FlowSensorCheck(void){
 		return 0;
 	}
 }
+/**
+ * WaterSupplyOperation
+ * 30/11/2021: Checked by An, need to test with Raspberry Pi Adjust alarm
+ */
 void WaterSupplyOperation(void){
 	O_SPOUT_WATER_PIN = ON;		// SV2 On
 	delay(30);
 	O_SUPPLY_WATER_PIN = ON;	// SV1 On
 	delay_ms(500);
 	O_SPOUT_WATER_PIN = OFF;	// SV2 Off
-	while(FlowSensorCheck() != 1){
-		//TODO: Adjust
-
+	while(FlowSensorCheck(&g_timerSetting.t3_flowSensorMonitorTime) != 1){
+		//TODO: RasPi - Adjust
+		uint32_t _flow = g_flow_value*1000; // mL/minutes
+		sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, _flow);
 	}
 	delay(10);
 }
@@ -279,16 +294,19 @@ void waterTankFullCheck(void){
 
 // Newest
 void main_20211111(void){
-	InitialOperationModeStart();
-	WaterSupplyOperation();
-	do{
-		ElectrolyticOperation();
-	}while((I_ALKALI_H_PIN == 0U)|(I_ACID_H_PIN == 0U));
-	electrolyticOperationOFF();
-	O_CVCC_ON_PIN = ON;
-	O_PUMP_SALT_PIN = OFF; 		//SP1
-	delay(5);
-	O_SUPPLY_WATER_PIN = OFF;	// SV1 On
+//	InitialOperationModeStart();
+//	WaterSupplyOperation();
+//	do{
+//		ElectrolyticOperation();
+//	}while((I_ALKALI_H_PIN == I_ON)|(I_ACID_H_PIN == I_ON));
+//	electrolyticOperationOFF();
+//	O_CVCC_ON_PIN = ON;
+//	O_PUMP_SALT_PIN = OFF; 		//SP1
+//	delay(5);
+//	O_SUPPLY_WATER_PIN = OFF;	// SV1 On
+
+//	Test section
+//	Voltage1Check();
 }
 
 void waitReset(void){
@@ -296,23 +314,37 @@ void waitReset(void){
 		R_WDT_Restart();
 	}
 }
+/**
+ * 30/11/2021: Checked by An
+ */
 void electrolyticOperationON(void){
 	//Electrolytic operation ON
+	O_SUPPLY_WATER_PIN = ON;
 	O_CVCC_ON_PIN = ON;
 	O_PUMP_SALT_PIN = ON; //SP1
 	g_electrolytic_flag = 1;
 }
+/**
+ * 30/11/2021: Checked by An
+ */
 void electrolyticOperationOFF(void){
 	//Electrolytic operation OFF
 	O_CVCC_ON_PIN = OFF;
 	O_PUMP_SALT_PIN = OFF; //SP1
+	delay(5);
+	O_SUPPLY_WATER_PIN = OFF;
 	g_electrolytic_flag = 0;
 }
+/**
+ *
+ * @param s: Period time take measurement in mills second
+ * @return L/minutes
+ */
 float measureFlowSensor(uint32_t s){
 	uint32_t stamp_flow_sensor = g_systemTime;
 	float flow_pluse = 0.0;
 	uint8_t flow_pulse_state = 1;
-	while(!ns_delay_ms(&stamp_flow_sensor, (s*1000))){
+	while(!ns_delay_ms(&stamp_flow_sensor, s)){
 		if(I_FLOW_PLUSE_PIN != flow_pulse_state){
 			if(I_FLOW_PLUSE_PIN == 0)
 				flow_pluse++;
@@ -320,7 +352,7 @@ float measureFlowSensor(uint32_t s){
 		}
 		R_WDT_Restart();
 	}
-	float flow_value = (flow_pluse*0.7*60)/(1000*s); // L/minutes
+	float flow_value = (flow_pluse*0.7*60)/s; // L/minutes
 	return flow_value;
 }
 char CRC8(const char *data,int length)
