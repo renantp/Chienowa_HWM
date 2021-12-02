@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file includes user definition.
-* Creation Date: 24/11/2021
+* Creation Date: 30/11/2021
 ***********************************************************************************************************************/
 
 #ifndef _USER_DEF_H
@@ -91,6 +91,7 @@ User definitions
 
 #define FLOW_PULSE_PIN	(P0_bit.no1)
 
+
 /* Parameter temporary */
 //extern uint16_t	param_AlarmActive;
 //extern uint16_t	param_WaterDelayTime;	// 0-5000: 0-5sec
@@ -138,6 +139,14 @@ extern struct Timer_Setting_s{
 	uint32_t t14_lowVoltageStartTime;
 	uint32_t t15_lowVoltageDelayTime;
 	uint32_t t17_solenoidLeakageStartTime;
+	uint32_t t51;
+	uint32_t t52;
+	uint32_t t53;
+	uint32_t t54;
+	uint32_t t56;
+	uint32_t t59;
+	uint32_t t61;
+	uint32_t t62;
 	char crc;
 }g_timerSetting;
 extern struct Number_Setting_s{
@@ -178,14 +187,15 @@ extern struct UART_Buffer_s{
 }g_control_buffer;
 enum Control_header{
 	OK, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
-	CURRENT_INVALID, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
+	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM
 };
 enum UART_header_e{
-	 H_READ = 82, H_SET = 83, H_ALARM = 65, H_ERROR = 69
+	 H_READ = 82, H_SET = 83, H_ALARM = 65, H_ERROR = 69, H_CLEAR = 67
 };
 extern enum Control_header g_alarm;
 
+extern volatile uint8_t g_uart3_sendend;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_end, g_uart2_send;
 extern volatile uint8_t g_uart2_fault;
@@ -194,8 +204,9 @@ extern volatile int g_error, g_status;
 extern float g_flow_value;
 extern uint16_t g_adc_value[2];
 extern float g_cvcc_current, g_cvcc_voltge;
-
+extern uint8_t rec_buf[12];
 extern void adc_int_handle(void);
+
 extern void setting_default(void);
 extern void main_20211111(void);
 extern void sendToRasPi(enum UART_header_e head, enum Control_header type, float value);
@@ -217,6 +228,13 @@ union byte_to_float{
 enum HS_COLOR{
 	BLACK, RED, WHITE, BLUE
 };
+extern enum HS_COLOR g_color, g_pre_color;
+void OpenSV1(void);
+void OpenSV2(void);
+void CloseSV1(void);
+void CloseSV2(void);
+void electrolyticOperationOFF(void);
+void electrolyticOperationON(void);
 void handSensorLED(enum HS_COLOR color);
 char CRC8(const char *data,int length);
 /* End user code. Do not edit comment generated here */

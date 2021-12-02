@@ -12,20 +12,22 @@
 uint16_t g_adc_value[2];
 
 void adc_int_handle(void){
+	//TODO: Change ratio to calculate ADC when change to new resistor.
+	const float _max_voltage = 10.0;
 	switch (ADS) {
 		case _00_AD_INPUT_CHANNEL_0:
 			R_ADC_Get_Result(&g_adc_value[0]);
-			g_cvcc_current = (float)g_adc_value[0]/512;
+			g_cvcc_current = ((float)g_adc_value[0]/1024)*_max_voltage;
 			ADS = _01_AD_INPUT_CHANNEL_1;
 			break;
 		case _01_AD_INPUT_CHANNEL_1:
 			R_ADC_Get_Result(&g_adc_value[1]);
-			g_cvcc_voltge = (float)g_adc_value[1]/512;
+			g_cvcc_voltge = ((float)g_adc_value[1]/1024)*_max_voltage;
 			ADS = _00_AD_INPUT_CHANNEL_0;
 			break;
 		default:
 			break;
 	}
-//	R_ADC_top();
+//	R_ADC_Stop();
 	R_ADC_Start();
 }

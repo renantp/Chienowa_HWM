@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/interupt_handle.obj
 #@   ../src/interupt_handle.c
-#@  compiled at Fri Nov 26 10:19:06 2021
+#@  compiled at Wed Dec 01 09:21:14 2021
 
 	.EXTERN _g_cvcc_current
 	.EXTERN _g_cvcc_voltge
@@ -41,34 +41,44 @@ _adc_int_handle:
 	;***       12 : uint16_t g_adc_value[2];
 	;***       13 : 
 	;***       14 : void adc_int_handle(void){
-	;***       15 : 	switch (ADS) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 15
+	;***       15 : 	//TODO: Change ratio to calculate ADC when change to new resistor.
+	;***       16 : 	const float _max_voltage = 10.0;
+	;***       17 : 	switch (ADS) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 17
 	mov a, 0xFFF31
 	cmp0 a
 	bz $.BB@LABEL@1_3
 .BB@LABEL@1_1:	; entry
 	dec a
 	bnz $.BB@LABEL@1_4
-.BB@LABEL@1_2:	; switch_clause_bb5
-	;***       16 : 		case _00_AD_INPUT_CHANNEL_0:
-	;***       17 : 			R_ADC_Get_Result(&g_adc_value[0]);
-	;***       18 : 			g_cvcc_current = (float)g_adc_value[0]/512;
-	;***       19 : 			ADS = _01_AD_INPUT_CHANNEL_1;
-	;***       20 : 			break;
-	;***       21 : 		case _01_AD_INPUT_CHANNEL_1:
-	;***       22 : 			R_ADC_Get_Result(&g_adc_value[1]);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 22
+.BB@LABEL@1_2:	; switch_clause_bb8
+	;***       18 : 		case _00_AD_INPUT_CHANNEL_0:
+	;***       19 : 			R_ADC_Get_Result(&g_adc_value[0]);
+	;***       20 : 			g_cvcc_current = ((float)g_adc_value[0]/1024)*_max_voltage;
+	;***       21 : 			ADS = _01_AD_INPUT_CHANNEL_1;
+	;***       22 : 			break;
+	;***       23 : 		case _01_AD_INPUT_CHANNEL_1:
+	;***       24 : 			R_ADC_Get_Result(&g_adc_value[1]);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 24
 	movw ax, #LOWW(_g_adc_value+0x00002)
 	call !!_R_ADC_Get_Result
-	;***       23 : 			g_cvcc_voltge = (float)g_adc_value[1]/512;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 23
+	;***       25 : 			g_cvcc_voltge = ((float)g_adc_value[1]/1024)*_max_voltage;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 25
 	movw ax, !LOWW(_g_adc_value+0x00002)
 	clrw bc
 	call !!__COM_ultof
 	movw de, ax
-	movw ax, #0x3B00
+	movw ax, #0x3A80
 	push ax
-	clrb a
+	clrw ax
+	push ax
+	movw ax, de
+	call !!__COM_fmul
+	movw de, ax
+	addw sp, #0x04
+	movw ax, #0x4120
+	push ax
+	clrw ax
 	push ax
 	movw ax, de
 	call !!__COM_fmul
@@ -78,22 +88,30 @@ _adc_int_handle:
 	movw !LOWW(_g_cvcc_voltge+0x00002), ax
 	movw ax, de
 	movw !LOWW(_g_cvcc_voltge), ax
-	;***       24 : 			ADS = _00_AD_INPUT_CHANNEL_0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 24
+	;***       26 : 			ADS = _00_AD_INPUT_CHANNEL_0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 26
 	mov 0xFFF31, #0x00
 	br $.BB@LABEL@1_4
 .BB@LABEL@1_3:	; switch_clause_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 17
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 19
 	movw ax, #LOWW(_g_adc_value)
 	call !!_R_ADC_Get_Result
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 18
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 20
 	movw ax, !LOWW(_g_adc_value)
 	clrw bc
 	call !!__COM_ultof
 	movw de, ax
-	movw ax, #0x3B00
+	movw ax, #0x3A80
 	push ax
-	clrb a
+	clrw ax
+	push ax
+	movw ax, de
+	call !!__COM_fmul
+	movw de, ax
+	addw sp, #0x04
+	movw ax, #0x4120
+	push ax
+	clrw ax
 	push ax
 	movw ax, de
 	call !!__COM_fmul
@@ -103,18 +121,18 @@ _adc_int_handle:
 	movw !LOWW(_g_cvcc_current+0x00002), ax
 	movw ax, de
 	movw !LOWW(_g_cvcc_current), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 19
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 21
 	mov 0xFFF31, #0x01
 .BB@LABEL@1_4:	; switch_break_bb
-	;***       25 : 			break;
-	;***       26 : 		default:
 	;***       27 : 			break;
-	;***       28 : 	}
-	;***       29 : //	R_ADC_top();
-	;***       30 : 	R_ADC_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 30
+	;***       28 : 		default:
+	;***       29 : 			break;
+	;***       30 : 	}
+	;***       31 : //	R_ADC_Stop();
+	;***       32 : 	R_ADC_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 32
 	br !!_R_ADC_Start
-	;***       31 : }
+	;***       33 : }
 	.SECTION .bss,BSS
 	.ALIGN 2
 _g_adc_value:

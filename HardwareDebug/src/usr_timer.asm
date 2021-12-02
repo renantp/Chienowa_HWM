@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/usr_timer.obj
 #@   ../src/usr_timer.c
-#@  compiled at Fri Nov 26 10:19:14 2021
+#@  compiled at Thu Dec 02 17:39:06 2021
 
 	.EXTERN _g_systemTime
 	.PUBLIC _delay_ms
@@ -134,28 +134,35 @@ _delay_ms:
 	addw sp, #0x08
 	ret
 _delay:
-	.STACK _delay = 4
+	.STACK _delay = 6
 	;***       19 : void delay(uint8_t s){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 19
-	cmp0 a
-	;***       20 : 	if(s != 0){
+	push hl
+	inc a
+.BB@LABEL@2_1:	; bb3
+	;***       20 : 	while(s != 0){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 20
-	sknz
-.BB@LABEL@2_1:	; return
+	dec a
+	mov [sp+0x00], a
+	bz $.BB@LABEL@2_3
+.BB@LABEL@2_2:	; bb
 	;***       21 : 		delay_ms(1000);
-	;***       22 : 		s--;
-	;***       23 : 		R_WDT_Restart();
-	;***       24 : 	}
-	;***       25 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 25
-	ret
-.BB@LABEL@2_2:	; if_then_bb
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 21
 	clrw bc
 	movw ax, #0x03E8
 	call $!_delay_ms
+	;***       22 : 		s--;
+	;***       23 : 		R_WDT_Restart();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 23
-	br !!_R_WDT_Restart
+	call !!_R_WDT_Restart
+	mov a, [sp+0x00]
+	br $.BB@LABEL@2_1
+.BB@LABEL@2_3:	; return
+	;***       24 : 	}
+	;***       25 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 25
+	pop hl
+	ret
 _ns_delay_ms:
 	.STACK _ns_delay_ms = 10
 	;***       26 : int ns_delay_ms(uint32_t *stamp, uint32_t ms){

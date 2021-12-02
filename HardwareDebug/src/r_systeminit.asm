@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_systeminit.obj
 #@   ../src/r_systeminit.c
-#@  compiled at Fri Nov 26 10:19:14 2021
+#@  compiled at Thu Dec 02 17:39:06 2021
 
 	.PUBLIC _R_Systeminit
 	.EXTERN _R_CGC_Get_ResetSource
@@ -58,7 +58,7 @@ _R_Systeminit:
 	;***       23 : * Device(s)    : R5F104ML
 	;***       24 : * Tool-Chain   : CCRL
 	;***       25 : * Description  : This file implements system initializing function.
-	;***       26 : * Creation Date: 24/11/2021
+	;***       26 : * Creation Date: 30/11/2021
 	;***       27 : ***********************************************************************************************************************/
 	;***       28 : 
 	;***       29 : /***********************************************************************************************************************

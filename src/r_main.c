@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements main function.
-* Creation Date: 24/11/2021
+* Creation Date: 30/11/2021
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -72,6 +72,16 @@ uint32_t rx_data[3];
 float data_f;
 union byte_to_float data_f_test;
 struct UART_Buffer_s g_control_buffer;
+#define DETECT I_HS_ODA_PIN
+uint8_t read_signal(void){
+   if(DETECT){
+	  delay_ms(2);
+      if(DETECT) return 1;return 0;
+   }else return 0;
+}
+uint8_t this_size;
+uint8_t rec_buf[12];
+uint8_t send_buf[7] = {8,1,2,3,4,5,6};
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -99,12 +109,26 @@ void main(void)
     R_RTC_Set_CounterValue(g_rtc);
     R_RTC_Start();
     R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
+
+//    Test nhan
+    O_RS485_MODE_PIN = 0U;
+    R_UART3_Receive(rec_buf, 7);
+
+//    Test gui
+//    O_RS485_MODE_PIN = 1U;
+//    delay_ms(10);
+//    R_UART3_Send(send_buf, 7);
 //    EEPROM_PROTECT_EN();
+
+    g_color = BLACK;
+    g_pre_color = BLUE;
+
+    this_size = sizeof(struct UART_Buffer_s);
     while (1U)
     {
 //--------------------------------- Testing code---------------------------------------------------------------
     	if(ns_delay_ms(&_stamp[0], 200)){
-////    		P6_bit.no3 = ~P6_bit.no3;
+    		P6_bit.no3 = ~P6_bit.no3;
 //    		R_UART3_Send((uint8_t *)"Hello", sizeof("Hello")-1);
 //    		R_UART1_Send((uint8_t *)"Hello", sizeof("Hello")-1);
 //    		g_e_status.raw = rEE_Status();
@@ -117,28 +141,62 @@ void main(void)
     	}
     	flow_p = I_FLOW_PLUSE_PIN == 1? 1: 0;
     	if(ns_delay_ms(&_stamp[1], 1000)){
+//    		send_buf[1]++;
+//    		R_UART3_Send(send_buf, 7);
+//    		R_UART3_Receive(rec_buf, 7);
     		O_CTRL_OUT_PIN = led_st&0x01;
+    		O_SPOUT_WATER_PIN = led_st&0x01;
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_send;
-    	    g_timerSetting.crc = CRC8((char *)&g_timerSetting, sizeof(g_timerSetting)-1);
-    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(g_timerSetting));
-			while(state == g_uart2_send){
+    	    g_timerSetting.t6_drainageOffTime++;
+    	    g_timerSetting.crc = CRC8((char *)&g_timerSetting, sizeof(g_timerSetting)-2);
+//    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s));
+    	    R_UART2_Send((uint8_t *)&g_timerSetting, 36);
+//    	    sendToRasPi(H_ALARM, CURRENT_ABNORMAL, 32);
+    	    while(state == g_uart2_send){
 				R_WDT_Restart();
 			}
+
     		if(led_st == 0x00){
 //    			O_HS_ICL_PIN = 0;
 //    			O_HS_IDA_PIN = 1;
-    			handSensorLED(RED);
-    			O_CVCC_ALARM_RS = 1;
+//    			handSensorLED(RED);
+//    			O_CVCC_ALARM_RS = 1;
+//    			O_PUMP_SALT_PIN = ON;
+//    			electrolyticOperationON();
+
     		}else{
 //    			O_HS_ICL_PIN = 1;
 //				O_HS_IDA_PIN = 0;
-    			handSensorLED(WHITE);
-    			O_CVCC_ALARM_RS = 0;
+//    			handSensorLED(WHITE);
+//    			O_CVCC_ALARM_RS = 0;
+//    			O_PUMP_SALT_PIN = OFF;
+//    			electrolyticOperationOFF();
     		}
     	}
 //--------------------------------End testing code---------------------------------------------------------
 //    	main_20211111();
+
+    	switch (read_signal()) {
+			case 0:
+				g_color = WHITE;
+				break;
+			case 1:
+				g_color = BLUE;
+				break;
+			default:
+
+				break;
+		}
+    	if(g_color != g_pre_color){
+			O_RS485_MODE_PIN = 1U;
+			uint8_t _uart3 = g_uart3_sendend;
+			send_buf[3]++;
+			R_UART3_Send(send_buf, 7);
+			while(_uart3 == g_uart3_sendend);
+			O_RS485_MODE_PIN = 0U;
+    	}
+    	handSensorLED(g_color);
     	R_WDT_Restart();
     }
     /* End user code. Do not edit comment generated here */

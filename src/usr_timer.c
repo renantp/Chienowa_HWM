@@ -17,7 +17,7 @@ void delay_ms(uint32_t ms){
 	}
 }
 void delay(uint8_t s){
-	if(s != 0){
+	while(s != 0){
 		delay_ms(1000);
 		s--;
 		R_WDT_Restart();

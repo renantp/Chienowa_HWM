@@ -1,7 +1,7 @@
 -input=".\generate\cstart.obj"
 -input=".\generate\stkinit.obj"
 -input=".\src\EEPROM.obj"
--input=".\src\interupt_handle.obj"
+-input=".\src\interrupt_handle.obj"
 -input=".\src\main.obj"
 -input=".\src\r_cg_adc.obj"
 -input=".\src\r_cg_adc_user.obj"

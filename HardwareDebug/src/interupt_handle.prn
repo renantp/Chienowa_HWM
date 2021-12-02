@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/interupt_handle.obj
 00000000                       17  #@   ../src/interupt_handle.c
-00000000                       18  #@  compiled at Fri Nov 26 10:19:06 2021
+00000000                       18  #@  compiled at Wed Dec 01 09:21:14 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_cvcc_current
 00000000                       21  	.EXTERN _g_cvcc_voltge
@@ -45,93 +45,111 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       41  	;***       12 : uint16_t g_adc_value[2];
 00000000                       42  	;***       13 : 
 00000000                       43  	;***       14 : void adc_int_handle(void){
-00000000                       44  	;***       15 : 	switch (ADS) {
-00000000                       45  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 15
-00000000 8E31                  46  	mov a, 0xFFF31
-00000002 D1                    47  	cmp0 a
-00000003 DD00                  48  	bz $.BB@LABEL@1_3
-00000005                       49  .BB@LABEL@1_1:	; entry
-00000005 91                    50  	dec a
-00000006 DF00                  51  	bnz $.BB@LABEL@1_4
-00000008                       52  .BB@LABEL@1_2:	; switch_clause_bb5
-00000008                       53  	;***       16 : 		case _00_AD_INPUT_CHANNEL_0:
-00000008                       54  	;***       17 : 			R_ADC_Get_Result(&g_adc_value[0]);
-00000008                       55  	;***       18 : 			g_cvcc_current = (float)g_adc_value[0]/512;
-00000008                       56  	;***       19 : 			ADS = _01_AD_INPUT_CHANNEL_1;
-00000008                       57  	;***       20 : 			break;
-00000008                       58  	;***       21 : 		case _01_AD_INPUT_CHANNEL_1:
-00000008                       59  	;***       22 : 			R_ADC_Get_Result(&g_adc_value[1]);
-00000008                       60  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 22
-00000008 300000                61  	movw ax, #LOWW(_g_adc_value+0x00002)
-0000000B FC000000              62  	call !!_R_ADC_Get_Result
-0000000F                       63  	;***       23 : 			g_cvcc_voltge = (float)g_adc_value[1]/512;
-0000000F                       64  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 23
-0000000F AF0000                65  	movw ax, !LOWW(_g_adc_value+0x00002)
-00000012 F7                    66  	clrw bc
-00000013 FC000000              67  	call !!__COM_ultof
-00000017 14                    68  	movw de, ax
-00000018 30003B                69  	movw ax, #0x3B00
-0000001B C1                    70  	push ax
-0000001C F1                    71  	clrb a
-0000001D C1                    72  	push ax
-0000001E 15                    73  	movw ax, de
-0000001F FC000000              74  	call !!__COM_fmul
-00000023 14                    75  	movw de, ax
-00000024 13                    76  	movw ax, bc
-00000025 1004                  77  	addw sp, #0x04
-00000027 BF0000                78  	movw !LOWW(_g_cvcc_voltge+0x00002), ax
-0000002A 15                    79  	movw ax, de
-0000002B BF0000                80  	movw !LOWW(_g_cvcc_voltge), ax
-0000002E                       81  	;***       24 : 			ADS = _00_AD_INPUT_CHANNEL_0;
-0000002E                       82  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 24
-0000002E CE3100                83  	mov 0xFFF31, #0x00
-00000031 EF00                  84  	br $.BB@LABEL@1_4
-00000033                       85  .BB@LABEL@1_3:	; switch_clause_bb
-00000033                       86  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 17
-00000033 300000                87  	movw ax, #LOWW(_g_adc_value)
-00000036 FC000000              88  	call !!_R_ADC_Get_Result
-0000003A                       89  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 18
-0000003A AF0000                90  	movw ax, !LOWW(_g_adc_value)
-0000003D F7                    91  	clrw bc
-0000003E FC000000              92  	call !!__COM_ultof
-00000042 14                    93  	movw de, ax
-00000043 30003B                94  	movw ax, #0x3B00
-00000046 C1                    95  	push ax
-00000047 F1                    96  	clrb a
-00000048 C1                    97  	push ax
-00000049 15                    98  	movw ax, de
-0000004A FC000000              99  	call !!__COM_fmul
-0000004E 14                   100  	movw de, ax
-0000004F 13                   101  	movw ax, bc
-00000050 1004                 102  	addw sp, #0x04
-00000052 BF0000               103  	movw !LOWW(_g_cvcc_current+0x00002), ax
-00000055 15                   104  	movw ax, de
-00000056 BF0000               105  	movw !LOWW(_g_cvcc_current), ax
-00000059                      106  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 19
-00000059 CE3101               107  	mov 0xFFF31, #0x01
-0000005C                      108  .BB@LABEL@1_4:	; switch_break_bb
-0000005C                      109  	;***       25 : 			break;
-0000005C                      110  	;***       26 : 		default:
-0000005C                      111  	;***       27 : 			break;
-0000005C                      112  	;***       28 : 	}
-0000005C                      113  	;***       29 : //	R_ADC_top();
-0000005C                      114  	;***       30 : 	R_ADC_Start();
-0000005C                      115  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 30
-0000005C EC000000             116  	br !!_R_ADC_Start
-00000060                      117  	;***       31 : }
-00000000                      118  	.SECTION .bss,BSS
-00000000                      119  	.ALIGN 2
-00000000                      120  _g_adc_value:
-00000000                      121  	.DS (4)
+00000000                       44  	;***       15 : 	//TODO: Change ratio to calculate ADC when change to new resistor.
+00000000                       45  	;***       16 : 	const float _max_voltage = 10.0;
+00000000                       46  	;***       17 : 	switch (ADS) {
+00000000                       47  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 17
+00000000 8E31                  48  	mov a, 0xFFF31
+00000002 D1                    49  	cmp0 a
+00000003 DD00                  50  	bz $.BB@LABEL@1_3
+00000005                       51  .BB@LABEL@1_1:	; entry
+00000005 91                    52  	dec a
+00000006 DF00                  53  	bnz $.BB@LABEL@1_4
+00000008                       54  .BB@LABEL@1_2:	; switch_clause_bb8
+00000008                       55  	;***       18 : 		case _00_AD_INPUT_CHANNEL_0:
+00000008                       56  	;***       19 : 			R_ADC_Get_Result(&g_adc_value[0]);
+00000008                       57  	;***       20 : 			g_cvcc_current = ((float)g_adc_value[0]/1024)*_max_voltage;
+00000008                       58  	;***       21 : 			ADS = _01_AD_INPUT_CHANNEL_1;
+00000008                       59  	;***       22 : 			break;
+00000008                       60  	;***       23 : 		case _01_AD_INPUT_CHANNEL_1:
+00000008                       61  	;***       24 : 			R_ADC_Get_Result(&g_adc_value[1]);
+00000008                       62  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 24
+00000008 300000                63  	movw ax, #LOWW(_g_adc_value+0x00002)
+0000000B FC000000              64  	call !!_R_ADC_Get_Result
+0000000F                       65  	;***       25 : 			g_cvcc_voltge = ((float)g_adc_value[1]/1024)*_max_voltage;
+0000000F                       66  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 25
+0000000F AF0000                67  	movw ax, !LOWW(_g_adc_value+0x00002)
+00000012 F7                    68  	clrw bc
+00000013 FC000000              69  	call !!__COM_ultof
+00000017 14                    70  	movw de, ax
+00000018 30803A                71  	movw ax, #0x3A80
+0000001B C1                    72  	push ax
+0000001C F6                    73  	clrw ax
+0000001D C1                    74  	push ax
+0000001E 15                    75  	movw ax, de
+0000001F FC000000              76  	call !!__COM_fmul
+00000023 14                    77  	movw de, ax
+00000024 1004                  78  	addw sp, #0x04
+00000026 302041                79  	movw ax, #0x4120
+00000029 C1                    80  	push ax
+0000002A F6                    81  	clrw ax
+0000002B C1                    82  	push ax
+0000002C 15                    83  	movw ax, de
+0000002D FC000000              84  	call !!__COM_fmul
+00000031 14                    85  	movw de, ax
+00000032 13                    86  	movw ax, bc
+00000033 1004                  87  	addw sp, #0x04
+00000035 BF0000                88  	movw !LOWW(_g_cvcc_voltge+0x00002), ax
+00000038 15                    89  	movw ax, de
+00000039 BF0000                90  	movw !LOWW(_g_cvcc_voltge), ax
+0000003C                       91  	;***       26 : 			ADS = _00_AD_INPUT_CHANNEL_0;
+0000003C                       92  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 26
+0000003C CE3100                93  	mov 0xFFF31, #0x00
+0000003F EF00                  94  	br $.BB@LABEL@1_4
+00000041                       95  .BB@LABEL@1_3:	; switch_clause_bb
+00000041                       96  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 19
+00000041 300000                97  	movw ax, #LOWW(_g_adc_value)
+00000044 FC000000              98  	call !!_R_ADC_Get_Result
+00000048                       99  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 20
+00000048 AF0000               100  	movw ax, !LOWW(_g_adc_value)
+0000004B F7                   101  	clrw bc
+0000004C FC000000             102  	call !!__COM_ultof
+00000050 14                   103  	movw de, ax
+00000051 30803A               104  	movw ax, #0x3A80
+00000054 C1                   105  	push ax
+00000055 F6                   106  	clrw ax
+00000056 C1                   107  	push ax
+00000057 15                   108  	movw ax, de
+00000058 FC000000             109  	call !!__COM_fmul
+0000005C 14                   110  	movw de, ax
+0000005D 1004                 111  	addw sp, #0x04
+0000005F 302041               112  	movw ax, #0x4120
+00000062 C1                   113  	push ax
+00000063 F6                   114  	clrw ax
+00000064 C1                   115  	push ax
+00000065 15                   116  	movw ax, de
+00000066 FC000000             117  	call !!__COM_fmul
+0000006A 14                   118  	movw de, ax
+0000006B 13                   119  	movw ax, bc
+0000006C 1004                 120  	addw sp, #0x04
+0000006E BF0000               121  	movw !LOWW(_g_cvcc_current+0x00002), ax
+00000071 15                   122  	movw ax, de
+00000072 BF0000               123  	movw !LOWW(_g_cvcc_current), ax
+00000075                      124  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 21
+00000075 CE3101               125  	mov 0xFFF31, #0x01
+00000078                      126  .BB@LABEL@1_4:	; switch_break_bb
+00000078                      127  	;***       27 : 			break;
+00000078                      128  	;***       28 : 		default:
+00000078                      129  	;***       29 : 			break;
+00000078                      130  	;***       30 : 	}
+00000078                      131  	;***       31 : //	R_ADC_Stop();
+00000078                      132  	;***       32 : 	R_ADC_Start();
+00000078                      133  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interupt_handle.c", 32
+00000078 EC000000             134  	br !!_R_ADC_Start
+0000007C                      135  	;***       33 : }
+00000000                      136  	.SECTION .bss,BSS
+00000000                      137  	.ALIGN 2
+00000000                      138  _g_adc_value:
+00000000                      139  	.DS (4)
 
 Section List
 Attr     Size                Name
 
-TEXTF                96 (00000060) .textf
+TEXTF               124 (0000007C) .textf
 BSS                   4 (00000004) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\interupt_handle.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\interupt_handle.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\interupt_handle.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\interupt_handle.asm 

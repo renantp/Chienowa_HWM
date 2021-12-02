@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_port.obj
 #@   ../src/r_cg_port.c
-#@  compiled at Fri Nov 26 10:19:09 2021
+#@  compiled at Thu Dec 02 17:39:01 2021
 
 	.PUBLIC _R_PORT_Create
 
@@ -47,7 +47,7 @@ _R_PORT_Create:
 	;***       23 : * Device(s)    : R5F104ML
 	;***       24 : * Tool-Chain   : CCRL
 	;***       25 : * Description  : This file implements device driver for PORT module.
-	;***       26 : * Creation Date: 24/11/2021
+	;***       26 : * Creation Date: 30/11/2021
 	;***       27 : ***********************************************************************************************************************/
 	;***       28 : 
 	;***       29 : /***********************************************************************************************************************
@@ -109,7 +109,7 @@ _R_PORT_Create:
 	;***       67 :     P13 = _00_Pn0_OUTPUT_0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 67
 	clrb 0xFFF0D
-	;***       68 :     P14 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0 | _00_Pn6_OUTPUT_0;
+	;***       68 :     P14 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0 | _00_Pn2_OUTPUT_0 | _00_Pn6_OUTPUT_0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 68
 	clrb 0xFFF0E
 	;***       69 :     PMC1 = _04_PMCn2_NOT_USE | _08_PMCn3_NOT_USE | _00_PMCn6_DI_ON | _00_PMCn7_DI_ON;
@@ -159,9 +159,9 @@ _R_PORT_Create:
 	;***       87 :     PM12 = _00_PMn0_MODE_OUTPUT | _FE_PM12_DEFAULT;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 87
 	mov 0xFFF2C, #0xFE
-	;***       88 :     PM14 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
+	;***       88 :     PM14 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _00_PMn2_MODE_OUTPUT | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 88
-	mov 0xFFF2E, #0xBC
+	mov 0xFFF2E, #0xB8
 	;***       89 :            _00_PMn6_MODE_OUTPUT | _80_PMn7_MODE_INPUT | _20_PM14_DEFAULT;
 	;***       90 :     PM15 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_MODE_INPUT | _F0_PM15_DEFAULT;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 90

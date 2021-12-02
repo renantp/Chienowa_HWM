@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements device driver for Serial module.
-* Creation Date: 24/11/2021
+* Creation Date: 30/11/2021
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -83,6 +83,7 @@ extern volatile uint16_t  g_uart3_rx_length;           /* uart3 receive data len
 volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_end, g_uart2_send, g_uart2_receive;
 uint8_t g_rx_data[32];
 volatile uint8_t g_uart2_fault;
+volatile uint8_t g_uart3_sendend;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -409,10 +410,13 @@ static void r_uart2_callback_receiveend(void)
 //	R_UART2_Stop();
 //	R_UART2_Start();
 	R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
-	if(g_rx_data[0] > 6){
-		g_uart2_fault = 1;
-	}else{
+	if((g_rx_data[0] == H_READ)|(g_rx_data[0] == H_SET)|(g_rx_data[0] == H_ALARM)|(g_rx_data[0] == H_CLEAR)|(g_rx_data[0] == H_ERROR)){
 		g_uart2_fault = 0;
+		if(g_rx_data[0] == H_READ){
+			R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
+		}
+	}else{
+		g_uart2_fault = 1;
 	}
 	g_uart2_receive++;
     /* End user code. Do not edit comment generated here */
@@ -524,6 +528,7 @@ static void __near r_uart3_interrupt_send(void)
 static void r_uart3_callback_receiveend(void)
 {
     /* Start user code. Do not edit comment generated here */
+	R_UART3_Receive(rec_buf, 7);
     /* End user code. Do not edit comment generated here */
 }
 
@@ -549,6 +554,7 @@ static void r_uart3_callback_softwareoverrun(uint16_t rx_data)
 static void r_uart3_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
+	g_uart3_sendend++;
     /* End user code. Do not edit comment generated here */
 }
 

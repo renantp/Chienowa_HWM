@@ -367,7 +367,7 @@
         <Port14 Pullup="true">
           <P140 Chip="RL78G14_48pin,RL78G14_49pin,RL78G14_52pin,RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P140/PCLBUZ0/INTP6" AltFunc="P140" Point="I/O" />
           <P141 Chip="RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P141/PCLBUZ1/INTP7" AltFunc="P141" Point="I/O" />
-          <P142 Chip="RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" TTL="true" Nch="true" Name="P142/_SCK30/SCL30" AltFunc="" Point="I/O" />
+          <P142 Chip="RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" TTL="true" Nch="true" Name="P142/_SCK30/SCL30" AltFunc="P142" Point="I/O" />
           <P143 Chip="RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P143/SI30/RXD3/SDA30" TTL="true" Nch="true" AltFunc="RXD3" Point="I/O" />
           <P144 Chip="RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P144/SO30/TXD3" Nch="true" AltFunc="TXD3" Point="I/O" />
           <P146 Chip="RL78G14_44pin,RL78G14_48pin,RL78G14_49pin,RL78G14_52pin,RL78G14_64pin,RL78G14_80pin,RL78G14_100pin,RL78G14_128pin" Name="P146" AltFunc="P146" Point="I/O" />
@@ -1511,7 +1511,7 @@
         </r_cg_wdt.c>
         <r_cg_wdt_user.c UserName="r_cg_wdt_user.c" LibName="_user.c" InUse="1">
           <Type R_WDT_Create_UserInit="void R_WDT_Create_UserInit(void)" r_wdt_interrupt="__interrupt static void r_wdt_interrupt(void)" />
-          <R_WDT_Create_UserInit UserName="" LibName="R_WDT_Create_UserInit" InUse="" />
+          <R_WDT_Create_UserInit UserName="" LibName="R_WDT_Create_UserInit" InUse="0" />
           <r_wdt_interrupt UserName="r_wdt_interrupt" INTHandle="" LibName="r_wdt_interrupt" InUse="1" />
         </r_cg_wdt_user.c>
         <r_cg_wdt.h UserName="r_cg_wdt.h" LibName=".h" InUse="1" />
@@ -1753,23 +1753,23 @@
         <cg_security2 Name="cg_security2" Value="00" />
         <pior1_value Name="pior1_value" Value="00" />
         <cg_security1 Name="cg_security1" Value="00" />
-        <cg_onchip Name="cg_onchip" Value="" />
+        <gtraceused Name="gtraceused" Value="" />
         <cg_security9 Name="cg_security9" Value="00" />
-        <lvi_option Name="lvi_option" Value="FF" />
+        <rrm Name="rrm" Value="7FE00" />
         <cg_security6 Name="cg_security6" Value="00" />
         <cg_crc_area Name="cg_crc_area" Value="00" />
         <cg_iawctl_value Name="cg_iawctl_value" Value="00" />
         <cg_security0 Name="cg_security0" Value="00" />
-        <cg_security7 Name="cg_security7" Value="00" />
         <ocdstart Name="ocdstart" Value="7FE00" />
+        <cg_security4 Name="cg_security4" Value="00" />
         <cg_pms_value Name="cg_pms_value" Value="00" />
         <cg_security3 Name="cg_security3" Value="00" />
-        <cg_security4 Name="cg_security4" Value="00" />
+        <cg_onchip Name="cg_onchip" Value="" />
         <pior_value Name="pior_value" Value="00" />
-        <cg_ocd_ram_size Name="cg_ocd_ram_size" Value="512" />
-        <rrm Name="rrm" Value="7FE00" />
         <cg_option Name="cg_option" Value="84" />
-        <gtraceused Name="gtraceused" Value="" />
+        <cg_ocd_ram_size Name="cg_ocd_ram_size" Value="512" />
+        <cg_security7 Name="cg_security7" Value="00" />
+        <lvi_option Name="lvi_option" Value="FF" />
       </GlobleUserTag>
     </TAG>
   </DIR>
@@ -1814,8 +1814,8 @@
       <TMRD1 SetFlag="" MacroName="TMRD" Channel="1" TabEnable="True" />
       <TMRG0 SetFlag="" MacroName="TMRG" Channel="0" TabEnable="True" />
     </TAU>
-    <WDT Prepared="true" SetFlag="true" HelpID="watchdogtimer" NeedRefresh="False">
-      <WDT SetFlag="true" MacroName="WDT" />
+    <WDT Prepared="true" SetFlag="True" HelpID="watchdogtimer" NeedRefresh="False">
+      <WDT SetFlag="True" MacroName="WDT" />
     </WDT>
     <RTC SetFlag="True" HelpID="rtc" NeedRefresh="False">
       <RTC MacroName="RTC" SetFlag="True" />
@@ -2382,7 +2382,7 @@
           <setting name="Output_value" value="0" />
         </P141>
         <P142>
-          <setting name="Operation" value="unused" />
+          <setting name="Operation" value="output" />
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />
@@ -2775,7 +2775,7 @@
       <setting name="AD_Trigger" value="softtri" />
       <setting name="AD_Trigger_Timer" value="0" />
       <setting name="Mode" value="ONESELECT" />
-      <setting name="InputPins" value="8" />
+      <setting name="InputPins" value="7" />
       <setting name="InputPinsAttach" value="ANI0 - ANI3" />
       <setting name="AD_Inputpin16" value="unused" />
       <setting name="AD_Inputpin17" value="unused" />
@@ -3109,20 +3109,8 @@
       <DTCD0>
         <setting name="DTCChannel" value="false" />
         <setting name="ChainTransfer" value="false" />
-        <setting name="Source" value="0" />
+        <setting name="Source" value="14" />
       </DTCD0>
-      <DTCITEM1>
-        <setting name="Mode" value="Normal" />
-        <setting name="TransferByteCount" value="1" />
-        <setting name="SourceAddress" value="" />
-        <setting name="DestinationAddress" value="" />
-        <setting name="AREA" value="Destination" />
-        <setting name="SourceAddressStyle" value="0" />
-        <setting name="DestinationAddressStyle" value="0" />
-        <setting name="BlockSize" value="1" />
-        <setting name="INT" value="Disable" />
-        <setting name="DATA" value="8bits" />
-      </DTCITEM1>
       <DTCD1>
         <setting name="DTCChannel" value="false" />
         <setting name="ChainTransfer" value="false" />

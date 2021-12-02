@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/usr_timer.obj
 00000000                       17  #@   ../src/usr_timer.c
-00000000                       18  #@  compiled at Fri Nov 26 10:19:14 2021
+00000000                       18  #@  compiled at Thu Dec 02 17:39:06 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_systemTime
 00000000                       21  	.PUBLIC _delay_ms
@@ -138,155 +138,162 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000065 1008                 134  	addw sp, #0x08
 00000067 D7                   135  	ret
 00000068                      136  _delay:
-00000068                      137  	.STACK _delay = 4
+00000068                      137  	.STACK _delay = 6
 00000068                      138  	;***       19 : void delay(uint8_t s){
 00000068                      139  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 19
-00000068 D1                   140  	cmp0 a
-00000069                      141  	;***       20 : 	if(s != 0){
-00000069                      142  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 20
-00000069 61F8                 143  	sknz
-0000006B                      144  .BB@LABEL@2_1:	; return
-0000006B                      145  	;***       21 : 		delay_ms(1000);
-0000006B                      146  	;***       22 : 		s--;
-0000006B                      147  	;***       23 : 		R_WDT_Restart();
-0000006B                      148  	;***       24 : 	}
-0000006B                      149  	;***       25 : }
-0000006B                      150  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 25
-0000006B D7                   151  	ret
-0000006C                      152  .BB@LABEL@2_2:	; if_then_bb
-0000006C                      153  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 21
-0000006C F7                   154  	clrw bc
-0000006D 30E803               155  	movw ax, #0x03E8
-00000070 FE0000               156  	call $!_delay_ms
-00000073                      157  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 23
-00000073 EC000000             158  	br !!_R_WDT_Restart
-00000077                      159  _ns_delay_ms:
-00000077                      160  	.STACK _ns_delay_ms = 10
-00000077                      161  	;***       26 : int ns_delay_ms(uint32_t *stamp, uint32_t ms){
-00000077                      162  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 26
-00000077 C1                   163  	push ax
-00000078 2004                 164  	subw sp, #0x04
-0000007A 16                   165  	movw hl, ax
-0000007B                      166  	;***       27 : //	if(0xffffffff - *stamp < ms)
-0000007B                      167  	;***       28 : //		if((g_systemTime <= ms - (0xffffffff - *stamp))&(g_systemTime < 0xffff0000))
-0000007B                      168  	;***       29 : //			return 0;
-0000007B                      169  	;***       30 : //	else
-0000007B                      170  	;***       31 : 		if(g_systemTime - *stamp < ms)
-0000007B                      171  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 31
-0000007B AF0000               172  	movw ax, !LOWW(_g_systemTime+0x00002)
-0000007E B800                 173  	movw [sp+0x00], ax
-00000080 AF0000               174  	movw ax, !LOWW(_g_systemTime)
-00000083 612900               175  	subw ax, [hl+0x00]
-00000086 B802                 176  	movw [sp+0x02], ax
-00000088 A800                 177  	movw ax, [sp+0x00]
-0000008A 61D8                 178  	sknc
-0000008C                      179  .BB@LABEL@3_1:	; entry
-0000008C B1                   180  	decw ax
-0000008D                      181  .BB@LABEL@3_2:	; entry
-0000008D 612902               182  	subw ax, [hl+0x02]
-00000090 45                   183  	cmpw ax, de
-00000091 A802                 184  	movw ax, [sp+0x02]
-00000093 61F8                 185  	sknz
-00000095                      186  .BB@LABEL@3_3:	; entry
-00000095 43                   187  	cmpw ax, bc
-00000096                      188  .BB@LABEL@3_4:	; entry
-00000096 DE00                 189  	bnc $.BB@LABEL@3_7
-00000098                      190  .BB@LABEL@3_5:	; bb13
-00000098                      191  	;***       32 : 			return 0;
-00000098                      192  	;***       33 : 	*stamp = g_systemTime;
-00000098                      193  	;***       34 : 	return 1;
-00000098                      194  	;***       35 : }
-00000098                      195  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 35
-00000098 F6                   196  	clrw ax
-00000099                      197  .BB@LABEL@3_6:	; bb13
-00000099 1006                 198  	addw sp, #0x06
-0000009B D7                   199  	ret
-0000009C                      200  .BB@LABEL@3_7:	; if_break_bb
-0000009C                      201  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 33
-0000009C DB0000               202  	movw bc, !LOWW(_g_systemTime+0x00002)
-0000009F A804                 203  	movw ax, [sp+0x04]
-000000A1 14                   204  	movw de, ax
-000000A2 AF0000               205  	movw ax, !LOWW(_g_systemTime)
-000000A5 B9                   206  	movw [de], ax
-000000A6 13                   207  	movw ax, bc
-000000A7 BA02                 208  	movw [de+0x02], ax
-000000A9                      209  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 34
-000000A9 E6                   210  	onew ax
-000000AA EF00                 211  	br $.BB@LABEL@3_6
-000000AC                      212  _non_block_delay:
-000000AC                      213  	.STACK _non_block_delay = 4
-000000AC                      214  	;***       36 : int non_block_delay(uint32_t *stamp, uint32_t ms){
-000000AC                      215  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 36
-000000AC E6                   216  	onew ax
-000000AD                      217  	;***       37 : 	return 1;
-000000AD                      218  	;***       38 : 
-000000AD                      219  	;***       39 : }
-000000AD                      220  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 39
-000000AD D7                   221  	ret
-000000AE                      222  _mTask:
-000000AE                      223  	.STACK _mTask = 14
-000000AE                      224  	;***       40 : 
-000000AE                      225  	;***       41 : void mTask(void (*func)(void), uint32_t *_p_stamp ,uint32_t ms){
-000000AE                      226  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 41
-000000AE C3                   227  	push bc
-000000AF 2006                 228  	subw sp, #0x06
-000000B1 9800                 229  	mov [sp+0x00], a
-000000B3 C3                   230  	push bc
-000000B4 C6                   231  	pop hl
-000000B5                      232  	;***       42 : 	if(g_systemTime - *_p_stamp >= ms){
-000000B5                      233  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 42
-000000B5 AF0000               234  	movw ax, !LOWW(_g_systemTime+0x00002)
-000000B8 B804                 235  	movw [sp+0x04], ax
-000000BA AF0000               236  	movw ax, !LOWW(_g_systemTime)
-000000BD 612900               237  	subw ax, [hl+0x00]
-000000C0 B802                 238  	movw [sp+0x02], ax
-000000C2 A80E                 239  	movw ax, [sp+0x0E]
-000000C4 12                   240  	movw bc, ax
-000000C5 A804                 241  	movw ax, [sp+0x04]
-000000C7 61D8                 242  	sknc
-000000C9                      243  .BB@LABEL@5_1:	; entry
-000000C9 B1                   244  	decw ax
-000000CA                      245  .BB@LABEL@5_2:	; entry
-000000CA 612902               246  	subw ax, [hl+0x02]
-000000CD 43                   247  	cmpw ax, bc
-000000CE A80C                 248  	movw ax, [sp+0x0C]
-000000D0 12                   249  	movw bc, ax
-000000D1 A802                 250  	movw ax, [sp+0x02]
-000000D3 61F8                 251  	sknz
-000000D5                      252  .BB@LABEL@5_3:	; entry
-000000D5 43                   253  	cmpw ax, bc
-000000D6                      254  .BB@LABEL@5_4:	; entry
-000000D6 DE00                 255  	bnc $.BB@LABEL@5_6
-000000D8                      256  .BB@LABEL@5_5:	; return
-000000D8 1008                 257  	addw sp, #0x08
-000000DA                      258  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 46
-000000DA D7                   259  	ret
-000000DB                      260  .BB@LABEL@5_6:	; if_then_bb
-000000DB 8800                 261  	mov a, [sp+0x00]
-000000DD                      262  	;***       43 : 		func();
-000000DD                      263  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 43
-000000DD 9EFC                 264  	mov cs, a
-000000DF C5                   265  	push de
-000000E0 C6                   266  	pop hl
-000000E1 61FA                 267  	call hl
-000000E3                      268  	;***       44 : 		*_p_stamp = g_systemTime;
-000000E3                      269  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 44
-000000E3 DB0000               270  	movw bc, !LOWW(_g_systemTime+0x00002)
-000000E6 A806                 271  	movw ax, [sp+0x06]
-000000E8 14                   272  	movw de, ax
-000000E9 AF0000               273  	movw ax, !LOWW(_g_systemTime)
-000000EC B9                   274  	movw [de], ax
-000000ED 13                   275  	movw ax, bc
-000000EE BA02                 276  	movw [de+0x02], ax
-000000F0 EF00                 277  	br $.BB@LABEL@5_5
-000000F2                      278  	;***       45 : 	}
-000000F2                      279  	;***       46 : }
-000000F2                      280  	;***       47 : 
+00000068 C7                   140  	push hl
+00000069 81                   141  	inc a
+0000006A                      142  .BB@LABEL@2_1:	; bb3
+0000006A                      143  	;***       20 : 	while(s != 0){
+0000006A                      144  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 20
+0000006A 91                   145  	dec a
+0000006B 9800                 146  	mov [sp+0x00], a
+0000006D DD00                 147  	bz $.BB@LABEL@2_3
+0000006F                      148  .BB@LABEL@2_2:	; bb
+0000006F                      149  	;***       21 : 		delay_ms(1000);
+0000006F                      150  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 21
+0000006F F7                   151  	clrw bc
+00000070 30E803               152  	movw ax, #0x03E8
+00000073 FE0000               153  	call $!_delay_ms
+00000076                      154  	;***       22 : 		s--;
+00000076                      155  	;***       23 : 		R_WDT_Restart();
+00000076                      156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 23
+00000076 FC000000             157  	call !!_R_WDT_Restart
+0000007A 8800                 158  	mov a, [sp+0x00]
+0000007C EF00                 159  	br $.BB@LABEL@2_1
+0000007E                      160  .BB@LABEL@2_3:	; return
+0000007E                      161  	;***       24 : 	}
+0000007E                      162  	;***       25 : }
+0000007E                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 25
+0000007E C6                   164  	pop hl
+0000007F D7                   165  	ret
+00000080                      166  _ns_delay_ms:
+00000080                      167  	.STACK _ns_delay_ms = 10
+00000080                      168  	;***       26 : int ns_delay_ms(uint32_t *stamp, uint32_t ms){
+00000080                      169  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 26
+00000080 C1                   170  	push ax
+00000081 2004                 171  	subw sp, #0x04
+00000083 16                   172  	movw hl, ax
+00000084                      173  	;***       27 : //	if(0xffffffff - *stamp < ms)
+00000084                      174  	;***       28 : //		if((g_systemTime <= ms - (0xffffffff - *stamp))&(g_systemTime < 0xffff0000))
+00000084                      175  	;***       29 : //			return 0;
+00000084                      176  	;***       30 : //	else
+00000084                      177  	;***       31 : 		if(g_systemTime - *stamp < ms)
+00000084                      178  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 31
+00000084 AF0000               179  	movw ax, !LOWW(_g_systemTime+0x00002)
+00000087 B800                 180  	movw [sp+0x00], ax
+00000089 AF0000               181  	movw ax, !LOWW(_g_systemTime)
+0000008C 612900               182  	subw ax, [hl+0x00]
+0000008F B802                 183  	movw [sp+0x02], ax
+00000091 A800                 184  	movw ax, [sp+0x00]
+00000093 61D8                 185  	sknc
+00000095                      186  .BB@LABEL@3_1:	; entry
+00000095 B1                   187  	decw ax
+00000096                      188  .BB@LABEL@3_2:	; entry
+00000096 612902               189  	subw ax, [hl+0x02]
+00000099 45                   190  	cmpw ax, de
+0000009A A802                 191  	movw ax, [sp+0x02]
+0000009C 61F8                 192  	sknz
+0000009E                      193  .BB@LABEL@3_3:	; entry
+0000009E 43                   194  	cmpw ax, bc
+0000009F                      195  .BB@LABEL@3_4:	; entry
+0000009F DE00                 196  	bnc $.BB@LABEL@3_7
+000000A1                      197  .BB@LABEL@3_5:	; bb13
+000000A1                      198  	;***       32 : 			return 0;
+000000A1                      199  	;***       33 : 	*stamp = g_systemTime;
+000000A1                      200  	;***       34 : 	return 1;
+000000A1                      201  	;***       35 : }
+000000A1                      202  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 35
+000000A1 F6                   203  	clrw ax
+000000A2                      204  .BB@LABEL@3_6:	; bb13
+000000A2 1006                 205  	addw sp, #0x06
+000000A4 D7                   206  	ret
+000000A5                      207  .BB@LABEL@3_7:	; if_break_bb
+000000A5                      208  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 33
+000000A5 DB0000               209  	movw bc, !LOWW(_g_systemTime+0x00002)
+000000A8 A804                 210  	movw ax, [sp+0x04]
+000000AA 14                   211  	movw de, ax
+000000AB AF0000               212  	movw ax, !LOWW(_g_systemTime)
+000000AE B9                   213  	movw [de], ax
+000000AF 13                   214  	movw ax, bc
+000000B0 BA02                 215  	movw [de+0x02], ax
+000000B2                      216  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 34
+000000B2 E6                   217  	onew ax
+000000B3 EF00                 218  	br $.BB@LABEL@3_6
+000000B5                      219  _non_block_delay:
+000000B5                      220  	.STACK _non_block_delay = 4
+000000B5                      221  	;***       36 : int non_block_delay(uint32_t *stamp, uint32_t ms){
+000000B5                      222  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 36
+000000B5 E6                   223  	onew ax
+000000B6                      224  	;***       37 : 	return 1;
+000000B6                      225  	;***       38 : 
+000000B6                      226  	;***       39 : }
+000000B6                      227  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 39
+000000B6 D7                   228  	ret
+000000B7                      229  _mTask:
+000000B7                      230  	.STACK _mTask = 14
+000000B7                      231  	;***       40 : 
+000000B7                      232  	;***       41 : void mTask(void (*func)(void), uint32_t *_p_stamp ,uint32_t ms){
+000000B7                      233  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 41
+000000B7 C3                   234  	push bc
+000000B8 2006                 235  	subw sp, #0x06
+000000BA 9800                 236  	mov [sp+0x00], a
+000000BC C3                   237  	push bc
+000000BD C6                   238  	pop hl
+000000BE                      239  	;***       42 : 	if(g_systemTime - *_p_stamp >= ms){
+000000BE                      240  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 42
+000000BE AF0000               241  	movw ax, !LOWW(_g_systemTime+0x00002)
+000000C1 B804                 242  	movw [sp+0x04], ax
+000000C3 AF0000               243  	movw ax, !LOWW(_g_systemTime)
+000000C6 612900               244  	subw ax, [hl+0x00]
+000000C9 B802                 245  	movw [sp+0x02], ax
+000000CB A80E                 246  	movw ax, [sp+0x0E]
+000000CD 12                   247  	movw bc, ax
+000000CE A804                 248  	movw ax, [sp+0x04]
+000000D0 61D8                 249  	sknc
+000000D2                      250  .BB@LABEL@5_1:	; entry
+000000D2 B1                   251  	decw ax
+000000D3                      252  .BB@LABEL@5_2:	; entry
+000000D3 612902               253  	subw ax, [hl+0x02]
+000000D6 43                   254  	cmpw ax, bc
+000000D7 A80C                 255  	movw ax, [sp+0x0C]
+000000D9 12                   256  	movw bc, ax
+000000DA A802                 257  	movw ax, [sp+0x02]
+000000DC 61F8                 258  	sknz
+000000DE                      259  .BB@LABEL@5_3:	; entry
+000000DE 43                   260  	cmpw ax, bc
+000000DF                      261  .BB@LABEL@5_4:	; entry
+000000DF DE00                 262  	bnc $.BB@LABEL@5_6
+000000E1                      263  .BB@LABEL@5_5:	; return
+000000E1 1008                 264  	addw sp, #0x08
+000000E3                      265  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 46
+000000E3 D7                   266  	ret
+000000E4                      267  .BB@LABEL@5_6:	; if_then_bb
+000000E4 8800                 268  	mov a, [sp+0x00]
+000000E6                      269  	;***       43 : 		func();
+000000E6                      270  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 43
+000000E6 9EFC                 271  	mov cs, a
+000000E8 C5                   272  	push de
+000000E9 C6                   273  	pop hl
+000000EA 61FA                 274  	call hl
+000000EC                      275  	;***       44 : 		*_p_stamp = g_systemTime;
+000000EC                      276  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 44
+000000EC DB0000               277  	movw bc, !LOWW(_g_systemTime+0x00002)
+000000EF A806                 278  	movw ax, [sp+0x06]
+000000F1 14                   279  	movw de, ax
+000000F2 AF0000               280  	movw ax, !LOWW(_g_systemTime)
+000000F5 B9                   281  	movw [de], ax
+000000F6 13                   282  	movw ax, bc
+000000F7 BA02                 283  	movw [de+0x02], ax
+000000F9 EF00                 284  	br $.BB@LABEL@5_5
+000000FB                      285  	;***       45 : 	}
+000000FB                      286  	;***       46 : }
+000000FB                      287  	;***       47 : 
 
 Section List
 Attr     Size                Name
 
-TEXTF               242 (000000F2) .textf
+TEXTF               251 (000000FB) .textf
 
 Command Line Parameter
 Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\usr_timer.asm.cmd 
