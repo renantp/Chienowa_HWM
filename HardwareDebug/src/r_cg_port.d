@@ -7,5 +7,5 @@ src/r_cg_port.obj src/r_cg_port.d: ../src/r_cg_port.h
 ../src/r_cg_port.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
-src/r_cg_port.obj src/r_cg_port.d: ../src/checksum.h
-../src/checksum.h:
+src/r_cg_port.obj src/r_cg_port.d: ../src/crc8.h
+../src/crc8.h:

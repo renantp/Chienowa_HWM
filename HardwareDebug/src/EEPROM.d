@@ -9,8 +9,8 @@ src/EEPROM.obj src/EEPROM.d: D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate\iodef
 D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate\iodefine.h:
 src/EEPROM.obj src/EEPROM.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
-src/EEPROM.obj src/EEPROM.d: ../src/checksum.h
-../src/checksum.h:
+src/EEPROM.obj src/EEPROM.d: ../src/crc8.h
+../src/crc8.h:
 src/EEPROM.obj src/EEPROM.d: ../src/usr_timer.h
 ../src/usr_timer.h:
 src/EEPROM.obj src/EEPROM.d: ../src/r_cg_wdt.h

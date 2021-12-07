@@ -28,8 +28,8 @@ int ns_delay_ms(uint32_t *stamp, uint32_t ms){
 //		if((g_systemTime <= ms - (0xffffffff - *stamp))&(g_systemTime < 0xffff0000))
 //			return 0;
 //	else
-		if(g_systemTime - *stamp < ms)
-			return 0;
+	if(g_systemTime - *stamp < ms)
+		return 0;
 	*stamp = g_systemTime;
 	return 1;
 }

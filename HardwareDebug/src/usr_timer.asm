@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/usr_timer.obj
 #@   ../src/usr_timer.c
-#@  compiled at Tue Dec 07 09:51:58 2021
+#@  compiled at Tue Dec 07 17:32:42 2021
 
 	.EXTERN _g_systemTime
 	.PUBLIC _delay_ms
@@ -174,7 +174,7 @@ _ns_delay_ms:
 	;***       28 : //		if((g_systemTime <= ms - (0xffffffff - *stamp))&(g_systemTime < 0xffff0000))
 	;***       29 : //			return 0;
 	;***       30 : //	else
-	;***       31 : 		if(g_systemTime - *stamp < ms)
+	;***       31 : 	if(g_systemTime - *stamp < ms)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 31
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw [sp+0x00], ax
@@ -195,7 +195,7 @@ _ns_delay_ms:
 .BB@LABEL@3_4:	; entry
 	bnc $.BB@LABEL@3_7
 .BB@LABEL@3_5:	; bb13
-	;***       32 : 			return 0;
+	;***       32 : 		return 0;
 	;***       33 : 	*stamp = g_systemTime;
 	;***       34 : 	return 1;
 	;***       35 : }

@@ -71,6 +71,9 @@ void setting_default(void){
 	g_timerSetting.t14_lowVoltageStartTime = 5000; //60000
 	g_timerSetting.t15_lowVoltageDelayTime = 2000;
 	g_timerSetting.t17_solenoidLeakageStartTime = 5000;
+	g_timerSetting.t51 = 15;
+	g_timerSetting.t52 = 16;
+	g_timerSetting.t53 = 17;
 }
 #ifdef RENAN_CODE
 void renanCode(void){
@@ -110,12 +113,12 @@ void code_20211029(void){
 
 //----------------------Begin code 11112021--------------------------------------
 void sendToRasPi(enum UART_header_e head, enum Control_status type, float value){
-	uint8_t state = g_uart2_send;
+	uint8_t state = g_uart2_sendend;
 	g_control_buffer.head = head;
 	g_control_buffer.set_number = type;
 	g_control_buffer.set_value = value;
 	R_UART2_Send((uint8_t *)&g_control_buffer, sizeof(struct UART_Buffer_s));
-	while(state == g_uart2_send);
+	while(state == g_uart2_sendend);
 }
 /**
  * InitialOperationModeStart
@@ -405,11 +408,68 @@ void HandWashingMode(void){
 }
 void AcidWaterMode(void){
 	uint8_t _state = 0;
+	uint32_t _stamp = g_systemTime;
+	const uint32_t _waterHamerTime = 1000;
 	if(readHS() == 1){
 		_state = 1;
+		O_SPOUT_ACID_PIN = ON;
+		delay_ms(100);
+		O_PUMP_ACID_PIN = ON;
+		g_color = RED;
+		handSensorLED(g_color);
+	}
+	while((readHS() == 1)&(g_systemTime - _stamp < g_timerSetting.t56)){
+		R_WDT_Restart();
 	}
 	if(_state == 1){
-
+		O_PUMP_ACID_PIN = OFF;
+		delay_ms(_waterHamerTime);
+		O_SPOUT_ACID_PIN = OFF;
+		g_color = BLACK;
+		handSensorLED(g_color);
+	}
+}
+void AlkalineWaterMode(void){
+	uint8_t _state = 0;
+	uint32_t _stamp = g_systemTime;
+	const uint32_t _waterHamerTime = 1000;
+	if(readHS() == 1){
+		_state = 1;
+		O_SPOUT_ALK_PIN = ON;
+		delay_ms(100);
+		O_PUMP_ALK_PIN = ON;
+		g_color = RED;
+		handSensorLED(g_color);
+	}
+	while((readHS() == 1)&(g_systemTime - _stamp < g_timerSetting.t56)){
+		R_WDT_Restart();
+	}
+	if(_state == 1){
+		O_PUMP_ALK_PIN = OFF;
+		delay_ms(_waterHamerTime);
+		O_SPOUT_ALK_PIN = OFF;
+		g_color = BLACK;
+		handSensorLED(g_color);
+	}
+}
+void nostop_CallanCleaningMode(void){
+	if((g_TickKeeper.SV1_OFF_minutes >= g_timerSetting.t61) &
+			(g_TickKeeper.SV2_OFF_minutes >= g_timerSetting.t61)){
+		g_callan_clear_flag = 1;
+		g_Tick.tickCustom[6] = g_Tick.tickCustom[7] = g_systemTime;
+		O_SPOUT_WATER_PIN = ON;
+	}
+	if(g_callan_clear_flag){
+		if(ns_delay_ms(&g_Tick.tickCustom[6], 500)){
+			g_color = g_color == WHITE ? BLACK:WHITE;
+			handSensorLED(g_color);
+		}
+		if(ns_delay_ms(&g_Tick.tickCustom[7], g_timerSetting.t62*1000)){
+			g_callan_clear_flag = 0;
+			O_SPOUT_WATER_PIN = OFF;
+			g_color = BLACK;
+			handSensorLED(g_color);
+		}
 	}
 }
 // Newest

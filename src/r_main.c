@@ -58,7 +58,6 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 volatile int g_error = 0;
 volatile int g_adc_ch = 0;
-uint32_t _stamp[3];
 union EEPROM_status_u g_e_status;
 uint8_t led_st = 0xff;
 uint8_t flow_p, salt_h_p;
@@ -112,7 +111,7 @@ void main(void)
     g_rtc.sec = 2;
     R_RTC_Set_CounterValue(g_rtc);
     R_RTC_Start();
-    R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
+    R_UART2_Receive(g_rx_data, 6);
 
 //    Test nhan
     O_RS485_MODE_PIN = 0U;
@@ -130,8 +129,25 @@ void main(void)
     this_size = sizeof(struct Timer_Setting_s);
     while (1U)
     {
+    	if(send_response_flag){
+    		uint8_t state = g_uart2_sendend;
+    		R_UART2_Send(g_rx_data, 6);
+    		while(state == g_uart2_sendend){
+				R_WDT_Restart();
+			}
+    		send_response_flag = 0;
+    	}
+    	if(send_response_time_flag){
+			uint8_t state = g_uart2_sendend;
+			g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
+			R_UART2_Send((uint8_t *)&g_timerSetting, 69);
+			while(state == g_uart2_sendend){
+				R_WDT_Restart();
+			}
+			send_response_time_flag = 0;
+    	}
 //--------------------------------- Testing code---------------------------------------------------------------
-    	if(ns_delay_ms(&_stamp[0], 200)){
+    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
     		P6_bit.no3 = ~P6_bit.no3;
 //    		R_UART3_Send((uint8_t *)"Hello", sizeof("Hello")-1);
 //    		R_UART1_Send((uint8_t *)"Hello", sizeof("Hello")-1);
@@ -145,37 +161,55 @@ void main(void)
     		g_uart2_fault = 0;
     	}
     	flow_p = I_FLOW_PLUSE_PIN == 1? 1: 0;
-    	if(ns_delay_ms(&_stamp[1], 1000)){
+    	if(ns_delay_ms(&g_Tick.tickCustom[1], 60000)){
+    		if(O_SUPPLY_WATER_PIN == ON){
+				g_TickKeeper.SV1_ON_minutes++;
+				g_TickKeeper.SV1_OFF_minutes = 0;
+			}else{
+				g_TickKeeper.SV1_OFF_minutes++;
+				g_TickKeeper.SV1_ON_minutes = 0;
+			}
+			if(O_SPOUT_WATER_PIN == ON){
+				g_TickKeeper.SV2_ON_minutes++;
+				g_TickKeeper.SV2_OFF_minutes = 0;
+			}else{
+				g_TickKeeper.SV2_OFF_minutes++;
+				g_TickKeeper.SV2_ON_minutes = 0;
+			}
+    	}
+    	if(ns_delay_ms(&g_Tick.tick1s, 1000)){
+
 //    		send_buf[1]++;
 //    		R_UART3_Send(send_buf, 7);
 //    		R_UART3_Receive(rec_buf, 7);
     		O_CTRL_OUT_PIN = led_st&0x01;
     		O_SPOUT_WATER_PIN = led_st&0x01;
     		led_st = led_st == 0?0xff:0x00;
-    	    uint8_t state = g_uart2_send;
+    	    uint8_t state = g_uart2_sendend;
 //    	    g_timerSetting.t2_flowSensorStartTime = 0x24770000;
     	    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
     	    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
     	    g_timerSetting.t6_drainageOffTime = 1000;
-//    	    g_timerSetting.t51++;
-    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 36);
+//			g_timerSetting.t51++;
+    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
 //    	    g_crc[0] = crc_8((unsigned char *)&g_timerSetting, 4);
 //    	    g_crc[1] = Fast_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
 //    	    g_crc[2] = Quick_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
 //    	    g_crc[3] = crc8x_simple(0x00, (unsigned char *)&g_timerSetting, 4);
 //    	    g_crc[4] = crc8x_fast(0x00, (unsigned char *)&g_timerSetting, 4);
 //    	    g_crc[5] = getCRC((unsigned char *)&g_timerSetting, 4);
-    	    g_crc[6] = crc8_4((uint8_t *)&g_timerSetting, 36);
-    	    g_crc[7] = crc8_1((uint8_t *)&g_timerSetting, 36);
+    	    g_crc[6] = crc8_4((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
+    	    g_crc[7] = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
 //    	    g_crc_32 = CRC32_function((uint8_t *)&g_timerSetting, 8);
 //    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s));
-    	    R_UART2_Send((uint8_t *)&g_timerSetting, 36);
+//    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 1);
 //    	    sendToRasPi(H_ALARM, CURRENT_ABNORMAL, 32);
-    	    while(state == g_uart2_send){
-				R_WDT_Restart();
-			}
+//    	    while(state == g_uart2_sendend){
+//				R_WDT_Restart();
+//			}
 
     		if(led_st == 0x00){
+
 //    			O_HS_ICL_PIN = 0;
 //    			O_HS_IDA_PIN = 1;
 //    			handSensorLED(RED);

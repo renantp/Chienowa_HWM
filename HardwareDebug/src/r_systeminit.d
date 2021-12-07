@@ -21,5 +21,5 @@ src/r_systeminit.obj src/r_systeminit.d: ../src/r_cg_rtc.h
 ../src/r_cg_rtc.h:
 src/r_systeminit.obj src/r_systeminit.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
-src/r_systeminit.obj src/r_systeminit.d: ../src/checksum.h
-../src/checksum.h:
+src/r_systeminit.obj src/r_systeminit.d: ../src/crc8.h
+../src/crc8.h:

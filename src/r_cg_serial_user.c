@@ -80,10 +80,38 @@ extern volatile uint8_t * gp_uart3_rx_address;         /* uart3 receive buffer a
 extern volatile uint16_t  g_uart3_rx_count;            /* uart3 receive data number */
 extern volatile uint16_t  g_uart3_rx_length;           /* uart3 receive data length */
 /* Start user code for global. Do not edit comment generated here */
-volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_end, g_uart2_send, g_uart2_receive;
+volatile uint8_t send_response_flag, send_response_time_flag, send_response_number_flag;
+volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_send, g_uart2_sendend, g_uart2_receive;
 uint8_t g_rx_data[32];
 volatile uint8_t g_uart2_fault;
 volatile uint8_t g_uart3_sendend;
+void sendResponse(uint8_t *data){
+	g_uart2_sendend = 0;
+	R_UART2_Send(data, 6);
+}
+uint8_t isCommand(uint8_t *data){
+	switch ((enum UART_header_e)data[0]) {
+		case H_ALARM:
+			sendResponse(data);
+			break;
+		case H_CLEAR:
+			sendResponse(data);
+			break;
+		case H_ERROR:
+			sendResponse(data);
+			break;
+		case H_READ:
+			sendResponse(data);
+			break;
+		case H_SET:
+			sendResponse(data);
+			break;
+		default:
+			return 0;
+	}
+	while(g_uart2_sendend == 0);
+	return 1;
+}
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -409,17 +437,33 @@ static void r_uart2_callback_receiveend(void)
 //	R_UART2_Receive(g_rx_data, 32);
 //	R_UART2_Stop();
 //	R_UART2_Start();
-	R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
-	if((g_rx_data[0] == H_READ)|(g_rx_data[0] == H_SET)|(g_rx_data[0] == H_ALARM)|(g_rx_data[0] == H_CLEAR)|(g_rx_data[0] == H_ERROR)){
+
+	R_UART2_Receive(g_rx_data, 6);
+	send_response_flag = 1;
+//	isCommand(g_rx_data);
+	if(1){
 		g_uart2_fault = 0;
-		if((g_rx_data[0] == H_READ)&(g_rx_data[1] == 1U)){
-			R_UART2_Receive(g_rx_data, sizeof(struct Number_Setting_s));
-		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == 2U)){
-			R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s));
+		if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_TIME)){
+			send_response_time_flag = 1;
+			g_timerSetting.t51++;
 		}
+//		if((g_rx_data[0] == H_SET)&(g_rx_data[1] == READ_NUMBER)){
+//			R_UART2_Receive(g_rx_data, sizeof(struct Number_Setting_s)-1);
+//		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == READ_TIME)){
+//			R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s)-1);
+//		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_TIME)){
+//			g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 68);
+//			R_UART2_Send((uint8_t *)&g_timerSetting, 69);
+//			g_timerSetting.t51++;
+//		}
 	}else{
+		R_UART2_Receive(g_rx_data, 6);
 		g_uart2_fault = 1;
 	}
+////	if((g_rx_data[0] == H_READ)|(g_rx_data[0] == H_SET)|(g_rx_data[0] == H_ALARM)|(g_rx_data[0] == H_CLEAR)|(g_rx_data[0] == H_ERROR)){
+////
+////	}else{
+////	}
 	g_uart2_receive++;
     /* End user code. Do not edit comment generated here */
 }
@@ -446,7 +490,7 @@ static void r_uart2_callback_softwareoverrun(uint16_t rx_data)
 static void r_uart2_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
-	g_uart2_send++;
+	g_uart2_sendend++;
     /* End user code. Do not edit comment generated here */
 }
 
