@@ -23,7 +23,7 @@ struct Timer_Setting_s g_timerSetting = {1000, 15};
 struct Number_Setting_s g_numberSetting;
 enum HS_COLOR g_color, g_pre_color;
 float g_cvcc_current, g_cvcc_voltge;
-enum Control_header g_alarm;
+enum Control_status g_alarm;
 float g_flow_value;
 uint32_t g_neutralization_time = 0;
 volatile uint8_t g_electrolytic_flag = 0;
@@ -109,7 +109,7 @@ void code_20211029(void){
 #endif
 
 //----------------------Begin code 11112021--------------------------------------
-void sendToRasPi(enum UART_header_e head, enum Control_header type, float value){
+void sendToRasPi(enum UART_header_e head, enum Control_status type, float value){
 	uint8_t state = g_uart2_send;
 	g_control_buffer.head = head;
 	g_control_buffer.set_number = type;
@@ -277,7 +277,7 @@ void ElectrolyticOperation(void){
 		if(LowVoltageCheck()) goto WAIT_RESET;
 		if(OverCurrentCheck()) goto WAIT_RESET;
 		//----------CVCC Alarm Input-----------------
-		if(I_CVCC_ALARM_IN == 0U){
+		if(I_CVCC_ALARM_IN == I_ON){
 			sendToRasPi(H_ALARM, CVCC_ALARM, 1);
 			electrolyticOperationOFF();
 			//TODO: Wait Reset
@@ -343,13 +343,80 @@ uint8_t FilterReplacementCheck(void){
 
 	return 0;
 }
+void ElectrolyzeWaterGeneration(void){
+	if((I_ACID_L_PIN == I_OFF)|(I_ALKALI_L_PIN = I_OFF)){
+		electrolyticOperationON();
+	}else if((I_ACID_H_PIN = I_ON)&(I_ALKALI_H_PIN = I_ON)){
+		electrolyticOperationOFF();
+	}
+}
+void WaterWashingMode(void){
+	uint8_t _state = 0;
+	if(readHS() == 1){
+		O_SPOUT_WATER_PIN = ON;
+		g_color = WHITE;
+		handSensorLED(g_color);
+		_state = 1;
+	}
+	while(readHS() == 1) R_WDT_Restart();
+	if(_state){
+		delay(2);
+		O_SPOUT_WATER_PIN = OFF;
+		g_color = BLACK;
+		handSensorLED(g_color);
+	}
+}
+void HandWashingMode(void){
+	uint8_t _state = 0;
+	const uint32_t _waterHamerTime = 1000;
+	if(readHS() == 1){
+		_state = 1;
+		g_color = BLUE;
+		handSensorLED(g_color);
+		O_SPOUT_ALK_PIN = ON;
+		delay_ms(10);
+		O_PUMP_ALK_PIN = ON;
+		delay_ms(g_timerSetting.t51 - g_timerSetting.t54);
+		g_color = RED;
+		handSensorLED(g_color);
+		O_SPOUT_ACID_PIN = ON;
+		delay_ms(10);
+		O_PUMP_ACID_PIN = ON;
+		delay_ms(g_timerSetting.t54);
+		O_PUMP_ALK_PIN = OFF;
+		delay_ms(_waterHamerTime);
+		O_SPOUT_ALK_PIN = OFF;
+		delay_ms(g_timerSetting.t52 - g_timerSetting.t54);
+		g_color = WHITE;
+		handSensorLED(g_color);
+		O_SPOUT_WATER_PIN = ON;
+		delay_ms(g_timerSetting.t54);
+		O_PUMP_ACID_PIN = OFF;
+		delay_ms(_waterHamerTime);
+		O_SPOUT_ACID_PIN = OFF;
+		delay_ms(g_timerSetting.t53 - g_timerSetting.t54);
+		O_SPOUT_WATER_PIN = OFF;
+	}
+	while(readHS() == 1) R_WDT_Restart();
+	if(_state == 1){
+		g_color = BLACK;
+		handSensorLED(g_color);
+	}
+}
+void AcidWaterMode(void){
+	uint8_t _state = 0;
+	if(readHS() == 1){
+		_state = 1;
+	}
+	if(_state == 1){
 
+	}
+}
 // Newest
 void main_20211111(void){
 	InitialOperationModeStart();
 	WaterSupplyOperation();
 	ElectrolyticOperation();
-
 
 //	Test section
 //	electrolyticOperationON();
@@ -360,12 +427,12 @@ void main_20211111(void){
 //	LowVoltageCheck();
 //	if(OverCurrentCheck() == 0) electrolyticOperationOFF();
 }
+void main_20211111_while(void){
+	ElectrolyzeWaterGeneration();
+	WaterWashingMode();
 
-void waitReset(void){
-	while(g_error != 0){
-		R_WDT_Restart();
-	}
 }
+
 /**
  * 30/11/2021: Checked by An, missing Neutralization timer ON
  */
@@ -412,23 +479,4 @@ float measureFlowSensor(uint32_t s){
 	float flow_value = (flow_pluse*0.7*60)/s; // L/minutes
 	return flow_value;
 }
-char CRC8(const char *data,int length)
-{
-   char crc = 0x00;
-   char extract;
-   char sum;
-   for(int i=0;i<length;i++)
-   {
-      extract = *data;
-      for (char tempI = 8; tempI; tempI--)
-      {
-         sum = (crc ^ extract) & 0x01;
-         crc >>= 1;
-         if (sum)
-            crc ^= 0x8C;
-         extract >>= 1;
-      }
-      data++;
-   }
-   return crc;
-}
+

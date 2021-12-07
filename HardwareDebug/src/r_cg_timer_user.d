@@ -7,3 +7,5 @@ src/r_cg_timer_user.obj src/r_cg_timer_user.d: ../src/r_cg_timer.h
 ../src/r_cg_timer.h:
 src/r_cg_timer_user.obj src/r_cg_timer_user.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
+src/r_cg_timer_user.obj src/r_cg_timer_user.d: ../src/checksum.h
+../src/checksum.h:

@@ -5,6 +5,8 @@
 # Add inputs and outputs from these tool invocations to the build variables
 C_SRCS += \
 ../src/EEPROM.c \
+../src/crc32.c \
+../src/crc8.c \
 ../src/interrupt_handle.c \
 ../src/main.c \
 ../src/r_cg_adc.c \
@@ -29,6 +31,8 @@ C_SRCS += \
 
 COMPILER_OBJS += \
 src/EEPROM.obj \
+src/crc32.obj \
+src/crc8.obj \
 src/interrupt_handle.obj \
 src/main.obj \
 src/r_cg_adc.obj \
@@ -53,6 +57,8 @@ src/usr_timer.obj
 
 C_DEPS += \
 src/EEPROM.d \
+src/crc32.d \
+src/crc8.d \
 src/interrupt_handle.d \
 src/main.d \
 src/r_cg_adc.d \

@@ -34,6 +34,7 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
+#include "checksum.h"
 #define ON	(1U)
 #define OFF (0U)
 #define I_ON (0U)
@@ -185,15 +186,15 @@ extern struct UART_Buffer_s{
 	uint8_t set_number; // 1 byte
 	uint32_t set_value; // 4 byte
 }g_control_buffer;
-enum Control_header{
-	OK, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
+enum Control_status{
+	OK_ALL, OK_USER, READ_TIME, READ_NUMBER, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM
 };
 enum UART_header_e{
 	 H_READ = 82, H_SET = 83, H_ALARM = 65, H_ERROR = 69, H_CLEAR = 67
 };
-extern enum Control_header g_alarm;
+extern enum Control_status g_alarm;
 
 extern volatile uint8_t g_uart3_sendend;
 extern volatile uint32_t g_systemTime;
@@ -209,7 +210,7 @@ extern void adc_int_handle(void);
 
 extern void setting_default(void);
 extern void main_20211111(void);
-extern void sendToRasPi(enum UART_header_e head, enum Control_header type, float value);
+extern void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
 extern float measureFlowSensor(uint32_t s);
 //extern int overVoltage1Check(void);
 extern void callAlarm(int _error);
@@ -235,7 +236,7 @@ void CloseSV1(void);
 void CloseSV2(void);
 void electrolyticOperationOFF(void);
 void electrolyticOperationON(void);
+uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);
-char CRC8(const char *data,int length);
 /* End user code. Do not edit comment generated here */
 #endif

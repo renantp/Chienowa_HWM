@@ -15,12 +15,11 @@
 #@   -pass_source
 #@   -o src/main.obj
 #@   ../src/main.c
-#@  compiled at Thu Dec 02 17:38:58 2021
+#@  compiled at Tue Dec 07 09:51:49 2021
 
 	.EXTERN _g_control_buffer
 	.EXTERN _g_systemTime
 	.EXTERN _g_uart2_send
-	.EXTERN _g_error
 	.EXTERN _g_rx_data
 	.PUBLIC _g_timerSetting
 	.PUBLIC _g_numberSetting
@@ -58,13 +57,17 @@
 	.PUBLIC _OpenSV2
 	.PUBLIC _CloseSV2
 	.PUBLIC _FilterReplacementCheck
+	.PUBLIC _ElectrolyzeWaterGeneration
+	.PUBLIC _WaterWashingMode
+	.EXTERN _readHS
+	.PUBLIC _HandWashingMode
+	.PUBLIC _AcidWaterMode
 	.PUBLIC _main_20211111
-	.PUBLIC _waitReset
+	.PUBLIC _main_20211111_while
 	.PUBLIC _electrolyticOperationON
 	.PUBLIC _electrolyticOperationOFF
 	.PUBLIC _measureFlowSensor
 	.EXTERN _ns_delay_ms
-	.PUBLIC _CRC8
 
 	.SECTION .textf,TEXTF
 _handSensorLED:
@@ -94,7 +97,7 @@ _handSensorLED:
 	;***       23 : struct Number_Setting_s g_numberSetting;
 	;***       24 : enum HS_COLOR g_color, g_pre_color;
 	;***       25 : float g_cvcc_current, g_cvcc_voltge;
-	;***       26 : enum Control_header g_alarm;
+	;***       26 : enum Control_status g_alarm;
 	;***       27 : float g_flow_value;
 	;***       28 : uint32_t g_neutralization_time = 0;
 	;***       29 : volatile uint8_t g_electrolytic_flag = 0;
@@ -307,7 +310,7 @@ _sendToRasPi:
 	;***      109 : #endif
 	;***      110 : 
 	;***      111 : //----------------------Begin code 11112021--------------------------------------
-	;***      112 : void sendToRasPi(enum UART_header_e head, enum Control_header type, float value){
+	;***      112 : void sendToRasPi(enum UART_header_e head, enum Control_status type, float value){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 112
 	push hl
 	push ax
@@ -552,7 +555,7 @@ _FlowSensorCheck:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 145
 	movw de, #0x3F80
 	clrw bc
-	movw ax, #0x4101
+	movw ax, #0x4104
 	call $!_sendToRasPi
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 146
 	clrb a
@@ -608,7 +611,7 @@ _WaterSupplyOperation:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4101
+	movw ax, #0x4104
 	call $!_sendToRasPi
 	br $.BB@LABEL@6_1
 .BB@LABEL@6_3:	; bb11
@@ -661,7 +664,7 @@ _Voltage1Check:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4102
+	movw ax, #0x4105
 	call $!_sendToRasPi
 	;***      174 : 		electrolyticOperationOFF();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 174
@@ -670,7 +673,7 @@ _Voltage1Check:
 	;***      175 : 		//TODO: Wait to reset
 	;***      176 : 		while((g_rx_data[0] != H_CLEAR)&(g_rx_data[1] != OVER_VOLTAGE_1)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 176
-	cmp !LOWW(_g_rx_data+0x00001), #0x02
+	cmp !LOWW(_g_rx_data+0x00001), #0x05
 	mov a, !LOWW(_g_rx_data)
 	bz $.BB@LABEL@7_5
 .BB@LABEL@7_3:	; bb9
@@ -802,7 +805,7 @@ _Voltage2Check:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4103
+	movw ax, #0x4106
 	call $!_sendToRasPi
 .BB@LABEL@8_13:	; if_break_bb
 	;***      197 : 			}
@@ -957,7 +960,7 @@ _Voltage3Check:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4104
+	movw ax, #0x4107
 	call $!_sendToRasPi
 	;***      216 : 		electrolyticOperationOFF();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 216
@@ -966,7 +969,7 @@ _Voltage3Check:
 	;***      217 : 		//TODO: Wait to reset
 	;***      218 : 		while((g_rx_data[0] != H_CLEAR)&(g_rx_data[1] != OVER_VOLTAGE_3)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 218
-	cmp !LOWW(_g_rx_data+0x00001), #0x04
+	cmp !LOWW(_g_rx_data+0x00001), #0x07
 	mov a, !LOWW(_g_rx_data)
 	bz $.BB@LABEL@9_17
 .BB@LABEL@9_15:	; bb29
@@ -1134,7 +1137,7 @@ _LowVoltageCheck:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4105
+	movw ax, #0x4108
 	call $!_sendToRasPi
 	;***      238 : 		electrolyticOperationOFF();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 238
@@ -1143,7 +1146,7 @@ _LowVoltageCheck:
 	;***      239 : 		//TODO: Wait to reset
 	;***      240 : 		while((g_rx_data[0] != H_CLEAR)&(g_rx_data[1] != UNDER_VOLTAGE)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 240
-	cmp !LOWW(_g_rx_data+0x00001), #0x05
+	cmp !LOWW(_g_rx_data+0x00001), #0x08
 	mov a, !LOWW(_g_rx_data)
 	bz $.BB@LABEL@10_24
 .BB@LABEL@10_22:	; bb39
@@ -1220,7 +1223,7 @@ _OverCurrentCheck:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4106
+	movw ax, #0x4109
 	call $!_sendToRasPi
 .BB@LABEL@11_4:	; bb20
 	;***      252 : 		while((g_cvcc_current >= g_numberSetting.upperCurrent)&(_time_count < _max_time)){
@@ -1307,7 +1310,7 @@ _OverCurrentCheck:
 	push bc
 	pop de
 	movw bc, ax
-	movw ax, #0x4107
+	movw ax, #0x410A
 	call $!_sendToRasPi
 	;***      260 : 			electrolyticOperationOFF();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 260
@@ -1316,7 +1319,7 @@ _OverCurrentCheck:
 	;***      261 : 			//TODO: Wait to reset
 	;***      262 : 			while((g_rx_data[0] != H_CLEAR)&(g_rx_data[1] != OVER_CURRENT)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 262
-	cmp !LOWW(_g_rx_data+0x00001), #0x07
+	cmp !LOWW(_g_rx_data+0x00001), #0x0A
 	mov a, !LOWW(_g_rx_data)
 	bz $.BB@LABEL@11_16
 .BB@LABEL@11_14:	; bb45
@@ -1377,7 +1380,7 @@ _ElectrolyticOperation:
 	bnz $.BB@LABEL@12_1
 .BB@LABEL@12_6:	; if_break_bb28
 	;***      279 : 		//----------CVCC Alarm Input-----------------
-	;***      280 : 		if(I_CVCC_ALARM_IN == 0U){
+	;***      280 : 		if(I_CVCC_ALARM_IN == I_ON){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 280
 	mov a, 0xFFF00
 	bf a.4, $.BB@LABEL@12_9
@@ -1411,13 +1414,13 @@ _ElectrolyticOperation:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 281
 	movw de, #0x3F80
 	clrw bc
-	movw ax, #0x410F
+	movw ax, #0x4112
 	call $!_sendToRasPi
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 282
 	call $!_electrolyticOperationOFF
 .BB@LABEL@12_10:	; bb38
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 284
-	cmp !LOWW(_g_rx_data+0x00001), #0x0F
+	cmp !LOWW(_g_rx_data+0x00001), #0x12
 	mov a, !LOWW(_g_rx_data)
 	bz $.BB@LABEL@12_1
 .BB@LABEL@12_11:	; bb38
@@ -1507,7 +1510,7 @@ _solenoidCheck:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 299
 	movw de, #0x3F80
 	clrw bc
-	movw ax, #0x4108
+	movw ax, #0x410B
 	br $!_sendToRasPi
 .BB@LABEL@13_9:	; return
 	;***      300 : 	}
@@ -1533,7 +1536,7 @@ _saltWaterTankFullCheck:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 304
 	movw de, #0x3F80
 	clrw bc
-	movw ax, #0x4109
+	movw ax, #0x410C
 	call $!_sendToRasPi
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 305
 	br $!_electrolyticOperationOFF
@@ -1549,7 +1552,7 @@ _saltWaterTankEmptyCheck:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 311
 	movw de, #0x3F80
 	clrw bc
-	movw ax, #0x410A
+	movw ax, #0x410D
 	br $!_sendToRasPi
 .BB@LABEL@15_2:	; return
 	;***      312 : 		//TODO: Control OFF
@@ -1606,7 +1609,7 @@ _acidWaterTankSkipCheck:
 .BB@LABEL@16_2:	; if_then_bb
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 318
 	movw de, #0x3F80
-	movw ax, #0x410B
+	movw ax, #0x410E
 	br $!_sendToRasPi
 _alkalineWaterTankSkipCheck:
 	.STACK _alkalineWaterTankSkipCheck = 6
@@ -1658,7 +1661,7 @@ _alkalineWaterTankSkipCheck:
 .BB@LABEL@17_2:	; if_then_bb
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 325
 	movw de, #0x3F80
-	movw ax, #0x410C
+	movw ax, #0x410F
 	br $!_sendToRasPi
 _OpenSV1:
 	.STACK _OpenSV1 = 4
@@ -1702,139 +1705,416 @@ _FilterReplacementCheck:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 345
 	clrb a
 	ret
-_main_20211111:
-	.STACK _main_20211111 = 4
-	;***      346 : 
-	;***      347 : // Newest
-	;***      348 : void main_20211111(void){
-	;***      349 : 	InitialOperationModeStart();
+_ElectrolyzeWaterGeneration:
+	.STACK _ElectrolyzeWaterGeneration = 4
+	;***      346 : void ElectrolyzeWaterGeneration(void){
+	;***      347 : 	if((I_ACID_L_PIN == I_OFF)|(I_ALKALI_L_PIN = I_OFF)){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 347
+	mov a, 0xFFF07
+	set1 0xFFF00.5
+	shr a, 0x01
+	mov x, a
+	mov a, 0xFFF00
+	shr a, 0x05
+	or a, x
+	bt a.0, $.BB@LABEL@23_4
+.BB@LABEL@23_1:	; if_else_bb
+	movw hl, #0xFF07
+	;***      348 : 		electrolyticOperationON();
+	;***      349 : 	}else if((I_ACID_H_PIN = I_ON)&(I_ALKALI_H_PIN = I_ON)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 349
-	call $!_InitialOperationModeStart
-	;***      350 : 	WaterSupplyOperation();
+	clr1 [hl].3
+	mov a, [hl]
+	clr1 [hl].0
+	shr a, 0x03
+	and a, [hl]
+	bt a.0, $.BB@LABEL@23_3
+.BB@LABEL@23_2:	; return
+	;***      350 : 		electrolyticOperationOFF();
+	;***      351 : 	}
+	;***      352 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 352
+	ret
+.BB@LABEL@23_3:	; if_then_bb26
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 350
-	call $!_WaterSupplyOperation
-	;***      351 : 	ElectrolyticOperation();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 351
-	br $!_ElectrolyticOperation
-_waitReset:
-	.STACK _waitReset = 4
-.BB@LABEL@24_1:	; bb1
-	;***      352 : 
-	;***      353 : 
-	;***      354 : //	Test section
-	;***      355 : //	electrolyticOperationON();
-	;***      356 : //	delay_ms(500);
-	;***      357 : //	Voltage1Check();
-	;***      358 : //	Voltage2Check();
-	;***      359 : //	Voltage3Check();
-	;***      360 : //	LowVoltageCheck();
-	;***      361 : //	if(OverCurrentCheck() == 0) electrolyticOperationOFF();
-	;***      362 : }
-	;***      363 : 
-	;***      364 : void waitReset(void){
-	;***      365 : 	while(g_error != 0){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 365
-	movw ax, !LOWW(_g_error)
-	clrw bc
-	cmpw ax, bc
-	bz $.BB@LABEL@24_3
-.BB@LABEL@24_2:	; bb
-	;***      366 : 		R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 366
+	br $!_electrolyticOperationOFF
+.BB@LABEL@23_4:	; if_then_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 348
+	br $!_electrolyticOperationON
+_WaterWashingMode:
+	.STACK _WaterWashingMode = 6
+	;***      353 : void WaterWashingMode(void){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 353
+	push hl
+	;***      354 : 	uint8_t _state = 0;
+	;***      355 : 	if(readHS() == 1){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 355
+	call !!_readHS
+	dec a
+	clrb a
+	bnz $.BB@LABEL@24_2
+.BB@LABEL@24_1:	; if_then_bb
+	;***      356 : 		O_SPOUT_WATER_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 356
+	set1 0xFFF05.5
+	;***      357 : 		g_color = WHITE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 357
+	mov !LOWW(_g_color), #0x02
+	;***      358 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 358
+	mov a, #0x02
+	call $!_handSensorLED
+	oneb a
+.BB@LABEL@24_2:	; if_then_bb
+	mov [sp+0x00], a
+.BB@LABEL@24_3:	; bb6
+	;***      359 : 		_state = 1;
+	;***      360 : 	}
+	;***      361 : 	while(readHS() == 1) R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 361
+	call !!_readHS
+	dec a
+	bnz $.BB@LABEL@24_5
+.BB@LABEL@24_4:	; bb
 	call !!_R_WDT_Restart
-	br $.BB@LABEL@24_1
-.BB@LABEL@24_3:	; return
+	br $.BB@LABEL@24_3
+.BB@LABEL@24_5:	; bb12
+	mov a, [sp+0x00]
+	;***      362 : 	if(_state){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 362
+	cmp0 a
+	bnz $.BB@LABEL@24_7
+.BB@LABEL@24_6:	; return
+	;***      363 : 		delay(2);
+	;***      364 : 		O_SPOUT_WATER_PIN = OFF;
+	;***      365 : 		g_color = BLACK;
+	;***      366 : 		handSensorLED(g_color);
 	;***      367 : 	}
 	;***      368 : }
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 368
+	pop hl
 	ret
+.BB@LABEL@24_7:	; if_then_bb18
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 363
+	mov a, #0x02
+	call !!_delay
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 364
+	clr1 0xFFF05.5
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 365
+	clrb !LOWW(_g_color)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 366
+	clrb a
+	pop hl
+	br $!_handSensorLED
+_HandWashingMode:
+	.STACK _HandWashingMode = 6
+	;***      369 : void HandWashingMode(void){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 369
+	push hl
+	;***      370 : 	uint8_t _state = 0;
+	;***      371 : 	const uint32_t _waterHamerTime = 1000;
+	;***      372 : 	if(readHS() == 1){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 372
+	call !!_readHS
+	dec a
+	bz $.BB@LABEL@25_2
+.BB@LABEL@25_1:	; entry.bb22.preheader_crit_edge
+	clrb a
+	mov [sp+0x00], a
+	br $!.BB@LABEL@25_9
+.BB@LABEL@25_2:	; if_then_bb
+	;***      373 : 		_state = 1;
+	;***      374 : 		g_color = BLUE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 374
+	mov !LOWW(_g_color), #0x03
+	;***      375 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 375
+	mov a, #0x03
+	call $!_handSensorLED
+	;***      376 : 		O_SPOUT_ALK_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 376
+	set1 0xFFF07.7
+	;***      377 : 		delay_ms(10);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 377
+	clrw bc
+	movw ax, #0x000A
+	call !!_delay_ms
+	;***      378 : 		O_PUMP_ALK_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 378
+	set1 0xFFF06.1
+	;***      379 : 		delay_ms(g_timerSetting.t51 - g_timerSetting.t54);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 379
+	movw ax, !LOWW(_g_timerSetting+0x00024)
+	subw ax, !LOWW(_g_timerSetting+0x00030)
+	movw de, ax
+	movw ax, !LOWW(_g_timerSetting+0x00026)
+	sknc
+.BB@LABEL@25_3:	; if_then_bb
+	decw ax
+.BB@LABEL@25_4:	; if_then_bb
+	subw ax, !LOWW(_g_timerSetting+0x00032)
+	movw bc, ax
+	movw ax, de
+	call !!_delay_ms
+	;***      380 : 		g_color = RED;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 380
+	oneb !LOWW(_g_color)
+	oneb a
+	mov [sp+0x00], a
+	;***      381 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 381
+	oneb a
+	call $!_handSensorLED
+	;***      382 : 		O_SPOUT_ACID_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 382
+	set1 0xFFF07.6
+	;***      383 : 		delay_ms(10);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 383
+	clrw bc
+	movw ax, #0x000A
+	call !!_delay_ms
+	;***      384 : 		O_PUMP_ACID_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 384
+	set1 0xFFF06.2
+	;***      385 : 		delay_ms(g_timerSetting.t54);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 385
+	movw bc, !LOWW(_g_timerSetting+0x00032)
+	movw ax, !LOWW(_g_timerSetting+0x00030)
+	call !!_delay_ms
+	;***      386 : 		O_PUMP_ALK_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 386
+	clr1 0xFFF06.1
+	;***      387 : 		delay_ms(_waterHamerTime);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 387
+	clrw bc
+	movw ax, #0x03E8
+	call !!_delay_ms
+	;***      388 : 		O_SPOUT_ALK_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 388
+	clr1 0xFFF07.7
+	;***      389 : 		delay_ms(g_timerSetting.t52 - g_timerSetting.t54);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 389
+	movw ax, !LOWW(_g_timerSetting+0x00028)
+	subw ax, !LOWW(_g_timerSetting+0x00030)
+	movw de, ax
+	movw ax, !LOWW(_g_timerSetting+0x0002A)
+	sknc
+.BB@LABEL@25_5:	; if_then_bb
+	decw ax
+.BB@LABEL@25_6:	; if_then_bb
+	subw ax, !LOWW(_g_timerSetting+0x00032)
+	movw bc, ax
+	movw ax, de
+	call !!_delay_ms
+	;***      390 : 		g_color = WHITE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 390
+	mov !LOWW(_g_color), #0x02
+	;***      391 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 391
+	mov a, #0x02
+	call $!_handSensorLED
+	;***      392 : 		O_SPOUT_WATER_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 392
+	set1 0xFFF05.5
+	;***      393 : 		delay_ms(g_timerSetting.t54);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 393
+	movw bc, !LOWW(_g_timerSetting+0x00032)
+	movw ax, !LOWW(_g_timerSetting+0x00030)
+	call !!_delay_ms
+	;***      394 : 		O_PUMP_ACID_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 394
+	clr1 0xFFF06.2
+	;***      395 : 		delay_ms(_waterHamerTime);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 395
+	clrw bc
+	movw ax, #0x03E8
+	call !!_delay_ms
+	;***      396 : 		O_SPOUT_ACID_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 396
+	clr1 0xFFF07.6
+	;***      397 : 		delay_ms(g_timerSetting.t53 - g_timerSetting.t54);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 397
+	movw ax, !LOWW(_g_timerSetting+0x0002C)
+	subw ax, !LOWW(_g_timerSetting+0x00030)
+	movw de, ax
+	movw ax, !LOWW(_g_timerSetting+0x0002E)
+	sknc
+.BB@LABEL@25_7:	; if_then_bb
+	decw ax
+.BB@LABEL@25_8:	; if_then_bb
+	subw ax, !LOWW(_g_timerSetting+0x00032)
+	movw bc, ax
+	movw ax, de
+	call !!_delay_ms
+	;***      398 : 		O_SPOUT_WATER_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 398
+	clr1 0xFFF05.5
+.BB@LABEL@25_9:	; bb22
+	;***      399 : 	}
+	;***      400 : 	while(readHS() == 1) R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 400
+	call !!_readHS
+	dec a
+	bnz $.BB@LABEL@25_11
+.BB@LABEL@25_10:	; bb
+	call !!_R_WDT_Restart
+	br $.BB@LABEL@25_9
+.BB@LABEL@25_11:	; bb28
+	mov a, [sp+0x00]
+	;***      401 : 	if(_state == 1){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 401
+	dec a
+	bnz $.BB@LABEL@25_13
+.BB@LABEL@25_12:	; if_then_bb34
+	;***      402 : 		g_color = BLACK;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 402
+	clrb !LOWW(_g_color)
+	;***      403 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 403
+	clrb a
+	pop hl
+	br $!_handSensorLED
+.BB@LABEL@25_13:	; return
+	;***      404 : 	}
+	;***      405 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 405
+	pop hl
+	ret
+_AcidWaterMode:
+	.STACK _AcidWaterMode = 4
+	;***      406 : void AcidWaterMode(void){
+	;***      407 : 	uint8_t _state = 0;
+	;***      408 : 	if(readHS() == 1){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 408
+	br !!_readHS
+_main_20211111:
+	.STACK _main_20211111 = 4
+	;***      409 : 		_state = 1;
+	;***      410 : 	}
+	;***      411 : 	if(_state == 1){
+	;***      412 : 
+	;***      413 : 	}
+	;***      414 : }
+	;***      415 : // Newest
+	;***      416 : void main_20211111(void){
+	;***      417 : 	InitialOperationModeStart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 417
+	call $!_InitialOperationModeStart
+	;***      418 : 	WaterSupplyOperation();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 418
+	call $!_WaterSupplyOperation
+	;***      419 : 	ElectrolyticOperation();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 419
+	br $!_ElectrolyticOperation
+_main_20211111_while:
+	.STACK _main_20211111_while = 4
+	;***      420 : 
+	;***      421 : //	Test section
+	;***      422 : //	electrolyticOperationON();
+	;***      423 : //	delay_ms(500);
+	;***      424 : //	Voltage1Check();
+	;***      425 : //	Voltage2Check();
+	;***      426 : //	Voltage3Check();
+	;***      427 : //	LowVoltageCheck();
+	;***      428 : //	if(OverCurrentCheck() == 0) electrolyticOperationOFF();
+	;***      429 : }
+	;***      430 : void main_20211111_while(void){
+	;***      431 : 	ElectrolyzeWaterGeneration();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 431
+	call $!_ElectrolyzeWaterGeneration
+	;***      432 : 	WaterWashingMode();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 432
+	br $!_WaterWashingMode
 _electrolyticOperationON:
 	.STACK _electrolyticOperationON = 4
-	;***      369 : /**
-	;***      370 :  * 30/11/2021: Checked by An, missing Neutralization timer ON
-	;***      371 :  */
-	;***      372 : void electrolyticOperationON(void){
-	;***      373 : 	//Electrolytic operation ON
-	;***      374 : 	O_SUPPLY_WATER_PIN = ON;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 374
+	;***      433 : 
+	;***      434 : }
+	;***      435 : 
+	;***      436 : /**
+	;***      437 :  * 30/11/2021: Checked by An, missing Neutralization timer ON
+	;***      438 :  */
+	;***      439 : void electrolyticOperationON(void){
+	;***      440 : 	//Electrolytic operation ON
+	;***      441 : 	O_SUPPLY_WATER_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 441
 	set1 0xFFF01.7
-	;***      375 : 	O_CVCC_ON_PIN = ON;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 375
+	;***      442 : 	O_CVCC_ON_PIN = ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 442
 	set1 0xFFF0E.2
-	;***      376 : 	O_PUMP_SALT_PIN = ON; //SP1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 376
+	;***      443 : 	O_PUMP_SALT_PIN = ON; //SP1
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 443
 	set1 0xFFF06.0
-	;***      377 : 	g_electrolytic_flag = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 377
+	;***      444 : 	g_electrolytic_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 444
 	oneb !LOWW(_g_electrolytic_flag)
-	;***      378 : 	g_neutralization_time = g_neutralization_time == 0 ? g_systemTime:g_neutralization_time;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 378
+	;***      445 : 	g_neutralization_time = g_neutralization_time == 0 ? g_systemTime:g_neutralization_time;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 445
 	movw bc, !LOWW(_g_neutralization_time+0x00002)
 	movw ax, !LOWW(_g_neutralization_time)
 	movw de, ax
 	addw ax, bc
-	bnz $.BB@LABEL@25_3
-.BB@LABEL@25_1:	; entry
-	bc $.BB@LABEL@25_3
-.BB@LABEL@25_2:	; bb
+	bnz $.BB@LABEL@29_3
+.BB@LABEL@29_1:	; entry
+	bc $.BB@LABEL@29_3
+.BB@LABEL@29_2:	; bb
 	movw bc, !LOWW(_g_systemTime+0x00002)
 	movw de, !LOWW(_g_systemTime)
-.BB@LABEL@25_3:	; bb6
+.BB@LABEL@29_3:	; bb6
 	movw ax, de
 	movw !LOWW(_g_neutralization_time), ax
 	movw ax, bc
 	movw !LOWW(_g_neutralization_time+0x00002), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 380
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 447
 	ret
 _electrolyticOperationOFF:
 	.STACK _electrolyticOperationOFF = 4
-	;***      379 : 	//TODO: Add Neutralization timer ON
-	;***      380 : }
-	;***      381 : /**
-	;***      382 :  * 30/11/2021: Checked by An, missing Neutralization timer OFF
-	;***      383 :  */
-	;***      384 : void electrolyticOperationOFF(void){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 384
+	;***      446 : 	//TODO: Add Neutralization timer ON
+	;***      447 : }
+	;***      448 : /**
+	;***      449 :  * 30/11/2021: Checked by An, missing Neutralization timer OFF
+	;***      450 :  */
+	;***      451 : void electrolyticOperationOFF(void){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 451
 	clrw ax
-	;***      385 : 	//TODO: Add Neutralization timer OFF
-	;***      386 : 	g_neutralization_time = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 386
+	;***      452 : 	//TODO: Add Neutralization timer OFF
+	;***      453 : 	g_neutralization_time = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 453
 	movw !LOWW(_g_neutralization_time+0x00002), ax
 	movw !LOWW(_g_neutralization_time), ax
-	;***      387 : 	//Electrolytic operation OFF
-	;***      388 : 	O_CVCC_ON_PIN = OFF;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 388
+	;***      454 : 	//Electrolytic operation OFF
+	;***      455 : 	O_CVCC_ON_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 455
 	clr1 0xFFF0E.2
-	;***      389 : 	O_PUMP_SALT_PIN = OFF; //SP1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 389
+	;***      456 : 	O_PUMP_SALT_PIN = OFF; //SP1
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 456
 	clr1 0xFFF06.0
-	;***      390 : 	delay(5);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 390
+	;***      457 : 	delay(5);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 457
 	mov a, #0x05
 	call !!_delay
-	;***      391 : 	O_SUPPLY_WATER_PIN = OFF;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 391
+	;***      458 : 	O_SUPPLY_WATER_PIN = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 458
 	clr1 0xFFF01.7
-	;***      392 : 	g_electrolytic_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 392
+	;***      459 : 	g_electrolytic_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 459
 	clrb !LOWW(_g_electrolytic_flag)
 	ret
 _measureFlowSensor:
 	.STACK _measureFlowSensor = 22
-	;***      393 : 
-	;***      394 : }
-	;***      395 : /**
-	;***      396 :  *
-	;***      397 :  * @param s: Period time take measurement in mills second
-	;***      398 :  * @return L/minutes
-	;***      399 :  */
-	;***      400 : float measureFlowSensor(uint32_t s){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 400
+	;***      460 : 
+	;***      461 : }
+	;***      462 : /**
+	;***      463 :  *
+	;***      464 :  * @param s: Period time take measurement in mills second
+	;***      465 :  * @return L/minutes
+	;***      466 :  */
+	;***      467 : float measureFlowSensor(uint32_t s){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 467
 	push bc
 	push ax
 	subw sp, #0x0A
-	;***      401 : 	uint32_t stamp_flow_sensor = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 401
+	;***      468 : 	uint32_t stamp_flow_sensor = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 468
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw [sp+0x08], ax
 	movw ax, !LOWW(_g_systemTime)
@@ -1845,40 +2125,40 @@ _measureFlowSensor:
 	mov [sp+0x02], a
 	clrw ax
 	movw [sp+0x04], ax
-.BB@LABEL@27_1:	; bb28
+.BB@LABEL@31_1:	; bb28
 	movw ax, [sp+0x0A]
 	movw bc, ax
 	movw ax, [sp+0x0C]
 	movw de, ax
-	;***      402 : 	float flow_pluse = 0.0;
-	;***      403 : 	uint8_t flow_pulse_state = 1;
-	;***      404 : 	while(!ns_delay_ms(&stamp_flow_sensor, s)){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 404
+	;***      469 : 	float flow_pluse = 0.0;
+	;***      470 : 	uint8_t flow_pulse_state = 1;
+	;***      471 : 	while(!ns_delay_ms(&stamp_flow_sensor, s)){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 471
 	movw ax, sp
 	addw ax, #0x0006
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bnz $.BB@LABEL@27_7
-.BB@LABEL@27_2:	; bb
+	bnz $.BB@LABEL@31_7
+.BB@LABEL@31_2:	; bb
 	mov a, [sp+0x02]
 	mov x, a
-	;***      405 : 		if(I_FLOW_PLUSE_PIN != flow_pulse_state){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 405
+	;***      472 : 		if(I_FLOW_PLUSE_PIN != flow_pulse_state){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 472
 	mov a, 0xFFF00
 	shr a, 0x01
 	and a, #0x01
 	cmp a, x
-	bz $.BB@LABEL@27_6
-.BB@LABEL@27_3:	; if_then_bb
-	;***      406 : 			if(I_FLOW_PLUSE_PIN == 0)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 406
+	bz $.BB@LABEL@31_6
+.BB@LABEL@31_3:	; if_then_bb
+	;***      473 : 			if(I_FLOW_PLUSE_PIN == 0)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 473
 	mov a, 0xFFF00
-	bt a.1, $.BB@LABEL@27_5
-.BB@LABEL@27_4:	; if_then_bb21
+	bt a.1, $.BB@LABEL@31_5
+.BB@LABEL@31_4:	; if_then_bb21
 	movw ax, #0x3F80
-	;***      407 : 				flow_pluse++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 407
+	;***      474 : 				flow_pluse++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 474
 	push ax
 	clrw ax
 	push ax
@@ -1890,24 +2170,24 @@ _measureFlowSensor:
 	movw ax, bc
 	movw [sp+0x08], ax
 	addw sp, #0x04
-.BB@LABEL@27_5:	; if_break_bb
-	;***      408 : 			flow_pulse_state = I_FLOW_PLUSE_PIN;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 408
+.BB@LABEL@31_5:	; if_break_bb
+	;***      475 : 			flow_pulse_state = I_FLOW_PLUSE_PIN;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 475
 	mov a, 0xFFF00
 	shr a, 0x01
 	and a, #0x01
 	mov [sp+0x02], a
-.BB@LABEL@27_6:	; if_break_bb27
-	;***      409 : 		}
-	;***      410 : 		R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 410
+.BB@LABEL@31_6:	; if_break_bb27
+	;***      476 : 		}
+	;***      477 : 		R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 477
 	call !!_R_WDT_Restart
-	br $.BB@LABEL@27_1
-.BB@LABEL@27_7:	; bb39
+	br $.BB@LABEL@31_1
+.BB@LABEL@31_7:	; bb39
 	movw ax, #0x3F33
-	;***      411 : 	}
-	;***      412 : 	float flow_value = (flow_pluse*0.7*60)/s; // L/minutes
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 412
+	;***      478 : 	}
+	;***      479 : 	float flow_value = (flow_pluse*0.7*60)/s; // L/minutes
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 479
 	push ax
 	mov a, #0x33
 	push ax
@@ -1937,100 +2217,12 @@ _measureFlowSensor:
 	movw bc, ax
 	movw ax, [sp+0x06]
 	call !!__COM_fdiv
-	;***      413 : 	return flow_value;
-	;***      414 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 414
+	;***      480 : 	return flow_value;
+	;***      481 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 481
 	addw sp, #0x12
 	ret
-_CRC8:
-	.STACK _CRC8 = 10
-	;***      415 : char CRC8(const char *data,int length)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 415
-	push bc
-	subw sp, #0x04
-	movw hl, ax
-	clrb b
-	clrw ax
-	movw de, ax
-	movw [sp+0x02], ax
-.BB@LABEL@28_1:	; bb46
-	movw ax, [sp+0x04]
-	;***      416 : {
-	;***      417 :    char crc = 0x00;
-	;***      418 :    char extract;
-	;***      419 :    char sum;
-	;***      420 :    for(int i=0;i<length;i++)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 420
-	xor a, #0x80
-	movw [sp+0x00], ax
-	movw ax, de
-	xor a, #0x80
-	movw de, ax
-	movw ax, [sp+0x00]
-	xchw ax, de
-	cmpw ax, de
-	bnc $.BB@LABEL@28_8
-.BB@LABEL@28_2:	; bb
-	;***      421 :    {
-	;***      422 :       extract = *data;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 422
-	mov a, [hl]
-	mov c, a
-	mov x, #0x08
-.BB@LABEL@28_3:	; bb9
-	;***      423 :       for (char tempI = 8; tempI; tempI--)
-	;***      424 :       {
-	;***      425 :          sum = (crc ^ extract) & 0x01;
-	;***      426 :          crc >>= 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 426
-	mov a, b
-	shr a, 0x01
-	mov [sp+0x00], a
-	mov a, c
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 425
-	xor b, a
-	mov a, b
-	bf a.0, $.BB@LABEL@28_5
-.BB@LABEL@28_4:	; if_then_bb
-	mov a, [sp+0x00]
-	;***      427 :          if (sum)
-	;***      428 :             crc ^= 0x8C;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 428
-	xor a, #0x8C
-	mov [sp+0x00], a
-.BB@LABEL@28_5:	; if_break_bb
-	mov a, c
-	;***      429 :          extract >>= 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 429
-	shr a, 0x01
-	mov c, a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 423
-	dec x
-	bz $.BB@LABEL@28_7
-.BB@LABEL@28_6:	; if_break_bb.bb9_crit_edge
-	mov a, [sp+0x00]
-	mov b, a
-	br $.BB@LABEL@28_3
-.BB@LABEL@28_7:	; bb41
-	movw ax, [sp+0x02]
-	;***      430 :       }
-	;***      431 :       data++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 431
-	incw ax
-	movw de, ax
-	movw [sp+0x02], ax
-	incw hl
-	mov a, [sp+0x00]
-	mov b, a
-	br $.BB@LABEL@28_1
-.BB@LABEL@28_8:	; bb52
-	;***      432 :    }
-	;***      433 :    return crc;
-	;***      434 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 434
-	mov a, b
-	addw sp, #0x06
-	ret
+	;***      482 : 
 	.SECTION .data,DATA
 	.ALIGN 2
 _g_timerSetting:

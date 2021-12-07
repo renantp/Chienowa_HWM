@@ -5,6 +5,8 @@ src/main.obj src/main.d: D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate\iodefine.
 D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate\iodefine.h:
 src/main.obj src/main.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
+src/main.obj src/main.d: ../src/checksum.h
+../src/checksum.h:
 src/main.obj src/main.d: ../src/usr_setting_sheet.h
 ../src/usr_setting_sheet.h:
 src/main.obj src/main.d: ../src/usr_timer.h

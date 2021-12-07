@@ -412,8 +412,10 @@ static void r_uart2_callback_receiveend(void)
 	R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
 	if((g_rx_data[0] == H_READ)|(g_rx_data[0] == H_SET)|(g_rx_data[0] == H_ALARM)|(g_rx_data[0] == H_CLEAR)|(g_rx_data[0] == H_ERROR)){
 		g_uart2_fault = 0;
-		if(g_rx_data[0] == H_READ){
-			R_UART2_Receive(g_rx_data, sizeof(struct UART_Buffer_s));
+		if((g_rx_data[0] == H_READ)&(g_rx_data[1] == 1U)){
+			R_UART2_Receive(g_rx_data, sizeof(struct Number_Setting_s));
+		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == 2U)){
+			R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s));
 		}
 	}else{
 		g_uart2_fault = 1;

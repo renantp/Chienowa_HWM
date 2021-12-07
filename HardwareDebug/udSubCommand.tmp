@@ -1,5 +1,9 @@
 D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/EEPROM.drv.ud
 D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/EEPROM.frt.ud
+D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/crc32.drv.ud
+D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/crc32.frt.ud
+D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/crc8.drv.ud
+D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/crc8.frt.ud
 D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/interrupt_handle.drv.ud
 D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/interrupt_handle.frt.ud
 D:/Chieniwa/E2_Studio/ControlPCB_HWM/HardwareDebug/src/main.drv.ud

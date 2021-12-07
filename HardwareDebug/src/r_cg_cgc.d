@@ -7,3 +7,5 @@ src/r_cg_cgc.obj src/r_cg_cgc.d: ../src/r_cg_cgc.h
 ../src/r_cg_cgc.h:
 src/r_cg_cgc.obj src/r_cg_cgc.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
+src/r_cg_cgc.obj src/r_cg_cgc.d: ../src/checksum.h
+../src/checksum.h:

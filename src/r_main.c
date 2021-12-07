@@ -42,6 +42,7 @@ Includes
 #include "EEPROM.h"
 #include "usr_timer.h"
 #include "usr_setting_sheet.h"
+#include "crc8.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -73,7 +74,7 @@ float data_f;
 union byte_to_float data_f_test;
 struct UART_Buffer_s g_control_buffer;
 #define DETECT I_HS_ODA_PIN
-uint8_t read_signal(void){
+uint8_t readHS(void){
    if(DETECT){
 	  delay_ms(2);
       if(DETECT) return 1;return 0;
@@ -82,6 +83,9 @@ uint8_t read_signal(void){
 uint8_t this_size;
 uint8_t rec_buf[12];
 uint8_t send_buf[7] = {8,1,2,3,4,5,6};
+char g_crc[8];
+uint32_t g_crc_32[8];
+uint32_t data_crc[2] = {30500, 60200};
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -123,7 +127,7 @@ void main(void)
     g_color = BLACK;
     g_pre_color = BLUE;
 
-    this_size = sizeof(struct UART_Buffer_s);
+    this_size = sizeof(struct Timer_Setting_s);
     while (1U)
     {
 //--------------------------------- Testing code---------------------------------------------------------------
@@ -133,6 +137,7 @@ void main(void)
 //    		R_UART1_Send((uint8_t *)"Hello", sizeof("Hello")-1);
 //    		g_e_status.raw = rEE_Status();
     	}
+    	// Check
     	if(g_uart2_fault == 1){
     		R_UART2_Stop();
     		delay_ms(10);
@@ -148,8 +153,21 @@ void main(void)
     		O_SPOUT_WATER_PIN = led_st&0x01;
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_send;
-    	    g_timerSetting.t6_drainageOffTime++;
-    	    g_timerSetting.crc = CRC8((char *)&g_timerSetting, sizeof(g_timerSetting)-2);
+//    	    g_timerSetting.t2_flowSensorStartTime = 0x24770000;
+    	    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
+    	    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
+    	    g_timerSetting.t6_drainageOffTime = 1000;
+//    	    g_timerSetting.t51++;
+    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 36);
+//    	    g_crc[0] = crc_8((unsigned char *)&g_timerSetting, 4);
+//    	    g_crc[1] = Fast_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
+//    	    g_crc[2] = Quick_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
+//    	    g_crc[3] = crc8x_simple(0x00, (unsigned char *)&g_timerSetting, 4);
+//    	    g_crc[4] = crc8x_fast(0x00, (unsigned char *)&g_timerSetting, 4);
+//    	    g_crc[5] = getCRC((unsigned char *)&g_timerSetting, 4);
+    	    g_crc[6] = crc8_4((uint8_t *)&g_timerSetting, 36);
+    	    g_crc[7] = crc8_1((uint8_t *)&g_timerSetting, 36);
+//    	    g_crc_32 = CRC32_function((uint8_t *)&g_timerSetting, 8);
 //    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s));
     	    R_UART2_Send((uint8_t *)&g_timerSetting, 36);
 //    	    sendToRasPi(H_ALARM, CURRENT_ABNORMAL, 32);
@@ -177,7 +195,7 @@ void main(void)
 //--------------------------------End testing code---------------------------------------------------------
 //    	main_20211111();
 
-    	switch (read_signal()) {
+    	switch (readHS()) {
 			case 0:
 				g_color = WHITE;
 				break;
