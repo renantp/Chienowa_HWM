@@ -85,6 +85,7 @@ uint8_t send_buf[7] = {8,1,2,3,4,5,6};
 char g_crc[8];
 uint32_t g_crc_32[8];
 uint32_t data_crc[2] = {30500, 60200};
+uint8_t rx_count;
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -107,6 +108,7 @@ void main(void)
 //    csi01_status = STATUS_COMPLETE;
     //Power ON
     setting_default();
+    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 68);
     g_rtc.hour = 10;
     g_rtc.sec = 2;
     R_RTC_Set_CounterValue(g_rtc);
@@ -125,16 +127,17 @@ void main(void)
 
     g_color = BLACK;
     g_pre_color = BLUE;
-
     this_size = sizeof(struct Timer_Setting_s);
     while (1U)
     {
     	if(send_response_flag){
+    		rx_count++;
     		uint8_t state = g_uart2_sendend;
     		R_UART2_Send(g_rx_data, 6);
     		while(state == g_uart2_sendend){
 				R_WDT_Restart();
 			}
+
     		send_response_flag = 0;
     	}
     	if(send_response_time_flag){
@@ -146,6 +149,42 @@ void main(void)
 			}
 			send_response_time_flag = 0;
     	}
+    	if(recived_time_setting_flag == 2){
+    		rx_count++;
+//    		uint8_t *p = (uint8_t *)&g_timerSetting;
+    		uint8_t *p = (uint8_t *)&_setting;
+			//Do not Edit this, must keep!!!!
+			for(uint8_t i=0;i<sizeof(struct Timer_Setting_s) - 2; i++){
+				switch (i%4) {
+					case 4:
+						p[67+3-i] = g_rx_data[i-3];
+						break;
+					case 2:
+						p[67+1-i] = g_rx_data[i-1];
+						break;
+					case 1:
+						p[67-1-i] = g_rx_data[1+i];
+						break;
+					case 0:
+						p[67-3-i] = g_rx_data[3+i];
+						break;
+					default:
+						break;
+				}
+			}
+			_setting.crc = g_rx_data[68];
+
+			if(_setting.crc == crc8_1((uint8_t *)g_rx_data, 68)){
+				rx_count++;
+				sendToRasPi(H_SET, OK_ALL, 0x0);
+				g_timerSetting = _setting;
+				recived_time_setting_flag = 0;
+			}else{
+				sendToRasPi(H_SET, SAVE_ERROR, 0x0);
+//				R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s)-1);
+				recived_time_setting_flag = 0;
+			}
+    	}
 //--------------------------------- Testing code---------------------------------------------------------------
     	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
     		P6_bit.no3 = ~P6_bit.no3;
@@ -153,6 +192,31 @@ void main(void)
 //    		R_UART1_Send((uint8_t *)"Hello", sizeof("Hello")-1);
 //    		g_e_status.raw = rEE_Status();
     	}
+    	if((g_rx_data[0] == H_SET)&(g_rx_data[1] == OK_USER)){
+    		if(this_size == 70){
+    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t51*1000)){
+					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
+					this_size++;
+				}
+    		}else if(this_size == 71){
+    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t52*1000)){
+					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
+					this_size++;
+				}
+    		}else if(this_size == 72){
+    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t53*1000)){
+					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
+					this_size++;
+				}
+    		}else if(this_size == 73){
+    			g_rx_data[0] = g_rx_data[1] = 0x00;
+    			g_Tick.tickCustom[1] = g_systemTime;
+				this_size = sizeof(struct Timer_Setting_s);
+    		}
+    	}else{
+    		g_Tick.tickCustom[1] = g_systemTime;
+    	}
+
     	// Check
     	if(g_uart2_fault == 1){
     		R_UART2_Stop();
@@ -187,11 +251,11 @@ void main(void)
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_sendend;
 //    	    g_timerSetting.t2_flowSensorStartTime = 0x24770000;
-    	    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
-    	    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
-    	    g_timerSetting.t6_drainageOffTime = 1000;
+//    	    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
+//    	    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
+//    	    g_timerSetting.t6_drainageOffTime = 1000;
 //			g_timerSetting.t51++;
-    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
+//    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
 //    	    g_crc[0] = crc_8((unsigned char *)&g_timerSetting, 4);
 //    	    g_crc[1] = Fast_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
 //    	    g_crc[2] = Quick_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);

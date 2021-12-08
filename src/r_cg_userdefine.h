@@ -41,6 +41,7 @@ User definitions
 #define I_OFF (1U)
 #define GPIO_ON (1U)
 #define GPIO_OFF (0U)
+#define WATER_HAMER_TIME_MS (1000)
 
 #define O_HS_IDA_PIN	(P1_bit.no5)
 #define O_HS_ICL_PIN	(P1_bit.no6)
@@ -91,19 +92,7 @@ User definitions
 #define OPTION_6_PIN	(P15_bit.no3)
 
 #define FLOW_PULSE_PIN	(P0_bit.no1)
-static struct Tick_s{
-	uint32_t tick1s;
-	uint32_t tick500ms;
-	uint32_t tick5s;
-	uint32_t tickBlink;
-	uint32_t tickCustom[8]; //Use: 6,7 in Callan
-}g_Tick;
-static struct Tick_Keeper_s{
-	uint32_t SV1_ON_minutes;
-	uint32_t SV1_OFF_minutes;
-	uint32_t SV2_ON_minutes;
-	uint32_t SV2_OFF_minutes;
-}g_TickKeeper;
+
 extern struct Timer_Setting_s{
 	uint32_t t2_flowSensorStartTime; // 4 byte
 	uint32_t t3_flowSensorMonitorTime; // 4 byte
@@ -150,11 +139,71 @@ extern union Alarm_register{
 		uint8_t alka:1;
 		uint8_t rsvd2:2;
 	}refined;
-	struct{
-		uint8_t fristAlarm;
-		uint8_t secondAlarm;
-	}raw;
+	uint8_t alarm[2];
 }g_alarm_u;
+static union Machine_State_u{
+	struct{
+		uint8_t AlkalineEmptyLevel: 1;
+		uint8_t AlkalineLowLevel: 1;
+		uint8_t AlkalineHighLevel: 1;
+		uint8_t AcidEmptyLevel: 1;
+		uint8_t AcidLowLevel: 1;
+		uint8_t AcidHighLevel: 1;
+		uint8_t SaltLowLevel: 1;
+		uint8_t SaltHighLevel: 1;
+
+		struct{
+			uint8_t SV1: 1;
+			uint8_t SV2: 1;
+			uint8_t SV3: 1;
+			uint8_t SV4: 1;
+			uint8_t SV5: 1;
+			uint8_t SV6: 1;
+			uint8_t SV7: 1;
+			uint8_t SV8: 1;
+
+			uint8_t SV9: 1;
+			uint8_t RSVD: 7;
+		}Valve; // 2 byte
+
+		uint8_t Pump1: 1;
+		uint8_t Pump2: 1;
+		uint8_t SaltPump: 1;
+		uint8_t RSVD1: 5;
+
+		uint8_t MachineMode;
+	}refined;
+	struct{
+		uint8_t LevelSensorStatus;
+		uint16_t ValveStatus;
+		uint8_t PumpStatus;
+		uint8_t MachineMode;
+	}raw;
+//	uint8_t reg_status[5];
+}g_machine_status;
+static struct Tick_s{
+	uint32_t tick500ms;
+	uint32_t tick1s;
+	uint32_t tick5s;
+	uint32_t tickBlink;
+	uint32_t tickAlkaline;
+	uint32_t tickAcid;
+	uint32_t tickWater;
+	uint32_t tickHandWash;
+	uint32_t tickCustom[8]; //Use: 6,7 in Callan
+}g_Tick;
+static struct Tick_Keeper_s{
+	uint32_t SV1_ON_minutes;
+	uint32_t SV1_OFF_minutes;
+	uint32_t SV2_ON_minutes;
+	uint32_t SV2_OFF_minutes;
+}g_TickKeeper;
+static struct Machine_Flag{
+	uint8_t akaline;
+	uint8_t acid;
+	uint8_t water;
+	uint8_t handwash;
+}g_machine_flag;
 extern struct UART_Buffer_s{
 	uint8_t head; // 1 byte
 	uint8_t set_number; // 1 byte
@@ -163,7 +212,7 @@ extern struct UART_Buffer_s{
 enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION
+	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION, SAVE_TIME, SAVE_NUMBER, SAVE_ERROR
 };
 enum UART_header_e{
 	 H_READ =	82, //0x52
@@ -173,6 +222,8 @@ enum UART_header_e{
 	 H_CLEAR = 	67
 };
 extern enum Control_status g_alarm;
+
+static struct Timer_Setting_s _setting;
 
 static uint8_t g_callan_clear_flag;
 extern volatile uint32_t g_systemTime;
@@ -198,7 +249,7 @@ extern void callAlarm(int _error);
 
 void overVoltage1Error(void);
 
-extern uint8_t g_rx_data[32];
+extern uint8_t g_rx_data[72];
 union byte_to_float{
 	struct{
 		uint8_t b[4];
@@ -210,7 +261,7 @@ enum HS_COLOR{
 	BLACK, RED, WHITE, BLUE
 };
 extern enum HS_COLOR g_color, g_pre_color;
-extern volatile uint8_t send_response_flag, send_response_time_flag, send_response_number_flag;
+extern volatile uint8_t send_response_flag, send_response_time_flag, send_response_number_flag, recived_time_setting_flag;
 void OpenSV1(void);
 void OpenSV2(void);
 void CloseSV1(void);

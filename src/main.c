@@ -63,17 +63,18 @@ void setting_default(void){
 	g_numberSetting.lowerCurrent = 0.5;
 	g_numberSetting.upperFlow = 1.2;
 	g_numberSetting.lowerFlow = 0.2;
-	g_timerSetting.t2_flowSensorStartTime = 30000;
-	g_timerSetting.t3_flowSensorMonitorTime = 5000;
+    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
+    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
+    g_timerSetting.t6_drainageOffTime = 1000;
 	g_timerSetting.t11_overVoltage1Time = 1000;
 	g_timerSetting.t12_overVoltage2Time = 2000;
 	g_timerSetting.t13_overVoltage3Time = 5000;
 	g_timerSetting.t14_lowVoltageStartTime = 5000; //60000
 	g_timerSetting.t15_lowVoltageDelayTime = 2000;
 	g_timerSetting.t17_solenoidLeakageStartTime = 5000;
-	g_timerSetting.t51 = 15;
-	g_timerSetting.t52 = 16;
-	g_timerSetting.t53 = 17;
+	g_timerSetting.t51 = 1;
+	g_timerSetting.t52 = 2;
+	g_timerSetting.t53 = 3;
 }
 #ifdef RENAN_CODE
 void renanCode(void){
@@ -370,86 +371,150 @@ void WaterWashingMode(void){
 	}
 }
 void HandWashingMode(void){
-	uint8_t _state = 0;
-	const uint32_t _waterHamerTime = 1000;
-	if(readHS() == 1){
-		_state = 1;
-		g_color = BLUE;
-		handSensorLED(g_color);
-		O_SPOUT_ALK_PIN = ON;
-		delay_ms(10);
-		O_PUMP_ALK_PIN = ON;
-		delay_ms(g_timerSetting.t51 - g_timerSetting.t54);
-		g_color = RED;
-		handSensorLED(g_color);
-		O_SPOUT_ACID_PIN = ON;
-		delay_ms(10);
-		O_PUMP_ACID_PIN = ON;
-		delay_ms(g_timerSetting.t54);
-		O_PUMP_ALK_PIN = OFF;
-		delay_ms(_waterHamerTime);
-		O_SPOUT_ALK_PIN = OFF;
-		delay_ms(g_timerSetting.t52 - g_timerSetting.t54);
-		g_color = WHITE;
-		handSensorLED(g_color);
-		O_SPOUT_WATER_PIN = ON;
-		delay_ms(g_timerSetting.t54);
-		O_PUMP_ACID_PIN = OFF;
-		delay_ms(_waterHamerTime);
-		O_SPOUT_ACID_PIN = OFF;
-		delay_ms(g_timerSetting.t53 - g_timerSetting.t54);
-		O_SPOUT_WATER_PIN = OFF;
+	uint8_t *flag = &g_machine_flag.handwash;
+	uint32_t *tick = &g_Tick.tickHandWash;
+	const uint32_t delayPump_ms = 50;
+	switch (*flag) {
+		case 0:
+			*flag = readHS() == 1?1:0;
+			*tick = g_systemTime;
+			break;
+		case 1:
+			O_SPOUT_ALK_PIN = ON;
+			g_color = BLUE;
+			handSensorLED(g_color);
+			if(ns_delay_ms(tick, delayPump_ms)){
+				O_PUMP_ALK_PIN = ON;
+				sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
+				(*flag)++;
+			}
+			break;
+		case 2:
+			if(ns_delay_ms(tick, (g_timerSetting.t51 - g_timerSetting.t54)*1000)){
+				O_PUMP_ACID_PIN = ON;
+				(*flag)++;
+			}
+			break;
+		case 3:
+			if(ns_delay_ms(tick, WATER_HAMER_TIME_MS)){
+				O_SPOUT_ACID_PIN = OFF;
+				g_color = BLACK;
+				handSensorLED(g_color);
+				(*flag)++;
+			}
+			break;
+		default:
+			*flag = 0;
+			break;
 	}
-	while(readHS() == 1) R_WDT_Restart();
-	if(_state == 1){
-		g_color = BLACK;
-		handSensorLED(g_color);
-	}
+//	uint8_t _state = 0;
+//	const uint32_t _waterHamerTime = 1000;
+//	if(readHS() == 1){
+//		_state = 1;
+//		g_color = BLUE;
+//		handSensorLED(g_color);
+//		O_SPOUT_ALK_PIN = ON;
+//		delay_ms(10);
+//		O_PUMP_ALK_PIN = ON;
+//		delay_ms(g_timerSetting.t51 - g_timerSetting.t54);
+//		g_color = RED;
+//		handSensorLED(g_color);
+//		O_SPOUT_ACID_PIN = ON;
+//		delay_ms(10);
+//		O_PUMP_ACID_PIN = ON;
+//		delay_ms(g_timerSetting.t54);
+//		O_PUMP_ALK_PIN = OFF;
+//		delay_ms(_waterHamerTime);
+//		O_SPOUT_ALK_PIN = OFF;
+//		delay_ms(g_timerSetting.t52 - g_timerSetting.t54);
+//		g_color = WHITE;
+//		handSensorLED(g_color);
+//		O_SPOUT_WATER_PIN = ON;
+//		delay_ms(g_timerSetting.t54);
+//		O_PUMP_ACID_PIN = OFF;
+//		delay_ms(_waterHamerTime);
+//		O_SPOUT_ACID_PIN = OFF;
+//		delay_ms(g_timerSetting.t53 - g_timerSetting.t54);
+//		O_SPOUT_WATER_PIN = OFF;
+//	}
+//	while(readHS() == 1) R_WDT_Restart();
+//	if(_state == 1){
+//		g_color = BLACK;
+//		handSensorLED(g_color);
+//	}
 }
 void AcidWaterMode(void){
-	uint8_t _state = 0;
-	uint32_t _stamp = g_systemTime;
-	const uint32_t _waterHamerTime = 1000;
-	if(readHS() == 1){
-		_state = 1;
-		O_SPOUT_ACID_PIN = ON;
-		delay_ms(100);
-		O_PUMP_ACID_PIN = ON;
-		g_color = RED;
-		handSensorLED(g_color);
-	}
-	while((readHS() == 1)&(g_systemTime - _stamp < g_timerSetting.t56)){
-		R_WDT_Restart();
-	}
-	if(_state == 1){
-		O_PUMP_ACID_PIN = OFF;
-		delay_ms(_waterHamerTime);
-		O_SPOUT_ACID_PIN = OFF;
-		g_color = BLACK;
-		handSensorLED(g_color);
+	uint8_t *flag = &g_machine_flag.acid;
+	uint32_t *tick = &g_Tick.tickAcid;
+	const uint32_t delayPump_ms = 50;
+	switch (*flag) {
+		case 0:
+			*flag = readHS() == 1?1:0;
+			*tick = g_systemTime;
+			break;
+		case 1:
+			O_SPOUT_ACID_PIN = ON;
+			g_color = RED;
+			handSensorLED(g_color);
+			if(ns_delay_ms(tick, delayPump_ms)){
+				O_PUMP_ACID_PIN = ON;
+				(*flag)++;
+			}
+			break;
+		case 2:
+			if(ns_delay_ms(tick, g_timerSetting.t56*1000)&(readHS() == 1)){
+				O_PUMP_ACID_PIN = OFF;
+				(*flag)++;
+			}
+			break;
+		case 3:
+			if(ns_delay_ms(tick, WATER_HAMER_TIME_MS)){
+				O_SPOUT_ACID_PIN = OFF;
+				g_color = BLACK;
+				handSensorLED(g_color);
+				(*flag)++;
+			}
+			break;
+		default:
+			*flag = 0;
+			break;
 	}
 }
-void AlkalineWaterMode(void){
-	uint8_t _state = 0;
-	uint32_t _stamp = g_systemTime;
-	const uint32_t _waterHamerTime = 1000;
-	if(readHS() == 1){
-		_state = 1;
-		O_SPOUT_ALK_PIN = ON;
-		delay_ms(100);
-		O_PUMP_ALK_PIN = ON;
-		g_color = RED;
-		handSensorLED(g_color);
-	}
-	while((readHS() == 1)&(g_systemTime - _stamp < g_timerSetting.t56)){
-		R_WDT_Restart();
-	}
-	if(_state == 1){
-		O_PUMP_ALK_PIN = OFF;
-		delay_ms(_waterHamerTime);
-		O_SPOUT_ALK_PIN = OFF;
-		g_color = BLACK;
-		handSensorLED(g_color);
+void nostop_AlkalineWaterMode(void){
+	uint8_t *flag = &g_machine_flag.akaline;
+	uint32_t *tick = &g_Tick.tickAlkaline;
+	const uint32_t delayPump_ms = 50;
+	switch (*flag) {
+		case 0:
+			*flag = readHS() == 1?1:0;
+			*tick = g_systemTime;
+			break;
+		case 1:
+			O_SPOUT_ALK_PIN = ON;
+			g_color = BLUE;
+			handSensorLED(g_color);
+			if(ns_delay_ms(tick, delayPump_ms)){
+				O_PUMP_ALK_PIN = ON;
+				(*flag)++;
+			}
+			break;
+		case 2:
+			if(ns_delay_ms(tick, g_timerSetting.t56*1000)&(readHS() == 1)){
+				O_PUMP_ALK_PIN = OFF;
+				(*flag)++;
+			}
+			break;
+		case 3:
+			if(ns_delay_ms(tick, WATER_HAMER_TIME_MS)){
+				O_SPOUT_ALK_PIN = OFF;
+				g_color = BLACK;
+				handSensorLED(g_color);
+				(*flag)++;
+			}
+			break;
+		default:
+			*flag = 0;
+			break;
 	}
 }
 void nostop_CallanCleaningMode(void){
