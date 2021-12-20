@@ -7,6 +7,12 @@ src/main.obj src/main.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/main.obj src/main.d: ../src/crc8.h
 ../src/crc8.h:
+src/main.obj src/main.d: ../src/EEPROM.h
+../src/EEPROM.h:
+src/main.obj src/main.d: ../src/r_cg_serial.h
+../src/r_cg_serial.h:
+src/main.obj src/main.d: ../src/r_cg_userdefine.h
+../src/r_cg_userdefine.h:
 src/main.obj src/main.d: ../src/usr_setting_sheet.h
 ../src/usr_setting_sheet.h:
 src/main.obj src/main.d: ../src/usr_timer.h
@@ -15,8 +21,6 @@ src/main.obj src/main.d: ../src/r_cg_cgc.h
 ../src/r_cg_cgc.h:
 src/main.obj src/main.d: ../src/r_cg_port.h
 ../src/r_cg_port.h:
-src/main.obj src/main.d: ../src/r_cg_serial.h
-../src/r_cg_serial.h:
 src/main.obj src/main.d: ../src/r_cg_adc.h
 ../src/r_cg_adc.h:
 src/main.obj src/main.d: ../src/r_cg_timer.h

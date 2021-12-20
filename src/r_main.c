@@ -43,6 +43,7 @@ Includes
 #include "usr_timer.h"
 #include "usr_setting_sheet.h"
 #include "crc8.h"
+#include "main.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -50,6 +51,8 @@ Includes
 Pragma directive
 ***********************************************************************************************************************/
 /* Start user code for pragma. Do not edit comment generated here */
+#define CVCC_Current_Set(a) R_DAC0_Set_ConversionValue(a)
+#define Salt_Analog_Set(a) R_DAC1_Set_ConversionValue(a)
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -59,10 +62,9 @@ Global variables and functions
 volatile int g_error = 0;
 volatile int g_adc_ch = 0;
 union EEPROM_status_u g_e_status;
+struct Number_Setting_s ret_number_setting;
 uint8_t led_st = 0xff;
 uint8_t flow_p, salt_h_p;
-uint8_t e_send[12] = {EEPROM_RDSR, 0b10100101, EEPROM_WRSR, 0x00, EEPROM_WRSR, 0x02, EEPROM_WREN, EEPROM_WRDI};
-uint8_t e_data[12] = {0,0};
 uint8_t g_eeprom_wren;
 uint8_t send_data[2] = { 0x23, 0xab};
 uint8_t receive_data[2];
@@ -72,21 +74,44 @@ uint32_t rx_data[3];
 float data_f;
 union byte_to_float data_f_test;
 struct UART_Buffer_s g_control_buffer;
-#define DETECT I_HS_ODA_PIN
+
+union {
+	struct{
+		uint8_t up_signal;
+	};
+	uint8_t status;
+}handsensor_status;
+uint8_t g_handsensor_status[2];
+void nostop_checkHandSensor(void){
+	if(DETECT_U == I_ON){
+		if(ns_delay_ms(&g_Tick.tickHandSensor[0], 500)){
+			g_handsensor_status[0] = g_handsensor_status[0] == 0? 1:0;
+		}
+	}else if(DETECT_D == I_ON){
+		g_handsensor_status[1] = 1;
+	}else if(DETECT_U == I_OFF){
+
+	}else if(DETECT_D == I_OFF){
+
+	}
+}
 uint8_t readHS(void){
-   if(DETECT){
+   if(DETECT_U){
 	  delay_ms(2);
-      if(DETECT) return 1;return 0;
+      if(DETECT_U) return 1;return 0;
    }else return 0;
 }
-uint8_t this_size;
+uint8_t this_size = sizeof(g_io_status);
+uint8_t this_size_2 = sizeof(union IO_Status_u);
 uint8_t rec_buf[12];
 uint8_t send_buf[7] = {8,1,2,3,4,5,6};
 char g_crc[8];
 uint32_t g_crc_32[8];
 uint32_t data_crc[2] = {30500, 60200};
 uint8_t rx_count;
+uint8_t dac_out[2] = {0xff, 0xff};
 /* End user code. Do not edit comment generated here */
+
 void R_MAIN_UserInit(void);
 
 /***********************************************************************************************************************
@@ -99,120 +124,49 @@ void main(void)
 {
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
+
     EEPROM_Init(&g_csi_rev_end, NONE_BLOCK);
-//    O_RS485_MODE_PIN = 1U;
-//    EEPROM_SPI_WriteBuffer(e_send, 0x000f, 4);
-//    delay_ms(1000);
-//    EEPROM_SPI_ReadBuffer(e_data, 0x000f, 3);
-//    R_UART0_Send("Hello \r\n", sizeof("Hello \r\n") - 1);
-//    csi01_status = STATUS_COMPLETE;
-    //Power ON
-    setting_default();
-    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 68);
+//    setting_default();
+    EE_SPI_Read((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
+    EE_SPI_Read((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
     g_rtc.hour = 10;
     g_rtc.sec = 2;
     R_RTC_Set_CounterValue(g_rtc);
     R_RTC_Start();
     R_UART2_Receive(g_rx_data, 6);
-
 //    Test nhan
     O_RS485_MODE_PIN = 0U;
-    R_UART3_Receive(rec_buf, 7);
+    R_UART3_Receive(rec_buf, 6);
 
 //    Test gui
 //    O_RS485_MODE_PIN = 1U;
 //    delay_ms(10);
 //    R_UART3_Send(send_buf, 7);
-//    EEPROM_PROTECT_EN();
+    EEPROM_PROTECT_EN();
 
-    g_color = BLACK;
     g_pre_color = BLUE;
-    this_size = sizeof(struct Timer_Setting_s);
+    handSensorLED(BLACK);
+//    g_machine_state.mode = INDIE; // Set as indie-mode
+
+    main_init_20211111();
+
     while (1U)
     {
-    	if(send_response_flag){
-    		rx_count++;
-    		uint8_t state = g_uart2_sendend;
-    		R_UART2_Send(g_rx_data, 6);
-    		while(state == g_uart2_sendend){
-				R_WDT_Restart();
-			}
+    	RaspberryResponse_nostop();
 
-    		send_response_flag = 0;
-    	}
-    	if(send_response_time_flag){
-			uint8_t state = g_uart2_sendend;
-			g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
-			R_UART2_Send((uint8_t *)&g_timerSetting, 69);
-			while(state == g_uart2_sendend){
-				R_WDT_Restart();
-			}
-			send_response_time_flag = 0;
-    	}
-    	if(recived_time_setting_flag == 2){
-    		rx_count++;
-//    		uint8_t *p = (uint8_t *)&g_timerSetting;
-    		uint8_t *p = (uint8_t *)&_setting;
-			//Do not Edit this, must keep!!!!
-			for(uint8_t i=0;i<sizeof(struct Timer_Setting_s) - 2; i++){
-				switch (i%4) {
-					case 4:
-						p[67+3-i] = g_rx_data[i-3];
-						break;
-					case 2:
-						p[67+1-i] = g_rx_data[i-1];
-						break;
-					case 1:
-						p[67-1-i] = g_rx_data[1+i];
-						break;
-					case 0:
-						p[67-3-i] = g_rx_data[3+i];
-						break;
-					default:
-						break;
-				}
-			}
-			_setting.crc = g_rx_data[68];
 
-			if(_setting.crc == crc8_1((uint8_t *)g_rx_data, 68)){
-				rx_count++;
-				sendToRasPi(H_SET, OK_ALL, 0x0);
-				g_timerSetting = _setting;
-				recived_time_setting_flag = 0;
-			}else{
-				sendToRasPi(H_SET, SAVE_ERROR, 0x0);
-//				R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s)-1);
-				recived_time_setting_flag = 0;
-			}
-    	}
+
+    	handSensorLED(g_color);
+		UpdateMachineStatus();
 //--------------------------------- Testing code---------------------------------------------------------------
     	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
     		P6_bit.no3 = ~P6_bit.no3;
-//    		R_UART3_Send((uint8_t *)"Hello", sizeof("Hello")-1);
-//    		R_UART1_Send((uint8_t *)"Hello", sizeof("Hello")-1);
-//    		g_e_status.raw = rEE_Status();
     	}
     	if((g_rx_data[0] == H_SET)&(g_rx_data[1] == OK_USER)){
-    		if(this_size == 70){
-    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t51*1000)){
-					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
-					this_size++;
-				}
-    		}else if(this_size == 71){
-    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t52*1000)){
-					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
-					this_size++;
-				}
-    		}else if(this_size == 72){
-    			if(ns_delay_ms(&g_Tick.tickCustom[1], g_timerSetting.t53*1000)){
-					sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
-					this_size++;
-				}
-    		}else if(this_size == 73){
-    			g_rx_data[0] = g_rx_data[1] = 0x00;
-    			g_Tick.tickCustom[1] = g_systemTime;
-				this_size = sizeof(struct Timer_Setting_s);
-    		}
+    		g_machine_state.user = 1;
+    	}
+    	if(g_machine_state.user == 1){
+    		HandWashingMode_nostop();
     	}else{
     		g_Tick.tickCustom[1] = g_systemTime;
     	}
@@ -246,73 +200,93 @@ void main(void)
 //    		send_buf[1]++;
 //    		R_UART3_Send(send_buf, 7);
 //    		R_UART3_Receive(rec_buf, 7);
-    		O_CTRL_OUT_PIN = led_st&0x01;
-    		O_SPOUT_WATER_PIN = led_st&0x01;
+//    		O_CTRL_OUT_PIN = led_st&0x01;
+//    		O_SPOUT_WATER_PIN = led_st&0x01;
+
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_sendend;
-//    	    g_timerSetting.t2_flowSensorStartTime = 0x24770000;
-//    	    g_timerSetting.t2_flowSensorStartTime = 0x0000ffff;
-//    	    g_timerSetting.t3_flowSensorMonitorTime = 0x0000aaaa;
-//    	    g_timerSetting.t6_drainageOffTime = 1000;
-//			g_timerSetting.t51++;
-//    	    g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
-//    	    g_crc[0] = crc_8((unsigned char *)&g_timerSetting, 4);
-//    	    g_crc[1] = Fast_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
-//    	    g_crc[2] = Quick_CRC_Cal8Bits(0x00, 4, (unsigned char *)&g_timerSetting);
-//    	    g_crc[3] = crc8x_simple(0x00, (unsigned char *)&g_timerSetting, 4);
-//    	    g_crc[4] = crc8x_fast(0x00, (unsigned char *)&g_timerSetting, 4);
-//    	    g_crc[5] = getCRC((unsigned char *)&g_timerSetting, 4);
     	    g_crc[6] = crc8_4((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
     	    g_crc[7] = crc8_1((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 2);
-//    	    g_crc_32 = CRC32_function((uint8_t *)&g_timerSetting, 8);
-//    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s));
-//    	    R_UART2_Send((uint8_t *)&g_timerSetting, sizeof(struct Timer_Setting_s) - 1);
-//    	    sendToRasPi(H_ALARM, CURRENT_ABNORMAL, 32);
-//    	    while(state == g_uart2_sendend){
-//				R_WDT_Restart();
+//    	    switch (g_color) {
+//				case BLACK:
+//					g_color = RED;
+//					break;
+//				case RED:
+//					g_color = BLUE;
+//					break;
+//				case BLUE:
+//					g_color = WHITE;
+//					break;
+//				default:
+//					g_color = BLACK;
+//					break;
 //			}
-
+//    	    dac_out[0]+= 10;
+			CVCC_Current_Set(dac_out[0]);
+//			dac_out[1]+= 10;
+			Salt_Analog_Set(dac_out[1]);
     		if(led_st == 0x00){
 
+//    			O_CVCC_ON_PIN = ON;
 //    			O_HS_ICL_PIN = 0;
 //    			O_HS_IDA_PIN = 1;
 //    			handSensorLED(RED);
 //    			O_CVCC_ALARM_RS = 1;
 //    			O_PUMP_SALT_PIN = ON;
 //    			electrolyticOperationON();
-
+//    			g_io_status.refined.Valve.SV4 = 1;
+//				g_io_status.refined.Pump2 = 1;
+//				g_io_status.refined.Valve.SV5 = 0;
+//				g_io_status.refined.Pump1 = 0;
+//				g_io_status.refined.SaltLowLevel = 1;
+//    			e_send[0]++;
+//    			g_numberSetting.upperVoltage1++;
+//    			g_numberSetting.crc--;
+//    			g_numberSetting.crc2++;
+//    			g_numberSetting.lowerFlow++;
+//    			g_numberSetting.hello++;
+//    			EE_SPI_Write((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
+//    			EE_SPI_Write((uint8_t *)&g_numberSetting.crc, 0x800, 6);
+//    			EE_SPI_Write((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
     		}else{
+//    			O_CVCC_ON_PIN = OFF;
 //    			O_HS_ICL_PIN = 1;
 //				O_HS_IDA_PIN = 0;
 //    			handSensorLED(WHITE);
 //    			O_CVCC_ALARM_RS = 0;
 //    			O_PUMP_SALT_PIN = OFF;
 //    			electrolyticOperationOFF();
+//    			g_io_status.refined.Valve.SV4 = 0;
+//				g_io_status.refined.Pump2 = 0;
+//				g_io_status.refined.Valve.SV5 = 1;
+//				g_io_status.refined.Pump1 = 1;
+//				g_io_status.refined.SaltLowLevel = 0;
+//    			EE_SPI_Read((uint8_t *)&ret_number_setting, 0x000, sizeof(g_numberSetting));
+
     		}
     	}
 //--------------------------------End testing code---------------------------------------------------------
-//    	main_20211111();
-
-    	switch (readHS()) {
-			case 0:
-				g_color = WHITE;
-				break;
-			case 1:
-				g_color = BLUE;
-				break;
-			default:
-
-				break;
-		}
-    	if(g_color != g_pre_color){
-			O_RS485_MODE_PIN = 1U;
-			uint8_t _uart3 = g_uart3_sendend;
-			send_buf[3]++;
-			R_UART3_Send(send_buf, 7);
-			while(_uart3 == g_uart3_sendend);
-			O_RS485_MODE_PIN = 0U;
+    	if(g_machine_state.mode == BUSY){
+    		g_machine_state.user = 0;
+    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, 800)){
+    			g_machine_state.mode = INDIE;
+    		}
+    	}else{
+    		g_Tick.tickDebouceHandSensor = g_systemTime;
     	}
-    	handSensorLED(g_color);
+		if((g_machine_state.mode == WATER_WASHING)|(g_machine_state.mode == INDIE)){
+//			nostop_WaterWashingMode();
+		}
+//    	InitialOperationModeStart();
+
+//    	if(g_color != g_pre_color){
+//			O_RS485_MODE_PIN = 1U;
+//			uint8_t _uart3 = g_uart3_sendend;
+//			send_buf[3]++;
+//			R_UART3_Send(send_buf, 7);
+//			while(_uart3 == g_uart3_sendend);
+//			O_RS485_MODE_PIN = 0U;
+//    	}
     	R_WDT_Restart();
     }
     /* End user code. Do not edit comment generated here */
@@ -349,8 +323,13 @@ void R_MAIN_UserInit(void)
 
     R_ADC_Create();
     R_ADC_Set_OperationOn();
-//    R_ADC_Set_ADChannel(ADCHANNEL0);
     R_ADC_Start();
+
+    R_DAC_Create();
+	CVCC_Current_Set(0x0);
+	Salt_Analog_Set(0x0);
+    R_DAC0_Start();
+    R_DAC1_Start();
     /* End user code. Do not edit comment generated here */
 }
 

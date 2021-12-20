@@ -16,7 +16,7 @@ void sEE_WriteStatusRegister(uint8_t reg);
 //-------------------------------------------------------
 union EEPROM_status_u eeprom_status;
 volatile uint8_t *spi_flag;
-
+uint8_t buf[32+3];
 /*!
  * EEPROM initialize, setup SPI transmit end flag, setup write disable block
  * @param intp_flag: SPI transmit done flag
@@ -64,13 +64,49 @@ void sEE_WriteDisable(void) {
  */
 void EE_SPI_Write(uint8_t *const pBuffer,
 		uint16_t addr, uint16_t num) {
-	uint8_t buf[36] = {EEPROM_WRITE, addr>>8, addr};
-	if(eeprom_status.refined.WEN == 0)
-		sEE_WriteEnable();
-	for(uint8_t i=0; i<num; i++){
-		buf[i+3] = pBuffer[i];
+	uint8_t page = num/32;
+	uint8_t max_page = page;
+	uint8_t rsvd = num%32;
+	uint8_t *p = pBuffer;
+	buf[0] = EEPROM_WRITE;
+	buf[1] = addr>>8;
+	buf[2] = addr;
+	while(page != 0){
+		do{
+			rEE_Status();
+		}while(eeprom_status.refined.RB == 1);
+		if(eeprom_status.refined.WEN == 0)
+				sEE_WriteEnable();
+
+		for(uint8_t i=0; i<32; i++){
+			buf[i+3] = p[i];
+		}
+		while(eeprom_status.refined.WEN == 0){
+			rEE_Status();
+		}
+		EE_TransmitData(buf, 32+3);
+		page--;
+		p+=32;
+		addr = addr + (uint16_t)0x0020*(max_page-page);
+		buf[0] = EEPROM_WRITE;
+		buf[1] = addr>>8;
+		buf[2] = addr;
 	}
-	EE_TransmitData(buf, num+3);
+
+	if(rsvd != 0){
+		do{
+			rEE_Status();
+		}while(eeprom_status.refined.RB == 1);
+		if(eeprom_status.refined.WEN == 0)
+			sEE_WriteEnable();
+		for(uint8_t i=0; i<rsvd; i++){
+			buf[i+3] = p[i];
+		}
+		while(eeprom_status.refined.WEN == 0){
+			rEE_Status();
+		}
+		EE_TransmitData(buf, rsvd+3);
+	}
 }
 /*!
  * Read data from EEPROM
@@ -80,15 +116,37 @@ void EE_SPI_Write(uint8_t *const pBuffer,
  */
 void EE_SPI_Read(uint8_t *const pBuffer,
 		uint16_t addr, uint16_t num){
-	uint8_t buf[36] = {EEPROM_READ, addr>>8, addr};
+	uint8_t page = num/32;
+	uint8_t max_page = page;
+	uint8_t rsvd = num%32;
+	uint8_t *p = pBuffer;
+	buf[0] = EEPROM_READ;
+	buf[1] = addr>>8;
+	buf[2] = addr;
+	while(page != 0){
 	//Wait until EEPROM Ready
-	do{
-    	rEE_Status();
-    }while(eeprom_status.refined.RB == 1);
-
-	EE_TransmitData(buf, num+3);
-	for(uint8_t i=0; i<num; i++){
-		pBuffer[i] = buf[i+3];
+		do{
+	    	rEE_Status();
+	    }while(eeprom_status.refined.RB == 1);
+		EE_TransmitData(buf, 32+3);
+		for(uint8_t i=0; i<32; i++){
+			p[i] = buf[i+3];
+		}
+		page--;
+		p+=32;
+		addr = addr + (uint16_t)0x0020*(max_page-page);
+		buf[0] = EEPROM_READ;
+		buf[1] = addr>>8;
+		buf[2] = addr;
+	}
+	if(rsvd != 0){
+		do{
+			rEE_Status();
+		}while(eeprom_status.refined.RB == 1);
+		EE_TransmitData(buf, rsvd+3);
+		for(uint8_t i=0; i<rsvd; i++){
+			p[i] = buf[i+3];
+		}
 	}
 }
 /*!

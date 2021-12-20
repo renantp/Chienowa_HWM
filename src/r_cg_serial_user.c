@@ -80,27 +80,31 @@ extern volatile uint8_t * gp_uart3_rx_address;         /* uart3 receive buffer a
 extern volatile uint16_t  g_uart3_rx_count;            /* uart3 receive data number */
 extern volatile uint16_t  g_uart3_rx_length;           /* uart3 receive data length */
 /* Start user code for global. Do not edit comment generated here */
-volatile uint8_t send_response_flag, send_response_time_flag, send_response_number_flag, recived_time_setting_flag;
+volatile uint8_t send_response_flag, send_response_time_flag, send_response_number_flag, recived_time_setting_flag
+,send_respone_status_flag, recived_number_setting_flag;
+volatile struct Communicaition_flag_s commnunication_flag;
 volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_send, g_uart2_sendend, g_uart2_receive;
 uint8_t g_rx_data[72];
 volatile uint8_t g_uart2_fault;
 volatile uint8_t g_uart3_sendend;
 uint8_t isCommand(uint8_t *data){
+	if(data[1] == NEXT_ANIMATION)
+		return 0;
 	switch ((enum UART_header_e)*data) {
 		case H_ALARM:
-			send_response_flag = 1;
+			commnunication_flag.send_response_flag = 1;
 			break;
 		case H_CLEAR:
-			send_response_flag = 1;
+			commnunication_flag.send_response_flag = 1;
 			break;
 		case H_ERROR:
-			send_response_flag = 1;
+			commnunication_flag.send_response_flag = 1;
 			break;
 		case H_READ:
-			send_response_flag = 1;
+			commnunication_flag.send_response_flag = 1;
 			break;
 		case H_SET:
-			send_response_flag = 1;
+			commnunication_flag.send_response_flag = 1;
 			break;
 		default:
 			return 0;
@@ -435,15 +439,23 @@ static void r_uart2_callback_receiveend(void)
 
 	R_UART2_Receive(g_rx_data, 6);
 	isCommand(g_rx_data);
-	recived_time_setting_flag = recived_time_setting_flag == 1 ? 2: recived_time_setting_flag;
+	commnunication_flag.recived_time_setting_flag = commnunication_flag.recived_time_setting_flag == 1 ? 2: commnunication_flag.recived_time_setting_flag;
+	commnunication_flag.recived_number_setting_flag = commnunication_flag.recived_number_setting_flag == 1 ? 2: commnunication_flag.recived_number_setting_flag;
 	if(1){
 		g_uart2_fault = 0;
 		if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_TIME)){
-			send_response_time_flag = 1;
+			commnunication_flag.send_response_time_flag = 1;
 //			g_timerSetting.t51++;
 		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == SAVE_TIME)){
 			R_UART2_Receive(g_rx_data, 69);
-			recived_time_setting_flag = 1;
+			commnunication_flag.recived_time_setting_flag = 1;
+		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_MACHINE_STATUS)){
+			commnunication_flag.send_respone_status_flag = 1;
+		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_NUMBER)){
+			commnunication_flag.send_response_number_flag = 1;
+		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == SAVE_NUMBER)){
+			R_UART2_Receive(g_rx_data, 33);
+			commnunication_flag.recived_number_setting_flag = 1;
 		}
 //		if((g_rx_data[0] == H_SET)&(g_rx_data[1] == READ_NUMBER)){
 //			R_UART2_Receive(g_rx_data, sizeof(struct Number_Setting_s)-1);
@@ -568,7 +580,12 @@ static void __near r_uart3_interrupt_send(void)
 static void r_uart3_callback_receiveend(void)
 {
     /* Start user code. Do not edit comment generated here */
-	R_UART3_Receive(rec_buf, 7);
+	R_UART3_Receive(rec_buf, 6);
+	if((rec_buf[0]==H_SET)|(rec_buf[0]==SAVE_TIME)){
+		rec_buf[2] = 0xff;
+		O_RS485_MODE_PIN = 1U;
+		R_UART3_Send(rec_buf, 6);
+	}
     /* End user code. Do not edit comment generated here */
 }
 
@@ -595,6 +612,7 @@ static void r_uart3_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
 	g_uart3_sendend++;
+	O_RS485_MODE_PIN = 0U;
     /* End user code. Do not edit comment generated here */
 }
 

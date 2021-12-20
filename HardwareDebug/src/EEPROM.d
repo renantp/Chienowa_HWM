@@ -11,6 +11,8 @@ src/EEPROM.obj src/EEPROM.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/EEPROM.obj src/EEPROM.d: ../src/crc8.h
 ../src/crc8.h:
+src/EEPROM.obj src/EEPROM.d: ../src/EEPROM.h
+../src/EEPROM.h:
 src/EEPROM.obj src/EEPROM.d: ../src/usr_timer.h
 ../src/usr_timer.h:
 src/EEPROM.obj src/EEPROM.d: ../src/r_cg_wdt.h

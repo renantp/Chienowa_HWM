@@ -23,3 +23,7 @@ src/r_systeminit.obj src/r_systeminit.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/r_systeminit.obj src/r_systeminit.d: ../src/crc8.h
 ../src/crc8.h:
+src/r_systeminit.obj src/r_systeminit.d: ../src/EEPROM.h
+../src/EEPROM.h:
+src/r_systeminit.obj src/r_systeminit.d: ../src/r_cg_userdefine.h
+../src/r_cg_userdefine.h:

@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/usr_timer.obj
 #@   ../src/usr_timer.c
-#@  compiled at Wed Dec 08 17:03:02 2021
+#@  compiled at Mon Dec 20 15:45:32 2021
 
 	.EXTERN _g_systemTime
 	.PUBLIC _delay_ms
@@ -174,7 +174,7 @@ _ns_delay_ms:
 	;***       28 : //		if((g_systemTime <= ms - (0xffffffff - *stamp))&(g_systemTime < 0xffff0000))
 	;***       29 : //			return 0;
 	;***       30 : //	else
-	;***       31 : 	if(g_systemTime - *stamp < ms)
+	;***       31 : 	if(g_systemTime - *stamp < ms) // if g_systemTime < *stamp (x) -> out=stamp+x
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/usr_timer.c", 31
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw [sp+0x00], ax

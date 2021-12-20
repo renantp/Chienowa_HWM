@@ -9,3 +9,9 @@ src/r_cg_timer.obj src/r_cg_timer.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/r_cg_timer.obj src/r_cg_timer.d: ../src/crc8.h
 ../src/crc8.h:
+src/r_cg_timer.obj src/r_cg_timer.d: ../src/EEPROM.h
+../src/EEPROM.h:
+src/r_cg_timer.obj src/r_cg_timer.d: ../src/r_cg_serial.h
+../src/r_cg_serial.h:
+src/r_cg_timer.obj src/r_cg_timer.d: ../src/r_cg_userdefine.h
+../src/r_cg_userdefine.h:

@@ -29,11 +29,11 @@ Change in next version
 
 3.	Peripheral connection:
 
-•	UART: OK
+•	UART: OK.
 
-•	RS485/RS232: BUG - Shift byte, first byte of array was wrong.
+•	RS485/RS232: OK.
 
-•	EEPROM: OK
+•	EEPROM: OK.
 
-•	Analog I/O: OK
+•	Analog I/O: OK.
 
