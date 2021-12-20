@@ -88,30 +88,30 @@ void setting_default(void) {
 #ifdef RENAN_CODE
 void renanCode(void){
 	//Power On Mode
-	O_DRAIN_ACID_PIN = I_ACID_L_PIN == I_ON ? ON:OFF;	// Turn on SV5 if ACID tank empty
-	O_DRAIN_ALK_PIN = I_ALKALI_L_PIN == I_ON ? ON:OFF;	// Turn on SV6 if ALK tank empty
+	O_DRAIN_ACID_PIN_SV7 = I_ACID_L_PIN == I_ON ? ON:OFF;	// Turn on SV5 if ACID tank empty
+	O_DRAIN_ALK_PIN_SV6 = I_ALKALI_L_PIN == I_ON ? ON:OFF;	// Turn on SV6 if ALK tank empty
 	do{
-		O_DRAIN_ACID_PIN = I_ACID_L_PIN == I_ON ? ON:O_DRAIN_ACID_PIN;	// Turn on SV5 if ACID tank empty
-		O_DRAIN_ALK_PIN = I_ALKALI_L_PIN == I_ON ? ON:O_DRAIN_ALK_PIN;	// Turn on SV6 if ALK tank empty
+		O_DRAIN_ACID_PIN_SV7 = I_ACID_L_PIN == I_ON ? ON:O_DRAIN_ACID_PIN_SV7;	// Turn on SV5 if ACID tank empty
+		O_DRAIN_ALK_PIN_SV6 = I_ALKALI_L_PIN == I_ON ? ON:O_DRAIN_ALK_PIN_SV6;	// Turn on SV6 if ALK tank empty
 		O_PUMP_ACID_PIN = I_ACID_L_PIN == I_ON ? ON:OFF;	// Turn on P1 if SV5 is open
 		O_PUMP_ALK_PIN = I_ALKALI_L_PIN == I_ON ? ON:OFF;	// Turn on P2 if SV6 is open
 		R_WDT_Restart();
 	}while((I_ACID_L_PIN == I_ON)|(I_ALKALI_L_PIN == I_ON));
 	delay_ms(st[0]); // 0.2 ~ 1.0 seconds to prevent water hammer
-	O_DRAIN_ACID_PIN = O_DRAIN_ALK_PIN = OFF;	// Turn on SV5 if ACID tank empty. Turn on SV6 if ALK tank empty
+	O_DRAIN_ACID_PIN_SV7 = O_DRAIN_ALK_PIN_SV6 = OFF;	// Turn on SV5 if ACID tank empty. Turn on SV6 if ALK tank empty
 
 	// Drainage operation
-	O_SPOUT_WATER_PIN = ON;	// SV2 On
+	O_SPOUT_WATER_PIN_SV2 = ON;	// SV2 On
 	delay(st[1]);			// Default 30 seconds
-	O_SUPPLY_WATER_PIN = ON;	// SV1 On
+	O_SUPPLY_WATER_PIN_SV1 = ON;	// SV1 On
 	delay_ms(500);
-	O_SPOUT_WATER_PIN = OFF;	// SV2 Off
+	O_SPOUT_WATER_PIN_SV2 = OFF;	// SV2 Off
 }
 
 
 void code_20211029(void){
 	//---------------Electrolytic operation-----------------------------
-	O_SUPPLY_WATER_PIN = ON; //SV1
+	O_SUPPLY_WATER_PIN_SV1 = ON; //SV1
 	O_CVCC_ON_PIN = ON;
 	O_PUMP_SALT_PIN = ON; //SP1
 	delay(10);
@@ -120,6 +120,91 @@ void code_20211029(void){
 	overVoltage1Error();
 }
 #endif
+
+
+uint8_t isAcidHigh(void){
+	if(g_io_status.refined.AcidHighLevel != g_pre_io_status.refined.AcidHighLevel){
+		if(I_ACID_H_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAcidLevel[0], g_timerSetting.t28_onDelayHighLevel_s*1000)){
+				g_pre_io_status.refined.AcidHighLevel = g_io_status.refined.AcidHighLevel;
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAcidLevel[0] = g_systemTime;
+	}
+	return 0;
+}
+uint8_t isAcidLow(void){
+	if(g_io_status.refined.AcidLowLevel != g_pre_io_status.refined.AcidLowLevel){
+		if(I_ACID_M_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAcidLevel[1], g_timerSetting.t27_onDelayLowLevel_s*1000)){
+				g_pre_io_status.refined.AcidLowLevel = g_io_status.refined.AcidLowLevel;
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAcidLevel[1] = g_systemTime;
+	}
+	return 0;
+}
+uint8_t isAcidEmpty(void){
+	if(g_io_status.refined.AcidEmptyLevel!= g_pre_io_status.refined.AcidEmptyLevel){
+		if(I_ACID_L_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAcidLevel[2], g_timerSetting.t26_onDelayEmptyLevel_s*1000)){
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAcidLevel[2] = g_systemTime;
+	}
+	return 0;
+}
+
+uint8_t isAlkalineHigh(void){
+	if(g_io_status.refined.AlkalineHighLevel != g_pre_io_status.refined.AlkalineHighLevel){
+		if(I_ALKALI_H_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAlkalineLevel[0], g_timerSetting.t28_onDelayHighLevel_s*1000)){
+				g_pre_io_status.refined.AlkalineHighLevel = g_io_status.refined.AlkalineHighLevel;
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAlkalineLevel[0] = g_systemTime;
+	}
+	return 0;
+}
+uint8_t isAlkalineLow(void){
+	if(g_io_status.refined.AlkalineLowLevel != g_pre_io_status.refined.AlkalineLowLevel){
+		if(I_ALKALI_M_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAlkalineLevel[1], g_timerSetting.t27_onDelayLowLevel_s*1000)){
+				g_pre_io_status.refined.AlkalineLowLevel = g_io_status.refined.AlkalineLowLevel;
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAlkalineLevel[1] = g_systemTime;
+	}
+	return 0;
+}
+uint8_t isAlkalineEmpty(void){
+	if(g_io_status.refined.AlkalineEmptyLevel!= g_pre_io_status.refined.AlkalineEmptyLevel){
+		if(I_ALKALI_L_PIN == I_ON){
+			if(ns_delay_ms(&g_Tick.tickAlkalineLevel[2], g_timerSetting.t26_onDelayEmptyLevel_s*1000)){
+				return 1;
+			}
+			return 0;
+		}
+	}else{
+		g_Tick.tickAlkalineLevel[2] = g_systemTime;
+	}
+	return 0;
+}
 
 //----------------------Begin code 11112021--------------------------------------
 void sendToRasPi(enum UART_header_e head, enum Control_status type, float value) {
@@ -152,7 +237,6 @@ void RaspberryResponse_nostop(void) {
 	}
 	if (commnunication_flag.send_respone_status_flag) {
 		uint8_t state = g_uart2_sendend;
-		rx_count++;
 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
 		while (state == g_uart2_sendend) {
 			R_WDT_Restart();
@@ -257,49 +341,50 @@ void RaspberryResponse_nostop(void) {
  */
 void InitialOperationModeStart(void) {
 	uint32_t _tick[2];
-	uint8_t pre_acid, pre_akaline;
-	pre_acid = O_DRAIN_ACID_PIN = I_ACID_L_PIN == I_ON ? ON : O_DRAIN_ACID_PIN;	// Turn on SV5 if ACID tank empty
-	pre_akaline = O_DRAIN_ALK_PIN =
-	I_ALKALI_L_PIN == I_ON ? ON : O_DRAIN_ALK_PIN;// Turn on SV6 if ALK tank empty
+//	uint8_t pre_acid, pre_akaline;
+	g_pre_io_status.refined.Valve.SV7 = O_DRAIN_ACID_PIN_SV7 = I_ACID_L_PIN == I_ON ? ON : O_DRAIN_ACID_PIN_SV7;	// Turn on SV5 if ACID tank NOT empty
+	g_pre_io_status.refined.Valve.SV6 = O_DRAIN_ALK_PIN_SV6 =
+	I_ALKALI_L_PIN == I_ON ? ON : O_DRAIN_ALK_PIN_SV6;// Turn on SV6 if ALK tank NOT empty
+	UpdateMachineStatus();
 	while (1) {
-		O_DRAIN_ACID_PIN = I_ACID_L_PIN == I_ON ? ON : O_DRAIN_ACID_PIN;// Turn on SV5 if ACID tank empty
-		O_DRAIN_ALK_PIN = I_ALKALI_L_PIN == I_ON ? ON : O_DRAIN_ALK_PIN;// Turn on SV6 if ALK tank empty
-		pre_acid = I_ACID_L_PIN == I_ON ? ON : OFF;	// Turn on SV5 if ACID tank empty
-		pre_akaline = I_ALKALI_L_PIN == I_ON ? ON : OFF;// Turn on SV6 if ALK tank empty
-		if (pre_acid != O_DRAIN_ACID_PIN) {
-			if (ns_delay_ms(&_tick[0], 500)) {
-				O_DRAIN_ACID_PIN = pre_acid;
+		O_DRAIN_ACID_PIN_SV7 = I_ACID_L_PIN == I_ON ? ON : O_DRAIN_ACID_PIN_SV7;// Turn on SV5 if ACID tank empty
+		O_DRAIN_ALK_PIN_SV6 = I_ALKALI_L_PIN == I_ON ? ON : O_DRAIN_ALK_PIN_SV6;// Turn on SV6 if ALK tank empty
+		g_pre_io_status.refined.Valve.SV7 = I_ACID_L_PIN == I_ON ? ON : OFF;
+		g_pre_io_status.refined.Valve.SV6 = I_ALKALI_L_PIN == I_ON ? ON : OFF;
+		if (g_pre_io_status.refined.Valve.SV7 != O_DRAIN_ACID_PIN_SV7) {
+			if (ns_delay_ms(&_tick[0], g_timerSetting.t26_onDelayEmptyLevel_s)) {
+				O_DRAIN_ACID_PIN_SV7 = g_pre_io_status.refined.Valve.SV7;
 			}
 		} else
 			_tick[0] = g_systemTime;
-		if (pre_akaline != O_DRAIN_ALK_PIN) {
-			if (ns_delay_ms(&_tick[1], 500)) {
-				O_DRAIN_ALK_PIN = pre_akaline;
+		if (g_pre_io_status.refined.Valve.SV6 != O_DRAIN_ALK_PIN_SV6) {
+			if (ns_delay_ms(&_tick[1], g_timerSetting.t26_onDelayEmptyLevel_s)) {
+				O_DRAIN_ALK_PIN_SV6 = g_pre_io_status.refined.Valve.SV6;
 			}
 		} else
 			_tick[1] = g_systemTime;
-		if ((O_DRAIN_ACID_PIN == OFF) & (O_DRAIN_ALK_PIN == OFF)) {
+		if ((O_DRAIN_ACID_PIN_SV7 == OFF) & (O_DRAIN_ALK_PIN_SV6 == OFF)) {
 			break;
 		}
 		UpdateMachineStatus();
 		R_WDT_Restart();
 	}
 }
-/**
- * FlowSensorCheck
- * 30/11/2021: Checked!
- * @return 0 is Error, 1 is OK, 2 Still taking
- */
-uint8_t FlowSensorCheck(uint32_t *_time) {
-//	g_flow_value = measureFlowSensor();
-	if ((g_flow_value < g_numberSetting.upperFlow)
-			& (g_flow_value > g_numberSetting.lowerFlow)) {
-		return 1;
-	} else {
-		sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, 1);
-		return 0;
-	}
-}
+///**
+// * FlowSensorCheck
+// * 30/11/2021: Checked!
+// * @return 0 is Error, 1 is OK, 2 Still taking
+// */
+//uint8_t FlowSensorCheck(uint32_t *_time) {
+////	g_flow_value = measureFlowSensor();
+//	if ((g_flow_value < g_numberSetting.upperFlow)
+//			& (g_flow_value > g_numberSetting.lowerFlow)) {
+//		return 1;
+//	} else {
+//		sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, 1);
+//		return 0;
+//	}
+//}
 /**
  * WaterSupplyOperation
  * 30/11/2021: Checked by An
@@ -313,19 +398,19 @@ uint8_t nostop_WaterSupplyOperation(void) {
 		(*state)++;
 		break;
 	case 1:
-		O_SPOUT_WATER_PIN = ON;		// SV2 On
+		O_SPOUT_WATER_PIN_SV2 = ON;		// SV2 On
 		if (ns_delay_ms(&g_Tick.tickWaterSupply, 30000)) {
 			(*state)++;
 		}
 		break;
 	case 2:
-		O_SUPPLY_WATER_PIN = ON;	// SV1 On
+		O_SUPPLY_WATER_PIN_SV1 = ON;	// SV1 On
 		if (ns_delay_ms(&g_Tick.tickWaterSupply, 500)) {
 			(*state)++;
 		}
 		break;
 	case 3:
-		O_SPOUT_WATER_PIN = OFF;	// SV2 Off
+		O_SPOUT_WATER_PIN_SV2 = OFF;	// SV2 Off
 //			nostop_measureFlowSensor();
 		if (ns_delay_ms(&g_Tick.tickWaterSupply, 15000)) {
 			(*state)++;
@@ -342,7 +427,6 @@ uint8_t nostop_WaterSupplyOperation(void) {
 	R_WDT_Restart();
 	return *state == 5 ? 0 : 1;
 }
-
 void stop_waitAlarmConfirm(enum Control_status alarm) {
 	while ((g_rx_data[0] != H_CLEAR) & (g_rx_data[1] != alarm)) {
 		R_WDT_Restart();
@@ -537,18 +621,6 @@ void alkalineWaterTankSkipCheck(void) {
 	}
 }
 
-//void OpenSV1(void){
-//	O_SUPPLY_WATER_PIN = ON;
-//}
-//void CloseSV1(void){
-//	O_SUPPLY_WATER_PIN = OFF;
-//}
-//void OpenSV2(void){
-//	O_SPOUT_WATER_PIN = ON;
-//}
-//void CloseSV2(void){
-//	O_SPOUT_WATER_PIN = OFF;
-//}
 uint8_t FilterReplacementCheck(void) {
 
 	return 0;
@@ -571,14 +643,14 @@ void WaterWashingMode_nostop(void) {
 	switch (*state) {
 	case 0:
 		g_machine_state.mode = WATER_WASHING;
-		O_SPOUT_WATER_PIN = ON;
+		O_SPOUT_WATER_PIN_SV2 = ON;
 		g_color = WHITE;
 		*tick = g_systemTime;
 		(*state)++;
 		break;
 	case 1:
 		if (DETECT_U == I_ON) {
-			O_SPOUT_WATER_PIN = OFF;
+			O_SPOUT_WATER_PIN_SV2 = OFF;
 			g_color = BLACK;
 			(*state)++;
 			g_machine_state.mode = BUSY;
@@ -605,7 +677,7 @@ void HandWashingMode_nostop(void) {
 		break;
 	case 1:
 		g_machine_state.mode = HAND_WASHING;
-		O_SPOUT_ALK_PIN = ON;
+		O_SPOUT_ALK_PIN_SV4 = ON;
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_PUMP_ALK_PIN = ON;
 			handSensorLED(BLUE);
@@ -618,7 +690,7 @@ void HandWashingMode_nostop(void) {
 				g_timerSetting.t51_alkalineWaterSpoutingTime_s * 1000
 						- g_timerSetting.t54_overLapTime_ms)) {
 			O_PUMP_ALK_PIN = OFF;
-			O_SPOUT_ACID_PIN = ON;
+			O_SPOUT_ACID_PIN_SV3 = ON;
 			(*state)++;
 		}
 		break;
@@ -633,7 +705,7 @@ void HandWashingMode_nostop(void) {
 	case 4:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t54_overLapTime_ms - delayPump_ms)) {
-			O_SPOUT_ALK_PIN = OFF;
+			O_SPOUT_ALK_PIN_SV4 = OFF;
 			(*state)++;
 		}
 		break;
@@ -643,21 +715,21 @@ void HandWashingMode_nostop(void) {
 						- g_timerSetting.t54_overLapTime_ms)) {
 			O_PUMP_ACID_PIN = OFF;
 			handSensorLED(WHITE);
-			O_SPOUT_WATER_PIN = ON;
+			O_SPOUT_WATER_PIN_SV2 = ON;
 			sendToRasPi(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
 	case 6:
 		if (ns_delay_ms(tick, g_timerSetting.t54_overLapTime_ms)) {
-			O_SPOUT_ACID_PIN = OFF;
+			O_SPOUT_ACID_PIN_SV3 = OFF;
 			(*state)++;
 		}
 		break;
 	case 7:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t53_washingWaterSpoutingTime_s * 1000)) {
-			O_SPOUT_WATER_PIN = OFF;
+			O_SPOUT_WATER_PIN_SV2 = OFF;
 			handSensorLED(BLACK);
 			(*state)++;
 			g_machine_state.mode = BUSY;
@@ -684,7 +756,7 @@ void AcidWaterMode_nostop(void) {
 		*tick = g_systemTime;
 		break;
 	case 1:
-		O_SPOUT_ACID_PIN = ON;
+		O_SPOUT_ACID_PIN_SV3 = ON;
 		g_color = RED;
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
@@ -701,7 +773,7 @@ void AcidWaterMode_nostop(void) {
 		break;
 	case 3:
 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
-			O_SPOUT_ACID_PIN = OFF;
+			O_SPOUT_ACID_PIN_SV3 = OFF;
 			g_color = BLACK;
 			handSensorLED(g_color);
 			(*state)++;
@@ -725,7 +797,7 @@ void AlkalineWaterMode_nostop(void) {
 		*tick = g_systemTime;
 		break;
 	case 1:
-		O_SPOUT_ALK_PIN = ON;
+		O_SPOUT_ALK_PIN_SV4 = ON;
 		g_color = BLUE;
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
@@ -742,7 +814,7 @@ void AlkalineWaterMode_nostop(void) {
 		break;
 	case 3:
 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
-			O_SPOUT_ALK_PIN = OFF;
+			O_SPOUT_ALK_PIN_SV4 = OFF;
 			g_color = BLACK;
 			handSensorLED(g_color);
 			(*state)++;
@@ -761,7 +833,7 @@ void CallanCleaningMode_nostop(void) {
 					>= g_timerSetting.t61_curranCleaningIntervalTime_h)) {
 		g_callan_clear_flag = 1;
 		g_Tick.tickCustom[6] = g_Tick.tickCustom[7] = g_systemTime;
-		O_SPOUT_WATER_PIN = ON;
+		O_SPOUT_WATER_PIN_SV2 = ON;
 	}
 	if (g_callan_clear_flag) {
 		if (ns_delay_ms(&g_Tick.tickCustom[6], 500)) {
@@ -771,7 +843,7 @@ void CallanCleaningMode_nostop(void) {
 		if (ns_delay_ms(&g_Tick.tickCustom[7],
 				g_timerSetting.t62_callanWashSpoutingTime_s * 1000)) {
 			g_callan_clear_flag = 0;
-			O_SPOUT_WATER_PIN = OFF;
+			O_SPOUT_WATER_PIN_SV2 = OFF;
 			g_color = BLACK;
 			handSensorLED(g_color);
 		}
@@ -810,7 +882,7 @@ void main_loop_20211111(void) {
  */
 void electrolyticOperationON(void) {
 	//Electrolytic operation ON
-	O_SUPPLY_WATER_PIN = ON;
+	O_SUPPLY_WATER_PIN_SV1 = ON;
 	O_CVCC_ON_PIN = ON;
 	O_PUMP_SALT_PIN = ON; //SP1
 	g_electrolytic_flag = 1;
@@ -829,7 +901,7 @@ void electrolyticOperationOFF(void) {
 	O_CVCC_ON_PIN = OFF;
 	O_PUMP_SALT_PIN = OFF; //SP1
 	delay(5);
-	O_SUPPLY_WATER_PIN = OFF;
+	O_SUPPLY_WATER_PIN_SV1 = OFF;
 	g_electrolytic_flag = 0;
 }
 
@@ -900,14 +972,14 @@ void UpdateMachineStatus(void) {
 	g_io_status.refined.SaltLowLevel = I_SALT_L_PIN == I_ON ? 1 : 0;
 	g_io_status.refined.SaltHighLevel = I_SALT_H_PIN == I_ON ? 1 : 0;
 
-	g_io_status.refined.Valve.SV1 = O_SUPPLY_WATER_PIN;
-	g_io_status.refined.Valve.SV2 = O_SPOUT_WATER_PIN;
-	g_io_status.refined.Valve.SV3 = O_SPOUT_ACID_PIN;
-	g_io_status.refined.Valve.SV4 = O_SPOUT_ALK_PIN;
+	g_io_status.refined.Valve.SV1 = O_SUPPLY_WATER_PIN_SV1;
+	g_io_status.refined.Valve.SV2 = O_SPOUT_WATER_PIN_SV2;
+	g_io_status.refined.Valve.SV3 = O_SPOUT_ACID_PIN_SV3;
+	g_io_status.refined.Valve.SV4 = O_SPOUT_ALK_PIN_SV4;
 	g_io_status.refined.Valve.SV5 = g_io_status.refined.Valve.SV8 =
-	O_DRAIN_ACID_PIN;
+	O_DRAIN_ACID_PIN_SV7;
 	g_io_status.refined.Valve.SV6 = g_io_status.refined.Valve.SV9 =
-	O_DRAIN_ALK_PIN;
+	O_DRAIN_ALK_PIN_SV6;
 	g_io_status.refined.Valve.SV7 = O_NEUTRALIZE_PIN;
 
 	g_io_status.refined.Pump1 = O_PUMP_ACID_PIN;

@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_main.obj
 00000000                       17  #@   ../src/r_main.c
-00000000                       18  #@  compiled at Mon Dec 20 15:45:31 2021
+00000000                       18  #@  compiled at Mon Dec 20 17:26:58 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_rtc
 00000000                       21  	.EXTERN _g_timerSetting
@@ -202,7 +202,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000005 F6                   198  	clrw ax
 00000006 14                   199  	movw de, ax
 00000007 32F401               200  	movw bc, #0x01F4
-0000000A 300000               201  	movw ax, #LOWW(_g_Tick@1+0x00040)
+0000000A 300000               201  	movw ax, #LOWW(_g_Tick@1+0x00058)
 0000000D FC000000             202  	call !!_ns_delay_ms
 00000011 F7                   203  	clrw bc
 00000012 43                   204  	cmpw ax, bc
@@ -394,7 +394,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000000BF F6                   390  	clrw ax
 000000C0 14                   391  	movw de, ax
 000000C1 32C800               392  	movw bc, #0x00C8
-000000C4 300000               393  	movw ax, #LOWW(_g_Tick@1+0x00048)
+000000C4 300000               393  	movw ax, #LOWW(_g_Tick@1+0x00060)
 000000C7 FC000000             394  	call !!_ns_delay_ms
 000000CB F7                   395  	clrw bc
 000000CC 43                   396  	cmpw ax, bc
@@ -438,9 +438,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000000F7                      434  	;***      171 :     		g_Tick.tickCustom[1] = g_systemTime;
 000000F7                      435  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 171
 000000F7 AF0000               436  	movw ax, !LOWW(_g_systemTime+0x00002)
-000000FA BF0000               437  	movw !LOWW(_g_Tick@1+0x0004E), ax
+000000FA BF0000               437  	movw !LOWW(_g_Tick@1+0x00066), ax
 000000FD AF0000               438  	movw ax, !LOWW(_g_systemTime)
-00000100 BF0000               439  	movw !LOWW(_g_Tick@1+0x0004C), ax
+00000100 BF0000               439  	movw !LOWW(_g_Tick@1+0x00064), ax
 00000103                      440  .BB@LABEL@3_9:	; if_break_bb39
 00000103                      441  	;***      172 :     	}
 00000103                      442  	;***      173 : 
@@ -481,13 +481,13 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000127 F6                   477  	clrw ax
 00000128 14                   478  	movw de, ax
 00000129 3260EA               479  	movw bc, #0xEA60
-0000012C 300000               480  	movw ax, #LOWW(_g_Tick@1+0x0004C)
+0000012C 300000               480  	movw ax, #LOWW(_g_Tick@1+0x00064)
 0000012F FC000000             481  	call !!_ns_delay_ms
 00000133 F7                   482  	clrw bc
 00000134 43                   483  	cmpw ax, bc
 00000135 DD00                 484  	bz $.BB@LABEL@3_25
 00000137                      485  .BB@LABEL@3_14:	; if_then_bb63
-00000137                      486  	;***      183 :     		if(O_SUPPLY_WATER_PIN == ON){
+00000137                      486  	;***      183 :     		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 00000137                      487  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 183
 00000137 8D01                 488  	mov a, 0xFFF01
 00000139 71FC                 489  	mov1 CY, a.7
@@ -532,7 +532,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000016C BF0000               528  	movw !LOWW(_g_TickKeeper@2+0x00002), ax
 0000016F                      529  .BB@LABEL@3_21:	; if_break_bb76
 0000016F                      530  	;***      189 : 			}
-0000016F                      531  	;***      190 : 			if(O_SPOUT_WATER_PIN == ON){
+0000016F                      531  	;***      190 : 			if(O_SPOUT_WATER_PIN_SV2 == ON){
 0000016F                      532  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 190
 0000016F 8D05                 533  	mov a, 0xFFF05
 00000171 71DC                 534  	mov1 CY, a.5
@@ -840,53 +840,53 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                      836  	.SECTION .bss,BSS
 00000000                      837  	.ALIGN 2
 00000000                      838  _g_Tick@1:
-00000000                      839  	.DS (104)
-00000068                      840  	.ALIGN 2
-00000068                      841  _g_TickKeeper@2:
-00000068                      842  	.DS (20)
-0000007C                      843  _g_e_status:
-0000007C                      844  	.DS (1)
-0000007D 00                   845  	.ALIGN 2
-0000007E                      846  _ret_number_setting:
-0000007E                      847  	.DS (38)
-000000A4                      848  _flow_p:
-000000A4                      849  	.DS (1)
-000000A5                      850  _salt_h_p:
-000000A5                      851  	.DS (1)
-000000A6                      852  _g_eeprom_wren:
-000000A6                      853  	.DS (1)
-000000A7                      854  _receive_data:
-000000A7                      855  	.DS (2)
-000000A9 00                   856  	.ALIGN 2
-000000AA                      857  _receive_setting:
-000000AA                      858  	.DS (38)
-000000D0                      859  _set:
-000000D0                      860  	.DS (1)
-000000D1 00                   861  	.ALIGN 2
-000000D2                      862  _rx_data:
-000000D2                      863  	.DS (12)
-000000DE                      864  	.ALIGN 2
-000000DE                      865  _data_f:
-000000DE                      866  	.DS (4)
-000000E2                      867  	.ALIGN 2
-000000E2                      868  _data_f_test:
-000000E2                      869  	.DS (4)
-000000E6                      870  	.ALIGN 2
-000000E6                      871  _g_control_buffer:
-000000E6                      872  	.DS (6)
-000000EC                      873  _handsensor_status:
-000000EC                      874  	.DS (1)
-000000ED                      875  _g_handsensor_status:
-000000ED                      876  	.DS (2)
-000000EF                      877  _rec_buf:
-000000EF                      878  	.DS (12)
-000000FB                      879  _g_crc:
-000000FB                      880  	.DS (8)
-00000103 00                   881  	.ALIGN 2
-00000104                      882  _g_crc_32:
-00000104                      883  	.DS (32)
-00000124                      884  _rx_count:
-00000124                      885  	.DS (1)
+00000000                      839  	.DS (128)
+00000080                      840  	.ALIGN 2
+00000080                      841  _g_TickKeeper@2:
+00000080                      842  	.DS (20)
+00000094                      843  _g_e_status:
+00000094                      844  	.DS (1)
+00000095 00                   845  	.ALIGN 2
+00000096                      846  _ret_number_setting:
+00000096                      847  	.DS (38)
+000000BC                      848  _flow_p:
+000000BC                      849  	.DS (1)
+000000BD                      850  _salt_h_p:
+000000BD                      851  	.DS (1)
+000000BE                      852  _g_eeprom_wren:
+000000BE                      853  	.DS (1)
+000000BF                      854  _receive_data:
+000000BF                      855  	.DS (2)
+000000C1 00                   856  	.ALIGN 2
+000000C2                      857  _receive_setting:
+000000C2                      858  	.DS (38)
+000000E8                      859  _set:
+000000E8                      860  	.DS (1)
+000000E9 00                   861  	.ALIGN 2
+000000EA                      862  _rx_data:
+000000EA                      863  	.DS (12)
+000000F6                      864  	.ALIGN 2
+000000F6                      865  _data_f:
+000000F6                      866  	.DS (4)
+000000FA                      867  	.ALIGN 2
+000000FA                      868  _data_f_test:
+000000FA                      869  	.DS (4)
+000000FE                      870  	.ALIGN 2
+000000FE                      871  _g_control_buffer:
+000000FE                      872  	.DS (6)
+00000104                      873  _handsensor_status:
+00000104                      874  	.DS (1)
+00000105                      875  _g_handsensor_status:
+00000105                      876  	.DS (2)
+00000107                      877  _rec_buf:
+00000107                      878  	.DS (12)
+00000113                      879  _g_crc:
+00000113                      880  	.DS (8)
+0000011B 00                   881  	.ALIGN 2
+0000011C                      882  _g_crc_32:
+0000011C                      883  	.DS (32)
+0000013C                      884  _rx_count:
+0000013C                      885  	.DS (1)
 00000000                      886  	.SECTION .data,DATA
 00000000                      887  	.ALIGN 2
 00000000                      888  _g_error:
@@ -924,7 +924,7 @@ Attr     Size                Name
 
 TEXTF               637 (0000027D) .textf
 DATA                 26 (0000001A) .data
-BSS                 293 (00000125) .bss
+BSS                 317 (0000013D) .bss
 
 Command Line Parameter
 Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl000\r_main.asm.cmd 

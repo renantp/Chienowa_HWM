@@ -147,7 +147,7 @@ void main(void)
     g_pre_color = BLUE;
     handSensorLED(BLACK);
 //    g_machine_state.mode = INDIE; // Set as indie-mode
-
+    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 5000;
     main_init_20211111();
 
     while (1U)
@@ -180,14 +180,14 @@ void main(void)
     	}
     	flow_p = I_FLOW_PLUSE_PIN == 1? 1: 0;
     	if(ns_delay_ms(&g_Tick.tickCustom[1], 60000)){
-    		if(O_SUPPLY_WATER_PIN == ON){
+    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 				g_TickKeeper.SV1_ON_minutes++;
 				g_TickKeeper.SV1_OFF_minutes = 0;
 			}else{
 				g_TickKeeper.SV1_OFF_minutes++;
 				g_TickKeeper.SV1_ON_minutes = 0;
 			}
-			if(O_SPOUT_WATER_PIN == ON){
+			if(O_SPOUT_WATER_PIN_SV2 == ON){
 				g_TickKeeper.SV2_ON_minutes++;
 				g_TickKeeper.SV2_OFF_minutes = 0;
 			}else{

@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Mon Dec 20 15:45:31 2021
+#@  compiled at Mon Dec 20 17:26:58 2021
 
 	.EXTERN _g_rtc
 	.EXTERN _g_timerSetting
@@ -198,7 +198,7 @@ _nostop_checkHandSensor:
 	clrw ax
 	movw de, ax
 	movw bc, #0x01F4
-	movw ax, #LOWW(_g_Tick@1+0x00040)
+	movw ax, #LOWW(_g_Tick@1+0x00058)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
@@ -390,7 +390,7 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0x00C8
-	movw ax, #LOWW(_g_Tick@1+0x00048)
+	movw ax, #LOWW(_g_Tick@1+0x00060)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
@@ -434,9 +434,9 @@ _main:
 	;***      171 :     		g_Tick.tickCustom[1] = g_systemTime;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 171
 	movw ax, !LOWW(_g_systemTime+0x00002)
-	movw !LOWW(_g_Tick@1+0x0004E), ax
+	movw !LOWW(_g_Tick@1+0x00066), ax
 	movw ax, !LOWW(_g_systemTime)
-	movw !LOWW(_g_Tick@1+0x0004C), ax
+	movw !LOWW(_g_Tick@1+0x00064), ax
 .BB@LABEL@3_9:	; if_break_bb39
 	;***      172 :     	}
 	;***      173 : 
@@ -477,13 +477,13 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0xEA60
-	movw ax, #LOWW(_g_Tick@1+0x0004C)
+	movw ax, #LOWW(_g_Tick@1+0x00064)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
 	bz $.BB@LABEL@3_25
 .BB@LABEL@3_14:	; if_then_bb63
-	;***      183 :     		if(O_SUPPLY_WATER_PIN == ON){
+	;***      183 :     		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 183
 	mov a, 0xFFF01
 	mov1 CY, a.7
@@ -528,7 +528,7 @@ _main:
 	movw !LOWW(_g_TickKeeper@2+0x00002), ax
 .BB@LABEL@3_21:	; if_break_bb76
 	;***      189 : 			}
-	;***      190 : 			if(O_SPOUT_WATER_PIN == ON){
+	;***      190 : 			if(O_SPOUT_WATER_PIN_SV2 == ON){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 190
 	mov a, 0xFFF05
 	mov1 CY, a.5
@@ -836,7 +836,7 @@ _R_MAIN_UserInit:
 	.SECTION .bss,BSS
 	.ALIGN 2
 _g_Tick@1:
-	.DS (104)
+	.DS (128)
 	.ALIGN 2
 _g_TickKeeper@2:
 	.DS (20)

@@ -49,14 +49,14 @@ extern uint8_t rx_count;
 
 #define O_HS_IDA_PIN	(P1_bit.no5)
 #define O_HS_ICL_PIN	(P1_bit.no6)
-#define O_SUPPLY_WATER_PIN (P1_bit.no7) // Valve SV1
+#define O_SUPPLY_WATER_PIN_SV1 (P1_bit.no7) // Valve SV1
 
 #define O_CTRL_OUT_PIN	(P3_bit.no1)
 
 #define I_SALT_LID_PIN	(P5_bit.no2) // Cap salt tank sensor
 #define I_SALT_H_PIN 		(P5_bit.no3) // High level salt sensor FL8
 #define I_SALT_L_PIN 		(P5_bit.no4) // Low level salt sensor FL7
-#define O_SPOUT_WATER_PIN	(P5_bit.no5) // Valve SV2
+#define O_SPOUT_WATER_PIN_SV2	(P5_bit.no5) // Valve SV2
 
 #define O_PUMP_SALT_PIN	(P6_bit.no0) // Pump SP
 #define O_PUMP_ALK_PIN	(P6_bit.no1) // Pump P2
@@ -64,8 +64,8 @@ extern uint8_t rx_count;
 #define O_PUMP_PRESS_PIN	(P6_bit.no3) // Pressurized Pump (J37)
 #define O_ALARM_OUT_PIN	(P6_bit.no4)
 #define O_NEUTRALIZE_PIN	(P6_bit.no5)
-#define O_DRAIN_ALK_PIN	(P6_bit.no6) // Valve SV6
-#define O_DRAIN_ACID_PIN	(P6_bit.no7) // Valve SV7
+#define O_DRAIN_ALK_PIN_SV6	(P6_bit.no6) // Valve SV6
+#define O_DRAIN_ACID_PIN_SV7	(P6_bit.no7) // Valve SV7
 
 #define I_ALKALI_L_PIN	(P0_bit.no5) // Low level Alkali sensor FL4
 #define I_ALKALI_M_PIN	(P0_bit.no6) // Medium level Alkali sensor FL5
@@ -75,8 +75,8 @@ extern uint8_t rx_count;
 #define I_ACID_H_PIN		(P7_bit.no3) // High level Acid sensor FL3
 #define I_HS_OCL_PIN		(P7_bit.no4) // HandSensor (Gesture) Clock Pin
 #define I_HS_ODA_PIN		(P7_bit.no5) // HandSensor (Gesture) Data pin
-#define O_SPOUT_ACID_PIN	(P7_bit.no6) // Valve SV3
-#define O_SPOUT_ALK_PIN	(P7_bit.no7) // Valve SV4
+#define O_SPOUT_ACID_PIN_SV3	(P7_bit.no6) // Valve SV3
+#define O_SPOUT_ALK_PIN_SV4	(P7_bit.no7) // Valve SV4
 
 #define O_CVCC_ON_PIN		(P14_bit.no2) // CVCC On
 #define I_CVCC_ALARM_IN	(P0_bit.no4)
@@ -88,8 +88,8 @@ extern uint8_t rx_count;
 #define O_RST_LAN_PIN		(P4_bit.no1)
 #define I_INT_LAN_PIN		(P13_bit.no7)
 
-#define OPTION_1_PIN	(P11_bit.no0) //SV8
-#define OPTION_2_PIN	(P11_bit.no1) //SV9
+#define OPTION_1_PIN_SV8	(P11_bit.no0) //SV8
+#define OPTION_2_PIN_SV9	(P11_bit.no1) //SV9
 #define OPTION_3_PIN	(P14_bit.no6)
 #define OPTION_4_PIN	(P14_bit.no7)
 #define OPTION_5_PIN	(P10_bit.no0)
@@ -117,10 +117,10 @@ extern struct Timer_Setting_s{
 	uint32_t t62_callanWashSpoutingTime_s;
 	char crc;
 
-	uint32_t t26_onDelayLowLevel_s;
-	uint32_t t27_onDelayMediumLevel_s;
+	uint32_t t26_onDelayEmptyLevel_s;
+	uint32_t t27_onDelayLowLevel_s;
 	uint32_t t28_onDelayHighLevel_s;
-	uint32_t t30_offDelayLowLevel_s;
+	uint32_t t30_offDelayEmptyLevel_s;
 	uint32_t t31_saltLowLevelDelay_s;
 	uint32_t t32_saltHighLevelDelay_s;
 	uint32_t t55_waterDischargeDelay_s;
@@ -220,6 +220,8 @@ static struct Tick_s{
 	uint32_t tickVoltage3Check;
 	uint32_t tickVoltageLowCheck;
 	uint32_t tickCurrentCheck;
+	uint32_t tickAcidLevel[3];
+	uint32_t tickAlkalineLevel[3];
 	uint32_t tickHandSensor[2];
 	uint32_t tickCustom[8]; //Use: 6,7 in Callan
 }g_Tick;
