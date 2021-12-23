@@ -101,33 +101,23 @@ extern uint8_t rx_count;
 #define FLOW_PULSE_PIN	(P0_bit.no1)
 
 extern struct Timer_Setting_s{
+	uint32_t t1_initialWaterDrainageOperation_s;
 	uint32_t t2_flowSensorStartTime_s; // 4 byte
 	uint32_t t3_flowSensorMonitorTime_s; // 4 byte
+	uint32_t t4_electrolysisOperationStart_s;
+	uint32_t t5_electrolysisStopDelay_s;
 	uint32_t t6_drainageOffTime_h; // 4 byte
+	uint32_t t7_powerOnPreparation_s;
+	uint32_t t8_flowRateAdjustmentRelease_s;
+	uint32_t t9_currentAdjustmentRelease_s;
+	uint32_t t10_electrolysisCurrentAlarmSpecified_s;
 	uint32_t t11_overVoltage1Time_s; // 4 byte
 	uint32_t t12_overVoltage2Time_s;
 	uint32_t t13_overVoltage3Time_s;
 	uint32_t t14_lowVoltageStartTime_s;
 	uint32_t t15_lowVoltageDelayTime_s;
-	uint32_t t17_solenoidLeakageStartTime_s;
-	uint32_t t51_alkalineWaterSpoutingTime_s;
-	uint32_t t52_acidWaterSpoutingTime_s;
-	uint32_t t53_washingWaterSpoutingTime_s;
-	uint32_t t54_overLapTime_ms;
-	uint32_t t56_acidWaterDownTime_s;
-	uint32_t t59_alkalineWaterDownTime_s;
-	uint32_t t61_curranCleaningIntervalTime_h;
-	uint32_t t62_callanWashSpoutingTime_s;
-	char crc;
-
-	uint32_t t1_initialWaterDrainageOperation_s;
-	uint32_t t4_electrolysisOperationStart_s;
-	uint32_t t5_electrolysisStopDelay_s;
-	uint32_t t7_powerOnPreparation_s;
-	uint32_t t8_flowRateAdjustmentRelease_s;
-	uint32_t t9_currentAdjustmentRelease_s;
-	uint32_t t10_electrolysisCurrentAlarmSpecified_s;
 	uint32_t t16_currentMonitoringStart_s;
+	uint32_t t17_solenoidLeakageStartTime_s;
 	uint32_t t18_fullWaterMonitoringStart_h;
 	uint32_t t19_waterFilterAlarm_h;
 	uint32_t t20_waterFilterAlarmIgnore_h;
@@ -137,7 +127,16 @@ extern struct Timer_Setting_s{
 	uint32_t t30_offDelayEmptyLevel_s;
 	uint32_t t31_saltLowLevelDelay_s;
 	uint32_t t32_saltHighLevelDelay_s;
+	uint32_t t51_alkalineWaterSpoutingTime_s;
+	uint32_t t52_acidWaterSpoutingTime_s;
+	uint32_t t53_washingWaterSpoutingTime_s;
+	uint32_t t54_overLapTime_ms;
 	uint32_t t55_waterDischargeDelay_s;
+	uint32_t t56_acidWaterDownTime_s;
+	uint32_t t59_alkalineWaterDownTime_s;
+	uint32_t t61_curranCleaningIntervalTime_h;
+	uint32_t t62_callanWashSpoutingTime_s;
+	char crc;
 }g_timerSetting;
 extern struct Number_Setting_s{
 	float upperVoltage1;
@@ -321,7 +320,7 @@ extern void callAlarm(int _error);
 
 void overVoltage1Error(void);
 
-extern uint8_t g_rx_data[4*60];
+extern uint8_t g_rx_data[4*40];
 union byte_to_float{
 	struct{
 		uint8_t b[4];
