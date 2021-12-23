@@ -32,6 +32,8 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_serial.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "r_cg_wdt.h"
+#include "main.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -84,16 +86,17 @@ volatile uint8_t send_response_flag, send_response_time_flag, send_response_numb
 ,send_respone_status_flag, recived_number_setting_flag;
 volatile struct Communicaition_flag_s commnunication_flag;
 volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end, g_uart1_send, g_uart2_sendend, g_uart2_receive;
-uint8_t g_rx_data[72];
+uint8_t g_rx_data[4*40];
+uint8_t g_uart3_rx_data[8];
 volatile uint8_t g_uart2_fault;
 volatile uint8_t g_uart3_sendend;
 uint8_t isCommand(uint8_t *data){
-	if(data[1] == NEXT_ANIMATION)
+	if((data[0] == H_SET)&&(data[1] == NEXT_ANIMATION))
 		return 0;
 	switch ((enum UART_header_e)*data) {
-		case H_ALARM:
-			commnunication_flag.send_response_flag = 1;
-			break;
+//		case H_ALARM:
+//			commnunication_flag.send_response_flag = 1;
+//			break;
 		case H_CLEAR:
 			commnunication_flag.send_response_flag = 1;
 			break;
@@ -438,36 +441,28 @@ static void r_uart2_callback_receiveend(void)
 //	R_UART2_Start();
 
 	R_UART2_Receive(g_rx_data, 6);
-	isCommand(g_rx_data);
 	commnunication_flag.recived_time_setting_flag = commnunication_flag.recived_time_setting_flag == 1 ? 2: commnunication_flag.recived_time_setting_flag;
 	commnunication_flag.recived_number_setting_flag = commnunication_flag.recived_number_setting_flag == 1 ? 2: commnunication_flag.recived_number_setting_flag;
-	if(1){
-		g_uart2_fault = 0;
-		if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_TIME)){
+	if(isCommand(g_rx_data)){
+		if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_TIME)){
 			commnunication_flag.send_response_time_flag = 1;
-//			g_timerSetting.t51++;
-		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == SAVE_TIME)){
-			R_UART2_Receive(g_rx_data, 69);
+		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == SAVE_TIME)){
+			R_UART2_Receive(g_rx_data, timeSettingSize);
 			commnunication_flag.recived_time_setting_flag = 1;
-		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_MACHINE_STATUS)){
+		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_MACHINE_STATUS)){
 			commnunication_flag.send_respone_status_flag = 1;
-		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_NUMBER)){
+		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_NUMBER)){
 			commnunication_flag.send_response_number_flag = 1;
-		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == SAVE_NUMBER)){
-			R_UART2_Receive(g_rx_data, 33);
+		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == SAVE_NUMBER)){
+			R_UART2_Receive(g_rx_data, numberSettingSize);
 			commnunication_flag.recived_number_setting_flag = 1;
+		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == WASHING_MODE)){
+			commnunication_flag.send_response_mode_flag = 1;
+//			commnunication_flag.send_response_flag = 0;
 		}
-//		if((g_rx_data[0] == H_SET)&(g_rx_data[1] == READ_NUMBER)){
-//			R_UART2_Receive(g_rx_data, sizeof(struct Number_Setting_s)-1);
-//		}else if((g_rx_data[0] == H_SET)&(g_rx_data[1] == READ_TIME)){
-//			R_UART2_Receive(g_rx_data, sizeof(struct Timer_Setting_s)-1);
-//		}else if((g_rx_data[0] == H_READ)&(g_rx_data[1] == READ_TIME)){
-//			g_timerSetting.crc = crc8_1((uint8_t *)&g_timerSetting, 68);
-//			R_UART2_Send((uint8_t *)&g_timerSetting, 69);
-//			g_timerSetting.t51++;
-//		}
-	}else{
+	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
 		R_UART2_Receive(g_rx_data, 6);
+	}else{
 		g_uart2_fault = 1;
 	}
 	g_uart2_receive++;
@@ -580,11 +575,11 @@ static void __near r_uart3_interrupt_send(void)
 static void r_uart3_callback_receiveend(void)
 {
     /* Start user code. Do not edit comment generated here */
-	R_UART3_Receive(rec_buf, 6);
-	if((rec_buf[0]==H_SET)|(rec_buf[0]==SAVE_TIME)){
-		rec_buf[2] = 0xff;
-		O_RS485_MODE_PIN = 1U;
-		R_UART3_Send(rec_buf, 6);
+	R_UART3_Receive(g_uart3_rx_data, 7);
+	if(g_uart3_rx_data[0] == 1){
+		if((rs485_rx_p[0] == H_READ) && (rs485_rx_p[1] == READ_TIME)){
+			commnunication_flag.rs485_send_watersolfner_response_flag = 1;
+		}
 	}
     /* End user code. Do not edit comment generated here */
 }

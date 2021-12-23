@@ -5,6 +5,10 @@ src/r_cg_serial_user.obj src/r_cg_serial_user.d: D:\Chieniwa\E2_Studio\ControlPC
 D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate\iodefine.h:
 src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/r_cg_serial.h
 ../src/r_cg_serial.h:
+src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/r_cg_wdt.h
+../src/r_cg_wdt.h:
+src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/main.h
+../src/main.h:
 src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/crc8.h

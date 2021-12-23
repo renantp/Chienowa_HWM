@@ -103,7 +103,6 @@ uint8_t readHS(void){
 }
 uint8_t this_size = sizeof(g_io_status);
 uint8_t this_size_2 = sizeof(union IO_Status_u);
-uint8_t rec_buf[12];
 uint8_t send_buf[7] = {8,1,2,3,4,5,6};
 char g_crc[8];
 uint32_t g_crc_32[8];
@@ -126,58 +125,79 @@ void main(void)
     /* Start user code. Do not edit comment generated here */
 
     EEPROM_Init(&g_csi_rev_end, NONE_BLOCK);
-//    setting_default();
-    EE_SPI_Read((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
-    EE_SPI_Read((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
-    g_rtc.hour = 10;
-    g_rtc.sec = 2;
-    R_RTC_Set_CounterValue(g_rtc);
-    R_RTC_Start();
+    EE_SPI_Read((uint8_t *)&g_numberSetting, NUMBER_SETTING_ADDRESS, numberSettingSize);
+    EE_SPI_Read((uint8_t *)&g_timerSetting, TIME_SETTING_ADDRESS, timeSettingSize);
+    _settingNumber = g_numberSetting;
+    _settingTime = g_timerSetting;
     R_UART2_Receive(g_rx_data, 6);
-//    Test nhan
     O_RS485_MODE_PIN = 0U;
-    R_UART3_Receive(rec_buf, 6);
-
+    R_UART3_Receive(g_uart3_rx_data, 7);
 //    Test gui
 //    O_RS485_MODE_PIN = 1U;
-//    delay_ms(10);
 //    R_UART3_Send(send_buf, 7);
     EEPROM_PROTECT_EN();
 
     g_pre_color = BLUE;
     handSensorLED(BLACK);
 //    g_machine_state.mode = INDIE; // Set as indie-mode
-    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 5000;
-    main_init_20211111();
+    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 2000;
+    g_timerSetting.t55_waterDischargeDelay_s = 10;
+    g_machine_mode = HAND_WASHING;
+    sendToRasPi(H_SET, OK_ALL, 0x0);
+//    main_init_20211111();
 
+    //Test
+    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
+    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
+    g_timerSetting.t52_acidWaterSpoutingTime_s = 6;
+    uint8_t wts = 0;
+    uint32_t my_tick;
     while (1U)
     {
     	RaspberryResponse_nostop();
-
-
+    	main_loop_20211111();
 
     	handSensorLED(g_color);
 		UpdateMachineStatus();
-//--------------------------------- Testing code---------------------------------------------------------------
-    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
-    		P6_bit.no3 = ~P6_bit.no3;
-    	}
-    	if((g_rx_data[0] == H_SET)&(g_rx_data[1] == OK_USER)){
-    		g_machine_state.user = 1;
-    	}
-    	if(g_machine_state.user == 1){
-    		HandWashingMode_nostop();
-    	}else{
-    		g_Tick.tickCustom[1] = g_systemTime;
-    	}
-
-    	// Check
     	if(g_uart2_fault == 1){
     		R_UART2_Stop();
     		delay_ms(10);
     		R_UART2_Start();
     		g_uart2_fault = 0;
     	}
+    	if(commnunication_flag.rs485_send_watersolfner_response_flag){
+    		sendToWaterSolfner(0xff, 82, 2, 12);
+    		rx_count++;
+    		sendToWaterSolfner(1, 82, 24,(uint32_t) 1);
+			rx_count++;
+			sendToWaterSolfner(0xff, 82, 24,(uint32_t) 1);
+			rx_count++;
+    		wts = 1;
+			commnunication_flag.rs485_send_watersolfner_response_flag = 0;
+    	}
+    	if((g_io_status.refined.Valve.SV1 != g_pre_io_status.refined.Valve.SV1) && (g_io_status.refined.Valve.SV1 == ON)){
+    		sendToWaterSolfner(1, 82, 24, g_io_status.refined.Valve.SV1 == 1? 0x01:0x00);
+		}
+    	if(wts == 1){
+    		if(ns_delay_ms(&my_tick, 5000)){
+    			wts = 0;
+    		}
+    	}else{
+    		my_tick = g_systemTime;
+    	}
+    	g_io_status = g_pre_io_status;
+//--------------------------------- Testing code---------------------------------------------------------------
+    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
+//    		P6_bit.no3 = ~P6_bit.no3;
+//    		O_SUPPLY_WATER_PIN_SV1 = ~O_SUPPLY_WATER_PIN_SV1;
+    	}
+//    	if(g_machine_state.user == 1){
+//    		HandWashingMode_nostop();
+//    	}else{
+//    		g_Tick.tickCustom[1] = g_systemTime;
+//    	}
+
+    	// Check
     	flow_p = I_FLOW_PLUSE_PIN == 1? 1: 0;
     	if(ns_delay_ms(&g_Tick.tickCustom[1], 60000)){
     		if(O_SUPPLY_WATER_PIN_SV1 == ON){
@@ -196,12 +216,6 @@ void main(void)
 			}
     	}
     	if(ns_delay_ms(&g_Tick.tick1s, 1000)){
-
-//    		send_buf[1]++;
-//    		R_UART3_Send(send_buf, 7);
-//    		R_UART3_Receive(rec_buf, 7);
-//    		O_CTRL_OUT_PIN = led_st&0x01;
-//    		O_SPOUT_WATER_PIN = led_st&0x01;
 
     		led_st = led_st == 0?0xff:0x00;
     	    uint8_t state = g_uart2_sendend;
@@ -266,14 +280,15 @@ void main(void)
     		}
     	}
 //--------------------------------End testing code---------------------------------------------------------
-    	if(g_machine_state.mode == BUSY){
-    		g_machine_state.user = 0;
-    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, 800)){
-    			g_machine_state.mode = INDIE;
-    		}
-    	}else{
-    		g_Tick.tickDebouceHandSensor = g_systemTime;
-    	}
+//    	if(g_machine_state.mode == BUSY){
+//    		g_machine_state.user = 0;
+//    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, g_timerSetting.t55_waterDischargeDelay_s*1000)){
+//    			g_machine_state.mode = INDIE;
+//    		}
+//    	}else{
+//    		g_Tick.tickDebouceHandSensor = g_systemTime;
+//    	}
+
 		if((g_machine_state.mode == WATER_WASHING)|(g_machine_state.mode == INDIE)){
 //			nostop_WaterWashingMode();
 		}

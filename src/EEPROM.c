@@ -63,7 +63,7 @@ void sEE_WriteDisable(void) {
  * @param num Number of bytes
  */
 void EE_SPI_Write(uint8_t *const pBuffer,
-		uint16_t addr, uint16_t num) {
+		uint16_t addr, uint32_t num) {
 	uint8_t page = num/32;
 	uint8_t max_page = page;
 	uint8_t rsvd = num%32;
@@ -115,7 +115,7 @@ void EE_SPI_Write(uint8_t *const pBuffer,
  * @param num Number if bytes to read
  */
 void EE_SPI_Read(uint8_t *const pBuffer,
-		uint16_t addr, uint16_t num){
+		uint16_t addr, uint32_t num){
 	uint8_t page = num/32;
 	uint8_t max_page = page;
 	uint8_t rsvd = num%32;

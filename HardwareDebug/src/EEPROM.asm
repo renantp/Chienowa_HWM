@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/EEPROM.obj
 #@   ../src/EEPROM.c
-#@  compiled at Mon Dec 20 17:26:30 2021
+#@  compiled at Thu Dec 23 17:24:03 2021
 
 	.EXTERN _g_csi_rev_end
 	.PUBLIC _eeprom_status
@@ -171,7 +171,7 @@ _sEE_WriteDisable:
 	pop hl
 	ret
 _EE_SPI_Write:
-	.STACK _EE_SPI_Write = 16
+	.STACK _EE_SPI_Write = 14
 	;***       57 : 	sEE_SendInstruction(command);
 	;***       58 : }
 	;***       59 : /*!
@@ -184,8 +184,8 @@ _EE_SPI_Write:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 65
 	push bc
 	push ax
-	subw sp, #0x08
-	;***       66 : 		uint16_t addr, uint16_t num) {
+	subw sp, #0x06
+	;***       66 : 		uint16_t addr, uint32_t num) {
 	;***       67 : 	uint8_t page = num/32;
 	;***       68 : 	uint8_t max_page = page;
 	;***       69 : 	uint8_t rsvd = num%32;
@@ -197,30 +197,32 @@ _EE_SPI_Write:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 72
 	movw ax, bc
 	mov !LOWW(_buf+0x00001), a
+	movw ax, [sp+0x0E]
+	movw de, ax
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 69
-	mov a, e
+	mov a, x
 	and a, #0x1F
 	mov [sp+0x02], a
 	movw ax, de
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 67
 	shrw ax, 0x05
-	movw [sp+0x06], ax
-	;***       73 : 	buf[2] = addr;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 73
 	mov a, x
 	mov [sp+0x04], a
+	;***       73 : 	buf[2] = addr;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 73
+	inc a
+	mov [sp+0x03], a
+	mov a, [sp+0x04]
+.BB@LABEL@5_1:	; entry
 	dec a
 	mov [sp+0x01], a
-	clrb x
-	mov a, x
-.BB@LABEL@5_1:	; entry
-	mov [sp+0x03], a
 	mov a, c
 	mov !LOWW(_buf+0x00002), a
-	mov a, [sp+0x04]
+	mov a, [sp+0x03]
 	;***       74 : 	while(page != 0){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 74
-	cmp a, x
+	dec a
+	mov [sp+0x03], a
 	bz $.BB@LABEL@5_10
 .BB@LABEL@5_2:	; bb23
 	;***       75 : 		do{
@@ -246,7 +248,7 @@ _EE_SPI_Write:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 82
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	addw ax, bc
 	movw de, ax
 	mov a, [sp+0x00]
@@ -291,29 +293,24 @@ _EE_SPI_Write:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 90
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x06]
-	clrb a
+	mov a, [sp+0x04]
+	shrw ax, 8+0x00000
 	subw ax, bc
 	movw bc, ax
 	shlw bc, 0x05
-	movw ax, [sp+0x0A]
+	movw ax, [sp+0x08]
 	addw ax, bc
-	movw [sp+0x0A], ax
+	movw [sp+0x08], ax
 	movw bc, ax
 	;***       92 : 		buf[1] = addr>>8;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 92
 	mov !LOWW(_buf+0x00001), a
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	;***       93 : 		buf[2] = addr;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 93
 	addw ax, #0x0020
-	movw [sp+0x08], ax
+	movw [sp+0x06], ax
 	mov a, [sp+0x01]
-	dec a
-	mov [sp+0x01], a
-	mov a, [sp+0x03]
-	inc a
-	mov x, a
 	br $.BB@LABEL@5_1
 .BB@LABEL@5_10:	; bb93
 	mov a, [sp+0x02]
@@ -339,7 +336,7 @@ _EE_SPI_Write:
 	;***      109 : 	}
 	;***      110 : }
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 110
-	addw sp, #0x0C
+	addw sp, #0x0A
 	ret
 .BB@LABEL@5_12:	; bb100
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 98
@@ -364,7 +361,7 @@ _EE_SPI_Write:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 103
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	addw ax, bc
 	movw de, ax
 	mov a, [sp+0x00]
@@ -392,10 +389,10 @@ _EE_SPI_Write:
 	add a, #0x03
 	mov c, a
 	movw ax, #LOWW(_buf)
-	addw sp, #0x0C
+	addw sp, #0x0A
 	br $!_EE_TransmitData
 _EE_SPI_Read:
-	.STACK _EE_SPI_Read = 16
+	.STACK _EE_SPI_Read = 14
 	;***      111 : /*!
 	;***      112 :  * Read data from EEPROM
 	;***      113 :  * @param pBuffer Pointer to read buffer
@@ -406,8 +403,8 @@ _EE_SPI_Read:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 117
 	push bc
 	push ax
-	subw sp, #0x08
-	;***      118 : 		uint16_t addr, uint16_t num){
+	subw sp, #0x06
+	;***      118 : 		uint16_t addr, uint32_t num){
 	;***      119 : 	uint8_t page = num/32;
 	;***      120 : 	uint8_t max_page = page;
 	;***      121 : 	uint8_t rsvd = num%32;
@@ -419,30 +416,32 @@ _EE_SPI_Read:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 124
 	movw ax, bc
 	mov !LOWW(_buf+0x00001), a
+	movw ax, [sp+0x0E]
+	movw de, ax
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 121
-	mov a, e
+	mov a, x
 	and a, #0x1F
 	mov [sp+0x02], a
 	movw ax, de
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 119
 	shrw ax, 0x05
-	movw [sp+0x06], ax
-	;***      125 : 	buf[2] = addr;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 125
 	mov a, x
 	mov [sp+0x04], a
+	;***      125 : 	buf[2] = addr;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 125
+	inc a
+	mov [sp+0x03], a
+	mov a, [sp+0x04]
+.BB@LABEL@6_1:	; entry
 	dec a
 	mov [sp+0x01], a
-	clrb x
-	mov a, x
-.BB@LABEL@6_1:	; entry
-	mov [sp+0x03], a
 	mov a, c
 	mov !LOWW(_buf+0x00002), a
-	mov a, [sp+0x04]
+	mov a, [sp+0x03]
 	;***      126 : 	while(page != 0){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 126
-	cmp a, x
+	dec a
+	mov [sp+0x03], a
 	bz $.BB@LABEL@6_6
 .BB@LABEL@6_2:	; bb23
 	;***      127 : 	//Wait until EEPROM Ready
@@ -468,7 +467,7 @@ _EE_SPI_Read:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 133
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	addw ax, bc
 	movw de, ax
 	mov a, [sp+0x00]
@@ -493,29 +492,24 @@ _EE_SPI_Read:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 137
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x06]
-	clrb a
+	mov a, [sp+0x04]
+	shrw ax, 8+0x00000
 	subw ax, bc
 	movw bc, ax
 	shlw bc, 0x05
-	movw ax, [sp+0x0A]
+	movw ax, [sp+0x08]
 	addw ax, bc
-	movw [sp+0x0A], ax
+	movw [sp+0x08], ax
 	movw bc, ax
 	;***      139 : 		buf[1] = addr>>8;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 139
 	mov !LOWW(_buf+0x00001), a
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	;***      140 : 		buf[2] = addr;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 140
 	addw ax, #0x0020
-	movw [sp+0x08], ax
+	movw [sp+0x06], ax
 	mov a, [sp+0x01]
-	dec a
-	mov [sp+0x01], a
-	mov a, [sp+0x03]
-	inc a
-	mov x, a
 	br $.BB@LABEL@6_1
 .BB@LABEL@6_6:	; bb75
 	mov a, [sp+0x02]
@@ -556,7 +550,7 @@ _EE_SPI_Read:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 148
 	shrw ax, 8+0x00000
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	addw ax, bc
 	movw de, ax
 	mov a, [sp+0x00]
@@ -571,7 +565,7 @@ _EE_SPI_Read:
 	;***      150 : 	}
 	;***      151 : }
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 151
-	addw sp, #0x0C
+	addw sp, #0x0A
 	ret
 _sEE_Block:
 	.STACK _sEE_Block = 4

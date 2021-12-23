@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/EEPROM.obj
 00000000                       17  #@   ../src/EEPROM.c
-00000000                       18  #@  compiled at Mon Dec 20 17:26:30 2021
+00000000                       18  #@  compiled at Thu Dec 23 17:24:03 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_csi_rev_end
 00000000                       21  	.PUBLIC _eeprom_status
@@ -175,7 +175,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000068 C6                   171  	pop hl
 00000069 D7                   172  	ret
 0000006A                      173  _EE_SPI_Write:
-0000006A                      174  	.STACK _EE_SPI_Write = 16
+0000006A                      174  	.STACK _EE_SPI_Write = 14
 0000006A                      175  	;***       57 : 	sEE_SendInstruction(command);
 0000006A                      176  	;***       58 : }
 0000006A                      177  	;***       59 : /*!
@@ -188,8 +188,8 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000006A                      184  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 65
 0000006A C3                   185  	push bc
 0000006B C1                   186  	push ax
-0000006C 2008                 187  	subw sp, #0x08
-0000006E                      188  	;***       66 : 		uint16_t addr, uint16_t num) {
+0000006C 2006                 187  	subw sp, #0x06
+0000006E                      188  	;***       66 : 		uint16_t addr, uint32_t num) {
 0000006E                      189  	;***       67 : 	uint8_t page = num/32;
 0000006E                      190  	;***       68 : 	uint8_t max_page = page;
 0000006E                      191  	;***       69 : 	uint8_t rsvd = num%32;
@@ -201,515 +201,509 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000072                      197  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 72
 00000072 13                   198  	movw ax, bc
 00000073 9F0000               199  	mov !LOWW(_buf+0x00001), a
-00000076                      200  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 69
-00000076 64                   201  	mov a, e
-00000077 5C1F                 202  	and a, #0x1F
-00000079 9802                 203  	mov [sp+0x02], a
-0000007B 15                   204  	movw ax, de
-0000007C                      205  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 67
-0000007C 315E                 206  	shrw ax, 0x05
-0000007E B806                 207  	movw [sp+0x06], ax
-00000080                      208  	;***       73 : 	buf[2] = addr;
-00000080                      209  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 73
-00000080 60                   210  	mov a, x
-00000081 9804                 211  	mov [sp+0x04], a
-00000083 91                   212  	dec a
-00000084 9801                 213  	mov [sp+0x01], a
-00000086 F0                   214  	clrb x
-00000087 60                   215  	mov a, x
-00000088                      216  .BB@LABEL@5_1:	; entry
-00000088 9803                 217  	mov [sp+0x03], a
-0000008A 62                   218  	mov a, c
-0000008B 9F0000               219  	mov !LOWW(_buf+0x00002), a
-0000008E 8804                 220  	mov a, [sp+0x04]
-00000090                      221  	;***       74 : 	while(page != 0){
-00000090                      222  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 74
-00000090 6148                 223  	cmp a, x
-00000092 DD00                 224  	bz $.BB@LABEL@5_10
-00000094                      225  .BB@LABEL@5_2:	; bb23
-00000094                      226  	;***       75 : 		do{
-00000094                      227  	;***       76 : 			rEE_Status();
-00000094                      228  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 76
-00000094 FE0000               229  	call $!_rEE_Status
-00000097                      230  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 75
-00000097 360000               231  	movw hl, #LOWW(_eeprom_status)
-0000009A 318300               232  	bt [hl].0, $.BB@LABEL@5_2
-0000009D                      233  .BB@LABEL@5_3:	; bb31
-0000009D                      234  	;***       77 : 		}while(eeprom_status.refined.RB == 1);
-0000009D                      235  	;***       78 : 		if(eeprom_status.refined.WEN == 0)
-0000009D                      236  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 78
-0000009D 319500               237  	bf [hl].1, $.BB@LABEL@5_8
-000000A0                      238  .BB@LABEL@5_4:	; bb31.bb39_crit_edge
-000000A0 F1                   239  	clrb a
-000000A1 9800                 240  	mov [sp+0x00], a
-000000A3                      241  .BB@LABEL@5_5:	; bb39
-000000A3                      242  	;***       79 : 				sEE_WriteEnable();
-000000A3                      243  	;***       80 : 
-000000A3                      244  	;***       81 : 		for(uint8_t i=0; i<32; i++){
-000000A3                      245  	;***       82 : 			buf[i+3] = p[i];
-000000A3                      246  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 82
-000000A3 318E                 247  	shrw ax, 8+0x00000
-000000A5 12                   248  	movw bc, ax
-000000A6 A808                 249  	movw ax, [sp+0x08]
-000000A8 03                   250  	addw ax, bc
-000000A9 14                   251  	movw de, ax
-000000AA 8800                 252  	mov a, [sp+0x00]
-000000AC 73                   253  	mov b, a
-000000AD 89                   254  	mov a, [de]
-000000AE 180000               255  	mov LOWW(_buf+0x00003)[b], a
-000000B1                      256  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 81
-000000B1 83                   257  	inc b
-000000B2 63                   258  	mov a, b
-000000B3 9800                 259  	mov [sp+0x00], a
-000000B5 4C20                 260  	cmp a, #0x20
-000000B7 DF00                 261  	bnz $.BB@LABEL@5_5
-000000B9                      262  .BB@LABEL@5_6:	; bb61
-000000B9                      263  	;***       83 : 		}
-000000B9                      264  	;***       84 : 		while(eeprom_status.refined.WEN == 0){
-000000B9                      265  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 84
-000000B9 360000               266  	movw hl, #LOWW(_eeprom_status)
-000000BC 319300               267  	bt [hl].1, $.BB@LABEL@5_9
-000000BF                      268  .BB@LABEL@5_7:	; bb59
-000000BF                      269  	;***       85 : 			rEE_Status();
-000000BF                      270  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 85
-000000BF FE0000               271  	call $!_rEE_Status
-000000C2 EF00                 272  	br $.BB@LABEL@5_6
-000000C4                      273  .BB@LABEL@5_8:	; if_then_bb
-000000C4                      274  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 79
-000000C4 FE0000               275  	call $!_sEE_WriteEnable
-000000C7 EF00                 276  	br $.BB@LABEL@5_4
-000000C9                      277  .BB@LABEL@5_9:	; bb69
-000000C9                      278  	;***       86 : 		}
-000000C9                      279  	;***       87 : 		EE_TransmitData(buf, 32+3);
-000000C9                      280  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 87
-000000C9 5223                 281  	mov c, #0x23
-000000CB 300000               282  	movw ax, #LOWW(_buf)
-000000CE FE0000               283  	call $!_EE_TransmitData
-000000D1                      284  	;***       88 : 		page--;
-000000D1                      285  	;***       89 : 		p+=32;
-000000D1                      286  	;***       90 : 		addr = addr + (uint16_t)0x0020*(max_page-page);
-000000D1                      287  	;***       91 : 		buf[0] = EEPROM_WRITE;
-000000D1                      288  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 91
-000000D1 CF000002             289  	mov !LOWW(_buf), #0x02
-000000D5 8801                 290  	mov a, [sp+0x01]
-000000D7                      291  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 90
-000000D7 318E                 292  	shrw ax, 8+0x00000
-000000D9 12                   293  	movw bc, ax
-000000DA A806                 294  	movw ax, [sp+0x06]
-000000DC F1                   295  	clrb a
-000000DD 23                   296  	subw ax, bc
-000000DE 12                   297  	movw bc, ax
-000000DF 315C                 298  	shlw bc, 0x05
-000000E1 A80A                 299  	movw ax, [sp+0x0A]
-000000E3 03                   300  	addw ax, bc
-000000E4 B80A                 301  	movw [sp+0x0A], ax
-000000E6 12                   302  	movw bc, ax
-000000E7                      303  	;***       92 : 		buf[1] = addr>>8;
-000000E7                      304  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 92
-000000E7 9F0000               305  	mov !LOWW(_buf+0x00001), a
-000000EA A808                 306  	movw ax, [sp+0x08]
-000000EC                      307  	;***       93 : 		buf[2] = addr;
-000000EC                      308  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 93
-000000EC 042000               309  	addw ax, #0x0020
-000000EF B808                 310  	movw [sp+0x08], ax
-000000F1 8801                 311  	mov a, [sp+0x01]
-000000F3 91                   312  	dec a
-000000F4 9801                 313  	mov [sp+0x01], a
-000000F6 8803                 314  	mov a, [sp+0x03]
-000000F8 81                   315  	inc a
-000000F9 70                   316  	mov x, a
-000000FA EF00                 317  	br $.BB@LABEL@5_1
-000000FC                      318  .BB@LABEL@5_10:	; bb93
-000000FC 8802                 319  	mov a, [sp+0x02]
-000000FE                      320  	;***       94 : 	}
-000000FE                      321  	;***       95 : 
-000000FE                      322  	;***       96 : 	if(rsvd != 0){
-000000FE                      323  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 96
-000000FE D1                   324  	cmp0 a
-000000FF DF00                 325  	bnz $.BB@LABEL@5_12
-00000101                      326  .BB@LABEL@5_11:	; return
-00000101                      327  	;***       97 : 		do{
-00000101                      328  	;***       98 : 			rEE_Status();
-00000101                      329  	;***       99 : 		}while(eeprom_status.refined.RB == 1);
-00000101                      330  	;***      100 : 		if(eeprom_status.refined.WEN == 0)
-00000101                      331  	;***      101 : 			sEE_WriteEnable();
-00000101                      332  	;***      102 : 		for(uint8_t i=0; i<rsvd; i++){
-00000101                      333  	;***      103 : 			buf[i+3] = p[i];
-00000101                      334  	;***      104 : 		}
-00000101                      335  	;***      105 : 		while(eeprom_status.refined.WEN == 0){
-00000101                      336  	;***      106 : 			rEE_Status();
-00000101                      337  	;***      107 : 		}
-00000101                      338  	;***      108 : 		EE_TransmitData(buf, rsvd+3);
-00000101                      339  	;***      109 : 	}
-00000101                      340  	;***      110 : }
-00000101                      341  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 110
-00000101 100C                 342  	addw sp, #0x0C
-00000103 D7                   343  	ret
-00000104                      344  .BB@LABEL@5_12:	; bb100
-00000104                      345  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 98
-00000104 FE0000               346  	call $!_rEE_Status
-00000107                      347  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 97
-00000107 360000               348  	movw hl, #LOWW(_eeprom_status)
-0000010A 318300               349  	bt [hl].0, $.BB@LABEL@5_12
-0000010D                      350  .BB@LABEL@5_13:	; bb109
-0000010D                      351  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 100
-0000010D 319500               352  	bf [hl].1, $.BB@LABEL@5_17
-00000110                      353  .BB@LABEL@5_14:	; bb109.bb132_crit_edge
-00000110 F1                   354  	clrb a
-00000111                      355  .BB@LABEL@5_15:	; bb109.bb132_crit_edge
-00000111 9800                 356  	mov [sp+0x00], a
-00000113 8802                 357  	mov a, [sp+0x02]
-00000115 70                   358  	mov x, a
-00000116 8800                 359  	mov a, [sp+0x00]
-00000118                      360  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 102
-00000118 6148                 361  	cmp a, x
-0000011A DD00                 362  	bz $.BB@LABEL@5_18
-0000011C                      363  .BB@LABEL@5_16:	; bb119
-0000011C                      364  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 103
-0000011C 318E                 365  	shrw ax, 8+0x00000
-0000011E 12                   366  	movw bc, ax
-0000011F A808                 367  	movw ax, [sp+0x08]
-00000121 03                   368  	addw ax, bc
-00000122 14                   369  	movw de, ax
-00000123 8800                 370  	mov a, [sp+0x00]
-00000125 73                   371  	mov b, a
-00000126 89                   372  	mov a, [de]
-00000127 180000               373  	mov LOWW(_buf+0x00003)[b], a
-0000012A 8800                 374  	mov a, [sp+0x00]
-0000012C 81                   375  	inc a
-0000012D EF00                 376  	br $.BB@LABEL@5_15
-0000012F                      377  .BB@LABEL@5_17:	; if_then_bb117
-0000012F                      378  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 101
-0000012F FE0000               379  	call $!_sEE_WriteEnable
-00000132 EF00                 380  	br $.BB@LABEL@5_14
-00000134                      381  .BB@LABEL@5_18:	; bb143
-00000134                      382  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 105
-00000134 360000               383  	movw hl, #LOWW(_eeprom_status)
-00000137 319300               384  	bt [hl].1, $.BB@LABEL@5_20
-0000013A                      385  .BB@LABEL@5_19:	; bb141
-0000013A                      386  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 106
-0000013A FE0000               387  	call $!_rEE_Status
-0000013D EF00                 388  	br $.BB@LABEL@5_18
-0000013F                      389  .BB@LABEL@5_20:	; bb151
-0000013F 8802                 390  	mov a, [sp+0x02]
-00000141                      391  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 108
-00000141 0C03                 392  	add a, #0x03
-00000143 72                   393  	mov c, a
-00000144 300000               394  	movw ax, #LOWW(_buf)
-00000147 100C                 395  	addw sp, #0x0C
-00000149 EE0000               396  	br $!_EE_TransmitData
-0000014C                      397  _EE_SPI_Read:
-0000014C                      398  	.STACK _EE_SPI_Read = 16
-0000014C                      399  	;***      111 : /*!
-0000014C                      400  	;***      112 :  * Read data from EEPROM
-0000014C                      401  	;***      113 :  * @param pBuffer Pointer to read buffer
-0000014C                      402  	;***      114 :  * @param addr Read EEPROM address (0x000 - 0xFFF)
-0000014C                      403  	;***      115 :  * @param num Number if bytes to read
-0000014C                      404  	;***      116 :  */
-0000014C                      405  	;***      117 : void EE_SPI_Read(uint8_t *const pBuffer,
-0000014C                      406  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 117
-0000014C C3                   407  	push bc
-0000014D C1                   408  	push ax
-0000014E 2008                 409  	subw sp, #0x08
-00000150                      410  	;***      118 : 		uint16_t addr, uint16_t num){
-00000150                      411  	;***      119 : 	uint8_t page = num/32;
-00000150                      412  	;***      120 : 	uint8_t max_page = page;
-00000150                      413  	;***      121 : 	uint8_t rsvd = num%32;
-00000150                      414  	;***      122 : 	uint8_t *p = pBuffer;
-00000150                      415  	;***      123 : 	buf[0] = EEPROM_READ;
-00000150                      416  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 123
-00000150 CF000003             417  	mov !LOWW(_buf), #0x03
-00000154                      418  	;***      124 : 	buf[1] = addr>>8;
-00000154                      419  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 124
-00000154 13                   420  	movw ax, bc
-00000155 9F0000               421  	mov !LOWW(_buf+0x00001), a
-00000158                      422  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 121
-00000158 64                   423  	mov a, e
-00000159 5C1F                 424  	and a, #0x1F
-0000015B 9802                 425  	mov [sp+0x02], a
-0000015D 15                   426  	movw ax, de
-0000015E                      427  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 119
-0000015E 315E                 428  	shrw ax, 0x05
-00000160 B806                 429  	movw [sp+0x06], ax
-00000162                      430  	;***      125 : 	buf[2] = addr;
-00000162                      431  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 125
-00000162 60                   432  	mov a, x
-00000163 9804                 433  	mov [sp+0x04], a
-00000165 91                   434  	dec a
-00000166 9801                 435  	mov [sp+0x01], a
-00000168 F0                   436  	clrb x
-00000169 60                   437  	mov a, x
-0000016A                      438  .BB@LABEL@6_1:	; entry
-0000016A 9803                 439  	mov [sp+0x03], a
-0000016C 62                   440  	mov a, c
-0000016D 9F0000               441  	mov !LOWW(_buf+0x00002), a
-00000170 8804                 442  	mov a, [sp+0x04]
-00000172                      443  	;***      126 : 	while(page != 0){
-00000172                      444  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 126
-00000172 6148                 445  	cmp a, x
-00000174 DD00                 446  	bz $.BB@LABEL@6_6
-00000176                      447  .BB@LABEL@6_2:	; bb23
-00000176                      448  	;***      127 : 	//Wait until EEPROM Ready
-00000176                      449  	;***      128 : 		do{
-00000176                      450  	;***      129 : 	    	rEE_Status();
-00000176                      451  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 129
-00000176 FE0000               452  	call $!_rEE_Status
-00000179                      453  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 128
-00000179 360000               454  	movw hl, #LOWW(_eeprom_status)
-0000017C 318300               455  	bt [hl].0, $.BB@LABEL@6_2
-0000017F                      456  .BB@LABEL@6_3:	; bb31
-0000017F                      457  	;***      130 : 	    }while(eeprom_status.refined.RB == 1);
-0000017F                      458  	;***      131 : 		EE_TransmitData(buf, 32+3);
-0000017F                      459  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 131
-0000017F 5223                 460  	mov c, #0x23
-00000181 300000               461  	movw ax, #LOWW(_buf)
-00000184 FE0000               462  	call $!_EE_TransmitData
-00000187 F1                   463  	clrb a
-00000188 9800                 464  	mov [sp+0x00], a
-0000018A                      465  .BB@LABEL@6_4:	; bb32
-0000018A                      466  	;***      132 : 		for(uint8_t i=0; i<32; i++){
-0000018A                      467  	;***      133 : 			p[i] = buf[i+3];
-0000018A                      468  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 133
-0000018A 318E                 469  	shrw ax, 8+0x00000
-0000018C 12                   470  	movw bc, ax
-0000018D A808                 471  	movw ax, [sp+0x08]
-0000018F 03                   472  	addw ax, bc
-00000190 14                   473  	movw de, ax
-00000191 8800                 474  	mov a, [sp+0x00]
-00000193 73                   475  	mov b, a
-00000194 090000               476  	mov a, LOWW(_buf+0x00003)[b]
-00000197 99                   477  	mov [de], a
-00000198                      478  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 132
-00000198 83                   479  	inc b
-00000199 63                   480  	mov a, b
-0000019A 9800                 481  	mov [sp+0x00], a
-0000019C 4C20                 482  	cmp a, #0x20
-0000019E DF00                 483  	bnz $.BB@LABEL@6_4
-000001A0                      484  .BB@LABEL@6_5:	; bb51
-000001A0                      485  	;***      134 : 		}
-000001A0                      486  	;***      135 : 		page--;
-000001A0                      487  	;***      136 : 		p+=32;
-000001A0                      488  	;***      137 : 		addr = addr + (uint16_t)0x0020*(max_page-page);
-000001A0                      489  	;***      138 : 		buf[0] = EEPROM_READ;
-000001A0                      490  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 138
-000001A0 CF000003             491  	mov !LOWW(_buf), #0x03
-000001A4 8801                 492  	mov a, [sp+0x01]
-000001A6                      493  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 137
-000001A6 318E                 494  	shrw ax, 8+0x00000
-000001A8 12                   495  	movw bc, ax
-000001A9 A806                 496  	movw ax, [sp+0x06]
-000001AB F1                   497  	clrb a
-000001AC 23                   498  	subw ax, bc
-000001AD 12                   499  	movw bc, ax
-000001AE 315C                 500  	shlw bc, 0x05
-000001B0 A80A                 501  	movw ax, [sp+0x0A]
-000001B2 03                   502  	addw ax, bc
-000001B3 B80A                 503  	movw [sp+0x0A], ax
-000001B5 12                   504  	movw bc, ax
-000001B6                      505  	;***      139 : 		buf[1] = addr>>8;
-000001B6                      506  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 139
-000001B6 9F0000               507  	mov !LOWW(_buf+0x00001), a
-000001B9 A808                 508  	movw ax, [sp+0x08]
-000001BB                      509  	;***      140 : 		buf[2] = addr;
-000001BB                      510  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 140
-000001BB 042000               511  	addw ax, #0x0020
-000001BE B808                 512  	movw [sp+0x08], ax
-000001C0 8801                 513  	mov a, [sp+0x01]
-000001C2 91                   514  	dec a
-000001C3 9801                 515  	mov [sp+0x01], a
-000001C5 8803                 516  	mov a, [sp+0x03]
-000001C7 81                   517  	inc a
-000001C8 70                   518  	mov x, a
-000001C9 EF00                 519  	br $.BB@LABEL@6_1
-000001CB                      520  .BB@LABEL@6_6:	; bb75
-000001CB 8802                 521  	mov a, [sp+0x02]
-000001CD                      522  	;***      141 : 	}
-000001CD                      523  	;***      142 : 	if(rsvd != 0){
-000001CD                      524  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 142
-000001CD D1                   525  	cmp0 a
-000001CE DD00                 526  	bz $.BB@LABEL@6_11
-000001D0                      527  .BB@LABEL@6_7:	; bb81
-000001D0                      528  	;***      143 : 		do{
-000001D0                      529  	;***      144 : 			rEE_Status();
-000001D0                      530  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 144
-000001D0 FE0000               531  	call $!_rEE_Status
-000001D3                      532  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 143
-000001D3 360000               533  	movw hl, #LOWW(_eeprom_status)
-000001D6 318300               534  	bt [hl].0, $.BB@LABEL@6_7
-000001D9                      535  .BB@LABEL@6_8:	; bb90
-000001D9 8802                 536  	mov a, [sp+0x02]
-000001DB                      537  	;***      145 : 		}while(eeprom_status.refined.RB == 1);
-000001DB                      538  	;***      146 : 		EE_TransmitData(buf, rsvd+3);
-000001DB                      539  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 146
-000001DB 0C03                 540  	add a, #0x03
-000001DD 72                   541  	mov c, a
-000001DE 300000               542  	movw ax, #LOWW(_buf)
-000001E1 FE0000               543  	call $!_EE_TransmitData
-000001E4 F1                   544  	clrb a
-000001E5                      545  .BB@LABEL@6_9:	; bb90
-000001E5 9800                 546  	mov [sp+0x00], a
-000001E7 8802                 547  	mov a, [sp+0x02]
-000001E9 70                   548  	mov x, a
-000001EA 8800                 549  	mov a, [sp+0x00]
-000001EC                      550  	;***      147 : 		for(uint8_t i=0; i<rsvd; i++){
-000001EC                      551  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 147
-000001EC 6148                 552  	cmp a, x
-000001EE DD00                 553  	bz $.BB@LABEL@6_11
-000001F0                      554  .BB@LABEL@6_10:	; bb95
-000001F0                      555  	;***      148 : 			p[i] = buf[i+3];
-000001F0                      556  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 148
-000001F0 318E                 557  	shrw ax, 8+0x00000
-000001F2 12                   558  	movw bc, ax
-000001F3 A808                 559  	movw ax, [sp+0x08]
-000001F5 03                   560  	addw ax, bc
-000001F6 14                   561  	movw de, ax
-000001F7 8800                 562  	mov a, [sp+0x00]
-000001F9 73                   563  	mov b, a
-000001FA 090000               564  	mov a, LOWW(_buf+0x00003)[b]
-000001FD 99                   565  	mov [de], a
-000001FE 8800                 566  	mov a, [sp+0x00]
-00000200 81                   567  	inc a
-00000201 EF00                 568  	br $.BB@LABEL@6_9
-00000203                      569  .BB@LABEL@6_11:	; return
-00000203                      570  	;***      149 : 		}
-00000203                      571  	;***      150 : 	}
-00000203                      572  	;***      151 : }
-00000203                      573  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 151
-00000203 100C                 574  	addw sp, #0x0C
-00000205 D7                   575  	ret
-00000206                      576  _sEE_Block:
-00000206                      577  	.STACK _sEE_Block = 4
-00000206                      578  	;***      152 : /*!
-00000206                      579  	;***      153 :  * Write disable block
-00000206                      580  	;***      154 :  * @param block: NONE_BLOCK, BLOCK_C00, BLOCK_800, BLOCK_ALL
-00000206                      581  	;***      155 :  */
-00000206                      582  	;***      156 : void sEE_Block(EEPROM_BLOCK_t block){
-00000206                      583  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 156
-00000206 3129                 584  	shl a, 0x02
-00000208                      585  	;***      157 : 	eeprom_status.refined.BP = block;
-00000208                      586  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 157
-00000208 5C0C                 587  	and a, #0x0C
-0000020A 70                   588  	mov x, a
-0000020B 51F3                 589  	mov a, #0xF3
-0000020D 5F0000               590  	and a, !LOWW(_eeprom_status)
-00000210 6108                 591  	add a, x
-00000212 9F0000               592  	mov !LOWW(_eeprom_status), a
-00000215                      593  	;***      158 : 	sEE_WriteStatusRegister(eeprom_status.raw);
-00000215                      594  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 158
-00000215 EF00                 595  	br $_sEE_WriteStatusRegister
-00000217                      596  _sEE_SendInstruction:
-00000217                      597  	.STACK _sEE_SendInstruction = 4
-00000217                      598  	;***      159 : }
-00000217                      599  	;***      160 : /*------------------------------------------------------------------
-00000217                      600  	;***      161 :  * ----------------------Local function-----------------------------
-00000217                      601  	;***      162 :  */
-00000217                      602  	;***      163 : void sEE_SendInstruction(uint8_t *instruction){
-00000217                      603  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 163
-00000217 E2                   604  	oneb c
-00000218                      605  	;***      164 : 	EE_TransmitData(instruction, 1);
-00000218                      606  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 164
-00000218 EF00                 607  	br $_EE_TransmitData
-0000021A                      608  _sEE_SendReceiveInstruction:
-0000021A                      609  	.STACK _sEE_SendReceiveInstruction = 4
-0000021A                      610  	;***      165 : }
-0000021A                      611  	;***      166 : void sEE_SendReceiveInstruction(uint8_t *p_data) {
-0000021A                      612  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 166
-0000021A 5202                 613  	mov c, #0x02
-0000021C                      614  	;***      167 : 	EE_TransmitData(p_data, 2);
-0000021C                      615  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 167
-0000021C EF00                 616  	br $_EE_TransmitData
-0000021E                      617  _EE_TransmitData:
-0000021E                      618  	.STACK _EE_TransmitData = 10
-0000021E                      619  	;***      168 : }
-0000021E                      620  	;***      169 : void EE_TransmitData(uint8_t *p_data, uint8_t num){
-0000021E                      621  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 169
-0000021E EB0000               622  	movw de, !LOWW(_spi_flag)
-00000221 C1                   623  	push ax
-00000222 C3                   624  	push bc
-00000223                      625  	;***      170 : 	uint8_t status = *spi_flag;
-00000223                      626  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 170
-00000223 89                   627  	mov a, [de]
-00000224 9801                 628  	mov [sp+0x01], a
-00000226                      629  	;***      171 : 	CSI01_CS_LOW();
-00000226                      630  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 171
-00000226 71130E               631  	clr1 0xFFF0E.1
-00000229                      632  	;***      172 : 	R_CSI01_Start();
-00000229                      633  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 172
-00000229 FC000000             634  	call !!_R_CSI01_Start
-0000022D A802                 635  	movw ax, [sp+0x02]
-0000022F 16                   636  	movw hl, ax
-00000230                      637  	;***      173 : 	R_CSI01_Send_Receive(p_data, num, p_data);
-00000230                      638  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 173
-00000230 C7                   639  	push hl
-00000231 C4                   640  	pop de
-00000232 8800                 641  	mov a, [sp+0x00]
-00000234 318E                 642  	shrw ax, 8+0x00000
-00000236 12                   643  	movw bc, ax
-00000237 17                   644  	movw ax, hl
-00000238 FC000000             645  	call !!_R_CSI01_Send_Receive
-0000023C                      646  .BB@LABEL@10_1:	; bb10
-0000023C                      647  	;***      174 : 	while(*spi_flag == status);
-0000023C                      648  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 174
-0000023C FB0000               649  	movw hl, !LOWW(_spi_flag)
-0000023F 8801                 650  	mov a, [sp+0x01]
-00000241 4D                   651  	cmp a, [hl]
-00000242 DD00                 652  	bz $.BB@LABEL@10_1
-00000244                      653  .BB@LABEL@10_2:	; bb18
-00000244                      654  	;***      175 : 	CSI01_CS_HIGH();
-00000244                      655  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 175
-00000244 71120E               656  	set1 0xFFF0E.1
-00000247 1004                 657  	addw sp, #0x04
-00000249 D7                   658  	ret
-0000024A                      659  _sEE_WriteStatusRegister:
-0000024A                      660  	.STACK _sEE_WriteStatusRegister = 6
-0000024A                      661  	;***      176 : }
-0000024A                      662  	;***      177 : void sEE_WriteStatusRegister(uint8_t reg){
-0000024A                      663  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 177
-0000024A C7                   664  	push hl
-0000024B                      665  	;***      178 : 	uint8_t buf[2] = {EEPROM_WRSR ,reg};
-0000024B                      666  	;***      179 : 	if(eeprom_status.refined.WEN == 0)
-0000024B                      667  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 179
-0000024B 360000               668  	movw hl, #LOWW(_eeprom_status)
-0000024E                      669  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 178
-0000024E C80100               670  	mov [sp+0x01], #0x00
-00000251 C80001               671  	mov [sp+0x00], #0x01
-00000254 9801                 672  	mov [sp+0x01], a
-00000256 319300               673  	bt [hl].1, $.BB@LABEL@11_2
-00000259                      674  .BB@LABEL@11_1:	; if_then_bb
-00000259                      675  	;***      180 : 		sEE_WriteEnable();
-00000259                      676  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 180
-00000259 FE0000               677  	call $!_sEE_WriteEnable
-0000025C                      678  .BB@LABEL@11_2:	; if_break_bb
-0000025C                      679  	;***      181 : 	EE_TransmitData(buf, 2);
-0000025C                      680  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 181
-0000025C 5202                 681  	mov c, #0x02
-0000025E AEF8                 682  	movw ax, sp
-00000260 FE0000               683  	call $!_EE_TransmitData
-00000263 C6                   684  	pop hl
-00000264 D7                   685  	ret
-00000265                      686  	;***      182 : }
-00000000                      687  	.SECTION .bss,BSS
-00000000                      688  _eeprom_status:
-00000000                      689  	.DS (1)
-00000001 00                   690  	.ALIGN 2
-00000002                      691  _spi_flag:
-00000002                      692  	.DS (2)
-00000004                      693  _buf:
-00000004                      694  	.DS (35)
-00000000                      695  	.SECTION .const,CONST
-00000000                      696  .STR@1:
-00000000 01                   697  	.DB 0x01
-00000001 00                   698  	.DS (1)
+00000076 A80E                 200  	movw ax, [sp+0x0E]
+00000078 14                   201  	movw de, ax
+00000079                      202  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 69
+00000079 60                   203  	mov a, x
+0000007A 5C1F                 204  	and a, #0x1F
+0000007C 9802                 205  	mov [sp+0x02], a
+0000007E 15                   206  	movw ax, de
+0000007F                      207  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 67
+0000007F 315E                 208  	shrw ax, 0x05
+00000081 60                   209  	mov a, x
+00000082 9804                 210  	mov [sp+0x04], a
+00000084                      211  	;***       73 : 	buf[2] = addr;
+00000084                      212  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 73
+00000084 81                   213  	inc a
+00000085 9803                 214  	mov [sp+0x03], a
+00000087 8804                 215  	mov a, [sp+0x04]
+00000089                      216  .BB@LABEL@5_1:	; entry
+00000089 91                   217  	dec a
+0000008A 9801                 218  	mov [sp+0x01], a
+0000008C 62                   219  	mov a, c
+0000008D 9F0000               220  	mov !LOWW(_buf+0x00002), a
+00000090 8803                 221  	mov a, [sp+0x03]
+00000092                      222  	;***       74 : 	while(page != 0){
+00000092                      223  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 74
+00000092 91                   224  	dec a
+00000093 9803                 225  	mov [sp+0x03], a
+00000095 DD00                 226  	bz $.BB@LABEL@5_10
+00000097                      227  .BB@LABEL@5_2:	; bb23
+00000097                      228  	;***       75 : 		do{
+00000097                      229  	;***       76 : 			rEE_Status();
+00000097                      230  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 76
+00000097 FE0000               231  	call $!_rEE_Status
+0000009A                      232  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 75
+0000009A 360000               233  	movw hl, #LOWW(_eeprom_status)
+0000009D 318300               234  	bt [hl].0, $.BB@LABEL@5_2
+000000A0                      235  .BB@LABEL@5_3:	; bb31
+000000A0                      236  	;***       77 : 		}while(eeprom_status.refined.RB == 1);
+000000A0                      237  	;***       78 : 		if(eeprom_status.refined.WEN == 0)
+000000A0                      238  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 78
+000000A0 319500               239  	bf [hl].1, $.BB@LABEL@5_8
+000000A3                      240  .BB@LABEL@5_4:	; bb31.bb39_crit_edge
+000000A3 F1                   241  	clrb a
+000000A4 9800                 242  	mov [sp+0x00], a
+000000A6                      243  .BB@LABEL@5_5:	; bb39
+000000A6                      244  	;***       79 : 				sEE_WriteEnable();
+000000A6                      245  	;***       80 : 
+000000A6                      246  	;***       81 : 		for(uint8_t i=0; i<32; i++){
+000000A6                      247  	;***       82 : 			buf[i+3] = p[i];
+000000A6                      248  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 82
+000000A6 318E                 249  	shrw ax, 8+0x00000
+000000A8 12                   250  	movw bc, ax
+000000A9 A806                 251  	movw ax, [sp+0x06]
+000000AB 03                   252  	addw ax, bc
+000000AC 14                   253  	movw de, ax
+000000AD 8800                 254  	mov a, [sp+0x00]
+000000AF 73                   255  	mov b, a
+000000B0 89                   256  	mov a, [de]
+000000B1 180000               257  	mov LOWW(_buf+0x00003)[b], a
+000000B4                      258  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 81
+000000B4 83                   259  	inc b
+000000B5 63                   260  	mov a, b
+000000B6 9800                 261  	mov [sp+0x00], a
+000000B8 4C20                 262  	cmp a, #0x20
+000000BA DF00                 263  	bnz $.BB@LABEL@5_5
+000000BC                      264  .BB@LABEL@5_6:	; bb61
+000000BC                      265  	;***       83 : 		}
+000000BC                      266  	;***       84 : 		while(eeprom_status.refined.WEN == 0){
+000000BC                      267  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 84
+000000BC 360000               268  	movw hl, #LOWW(_eeprom_status)
+000000BF 319300               269  	bt [hl].1, $.BB@LABEL@5_9
+000000C2                      270  .BB@LABEL@5_7:	; bb59
+000000C2                      271  	;***       85 : 			rEE_Status();
+000000C2                      272  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 85
+000000C2 FE0000               273  	call $!_rEE_Status
+000000C5 EF00                 274  	br $.BB@LABEL@5_6
+000000C7                      275  .BB@LABEL@5_8:	; if_then_bb
+000000C7                      276  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 79
+000000C7 FE0000               277  	call $!_sEE_WriteEnable
+000000CA EF00                 278  	br $.BB@LABEL@5_4
+000000CC                      279  .BB@LABEL@5_9:	; bb69
+000000CC                      280  	;***       86 : 		}
+000000CC                      281  	;***       87 : 		EE_TransmitData(buf, 32+3);
+000000CC                      282  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 87
+000000CC 5223                 283  	mov c, #0x23
+000000CE 300000               284  	movw ax, #LOWW(_buf)
+000000D1 FE0000               285  	call $!_EE_TransmitData
+000000D4                      286  	;***       88 : 		page--;
+000000D4                      287  	;***       89 : 		p+=32;
+000000D4                      288  	;***       90 : 		addr = addr + (uint16_t)0x0020*(max_page-page);
+000000D4                      289  	;***       91 : 		buf[0] = EEPROM_WRITE;
+000000D4                      290  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 91
+000000D4 CF000002             291  	mov !LOWW(_buf), #0x02
+000000D8 8801                 292  	mov a, [sp+0x01]
+000000DA                      293  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 90
+000000DA 318E                 294  	shrw ax, 8+0x00000
+000000DC 12                   295  	movw bc, ax
+000000DD 8804                 296  	mov a, [sp+0x04]
+000000DF 318E                 297  	shrw ax, 8+0x00000
+000000E1 23                   298  	subw ax, bc
+000000E2 12                   299  	movw bc, ax
+000000E3 315C                 300  	shlw bc, 0x05
+000000E5 A808                 301  	movw ax, [sp+0x08]
+000000E7 03                   302  	addw ax, bc
+000000E8 B808                 303  	movw [sp+0x08], ax
+000000EA 12                   304  	movw bc, ax
+000000EB                      305  	;***       92 : 		buf[1] = addr>>8;
+000000EB                      306  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 92
+000000EB 9F0000               307  	mov !LOWW(_buf+0x00001), a
+000000EE A806                 308  	movw ax, [sp+0x06]
+000000F0                      309  	;***       93 : 		buf[2] = addr;
+000000F0                      310  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 93
+000000F0 042000               311  	addw ax, #0x0020
+000000F3 B806                 312  	movw [sp+0x06], ax
+000000F5 8801                 313  	mov a, [sp+0x01]
+000000F7 EF00                 314  	br $.BB@LABEL@5_1
+000000F9                      315  .BB@LABEL@5_10:	; bb93
+000000F9 8802                 316  	mov a, [sp+0x02]
+000000FB                      317  	;***       94 : 	}
+000000FB                      318  	;***       95 : 
+000000FB                      319  	;***       96 : 	if(rsvd != 0){
+000000FB                      320  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 96
+000000FB D1                   321  	cmp0 a
+000000FC DF00                 322  	bnz $.BB@LABEL@5_12
+000000FE                      323  .BB@LABEL@5_11:	; return
+000000FE                      324  	;***       97 : 		do{
+000000FE                      325  	;***       98 : 			rEE_Status();
+000000FE                      326  	;***       99 : 		}while(eeprom_status.refined.RB == 1);
+000000FE                      327  	;***      100 : 		if(eeprom_status.refined.WEN == 0)
+000000FE                      328  	;***      101 : 			sEE_WriteEnable();
+000000FE                      329  	;***      102 : 		for(uint8_t i=0; i<rsvd; i++){
+000000FE                      330  	;***      103 : 			buf[i+3] = p[i];
+000000FE                      331  	;***      104 : 		}
+000000FE                      332  	;***      105 : 		while(eeprom_status.refined.WEN == 0){
+000000FE                      333  	;***      106 : 			rEE_Status();
+000000FE                      334  	;***      107 : 		}
+000000FE                      335  	;***      108 : 		EE_TransmitData(buf, rsvd+3);
+000000FE                      336  	;***      109 : 	}
+000000FE                      337  	;***      110 : }
+000000FE                      338  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 110
+000000FE 100A                 339  	addw sp, #0x0A
+00000100 D7                   340  	ret
+00000101                      341  .BB@LABEL@5_12:	; bb100
+00000101                      342  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 98
+00000101 FE0000               343  	call $!_rEE_Status
+00000104                      344  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 97
+00000104 360000               345  	movw hl, #LOWW(_eeprom_status)
+00000107 318300               346  	bt [hl].0, $.BB@LABEL@5_12
+0000010A                      347  .BB@LABEL@5_13:	; bb109
+0000010A                      348  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 100
+0000010A 319500               349  	bf [hl].1, $.BB@LABEL@5_17
+0000010D                      350  .BB@LABEL@5_14:	; bb109.bb132_crit_edge
+0000010D F1                   351  	clrb a
+0000010E                      352  .BB@LABEL@5_15:	; bb109.bb132_crit_edge
+0000010E 9800                 353  	mov [sp+0x00], a
+00000110 8802                 354  	mov a, [sp+0x02]
+00000112 70                   355  	mov x, a
+00000113 8800                 356  	mov a, [sp+0x00]
+00000115                      357  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 102
+00000115 6148                 358  	cmp a, x
+00000117 DD00                 359  	bz $.BB@LABEL@5_18
+00000119                      360  .BB@LABEL@5_16:	; bb119
+00000119                      361  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 103
+00000119 318E                 362  	shrw ax, 8+0x00000
+0000011B 12                   363  	movw bc, ax
+0000011C A806                 364  	movw ax, [sp+0x06]
+0000011E 03                   365  	addw ax, bc
+0000011F 14                   366  	movw de, ax
+00000120 8800                 367  	mov a, [sp+0x00]
+00000122 73                   368  	mov b, a
+00000123 89                   369  	mov a, [de]
+00000124 180000               370  	mov LOWW(_buf+0x00003)[b], a
+00000127 8800                 371  	mov a, [sp+0x00]
+00000129 81                   372  	inc a
+0000012A EF00                 373  	br $.BB@LABEL@5_15
+0000012C                      374  .BB@LABEL@5_17:	; if_then_bb117
+0000012C                      375  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 101
+0000012C FE0000               376  	call $!_sEE_WriteEnable
+0000012F EF00                 377  	br $.BB@LABEL@5_14
+00000131                      378  .BB@LABEL@5_18:	; bb143
+00000131                      379  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 105
+00000131 360000               380  	movw hl, #LOWW(_eeprom_status)
+00000134 319300               381  	bt [hl].1, $.BB@LABEL@5_20
+00000137                      382  .BB@LABEL@5_19:	; bb141
+00000137                      383  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 106
+00000137 FE0000               384  	call $!_rEE_Status
+0000013A EF00                 385  	br $.BB@LABEL@5_18
+0000013C                      386  .BB@LABEL@5_20:	; bb151
+0000013C 8802                 387  	mov a, [sp+0x02]
+0000013E                      388  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 108
+0000013E 0C03                 389  	add a, #0x03
+00000140 72                   390  	mov c, a
+00000141 300000               391  	movw ax, #LOWW(_buf)
+00000144 100A                 392  	addw sp, #0x0A
+00000146 EE0000               393  	br $!_EE_TransmitData
+00000149                      394  _EE_SPI_Read:
+00000149                      395  	.STACK _EE_SPI_Read = 14
+00000149                      396  	;***      111 : /*!
+00000149                      397  	;***      112 :  * Read data from EEPROM
+00000149                      398  	;***      113 :  * @param pBuffer Pointer to read buffer
+00000149                      399  	;***      114 :  * @param addr Read EEPROM address (0x000 - 0xFFF)
+00000149                      400  	;***      115 :  * @param num Number if bytes to read
+00000149                      401  	;***      116 :  */
+00000149                      402  	;***      117 : void EE_SPI_Read(uint8_t *const pBuffer,
+00000149                      403  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 117
+00000149 C3                   404  	push bc
+0000014A C1                   405  	push ax
+0000014B 2006                 406  	subw sp, #0x06
+0000014D                      407  	;***      118 : 		uint16_t addr, uint32_t num){
+0000014D                      408  	;***      119 : 	uint8_t page = num/32;
+0000014D                      409  	;***      120 : 	uint8_t max_page = page;
+0000014D                      410  	;***      121 : 	uint8_t rsvd = num%32;
+0000014D                      411  	;***      122 : 	uint8_t *p = pBuffer;
+0000014D                      412  	;***      123 : 	buf[0] = EEPROM_READ;
+0000014D                      413  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 123
+0000014D CF000003             414  	mov !LOWW(_buf), #0x03
+00000151                      415  	;***      124 : 	buf[1] = addr>>8;
+00000151                      416  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 124
+00000151 13                   417  	movw ax, bc
+00000152 9F0000               418  	mov !LOWW(_buf+0x00001), a
+00000155 A80E                 419  	movw ax, [sp+0x0E]
+00000157 14                   420  	movw de, ax
+00000158                      421  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 121
+00000158 60                   422  	mov a, x
+00000159 5C1F                 423  	and a, #0x1F
+0000015B 9802                 424  	mov [sp+0x02], a
+0000015D 15                   425  	movw ax, de
+0000015E                      426  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 119
+0000015E 315E                 427  	shrw ax, 0x05
+00000160 60                   428  	mov a, x
+00000161 9804                 429  	mov [sp+0x04], a
+00000163                      430  	;***      125 : 	buf[2] = addr;
+00000163                      431  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 125
+00000163 81                   432  	inc a
+00000164 9803                 433  	mov [sp+0x03], a
+00000166 8804                 434  	mov a, [sp+0x04]
+00000168                      435  .BB@LABEL@6_1:	; entry
+00000168 91                   436  	dec a
+00000169 9801                 437  	mov [sp+0x01], a
+0000016B 62                   438  	mov a, c
+0000016C 9F0000               439  	mov !LOWW(_buf+0x00002), a
+0000016F 8803                 440  	mov a, [sp+0x03]
+00000171                      441  	;***      126 : 	while(page != 0){
+00000171                      442  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 126
+00000171 91                   443  	dec a
+00000172 9803                 444  	mov [sp+0x03], a
+00000174 DD00                 445  	bz $.BB@LABEL@6_6
+00000176                      446  .BB@LABEL@6_2:	; bb23
+00000176                      447  	;***      127 : 	//Wait until EEPROM Ready
+00000176                      448  	;***      128 : 		do{
+00000176                      449  	;***      129 : 	    	rEE_Status();
+00000176                      450  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 129
+00000176 FE0000               451  	call $!_rEE_Status
+00000179                      452  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 128
+00000179 360000               453  	movw hl, #LOWW(_eeprom_status)
+0000017C 318300               454  	bt [hl].0, $.BB@LABEL@6_2
+0000017F                      455  .BB@LABEL@6_3:	; bb31
+0000017F                      456  	;***      130 : 	    }while(eeprom_status.refined.RB == 1);
+0000017F                      457  	;***      131 : 		EE_TransmitData(buf, 32+3);
+0000017F                      458  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 131
+0000017F 5223                 459  	mov c, #0x23
+00000181 300000               460  	movw ax, #LOWW(_buf)
+00000184 FE0000               461  	call $!_EE_TransmitData
+00000187 F1                   462  	clrb a
+00000188 9800                 463  	mov [sp+0x00], a
+0000018A                      464  .BB@LABEL@6_4:	; bb32
+0000018A                      465  	;***      132 : 		for(uint8_t i=0; i<32; i++){
+0000018A                      466  	;***      133 : 			p[i] = buf[i+3];
+0000018A                      467  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 133
+0000018A 318E                 468  	shrw ax, 8+0x00000
+0000018C 12                   469  	movw bc, ax
+0000018D A806                 470  	movw ax, [sp+0x06]
+0000018F 03                   471  	addw ax, bc
+00000190 14                   472  	movw de, ax
+00000191 8800                 473  	mov a, [sp+0x00]
+00000193 73                   474  	mov b, a
+00000194 090000               475  	mov a, LOWW(_buf+0x00003)[b]
+00000197 99                   476  	mov [de], a
+00000198                      477  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 132
+00000198 83                   478  	inc b
+00000199 63                   479  	mov a, b
+0000019A 9800                 480  	mov [sp+0x00], a
+0000019C 4C20                 481  	cmp a, #0x20
+0000019E DF00                 482  	bnz $.BB@LABEL@6_4
+000001A0                      483  .BB@LABEL@6_5:	; bb51
+000001A0                      484  	;***      134 : 		}
+000001A0                      485  	;***      135 : 		page--;
+000001A0                      486  	;***      136 : 		p+=32;
+000001A0                      487  	;***      137 : 		addr = addr + (uint16_t)0x0020*(max_page-page);
+000001A0                      488  	;***      138 : 		buf[0] = EEPROM_READ;
+000001A0                      489  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 138
+000001A0 CF000003             490  	mov !LOWW(_buf), #0x03
+000001A4 8801                 491  	mov a, [sp+0x01]
+000001A6                      492  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 137
+000001A6 318E                 493  	shrw ax, 8+0x00000
+000001A8 12                   494  	movw bc, ax
+000001A9 8804                 495  	mov a, [sp+0x04]
+000001AB 318E                 496  	shrw ax, 8+0x00000
+000001AD 23                   497  	subw ax, bc
+000001AE 12                   498  	movw bc, ax
+000001AF 315C                 499  	shlw bc, 0x05
+000001B1 A808                 500  	movw ax, [sp+0x08]
+000001B3 03                   501  	addw ax, bc
+000001B4 B808                 502  	movw [sp+0x08], ax
+000001B6 12                   503  	movw bc, ax
+000001B7                      504  	;***      139 : 		buf[1] = addr>>8;
+000001B7                      505  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 139
+000001B7 9F0000               506  	mov !LOWW(_buf+0x00001), a
+000001BA A806                 507  	movw ax, [sp+0x06]
+000001BC                      508  	;***      140 : 		buf[2] = addr;
+000001BC                      509  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 140
+000001BC 042000               510  	addw ax, #0x0020
+000001BF B806                 511  	movw [sp+0x06], ax
+000001C1 8801                 512  	mov a, [sp+0x01]
+000001C3 EF00                 513  	br $.BB@LABEL@6_1
+000001C5                      514  .BB@LABEL@6_6:	; bb75
+000001C5 8802                 515  	mov a, [sp+0x02]
+000001C7                      516  	;***      141 : 	}
+000001C7                      517  	;***      142 : 	if(rsvd != 0){
+000001C7                      518  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 142
+000001C7 D1                   519  	cmp0 a
+000001C8 DD00                 520  	bz $.BB@LABEL@6_11
+000001CA                      521  .BB@LABEL@6_7:	; bb81
+000001CA                      522  	;***      143 : 		do{
+000001CA                      523  	;***      144 : 			rEE_Status();
+000001CA                      524  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 144
+000001CA FE0000               525  	call $!_rEE_Status
+000001CD                      526  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 143
+000001CD 360000               527  	movw hl, #LOWW(_eeprom_status)
+000001D0 318300               528  	bt [hl].0, $.BB@LABEL@6_7
+000001D3                      529  .BB@LABEL@6_8:	; bb90
+000001D3 8802                 530  	mov a, [sp+0x02]
+000001D5                      531  	;***      145 : 		}while(eeprom_status.refined.RB == 1);
+000001D5                      532  	;***      146 : 		EE_TransmitData(buf, rsvd+3);
+000001D5                      533  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 146
+000001D5 0C03                 534  	add a, #0x03
+000001D7 72                   535  	mov c, a
+000001D8 300000               536  	movw ax, #LOWW(_buf)
+000001DB FE0000               537  	call $!_EE_TransmitData
+000001DE F1                   538  	clrb a
+000001DF                      539  .BB@LABEL@6_9:	; bb90
+000001DF 9800                 540  	mov [sp+0x00], a
+000001E1 8802                 541  	mov a, [sp+0x02]
+000001E3 70                   542  	mov x, a
+000001E4 8800                 543  	mov a, [sp+0x00]
+000001E6                      544  	;***      147 : 		for(uint8_t i=0; i<rsvd; i++){
+000001E6                      545  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 147
+000001E6 6148                 546  	cmp a, x
+000001E8 DD00                 547  	bz $.BB@LABEL@6_11
+000001EA                      548  .BB@LABEL@6_10:	; bb95
+000001EA                      549  	;***      148 : 			p[i] = buf[i+3];
+000001EA                      550  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 148
+000001EA 318E                 551  	shrw ax, 8+0x00000
+000001EC 12                   552  	movw bc, ax
+000001ED A806                 553  	movw ax, [sp+0x06]
+000001EF 03                   554  	addw ax, bc
+000001F0 14                   555  	movw de, ax
+000001F1 8800                 556  	mov a, [sp+0x00]
+000001F3 73                   557  	mov b, a
+000001F4 090000               558  	mov a, LOWW(_buf+0x00003)[b]
+000001F7 99                   559  	mov [de], a
+000001F8 8800                 560  	mov a, [sp+0x00]
+000001FA 81                   561  	inc a
+000001FB EF00                 562  	br $.BB@LABEL@6_9
+000001FD                      563  .BB@LABEL@6_11:	; return
+000001FD                      564  	;***      149 : 		}
+000001FD                      565  	;***      150 : 	}
+000001FD                      566  	;***      151 : }
+000001FD                      567  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 151
+000001FD 100A                 568  	addw sp, #0x0A
+000001FF D7                   569  	ret
+00000200                      570  _sEE_Block:
+00000200                      571  	.STACK _sEE_Block = 4
+00000200                      572  	;***      152 : /*!
+00000200                      573  	;***      153 :  * Write disable block
+00000200                      574  	;***      154 :  * @param block: NONE_BLOCK, BLOCK_C00, BLOCK_800, BLOCK_ALL
+00000200                      575  	;***      155 :  */
+00000200                      576  	;***      156 : void sEE_Block(EEPROM_BLOCK_t block){
+00000200                      577  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 156
+00000200 3129                 578  	shl a, 0x02
+00000202                      579  	;***      157 : 	eeprom_status.refined.BP = block;
+00000202                      580  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 157
+00000202 5C0C                 581  	and a, #0x0C
+00000204 70                   582  	mov x, a
+00000205 51F3                 583  	mov a, #0xF3
+00000207 5F0000               584  	and a, !LOWW(_eeprom_status)
+0000020A 6108                 585  	add a, x
+0000020C 9F0000               586  	mov !LOWW(_eeprom_status), a
+0000020F                      587  	;***      158 : 	sEE_WriteStatusRegister(eeprom_status.raw);
+0000020F                      588  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 158
+0000020F EF00                 589  	br $_sEE_WriteStatusRegister
+00000211                      590  _sEE_SendInstruction:
+00000211                      591  	.STACK _sEE_SendInstruction = 4
+00000211                      592  	;***      159 : }
+00000211                      593  	;***      160 : /*------------------------------------------------------------------
+00000211                      594  	;***      161 :  * ----------------------Local function-----------------------------
+00000211                      595  	;***      162 :  */
+00000211                      596  	;***      163 : void sEE_SendInstruction(uint8_t *instruction){
+00000211                      597  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 163
+00000211 E2                   598  	oneb c
+00000212                      599  	;***      164 : 	EE_TransmitData(instruction, 1);
+00000212                      600  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 164
+00000212 EF00                 601  	br $_EE_TransmitData
+00000214                      602  _sEE_SendReceiveInstruction:
+00000214                      603  	.STACK _sEE_SendReceiveInstruction = 4
+00000214                      604  	;***      165 : }
+00000214                      605  	;***      166 : void sEE_SendReceiveInstruction(uint8_t *p_data) {
+00000214                      606  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 166
+00000214 5202                 607  	mov c, #0x02
+00000216                      608  	;***      167 : 	EE_TransmitData(p_data, 2);
+00000216                      609  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 167
+00000216 EF00                 610  	br $_EE_TransmitData
+00000218                      611  _EE_TransmitData:
+00000218                      612  	.STACK _EE_TransmitData = 10
+00000218                      613  	;***      168 : }
+00000218                      614  	;***      169 : void EE_TransmitData(uint8_t *p_data, uint8_t num){
+00000218                      615  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 169
+00000218 EB0000               616  	movw de, !LOWW(_spi_flag)
+0000021B C1                   617  	push ax
+0000021C C3                   618  	push bc
+0000021D                      619  	;***      170 : 	uint8_t status = *spi_flag;
+0000021D                      620  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 170
+0000021D 89                   621  	mov a, [de]
+0000021E 9801                 622  	mov [sp+0x01], a
+00000220                      623  	;***      171 : 	CSI01_CS_LOW();
+00000220                      624  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 171
+00000220 71130E               625  	clr1 0xFFF0E.1
+00000223                      626  	;***      172 : 	R_CSI01_Start();
+00000223                      627  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 172
+00000223 FC000000             628  	call !!_R_CSI01_Start
+00000227 A802                 629  	movw ax, [sp+0x02]
+00000229 16                   630  	movw hl, ax
+0000022A                      631  	;***      173 : 	R_CSI01_Send_Receive(p_data, num, p_data);
+0000022A                      632  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 173
+0000022A C7                   633  	push hl
+0000022B C4                   634  	pop de
+0000022C 8800                 635  	mov a, [sp+0x00]
+0000022E 318E                 636  	shrw ax, 8+0x00000
+00000230 12                   637  	movw bc, ax
+00000231 17                   638  	movw ax, hl
+00000232 FC000000             639  	call !!_R_CSI01_Send_Receive
+00000236                      640  .BB@LABEL@10_1:	; bb10
+00000236                      641  	;***      174 : 	while(*spi_flag == status);
+00000236                      642  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 174
+00000236 FB0000               643  	movw hl, !LOWW(_spi_flag)
+00000239 8801                 644  	mov a, [sp+0x01]
+0000023B 4D                   645  	cmp a, [hl]
+0000023C DD00                 646  	bz $.BB@LABEL@10_1
+0000023E                      647  .BB@LABEL@10_2:	; bb18
+0000023E                      648  	;***      175 : 	CSI01_CS_HIGH();
+0000023E                      649  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 175
+0000023E 71120E               650  	set1 0xFFF0E.1
+00000241 1004                 651  	addw sp, #0x04
+00000243 D7                   652  	ret
+00000244                      653  _sEE_WriteStatusRegister:
+00000244                      654  	.STACK _sEE_WriteStatusRegister = 6
+00000244                      655  	;***      176 : }
+00000244                      656  	;***      177 : void sEE_WriteStatusRegister(uint8_t reg){
+00000244                      657  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 177
+00000244 C7                   658  	push hl
+00000245                      659  	;***      178 : 	uint8_t buf[2] = {EEPROM_WRSR ,reg};
+00000245                      660  	;***      179 : 	if(eeprom_status.refined.WEN == 0)
+00000245                      661  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 179
+00000245 360000               662  	movw hl, #LOWW(_eeprom_status)
+00000248                      663  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 178
+00000248 C80100               664  	mov [sp+0x01], #0x00
+0000024B C80001               665  	mov [sp+0x00], #0x01
+0000024E 9801                 666  	mov [sp+0x01], a
+00000250 319300               667  	bt [hl].1, $.BB@LABEL@11_2
+00000253                      668  .BB@LABEL@11_1:	; if_then_bb
+00000253                      669  	;***      180 : 		sEE_WriteEnable();
+00000253                      670  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 180
+00000253 FE0000               671  	call $!_sEE_WriteEnable
+00000256                      672  .BB@LABEL@11_2:	; if_break_bb
+00000256                      673  	;***      181 : 	EE_TransmitData(buf, 2);
+00000256                      674  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/EEPROM.c", 181
+00000256 5202                 675  	mov c, #0x02
+00000258 AEF8                 676  	movw ax, sp
+0000025A FE0000               677  	call $!_EE_TransmitData
+0000025D C6                   678  	pop hl
+0000025E D7                   679  	ret
+0000025F                      680  	;***      182 : }
+00000000                      681  	.SECTION .bss,BSS
+00000000                      682  _eeprom_status:
+00000000                      683  	.DS (1)
+00000001 00                   684  	.ALIGN 2
+00000002                      685  _spi_flag:
+00000002                      686  	.DS (2)
+00000004                      687  _buf:
+00000004                      688  	.DS (35)
+00000000                      689  	.SECTION .const,CONST
+00000000                      690  .STR@1:
+00000000 01                   691  	.DB 0x01
+00000001 00                   692  	.DS (1)
 
 Section List
 Attr     Size                Name
 
-TEXTF               613 (00000265) .textf
+TEXTF               607 (0000025F) .textf
 CONST                 2 (00000002) .const
 BSS                  39 (00000027) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\EEPROM.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\EEPROM.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\EEPROM.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\EEPROM.asm 

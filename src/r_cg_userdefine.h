@@ -234,6 +234,7 @@ static struct Tick_s{
 	uint32_t tickVoltage3Check;
 	uint32_t tickVoltageLowCheck;
 	uint32_t tickCurrentCheck;
+	uint32_t tickElectrolyticOff;
 	uint32_t tickAcidLevel[3];
 	uint32_t tickAlkalineLevel[3];
 	uint32_t tickHandSensor[2];
@@ -250,7 +251,7 @@ enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION, SAVE_TIME, SAVE_NUMBER, SAVE_ERROR, READ_MACHINE_STATUS,
-	SAVE_MODE, GET_MODE
+	WASHING_MODE, GET_MODE
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -308,19 +309,21 @@ extern volatile uint8_t timer0_ch0_flag, timer0_ch1_flag, timer0_ch2_flag;
 extern volatile int g_error, g_status;
 extern float g_flow_value;
 extern uint16_t g_adc_value[2];
-extern uint8_t rec_buf[12];
 extern void adc_int_handle(void);
 
 extern void setting_default(void);
 extern void main_init_20211111(void);
-extern void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
-//extern int overVoltage1Check(void);
+void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
+void sendToWaterSolfner(uint8_t busy, uint8_t head, uint8_t type, uint32_t value);
 extern void callAlarm(int _error);
 
 
 void overVoltage1Error(void);
 
 extern uint8_t g_rx_data[4*40];
+extern uint8_t g_uart3_rx_data[8];
+static uint8_t * const rs485_rx_p = &g_uart3_rx_data[1];
+static uint32_t * const water_solfner_time_p = (uint32_t *)&g_uart3_rx_data[2];
 union byte_to_float{
 	struct{
 		uint8_t b[4];
@@ -335,7 +338,8 @@ extern enum HS_COLOR g_color, g_pre_color;
 extern volatile struct Communicaition_flag_s{
 	volatile uint8_t send_response_flag, send_response_time_flag,
 	send_response_number_flag, recived_number_setting_flag,
-	recived_time_setting_flag, send_respone_status_flag;
+	recived_time_setting_flag, send_respone_status_flag, send_response_mode_flag;
+	volatile uint8_t rs485_send_watersolfner_response_flag;
 }commnunication_flag;
 extern volatile uint8_t send_response_flag, send_response_time_flag,
 send_response_number_flag, recived_number_setting_flag,
@@ -346,7 +350,7 @@ void OpenSV1(void);
 void OpenSV2(void);
 void CloseSV1(void);
 void CloseSV2(void);
-void electrolyticOperationOFF(void);
+uint8_t electrolyticOperationOFF(void);
 void electrolyticOperationON(void);
 uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);

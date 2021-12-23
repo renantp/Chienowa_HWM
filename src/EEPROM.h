@@ -54,9 +54,9 @@ uint8_t rEE_Status(void);
 void sEE_WriteEnable(void);
 void sEE_WriteDisable(void);
 void EE_SPI_Write(uint8_t *const pBuffer,
-		uint16_t addr, uint16_t num);
+		uint16_t addr, uint32_t num);
 void EE_SPI_Read(uint8_t *const pBuffer,
-		uint16_t addr, uint16_t num);
+		uint16_t addr, uint32_t num);
 void sEE_Block(EEPROM_BLOCK_t block);
 
 /* Low layer functions */
