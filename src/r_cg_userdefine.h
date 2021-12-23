@@ -37,6 +37,9 @@ User definitions
 #include "crc8.h"
 #include "EEPROM.h"
 extern uint8_t rx_count;
+
+#define NUMBER_SETTING_ADDRESS (0x000)
+#define TIME_SETTING_ADDRESS (0x800)
 #define ON	(1U)
 #define OFF (0U)
 #define I_ON (0U)
@@ -117,6 +120,17 @@ extern struct Timer_Setting_s{
 	uint32_t t62_callanWashSpoutingTime_s;
 	char crc;
 
+	uint32_t t1_initialWaterDrainageOperation_s;
+	uint32_t t4_electrolysisOperationStart_s;
+	uint32_t t5_electrolysisStopDelay_s;
+	uint32_t t7_powerOnPreparation_s;
+	uint32_t t8_flowRateAdjustmentRelease_s;
+	uint32_t t9_currentAdjustmentRelease_s;
+	uint32_t t10_electrolysisCurrentAlarmSpecified_s;
+	uint32_t t16_currentMonitoringStart_s;
+	uint32_t t18_fullWaterMonitoringStart_h;
+	uint32_t t19_waterFilterAlarm_h;
+	uint32_t t20_waterFilterAlarmIgnore_h;
 	uint32_t t26_onDelayEmptyLevel_s;
 	uint32_t t27_onDelayLowLevel_s;
 	uint32_t t28_onDelayHighLevel_s;
@@ -137,6 +151,7 @@ extern struct Number_Setting_s{
 	char crc;
 	float cvccCurrent;
 }g_numberSetting;
+
 /**
  * IO_Status Union content:
  *  - Input/Output of  MCU
@@ -235,8 +250,8 @@ static struct Tick_Keeper_s{
 enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION, SAVE_TIME, SAVE_NUMBER, SAVE_ERROR, READ_MACHINE_STATUS, SV1_STATE,
-	INIT_SCREEN
+	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION, SAVE_TIME, SAVE_NUMBER, SAVE_ERROR, READ_MACHINE_STATUS,
+	SAVE_MODE, GET_MODE
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -261,8 +276,8 @@ extern struct Machine_State_u{
 	 * 4 - Alkaline Mode
 	 * 5 - Test Mode
 	 * 6 - Power On Mode
-	 * 7 - Wait to Indie-mode
-	 * 8 - Electrolytic Water Generation
+	 * 7 - Busy
+	 * 8 - Electrolytic Water Generation (Control OFF)
 	 */
 	uint8_t mode;
 }g_machine_state;
@@ -281,9 +296,9 @@ enum UART_header_e{
 	 H_CLEAR = 	67
 };
 
-static struct Timer_Setting_s _settingTime;
-static struct Number_Setting_s _settingNumber;
-
+//static struct Timer_Setting_s _settingTime;
+//static struct Number_Setting_s _settingNumber;
+extern uint8_t g_machine_mode;
 static uint8_t g_callan_clear_flag;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end;
@@ -306,7 +321,7 @@ extern void callAlarm(int _error);
 
 void overVoltage1Error(void);
 
-extern uint8_t g_rx_data[72];
+extern uint8_t g_rx_data[4*60];
 union byte_to_float{
 	struct{
 		uint8_t b[4];
