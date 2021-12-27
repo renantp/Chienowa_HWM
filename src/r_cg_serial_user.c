@@ -459,6 +459,8 @@ static void r_uart2_callback_receiveend(void)
 		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == WASHING_MODE)){
 			commnunication_flag.send_response_mode_flag = 1;
 //			commnunication_flag.send_response_flag = 0;
+		}else if((g_rx_data[0] == H_CLEAR)){
+			commnunication_flag.alarm_clear_flag = g_rx_data[1];
 		}
 	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
 		R_UART2_Receive(g_rx_data, 6);
@@ -577,9 +579,25 @@ static void r_uart3_callback_receiveend(void)
     /* Start user code. Do not edit comment generated here */
 	R_UART3_Receive(g_uart3_rx_data, 7);
 	if(g_uart3_rx_data[0] == 1){
+		//Read timer setting
 		if((rs485_rx_p[0] == H_READ) && (rs485_rx_p[1] == READ_TIME)){
-			commnunication_flag.rs485_send_watersolfner_response_flag = 1;
+			commnunication_flag.rs485_send_to_watersolfner_response_flag = 1;
+		}else if((rs485_rx_p[0] == 82) && (rs485_rx_p[1] == 24)){
+			commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 1;
+		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 70)){
+			//TODO: Start Water Softener
+
+		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 80)){
+			//TODO: Stop Water Softener + Time of SNP ON (4 bytes)
 		}
+	}else if(g_uart3_rx_data[0] == 2){
+		if((rs485_rx_p[0] == 11)){
+			commnunication_flag.rs485_send_to_valve_response_flag = 1;
+		}else if((rs485_rx_p[0] == 12)){
+			commnunication_flag.rs485_get_valve_gesture_flag = 1;
+		}
+	}else if(g_uart3_rx_data[0] != 0xff){
+		commnunication_flag.rs485_fault = 1;
 	}
     /* End user code. Do not edit comment generated here */
 }

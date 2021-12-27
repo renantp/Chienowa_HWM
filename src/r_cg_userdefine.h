@@ -147,8 +147,8 @@ extern struct Number_Setting_s{
 	float lowerCurrent;
 	float upperFlow;
 	float lowerFlow;
-	char crc;
 	float cvccCurrent;
+	char crc;
 }g_numberSetting;
 
 /**
@@ -204,9 +204,9 @@ extern union Alarm_Flag_u{
 		uint8_t overFlow : 1;
 		uint8_t underVoltage : 1;
 		uint8_t underCurrent : 1;
-		uint8_t underFlow : 1;
 
 		uint8_t cvcc : 1;
+		uint8_t underFlow : 1;
 	}refined;
 }g_alarm;
 
@@ -217,7 +217,7 @@ enum Machine_Mode_e{
 };
 
 
-static struct Tick_s{
+extern struct Tick_s{
 	uint32_t tick500ms;
 	uint32_t tick1s;
 	uint32_t tick5s;
@@ -286,7 +286,7 @@ static uint8_t pre_machine_mode;
 extern struct UART_Buffer_s{
 	uint8_t head; // 1 byte
 	uint8_t set_number; // 1 byte
-	uint32_t set_value; // 4 byte
+	float set_value; // 4 byte
 }g_control_buffer;
 enum UART_header_e{
 	 H_READ =	82, //0x52
@@ -314,7 +314,8 @@ extern void adc_int_handle(void);
 extern void setting_default(void);
 extern void main_init_20211111(void);
 void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
-void sendToWaterSolfner(uint8_t busy, uint8_t head, uint8_t type, uint32_t value);
+void sendRS485(uint8_t busy, uint8_t head, uint8_t type, uint32_t value);
+void sendR485_7byte(uint8_t addr, uint8_t head, uint8_t *val);
 extern void callAlarm(int _error);
 
 
@@ -338,8 +339,11 @@ extern enum HS_COLOR g_color, g_pre_color;
 extern volatile struct Communicaition_flag_s{
 	volatile uint8_t send_response_flag, send_response_time_flag,
 	send_response_number_flag, recived_number_setting_flag,
-	recived_time_setting_flag, send_respone_status_flag, send_response_mode_flag;
-	volatile uint8_t rs485_send_watersolfner_response_flag;
+	recived_time_setting_flag, send_respone_status_flag, send_response_mode_flag,
+	alarm_clear_flag;
+	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
+	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
+	rs485_fault;
 }commnunication_flag;
 extern volatile uint8_t send_response_flag, send_response_time_flag,
 send_response_number_flag, recived_number_setting_flag,

@@ -140,18 +140,23 @@ void main(void)
     g_pre_color = BLUE;
     handSensorLED(BLACK);
 //    g_machine_state.mode = INDIE; // Set as indie-mode
-    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 2000;
-    g_timerSetting.t55_waterDischargeDelay_s = 10;
+//    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 2;
+//    g_timerSetting.t55_waterDischargeDelay_s = 10;
+    g_timerSetting.t26_onDelayEmptyLevel_s = 2;
+    g_timerSetting.t4_electrolysisOperationStart_s = 5;
+    g_timerSetting.t2_flowSensorStartTime_s = 1;
+    g_timerSetting.t3_flowSensorMonitorTime_s = 5;
     g_machine_mode = HAND_WASHING;
     sendToRasPi(H_SET, OK_ALL, 0x0);
-//    main_init_20211111();
+    main_init_20211111();
 
     //Test
-    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
-    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
-    g_timerSetting.t52_acidWaterSpoutingTime_s = 6;
-    uint8_t wts = 0;
-    uint32_t my_tick;
+//    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
+//    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
+//    g_timerSetting.t52_acidWaterSpoutingTime_s = 6;
+    uint8_t wts, vpcb, vpcb_v = 1;
+    uint32_t my_tick, my_tick2, rs485_tick;
+    sendRS485(0xff, 82, 2, 12);
     while (1U)
     {
     	RaspberryResponse_nostop();
@@ -165,27 +170,77 @@ void main(void)
     		R_UART2_Start();
     		g_uart2_fault = 0;
     	}
-    	if(commnunication_flag.rs485_send_watersolfner_response_flag){
-    		sendToWaterSolfner(0xff, 82, 2, 12);
-    		rx_count++;
-    		sendToWaterSolfner(1, 82, 24,(uint32_t) 1);
-			rx_count++;
-			sendToWaterSolfner(0xff, 82, 24,(uint32_t) 1);
-			rx_count++;
-    		wts = 1;
-			commnunication_flag.rs485_send_watersolfner_response_flag = 0;
+
+    	// Communication with WaterSoftener
+    	if(commnunication_flag.rs485_send_to_watersolfner_response_flag){
+    		sendRS485(0xff, 82, 2, 5);
+//    		rx_count++;
+    		wts = 1; //Test flag = 1
+			commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
     	}
-    	if((g_io_status.refined.Valve.SV1 != g_pre_io_status.refined.Valve.SV1) && (g_io_status.refined.Valve.SV1 == ON)){
-    		sendToWaterSolfner(1, 82, 24, g_io_status.refined.Valve.SV1 == 1? 0x01:0x00);
-		}
-    	if(wts == 1){
+		if(commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
+    		// Sand to Water softener SV state
+    		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.Valve.SV1 == 1?1:0);
+    		commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
+    	}
+		// Test SV1 for Water Softener
+    	if(wts != 0){
     		if(ns_delay_ms(&my_tick, 5000)){
-    			wts = 0;
+    			if(wts == 1){
+    				O_SUPPLY_WATER_PIN_SV1 = ON;
+//					sendRS485(1, 82, 24,(uint32_t) 1);
+//					sendRS485(0xff, 82, 24,(uint32_t) 1);
+					wts = 2;
+    			}else{
+    				O_SUPPLY_WATER_PIN_SV1 = OFF;
+//    				sendRS485(1, 82, 24,(uint32_t) 0);
+//					sendRS485(0xff, 82, 24,(uint32_t) 0);
+					wts = 0;
+    			}
     		}
     	}else{
     		my_tick = g_systemTime;
     	}
-    	g_io_status = g_pre_io_status;
+
+    	//Valve PCB
+    	if(commnunication_flag.rs485_send_to_valve_response_flag == 1){
+//    		sendRS485(0xff, 11, 24, 0x01000000);
+    		//Send when change in valve
+    		uint8_t _b[5] = {g_uart3_sendend%2,g_systemTime%2,0,0,1};
+    		// 0 - Stand alone 1 - Control Valve
+    		sendR485_7byte(0xff, vpcb_v, _b);
+    		vpcb++;
+//    		sendR485_7byte(0xff, 1, _b);
+    		commnunication_flag.rs485_send_to_valve_response_flag  = 0;
+    	}else if(commnunication_flag.rs485_get_valve_gesture_flag == 1){
+    		uint8_t _b[5] = {0,1,0,0,1};
+    		sendR485_7byte(0xff, 1, _b);
+    		rx_count++;
+    		commnunication_flag.rs485_get_valve_gesture_flag = 0;
+    	}
+
+    	if(vpcb != 0){
+    		if(ns_delay_ms(&my_tick2, 5000)){
+    			vpcb_v = vpcb_v == 1 ? 0 : 1;
+    			vpcb = 0;
+    		}
+    	}else{
+    		my_tick2 = g_systemTime;
+    	}
+
+    	//RS485 fault check
+    	if(commnunication_flag.rs485_fault == 1){
+    		R_UART3_Stop();
+    		commnunication_flag.rs485_fault++;
+    		rs485_tick = g_systemTime;
+    	}else if(commnunication_flag.rs485_fault == 2){
+    		if(ns_delay_ms(&rs485_tick, 500)){
+				R_UART3_Start();
+				R_UART3_Receive(g_uart3_rx_data, 7);
+				commnunication_flag.rs485_fault = 0;
+    		}
+    	}
+    	g_pre_io_status = g_io_status;
 //--------------------------------- Testing code---------------------------------------------------------------
     	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
 //    		P6_bit.no3 = ~P6_bit.no3;

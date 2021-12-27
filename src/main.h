@@ -21,7 +21,7 @@ extern struct Number_Setting_s _settingNumber;
 void waitReset(void);
 void solenoidCheck(void);
 uint8_t Voltage1Check_waitReset(void);
-void Voltage2Check_loop(void);
+void Voltage2Check_nostop(void);
 uint8_t Voltage3Check_waitReset(void);
 void RaspberryResponse_nostop(void);
 
@@ -32,7 +32,7 @@ void RaspberryResponse_nostop(void);
 void UpdateMachineStatus(void);
 void InitialOperationModeStart(void);
 
-float measureFlowSensor(void);
+float measureFlowSensor(uint32_t *t);
 float measureFlowSensor_nostop(void);
 uint8_t WaterSupplyOperation_nostop(void);
 void HandWashingMode_nostop(void);
