@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Mon Dec 27 17:12:14 2021
+#@  compiled at Mon Dec 27 18:07:13 2021
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -73,7 +73,6 @@
 	.EXTERN _R_UART3_Receive
 	.EXTERN _handSensorLED
 	.EXTERN _sendToRasPi
-	.EXTERN _main_init_20211111
 	.EXTERN _sendRS485
 	.EXTERN _RaspberryResponse_nostop
 	.EXTERN _main_loop_20211111
@@ -405,10 +404,8 @@ _main:
 	clrw bc
 	mov a, #0x53
 	call !!_sendToRasPi
-	;***      151 :     main_init_20211111();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 151
-	call !!_main_init_20211111
 	clrw ax
+	;***      151 : //    main_init_20211111();
 	;***      152 : 
 	;***      153 :     //Test
 	;***      154 : //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;

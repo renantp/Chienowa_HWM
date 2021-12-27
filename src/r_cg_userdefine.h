@@ -359,5 +359,7 @@ void electrolyticOperationON(void);
 uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);
 void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
+uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
+		enum Control_status control, uint32_t data);
 /* End user code. Do not edit comment generated here */
 #endif

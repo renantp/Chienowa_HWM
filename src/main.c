@@ -291,12 +291,11 @@ void RaspberryResponse_nostop(void) {
 	if (commnunication_flag.send_response_flag) {
 		uint8_t state = g_uart2_sendend;
 		R_UART2_Send(g_rx_data, 6);
-		// TODO: Move this set Mode
-		if (isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0) {
-			g_machine_mode = g_rx_data[5];
-		} else if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
-			g_machine_state.user = 1;
-		}
+//		if (isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0) {
+//			g_machine_mode = g_rx_data[5];
+//		} else if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
+//			g_machine_state.user = 1;
+//		}
 		while (state == g_uart2_sendend) {
 			R_WDT_Restart();
 		}
@@ -304,6 +303,7 @@ void RaspberryResponse_nostop(void) {
 	}
 	if (commnunication_flag.send_response_mode_flag == 1) {
 		sendToRasPi(H_READ, WASHING_MODE, (uint32_t) g_machine_mode << (8 * 3));
+//		sendToRasPi(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
 		commnunication_flag.send_response_mode_flag = 0;
 	}
 	if (commnunication_flag.send_respone_status_flag) {
@@ -690,7 +690,6 @@ void ElectrolyticOperation(void) {
 	g_Tick.tickVoltage2Check = g_systemTime;
 	g_Tick.tickVoltage3Check = g_systemTime;
 	g_Tick.tickCurrentCheck = g_systemTime;
-	rx_count++;
 	do {
 		RaspberryResponse_nostop();
 		if (Voltage1Check_waitReset())
@@ -1032,9 +1031,8 @@ void main_init_20211111(void) {
 	UpdateMachineStatus();
 //	rx_count++;
 }
-void main_loop_20211111(void) {
-//	ElectrolyzeWaterGeneration();
 
+void userAuthHandler_nostop(void){
 	if ((g_machine_state.user == 1) && (g_machine_state.mode != BUSY)) {
 		switch (g_machine_mode) {
 		case HAND_WASHING:
@@ -1062,6 +1060,15 @@ void main_loop_20211111(void) {
 	} else {
 		g_Tick.tickDebouceHandSensor = g_systemTime;
 	}
+}
+void errorCheck(void){
+	
+}
+void main_loop_20211111(void) {
+//	ElectrolyzeWaterGeneration();
+	userAuthHandler_nostop();
+	
+
 }
 
 /**
