@@ -13,7 +13,7 @@ static const uint8_t io_statusSize = 5;
 //const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s);
 static const uint8_t timeSettingSize = 141;
 //const uint8_t numberSettingSize = sizeof(struct Number_Setting_s);
-static const uint8_t numberSettingSize = 33;
+static const uint8_t numberSettingSize = 37;
 extern struct Timer_Setting_s _settingTime;
 extern struct Number_Setting_s _settingNumber;
 //void electrolyticOperationON(void);

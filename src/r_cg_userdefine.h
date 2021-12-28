@@ -235,6 +235,9 @@ extern struct Tick_s{
 	uint32_t tickVoltageLowCheck;
 	uint32_t tickCurrentCheck;
 	uint32_t tickElectrolyticOff;
+	uint32_t tickWaterSoftenerPCB;
+	uint32_t tickValvePCB;
+	uint32_t tickRS485;
 	uint32_t tickAcidLevel[3];
 	uint32_t tickAlkalineLevel[3];
 	uint32_t tickHandSensor[2];
@@ -354,7 +357,7 @@ void OpenSV1(void);
 void OpenSV2(void);
 void CloseSV1(void);
 void CloseSV2(void);
-uint8_t electrolyticOperationOFF(void);
+uint8_t electrolyticOperationOFF_nostop(void);
 void electrolyticOperationON(void);
 uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);

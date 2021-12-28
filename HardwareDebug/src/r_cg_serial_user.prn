@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_serial_user.obj
 00000000                       17  #@   ../src/r_cg_serial_user.c
-00000000                       18  #@  compiled at Mon Dec 27 18:07:13 2021
+00000000                       18  #@  compiled at Tue Dec 28 10:42:08 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_machine_state
 00000000                       21  	.EXTERN _g_machine_mode
@@ -1117,7 +1117,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000000CD DF00                1113  	bnz $.BB@LABEL@16_24
 000000CF                     1114  .BB@LABEL@16_23:	; if_then_bb125
 000000CF                     1115  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 454
-000000CF 322100              1116  	movw bc, #0x0021
+000000CF 322500              1116  	movw bc, #0x0025
 000000D2 300000              1117  	movw ax, #LOWW(_g_rx_data)
 000000D5 FC000000            1118  	call !!_R_UART2_Receive
 000000D9                     1119  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 455
@@ -1610,7 +1610,7 @@ TEXTF               390 (00000186) .textf
 BSS                 196 (000000C4) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl000\r_cg_serial_user.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\r_cg_serial_user.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_serial_user.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_serial_user.asm 

@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Mon Dec 27 18:07:13 2021
+#@  compiled at Tue Dec 28 10:42:08 2021
 
 	.EXTERN _g_machine_state
 	.EXTERN _g_machine_mode
@@ -1113,7 +1113,7 @@ _r_uart2_callback_receiveend@1:
 	bnz $.BB@LABEL@16_24
 .BB@LABEL@16_23:	; if_then_bb125
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 454
-	movw bc, #0x0021
+	movw bc, #0x0025
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 455
