@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_serial_user.obj
 00000000                       17  #@   ../src/r_cg_serial_user.c
-00000000                       18  #@  compiled at Tue Dec 28 10:42:08 2021
+00000000                       18  #@  compiled at Wed Dec 29 17:58:58 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_machine_state
 00000000                       21  	.EXTERN _g_machine_mode
@@ -1017,7 +1017,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000005E FE0000              1013  	call $!_isCommand
 00000061 D1                  1014  	cmp0 a
 00000062 DF00                1015  	bnz $.BB@LABEL@16_10
-00000064                     1016  .BB@LABEL@16_5:	; if_else_bb178
+00000064                     1016  .BB@LABEL@16_5:	; if_else_bb197
 00000064                     1017  	;***      444 : 		if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_TIME)){
 00000064                     1018  	;***      445 : 			commnunication_flag.send_response_time_flag = 1;
 00000064                     1019  	;***      446 : 		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == SAVE_TIME)){
@@ -1035,578 +1035,580 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000064                     1031  	;***      458 : //			commnunication_flag.send_response_flag = 0;
 00000064                     1032  	;***      459 : 		}else if((g_rx_data[0] == H_CLEAR)){
 00000064                     1033  	;***      460 : 			commnunication_flag.alarm_clear_flag = g_rx_data[1];
-00000064                     1034  	;***      461 : 		}
-00000064                     1035  	;***      462 : 		if(isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0){
-00000064                     1036  	;***      463 : 			g_machine_mode = g_rx_data[5];
-00000064                     1037  	;***      464 : 		}else if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
-00000064                     1038  	;***      465 : 			g_machine_state.user = 1;
+00000064                     1034  	;***      461 : 		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == NEXT_ANIMATION)){
+00000064                     1035  	;***      462 : //			g_machine_state.waitAnimationRes = 0;
+00000064                     1036  	;***      463 : 		}
+00000064                     1037  	;***      464 : 		if(isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0){
+00000064                     1038  	;***      465 : 			g_machine_mode = g_rx_data[5];
 00000064                     1039  	;***      466 : 		}
-00000064                     1040  	;***      467 : 	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
-00000064                     1041  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 467
-00000064 D50000              1042  	cmp0 !LOWW(_commnunication_flag+0x00004)
-00000067 DF00                1043  	bnz $.BB@LABEL@16_8
-00000069                     1044  .BB@LABEL@16_6:	; bb183
-00000069 D50000              1045  	cmp0 !LOWW(_commnunication_flag+0x00003)
-0000006C DF00                1046  	bnz $.BB@LABEL@16_8
-0000006E                     1047  .BB@LABEL@16_7:	; if_else_bb198
-0000006E                     1048  	;***      468 : 		R_UART2_Receive(g_rx_data, 6);
-0000006E                     1049  	;***      469 : 	}else{
-0000006E                     1050  	;***      470 : 		g_uart2_fault = 1;
-0000006E                     1051  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 470
-0000006E E50000              1052  	oneb !LOWW(_g_uart2_fault)
-00000071 EF00                1053  	br $.BB@LABEL@16_9
-00000073                     1054  .BB@LABEL@16_8:	; if_then_bb196
-00000073                     1055  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 468
-00000073 320600              1056  	movw bc, #0x0006
-00000076 300000              1057  	movw ax, #LOWW(_g_rx_data)
-00000079 FC000000            1058  	call !!_R_UART2_Receive
-0000007D                     1059  .BB@LABEL@16_9:	; if_then_bb196
-0000007D EE0000              1060  	br $!.BB@LABEL@16_34
-00000080                     1061  .BB@LABEL@16_10:	; if_then_bb
-00000080                     1062  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 444
-00000080 8F0000              1063  	mov a, !LOWW(_g_rx_data)
-00000083 4C52                1064  	cmp a, #0x52
-00000085 DF00                1065  	bnz $.BB@LABEL@16_13
-00000087                     1066  .BB@LABEL@16_11:	; bb33
-00000087 40000002            1067  	cmp !LOWW(_g_rx_data+0x00001), #0x02
-0000008B DF00                1068  	bnz $.BB@LABEL@16_13
-0000008D                     1069  .BB@LABEL@16_12:	; if_then_bb46
-0000008D                     1070  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 445
-0000008D E50000              1071  	oneb !LOWW(_commnunication_flag+0x00001)
-00000090 EF00                1072  	br $.BB@LABEL@16_27
-00000092                     1073  .BB@LABEL@16_13:	; if_else_bb
-00000092                     1074  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 446
-00000092 4C53                1075  	cmp a, #0x53
-00000094 DF00                1076  	bnz $.BB@LABEL@16_16
-00000096                     1077  .BB@LABEL@16_14:	; bb51
-00000096 40000014            1078  	cmp !LOWW(_g_rx_data+0x00001), #0x14
-0000009A DF00                1079  	bnz $.BB@LABEL@16_16
-0000009C                     1080  .BB@LABEL@16_15:	; if_then_bb64
-0000009C                     1081  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 447
-0000009C 328D00              1082  	movw bc, #0x008D
-0000009F 300000              1083  	movw ax, #LOWW(_g_rx_data)
-000000A2 FC000000            1084  	call !!_R_UART2_Receive
-000000A6                     1085  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 448
-000000A6 E50000              1086  	oneb !LOWW(_commnunication_flag+0x00004)
-000000A9 EF00                1087  	br $.BB@LABEL@16_30
-000000AB                     1088  .BB@LABEL@16_16:	; if_else_bb69
-000000AB                     1089  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 449
-000000AB 4C52                1090  	cmp a, #0x52
-000000AD DF00                1091  	bnz $.BB@LABEL@16_21
-000000AF                     1092  .BB@LABEL@16_17:	; bb74
-000000AF 40000017            1093  	cmp !LOWW(_g_rx_data+0x00001), #0x17
-000000B3 DF00                1094  	bnz $.BB@LABEL@16_19
-000000B5                     1095  .BB@LABEL@16_18:	; if_then_bb87
-000000B5                     1096  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 450
-000000B5 E50000              1097  	oneb !LOWW(_commnunication_flag+0x00005)
-000000B8 EF00                1098  	br $.BB@LABEL@16_30
-000000BA                     1099  .BB@LABEL@16_19:	; bb93
-000000BA                     1100  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 451
-000000BA 40000003            1101  	cmp !LOWW(_g_rx_data+0x00001), #0x03
-000000BE DF00                1102  	bnz $.BB@LABEL@16_21
-000000C0                     1103  .BB@LABEL@16_20:	; if_then_bb106
-000000C0                     1104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 452
-000000C0 E50000              1105  	oneb !LOWW(_commnunication_flag+0x00002)
-000000C3 EF00                1106  	br $.BB@LABEL@16_30
-000000C5                     1107  .BB@LABEL@16_21:	; if_else_bb107
-000000C5                     1108  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 453
-000000C5 4C53                1109  	cmp a, #0x53
-000000C7 DF00                1110  	bnz $.BB@LABEL@16_24
-000000C9                     1111  .BB@LABEL@16_22:	; bb112
-000000C9 40000015            1112  	cmp !LOWW(_g_rx_data+0x00001), #0x15
-000000CD DF00                1113  	bnz $.BB@LABEL@16_24
-000000CF                     1114  .BB@LABEL@16_23:	; if_then_bb125
-000000CF                     1115  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 454
-000000CF 322500              1116  	movw bc, #0x0025
-000000D2 300000              1117  	movw ax, #LOWW(_g_rx_data)
-000000D5 FC000000            1118  	call !!_R_UART2_Receive
-000000D9                     1119  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 455
-000000D9 E50000              1120  	oneb !LOWW(_commnunication_flag+0x00003)
-000000DC EF00                1121  	br $.BB@LABEL@16_30
-000000DE                     1122  .BB@LABEL@16_24:	; if_else_bb129
-000000DE                     1123  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 456
-000000DE 4C52                1124  	cmp a, #0x52
-000000E0 DF00                1125  	bnz $.BB@LABEL@16_28
-000000E2                     1126  .BB@LABEL@16_25:	; bb134
-000000E2 40000018            1127  	cmp !LOWW(_g_rx_data+0x00001), #0x18
-000000E6 DF00                1128  	bnz $.BB@LABEL@16_28
-000000E8                     1129  .BB@LABEL@16_26:	; if_then_bb147
-000000E8                     1130  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 457
-000000E8 E50000              1131  	oneb !LOWW(_commnunication_flag+0x00006)
-000000EB                     1132  .BB@LABEL@16_27:	; if_then_bb147
-000000EB EF00                1133  	br $.BB@LABEL@16_30
-000000ED                     1134  .BB@LABEL@16_28:	; if_else_bb148
-000000ED                     1135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 459
-000000ED 4C43                1136  	cmp a, #0x43
-000000EF DF00                1137  	bnz $.BB@LABEL@16_30
-000000F1                     1138  .BB@LABEL@16_29:	; if_then_bb154
-000000F1                     1139  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 460
-000000F1 8F0000              1140  	mov a, !LOWW(_g_rx_data+0x00001)
-000000F4 9F0000              1141  	mov !LOWW(_commnunication_flag+0x00007), a
-000000F7                     1142  .BB@LABEL@16_30:	; if_break_bb161
-000000F7 F6                  1143  	clrw ax
-000000F8                     1144  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 462
-000000F8 C1                  1145  	push ax
-000000F9 50FF                1146  	mov x, #0xFF
-000000FB C1                  1147  	push ax
-000000FC 325318              1148  	movw bc, #0x1853
-000000FF 300000              1149  	movw ax, #LOWW(_g_rx_data)
-00000102 FC000000            1150  	call !!_isThisCommand
-00000106 1004                1151  	addw sp, #0x04
-00000108 D1                  1152  	cmp0 a
-00000109 DF00                1153  	bnz $.BB@LABEL@16_33
-0000010B                     1154  .BB@LABEL@16_31:	; if_else_bb169
-0000010B F6                  1155  	clrw ax
-0000010C                     1156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 464
-0000010C C1                  1157  	push ax
-0000010D 50FF                1158  	mov x, #0xFF
-0000010F C1                  1159  	push ax
-00000110 325301              1160  	movw bc, #0x0153
-00000113 300000              1161  	movw ax, #LOWW(_g_rx_data)
-00000116 FC000000            1162  	call !!_isThisCommand
-0000011A 1004                1163  	addw sp, #0x04
-0000011C D1                  1164  	cmp0 a
-0000011D DD00                1165  	bz $.BB@LABEL@16_34
-0000011F                     1166  .BB@LABEL@16_32:	; if_then_bb175
-0000011F                     1167  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 465
-0000011F E50000              1168  	oneb !LOWW(_g_machine_state+0x00006)
-00000122 EF00                1169  	br $.BB@LABEL@16_34
-00000124                     1170  .BB@LABEL@16_33:	; if_then_bb167
-00000124                     1171  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 463
-00000124 8F0000              1172  	mov a, !LOWW(_g_rx_data+0x00005)
-00000127 9F0000              1173  	mov !LOWW(_g_machine_mode), a
-0000012A                     1174  .BB@LABEL@16_34:	; if_break_bb200
-0000012A                     1175  	;***      471 : 	}
-0000012A                     1176  	;***      472 : 	g_uart2_receive++;
-0000012A                     1177  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 472
-0000012A A00000              1178  	inc !LOWW(_g_uart2_receive)
-0000012D D7                  1179  	ret
-0000012E                     1180  _r_uart2_callback_softwareoverrun@1:
-0000012E                     1181  	.STACK _r_uart2_callback_softwareoverrun@1 = 4
-0000012E                     1182  	;***      473 : 
-0000012E                     1183  	;***      474 :     /* End user code. Do not edit comment generated here */
-0000012E                     1184  	;***      475 : }
-0000012E                     1185  	;***      476 : 
-0000012E                     1186  	;***      477 : /***********************************************************************************************************************
-0000012E                     1187  	;***      478 : * Function Name: r_uart2_callback_softwareoverrun
-0000012E                     1188  	;***      479 : * Description  : This function is a callback function when UART2 receives an overflow data.
-0000012E                     1189  	;***      480 : * Arguments    : rx_data -
-0000012E                     1190  	;***      481 : *                    receive data
-0000012E                     1191  	;***      482 : * Return Value : None
-0000012E                     1192  	;***      483 : ***********************************************************************************************************************/
-0000012E                     1193  	;***      484 : static void r_uart2_callback_softwareoverrun(uint16_t rx_data)
-0000012E                     1194  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 484
-0000012E D7                  1195  	ret
-0000012F                     1196  _r_uart2_callback_sendend@1:
-0000012F                     1197  	.STACK _r_uart2_callback_sendend@1 = 4
-0000012F                     1198  	;***      485 : {
-0000012F                     1199  	;***      486 :     /* Start user code. Do not edit comment generated here */
-0000012F                     1200  	;***      487 :     /* End user code. Do not edit comment generated here */
-0000012F                     1201  	;***      488 : }
-0000012F                     1202  	;***      489 : 
-0000012F                     1203  	;***      490 : /***********************************************************************************************************************
-0000012F                     1204  	;***      491 : * Function Name: r_uart2_callback_sendend
-0000012F                     1205  	;***      492 : * Description  : This function is a callback function when UART2 finishes transmission.
-0000012F                     1206  	;***      493 : * Arguments    : None
-0000012F                     1207  	;***      494 : * Return Value : None
-0000012F                     1208  	;***      495 : ***********************************************************************************************************************/
-0000012F                     1209  	;***      496 : static void r_uart2_callback_sendend(void)
-0000012F                     1210  	;***      497 : {
-0000012F                     1211  	;***      498 :     /* Start user code. Do not edit comment generated here */
-0000012F                     1212  	;***      499 : 	g_uart2_sendend++;
-0000012F                     1213  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 499
-0000012F A00000              1214  	inc !LOWW(_g_uart2_sendend)
-00000132 D7                  1215  	ret
-00000133                     1216  _r_uart2_callback_error@1:
-00000133                     1217  	.STACK _r_uart2_callback_error@1 = 4
-00000133                     1218  	;***      500 :     /* End user code. Do not edit comment generated here */
-00000133                     1219  	;***      501 : }
-00000133                     1220  	;***      502 : 
-00000133                     1221  	;***      503 : /***********************************************************************************************************************
-00000133                     1222  	;***      504 : * Function Name: r_uart2_callback_error
-00000133                     1223  	;***      505 : * Description  : This function is a callback function when UART2 reception error occurs.
-00000133                     1224  	;***      506 : * Arguments    : err_type -
-00000133                     1225  	;***      507 : *                    error type value
-00000133                     1226  	;***      508 : * Return Value : None
-00000133                     1227  	;***      509 : ***********************************************************************************************************************/
-00000133                     1228  	;***      510 : static void r_uart2_callback_error(uint8_t err_type)
-00000133                     1229  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 510
-00000133 D7                  1230  	ret
-000001EE                     1231  	.SECTION .text,TEXT
-000001EE                     1232  _r_uart3_interrupt_receive@1	.vector 0x003E
-000001EE                     1233  _r_uart3_interrupt_receive@1:
-000001EE                     1234  	.STACK _r_uart3_interrupt_receive@1 = 16
-000001EE                     1235  	;***      511 : {
-000001EE                     1236  	;***      512 :     /* Start user code. Do not edit comment generated here */
-000001EE                     1237  	;***      513 :     /* End user code. Do not edit comment generated here */
-000001EE                     1238  	;***      514 : }
-000001EE                     1239  	;***      515 : 
-000001EE                     1240  	;***      516 : /***********************************************************************************************************************
-000001EE                     1241  	;***      517 : * Function Name: r_uart3_interrupt_receive
-000001EE                     1242  	;***      518 : * Description  : This function is INTSR3 interrupt service routine.
-000001EE                     1243  	;***      519 : * Arguments    : None
-000001EE                     1244  	;***      520 : * Return Value : None
-000001EE                     1245  	;***      521 : ***********************************************************************************************************************/
-000001EE                     1246  	;***      522 : static void __near r_uart3_interrupt_receive(void)
-000001EE                     1247  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 522
-000001EE C1                  1248  	push ax
-000001EF C3                  1249  	push bc
-000001F0 C5                  1250  	push de
-000001F1 C7                  1251  	push hl
-000001F2 8EFD                1252  	mov a, es
-000001F4 70                  1253  	mov x, a
-000001F5 8EFC                1254  	mov a, cs
-000001F7 C1                  1255  	push ax
-000001F8 C7                  1256  	push hl
-000001F9                     1257  	;***      523 : {
-000001F9                     1258  	;***      524 :     volatile uint8_t rx_data;
-000001F9                     1259  	;***      525 :     volatile uint8_t err_type;
-000001F9                     1260  	;***      526 :     
-000001F9                     1261  	;***      527 :     err_type = (uint8_t)(SSR13 & 0x0007U);
-000001F9                     1262  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 527
-000001F9 AF4601              1263  	movw ax, !0x0146
-000001FC 60                  1264  	mov a, x
-000001FD 5C07                1265  	and a, #0x07
-000001FF 9800                1266  	mov [sp+0x00], a
-00000201                     1267  	;***      528 :     SIR13 = (uint16_t)err_type;
-00000201                     1268  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 528
-00000201 8800                1269  	mov a, [sp+0x00]
-00000203 318E                1270  	shrw ax, 8+0x00000
-00000205 BF4E01              1271  	movw !0x014E, ax
-00000208                     1272  	;***      529 : 
-00000208                     1273  	;***      530 :     if (err_type != 0U)
-00000208                     1274  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 530
-00000208 8800                1275  	mov a, [sp+0x00]
-0000020A D1                  1276  	cmp0 a
-0000020B DD00                1277  	bz $.BB@LABEL@20_2
-0000020D                     1278  .BB@LABEL@20_1:	; if_then_bb
-0000020D                     1279  	;***      531 :     {
-0000020D                     1280  	;***      532 :         r_uart3_callback_error(err_type);
-0000020D                     1281  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 532
-0000020D 8800                1282  	mov a, [sp+0x00]
-0000020F FC000000            1283  	call !!_r_uart3_callback_error@1
-00000213                     1284  .BB@LABEL@20_2:	; if_break_bb
-00000213                     1285  	;***      533 :     }
-00000213                     1286  	;***      534 :     
-00000213                     1287  	;***      535 :     rx_data = RXD3;
-00000213                     1288  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 535
-00000213 8D16                1289  	mov a, 0xFFF16
-00000215 9801                1290  	mov [sp+0x01], a
-00000217                     1291  	;***      536 : 
-00000217                     1292  	;***      537 :     if (g_uart3_rx_length > g_uart3_rx_count)
-00000217                     1293  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 537
-00000217 AF0000              1294  	movw ax, !LOWW(_g_uart3_rx_length)
-0000021A 420000              1295  	cmpw ax, !LOWW(_g_uart3_rx_count)
-0000021D 8801                1296  	mov a, [sp+0x01]
-0000021F 61D300              1297  	bnh $.BB@LABEL@20_6
-00000222                     1298  .BB@LABEL@20_3:	; if_then_bb18
-00000222                     1299  	;***      538 :     {
-00000222                     1300  	;***      539 :         *gp_uart3_rx_address = rx_data;
-00000222                     1301  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 539
-00000222 EB0000              1302  	movw de, !LOWW(_gp_uart3_rx_address)
-00000225 99                  1303  	mov [de], a
-00000226                     1304  	;***      540 :         gp_uart3_rx_address++;
-00000226                     1305  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 540
-00000226 A20000              1306  	incw !LOWW(_gp_uart3_rx_address)
-00000229                     1307  	;***      541 :         g_uart3_rx_count++;
-00000229                     1308  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 541
-00000229 A20000              1309  	incw !LOWW(_g_uart3_rx_count)
-0000022C                     1310  	;***      542 : 
-0000022C                     1311  	;***      543 :         if (g_uart3_rx_length == g_uart3_rx_count)
-0000022C                     1312  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 543
-0000022C AF0000              1313  	movw ax, !LOWW(_g_uart3_rx_length)
-0000022F 420000              1314  	cmpw ax, !LOWW(_g_uart3_rx_count)
-00000232 61F8                1315  	sknz
-00000234                     1316  .BB@LABEL@20_4:	; if_then_bb30
-00000234                     1317  	;***      544 :         {
-00000234                     1318  	;***      545 :             r_uart3_callback_receiveend();
-00000234                     1319  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 545
-00000234 FC000000            1320  	call !!_r_uart3_callback_receiveend@1
-00000238                     1321  .BB@LABEL@20_5:	; return
-00000238 C6                  1322  	pop hl
-00000239 C0                  1323  	pop ax
-0000023A 9EFC                1324  	mov cs, a
-0000023C 60                  1325  	mov a, x
-0000023D 9EFD                1326  	mov es, a
-0000023F C6                  1327  	pop hl
-00000240 C4                  1328  	pop de
-00000241 C2                  1329  	pop bc
-00000242 C0                  1330  	pop ax
-00000243                     1331  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 552
-00000243 61FC                1332  	reti
-00000245                     1333  .BB@LABEL@20_6:	; if_else_bb
-00000245                     1334  	;***      546 :         }
-00000245                     1335  	;***      547 :     }
-00000245                     1336  	;***      548 :     else
-00000245                     1337  	;***      549 :     {
-00000245                     1338  	;***      550 :         r_uart3_callback_softwareoverrun(rx_data);
-00000245                     1339  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 550
-00000245 318E                1340  	shrw ax, 8+0x00000
-00000247 FC000000            1341  	call !!_r_uart3_callback_softwareoverrun@1
-0000024B EF00                1342  	br $.BB@LABEL@20_5
-0000024D                     1343  _r_uart3_interrupt_send@1	.vector 0x003C
-0000024D                     1344  _r_uart3_interrupt_send@1:
-0000024D                     1345  	.STACK _r_uart3_interrupt_send@1 = 14
-0000024D                     1346  	;***      551 :     }
-0000024D                     1347  	;***      552 : }
-0000024D                     1348  	;***      553 : 
-0000024D                     1349  	;***      554 : /***********************************************************************************************************************
-0000024D                     1350  	;***      555 : * Function Name: r_uart3_interrupt_send
-0000024D                     1351  	;***      556 : * Description  : This function is INTST3 interrupt service routine.
-0000024D                     1352  	;***      557 : * Arguments    : None
-0000024D                     1353  	;***      558 : * Return Value : None
-0000024D                     1354  	;***      559 : ***********************************************************************************************************************/
-0000024D                     1355  	;***      560 : static void __near r_uart3_interrupt_send(void)
-0000024D                     1356  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 560
-0000024D C1                  1357  	push ax
-0000024E C3                  1358  	push bc
-0000024F C5                  1359  	push de
-00000250 C7                  1360  	push hl
-00000251 8EFD                1361  	mov a, es
-00000253 70                  1362  	mov x, a
-00000254 8EFC                1363  	mov a, cs
-00000256 C1                  1364  	push ax
-00000257                     1365  	;***      561 : {
-00000257                     1366  	;***      562 :     if (g_uart3_tx_count > 0U)
-00000257                     1367  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 562
-00000257 AF0000              1368  	movw ax, !LOWW(_g_uart3_tx_count)
-0000025A F7                  1369  	clrw bc
-0000025B 43                  1370  	cmpw ax, bc
-0000025C DF00                1371  	bnz $.BB@LABEL@21_3
-0000025E                     1372  .BB@LABEL@21_1:	; if_else_bb
-0000025E                     1373  	;***      563 :     {
-0000025E                     1374  	;***      564 :         TXD3 = *gp_uart3_tx_address;
-0000025E                     1375  	;***      565 :         gp_uart3_tx_address++;
-0000025E                     1376  	;***      566 :         g_uart3_tx_count--;
-0000025E                     1377  	;***      567 :     }
-0000025E                     1378  	;***      568 :     else
-0000025E                     1379  	;***      569 :     {
-0000025E                     1380  	;***      570 :         r_uart3_callback_sendend();
-0000025E                     1381  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 570
-0000025E FC000000            1382  	call !!_r_uart3_callback_sendend@1
-00000262                     1383  .BB@LABEL@21_2:	; if_else_bb
-00000262 C0                  1384  	pop ax
-00000263 9EFC                1385  	mov cs, a
-00000265 60                  1386  	mov a, x
-00000266 9EFD                1387  	mov es, a
-00000268 C6                  1388  	pop hl
-00000269 C4                  1389  	pop de
-0000026A C2                  1390  	pop bc
-0000026B C0                  1391  	pop ax
-0000026C                     1392  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 572
-0000026C 61FC                1393  	reti
-0000026E                     1394  .BB@LABEL@21_3:	; if_then_bb
-0000026E                     1395  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 564
-0000026E EB0000              1396  	movw de, !LOWW(_gp_uart3_tx_address)
-00000271 89                  1397  	mov a, [de]
-00000272 9D14                1398  	mov 0xFFF14, a
-00000274                     1399  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 565
-00000274 A5                  1400  	incw de
-00000275 15                  1401  	movw ax, de
-00000276 BF0000              1402  	movw !LOWW(_gp_uart3_tx_address), ax
-00000279                     1403  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 566
-00000279 B20000              1404  	decw !LOWW(_g_uart3_tx_count)
-0000027C EF00                1405  	br $.BB@LABEL@21_2
-00000134                     1406  	.SECTION .textf,TEXTF
-00000134                     1407  _r_uart3_callback_receiveend@1:
-00000134                     1408  	.STACK _r_uart3_callback_receiveend@1 = 4
-00000134                     1409  	;***      571 :     }
-00000134                     1410  	;***      572 : }
-00000134                     1411  	;***      573 : 
-00000134                     1412  	;***      574 : /***********************************************************************************************************************
-00000134                     1413  	;***      575 : * Function Name: r_uart3_callback_receiveend
-00000134                     1414  	;***      576 : * Description  : This function is a callback function when UART3 finishes reception.
-00000134                     1415  	;***      577 : * Arguments    : None
-00000134                     1416  	;***      578 : * Return Value : None
-00000134                     1417  	;***      579 : ***********************************************************************************************************************/
-00000134                     1418  	;***      580 : static void r_uart3_callback_receiveend(void)
-00000134                     1419  	;***      581 : {
-00000134                     1420  	;***      582 :     /* Start user code. Do not edit comment generated here */
-00000134                     1421  	;***      583 : 	R_UART3_Receive(g_uart3_rx_data, 7);
-00000134                     1422  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 583
-00000134 320700              1423  	movw bc, #0x0007
-00000137 300000              1424  	movw ax, #LOWW(_g_uart3_rx_data)
-0000013A FC000000            1425  	call !!_R_UART3_Receive
-0000013E                     1426  	;***      584 : 	if(g_uart3_rx_data[0] == 1){
-0000013E                     1427  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 584
-0000013E 8F0000              1428  	mov a, !LOWW(_g_uart3_rx_data)
-00000141 4C01                1429  	cmp a, #0x01
-00000143 DF00                1430  	bnz $.BB@LABEL@22_7
-00000145                     1431  .BB@LABEL@22_1:	; if_then_bb
-00000145                     1432  	;***      585 : 		//Read timer setting
-00000145                     1433  	;***      586 : 		if((rs485_rx_p[0] == H_READ) && (rs485_rx_p[1] == READ_TIME)){
-00000145                     1434  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 586
-00000145 40000052            1435  	cmp !LOWW(_g_uart3_rx_data+0x00001), #0x52
-00000149 DF00                1436  	bnz $.BB@LABEL@22_6
-0000014B                     1437  .BB@LABEL@22_2:	; bb
-0000014B 40000002            1438  	cmp !LOWW(_g_uart3_rx_data+0x00002), #0x02
-0000014F DF00                1439  	bnz $.BB@LABEL@22_4
-00000151                     1440  .BB@LABEL@22_3:	; if_then_bb25
-00000151                     1441  	;***      587 : 			commnunication_flag.rs485_send_to_watersolfner_response_flag = 1;
-00000151                     1442  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 587
-00000151 E50000              1443  	oneb !LOWW(_commnunication_flag+0x00008)
-00000154 D7                  1444  	ret
-00000155                     1445  .BB@LABEL@22_4:	; bb32
-00000155                     1446  	;***      588 : 		}else if((rs485_rx_p[0] == 82) && (rs485_rx_p[1] == 24)){
-00000155                     1447  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 588
-00000155 40000018            1448  	cmp !LOWW(_g_uart3_rx_data+0x00002), #0x18
-00000159 61F8                1449  	sknz
-0000015B                     1450  .BB@LABEL@22_5:	; if_then_bb47
-0000015B                     1451  	;***      589 : 			commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 1;
-0000015B                     1452  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 589
-0000015B E50000              1453  	oneb !LOWW(_commnunication_flag+0x00009)
-0000015E                     1454  .BB@LABEL@22_6:	; if_else_bb.if_else_bb48_crit_edge.critedge
-0000015E                     1455  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 606
-0000015E D7                  1456  	ret
-0000015F                     1457  .BB@LABEL@22_7:	; if_else_bb97
-0000015F                     1458  	;***      590 : 		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 70)){
-0000015F                     1459  	;***      591 : 			//TODO: Start Water Softener
-0000015F                     1460  	;***      592 : 
-0000015F                     1461  	;***      593 : 		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 80)){
-0000015F                     1462  	;***      594 : 			//TODO: Stop Water Softener + Time of SNP ON (4 bytes)
-0000015F                     1463  	;***      595 : 		}
-0000015F                     1464  	;***      596 : 	}else if(g_uart3_rx_data[0] == 2){
-0000015F                     1465  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 596
-0000015F 4C02                1466  	cmp a, #0x02
-00000161 DF00                1467  	bnz $.BB@LABEL@22_12
-00000163                     1468  .BB@LABEL@22_8:	; if_then_bb103
-00000163                     1469  	;***      597 : 		if((rs485_rx_p[0] == 11)){
-00000163                     1470  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 597
-00000163 8F0000              1471  	mov a, !LOWW(_g_uart3_rx_data+0x00001)
-00000166 4C0B                1472  	cmp a, #0x0B
-00000168 DF00                1473  	bnz $.BB@LABEL@22_10
-0000016A                     1474  .BB@LABEL@22_9:	; if_then_bb111
-0000016A                     1475  	;***      598 : 			commnunication_flag.rs485_send_to_valve_response_flag = 1;
-0000016A                     1476  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 598
-0000016A E50000              1477  	oneb !LOWW(_commnunication_flag+0x0000A)
-0000016D D7                  1478  	ret
-0000016E                     1479  .BB@LABEL@22_10:	; if_else_bb112
-0000016E                     1480  	;***      599 : 		}else if((rs485_rx_p[0] == 12)){
-0000016E                     1481  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 599
-0000016E 4C0C                1482  	cmp a, #0x0C
-00000170 DF00                1483  	bnz $.BB@LABEL@22_14
-00000172                     1484  .BB@LABEL@22_11:	; if_then_bb120
-00000172                     1485  	;***      600 : 			commnunication_flag.rs485_get_valve_gesture_flag = 1;
-00000172                     1486  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 600
-00000172 E50000              1487  	oneb !LOWW(_commnunication_flag+0x0000B)
-00000175 D7                  1488  	ret
-00000176                     1489  .BB@LABEL@22_12:	; if_else_bb123
-00000176                     1490  	;***      601 : 		}
-00000176                     1491  	;***      602 : 	}else if(g_uart3_rx_data[0] != 0xff){
-00000176                     1492  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 602
-00000176 81                  1493  	inc a
-00000177 61E8                1494  	skz
-00000179                     1495  .BB@LABEL@22_13:	; if_then_bb129
-00000179                     1496  	;***      603 : 		commnunication_flag.rs485_fault = 1;
-00000179                     1497  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 603
-00000179 E50000              1498  	oneb !LOWW(_commnunication_flag+0x0000C)
-0000017C                     1499  .BB@LABEL@22_14:	; return
-0000017C                     1500  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 606
-0000017C D7                  1501  	ret
-0000017D                     1502  _r_uart3_callback_softwareoverrun@1:
-0000017D                     1503  	.STACK _r_uart3_callback_softwareoverrun@1 = 4
-0000017D                     1504  	;***      604 : 	}
-0000017D                     1505  	;***      605 :     /* End user code. Do not edit comment generated here */
-0000017D                     1506  	;***      606 : }
-0000017D                     1507  	;***      607 : 
-0000017D                     1508  	;***      608 : /***********************************************************************************************************************
-0000017D                     1509  	;***      609 : * Function Name: r_uart3_callback_softwareoverrun
-0000017D                     1510  	;***      610 : * Description  : This function is a callback function when UART3 receives an overflow data.
-0000017D                     1511  	;***      611 : * Arguments    : rx_data -
-0000017D                     1512  	;***      612 : *                    receive data
-0000017D                     1513  	;***      613 : * Return Value : None
-0000017D                     1514  	;***      614 : ***********************************************************************************************************************/
-0000017D                     1515  	;***      615 : static void r_uart3_callback_softwareoverrun(uint16_t rx_data)
-0000017D                     1516  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 615
-0000017D D7                  1517  	ret
-0000017E                     1518  _r_uart3_callback_sendend@1:
-0000017E                     1519  	.STACK _r_uart3_callback_sendend@1 = 4
-0000017E                     1520  	;***      616 : {
-0000017E                     1521  	;***      617 :     /* Start user code. Do not edit comment generated here */
-0000017E                     1522  	;***      618 :     /* End user code. Do not edit comment generated here */
-0000017E                     1523  	;***      619 : }
-0000017E                     1524  	;***      620 : 
-0000017E                     1525  	;***      621 : /***********************************************************************************************************************
-0000017E                     1526  	;***      622 : * Function Name: r_uart3_callback_sendend
-0000017E                     1527  	;***      623 : * Description  : This function is a callback function when UART3 finishes transmission.
-0000017E                     1528  	;***      624 : * Arguments    : None
-0000017E                     1529  	;***      625 : * Return Value : None
-0000017E                     1530  	;***      626 : ***********************************************************************************************************************/
-0000017E                     1531  	;***      627 : static void r_uart3_callback_sendend(void)
-0000017E                     1532  	;***      628 : {
-0000017E                     1533  	;***      629 :     /* Start user code. Do not edit comment generated here */
-0000017E                     1534  	;***      630 : 	g_uart3_sendend++;
-0000017E                     1535  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 630
-0000017E A00000              1536  	inc !LOWW(_g_uart3_sendend)
-00000181                     1537  	;***      631 : 	O_RS485_MODE_PIN = 0U;
-00000181                     1538  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 631
-00000181 710300              1539  	clr1 0xFFF00.0
-00000184 D7                  1540  	ret
-00000185                     1541  _r_uart3_callback_error@1:
-00000185                     1542  	.STACK _r_uart3_callback_error@1 = 4
-00000185                     1543  	;***      632 :     /* End user code. Do not edit comment generated here */
-00000185                     1544  	;***      633 : }
-00000185                     1545  	;***      634 : 
-00000185                     1546  	;***      635 : /***********************************************************************************************************************
-00000185                     1547  	;***      636 : * Function Name: r_uart3_callback_error
-00000185                     1548  	;***      637 : * Description  : This function is a callback function when UART3 reception error occurs.
-00000185                     1549  	;***      638 : * Arguments    : err_type -
-00000185                     1550  	;***      639 : *                    error type value
-00000185                     1551  	;***      640 : * Return Value : None
-00000185                     1552  	;***      641 : ***********************************************************************************************************************/
-00000185                     1553  	;***      642 : static void r_uart3_callback_error(uint8_t err_type)
-00000185                     1554  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 642
-00000185 D7                  1555  	ret
-00000186                     1556  	;***      643 : {
-00000186                     1557  	;***      644 :     /* Start user code. Do not edit comment generated here */
-00000186                     1558  	;***      645 :     /* End user code. Do not edit comment generated here */
-00000186                     1559  	;***      646 : }
-00000186                     1560  	;***      647 : 
-00000186                     1561  	;***      648 : /* Start user code for adding. Do not edit comment generated here */
-00000186                     1562  	;***      649 : /* End user code. Do not edit comment generated here */
-00000000                     1563  	.SECTION .bss,BSS
-00000000                     1564  _g_uart3_rx_data:
-00000000                     1565  	.DS (8)
-00000008                     1566  _send_response_flag:
-00000008                     1567  	.DS (1)
-00000009                     1568  _send_response_time_flag:
-00000009                     1569  	.DS (1)
-0000000A                     1570  _send_response_number_flag:
-0000000A                     1571  	.DS (1)
-0000000B                     1572  _recived_time_setting_flag:
-0000000B                     1573  	.DS (1)
-0000000C                     1574  _send_respone_status_flag:
-0000000C                     1575  	.DS (1)
-0000000D                     1576  _recived_number_setting_flag:
-0000000D                     1577  	.DS (1)
-0000000E                     1578  _commnunication_flag:
-0000000E                     1579  	.DS (13)
-0000001B                     1580  _g_csi_count:
-0000001B                     1581  	.DS (1)
-0000001C                     1582  _g_csi_err:
-0000001C                     1583  	.DS (1)
-0000001D                     1584  _g_csi_send_end:
-0000001D                     1585  	.DS (1)
-0000001E                     1586  _g_csi_rev_end:
-0000001E                     1587  	.DS (1)
-0000001F                     1588  _g_uart1_send:
-0000001F                     1589  	.DS (1)
-00000020                     1590  _g_uart2_sendend:
-00000020                     1591  	.DS (1)
-00000021                     1592  _g_uart2_receive:
-00000021                     1593  	.DS (1)
-00000022                     1594  _g_rx_data:
-00000022                     1595  	.DS (160)
-000000C2                     1596  _g_uart2_fault:
-000000C2                     1597  	.DS (1)
-000000C3                     1598  _g_uart3_sendend:
-000000C3                     1599  	.DS (1)
+00000064                     1040  	;***      467 : 		if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
+00000064                     1041  	;***      468 : 			g_machine_state.user = 2;
+00000064                     1042  	;***      469 : 		}
+00000064                     1043  	;***      470 : 	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
+00000064                     1044  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 470
+00000064 D50000              1045  	cmp0 !LOWW(_commnunication_flag+0x00004)
+00000067 DF00                1046  	bnz $.BB@LABEL@16_8
+00000069                     1047  .BB@LABEL@16_6:	; bb202
+00000069 D50000              1048  	cmp0 !LOWW(_commnunication_flag+0x00003)
+0000006C DF00                1049  	bnz $.BB@LABEL@16_8
+0000006E                     1050  .BB@LABEL@16_7:	; if_else_bb217
+0000006E                     1051  	;***      471 : 		R_UART2_Receive(g_rx_data, 6);
+0000006E                     1052  	;***      472 : 	}else{
+0000006E                     1053  	;***      473 : 		g_uart2_fault = 1;
+0000006E                     1054  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 473
+0000006E E50000              1055  	oneb !LOWW(_g_uart2_fault)
+00000071 EF00                1056  	br $.BB@LABEL@16_9
+00000073                     1057  .BB@LABEL@16_8:	; if_then_bb215
+00000073                     1058  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 471
+00000073 320600              1059  	movw bc, #0x0006
+00000076 300000              1060  	movw ax, #LOWW(_g_rx_data)
+00000079 FC000000            1061  	call !!_R_UART2_Receive
+0000007D                     1062  .BB@LABEL@16_9:	; if_then_bb215
+0000007D EE0000              1063  	br $!.BB@LABEL@16_34
+00000080                     1064  .BB@LABEL@16_10:	; if_then_bb
+00000080                     1065  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 444
+00000080 8F0000              1066  	mov a, !LOWW(_g_rx_data)
+00000083 4C52                1067  	cmp a, #0x52
+00000085 DF00                1068  	bnz $.BB@LABEL@16_13
+00000087                     1069  .BB@LABEL@16_11:	; bb33
+00000087 40000002            1070  	cmp !LOWW(_g_rx_data+0x00001), #0x02
+0000008B DF00                1071  	bnz $.BB@LABEL@16_13
+0000008D                     1072  .BB@LABEL@16_12:	; if_then_bb46
+0000008D                     1073  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 445
+0000008D E50000              1074  	oneb !LOWW(_commnunication_flag+0x00001)
+00000090 EF00                1075  	br $.BB@LABEL@16_27
+00000092                     1076  .BB@LABEL@16_13:	; if_else_bb
+00000092                     1077  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 446
+00000092 4C53                1078  	cmp a, #0x53
+00000094 DF00                1079  	bnz $.BB@LABEL@16_16
+00000096                     1080  .BB@LABEL@16_14:	; bb51
+00000096 40000014            1081  	cmp !LOWW(_g_rx_data+0x00001), #0x14
+0000009A DF00                1082  	bnz $.BB@LABEL@16_16
+0000009C                     1083  .BB@LABEL@16_15:	; if_then_bb64
+0000009C                     1084  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 447
+0000009C 328D00              1085  	movw bc, #0x008D
+0000009F 300000              1086  	movw ax, #LOWW(_g_rx_data)
+000000A2 FC000000            1087  	call !!_R_UART2_Receive
+000000A6                     1088  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 448
+000000A6 E50000              1089  	oneb !LOWW(_commnunication_flag+0x00004)
+000000A9 EF00                1090  	br $.BB@LABEL@16_30
+000000AB                     1091  .BB@LABEL@16_16:	; if_else_bb69
+000000AB                     1092  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 449
+000000AB 4C52                1093  	cmp a, #0x52
+000000AD DF00                1094  	bnz $.BB@LABEL@16_21
+000000AF                     1095  .BB@LABEL@16_17:	; bb74
+000000AF 40000017            1096  	cmp !LOWW(_g_rx_data+0x00001), #0x17
+000000B3 DF00                1097  	bnz $.BB@LABEL@16_19
+000000B5                     1098  .BB@LABEL@16_18:	; if_then_bb87
+000000B5                     1099  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 450
+000000B5 E50000              1100  	oneb !LOWW(_commnunication_flag+0x00005)
+000000B8 EF00                1101  	br $.BB@LABEL@16_30
+000000BA                     1102  .BB@LABEL@16_19:	; bb93
+000000BA                     1103  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 451
+000000BA 40000003            1104  	cmp !LOWW(_g_rx_data+0x00001), #0x03
+000000BE DF00                1105  	bnz $.BB@LABEL@16_21
+000000C0                     1106  .BB@LABEL@16_20:	; if_then_bb106
+000000C0                     1107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 452
+000000C0 E50000              1108  	oneb !LOWW(_commnunication_flag+0x00002)
+000000C3 EF00                1109  	br $.BB@LABEL@16_30
+000000C5                     1110  .BB@LABEL@16_21:	; if_else_bb107
+000000C5                     1111  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 453
+000000C5 4C53                1112  	cmp a, #0x53
+000000C7 DF00                1113  	bnz $.BB@LABEL@16_24
+000000C9                     1114  .BB@LABEL@16_22:	; bb112
+000000C9 40000015            1115  	cmp !LOWW(_g_rx_data+0x00001), #0x15
+000000CD DF00                1116  	bnz $.BB@LABEL@16_24
+000000CF                     1117  .BB@LABEL@16_23:	; if_then_bb125
+000000CF                     1118  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 454
+000000CF 322500              1119  	movw bc, #0x0025
+000000D2 300000              1120  	movw ax, #LOWW(_g_rx_data)
+000000D5 FC000000            1121  	call !!_R_UART2_Receive
+000000D9                     1122  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 455
+000000D9 E50000              1123  	oneb !LOWW(_commnunication_flag+0x00003)
+000000DC EF00                1124  	br $.BB@LABEL@16_30
+000000DE                     1125  .BB@LABEL@16_24:	; if_else_bb129
+000000DE                     1126  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 456
+000000DE 4C52                1127  	cmp a, #0x52
+000000E0 DF00                1128  	bnz $.BB@LABEL@16_28
+000000E2                     1129  .BB@LABEL@16_25:	; bb134
+000000E2 40000018            1130  	cmp !LOWW(_g_rx_data+0x00001), #0x18
+000000E6 DF00                1131  	bnz $.BB@LABEL@16_28
+000000E8                     1132  .BB@LABEL@16_26:	; if_then_bb147
+000000E8                     1133  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 457
+000000E8 E50000              1134  	oneb !LOWW(_commnunication_flag+0x00006)
+000000EB                     1135  .BB@LABEL@16_27:	; if_then_bb147
+000000EB EF00                1136  	br $.BB@LABEL@16_30
+000000ED                     1137  .BB@LABEL@16_28:	; if_else_bb148
+000000ED                     1138  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 459
+000000ED 4C43                1139  	cmp a, #0x43
+000000EF DF00                1140  	bnz $.BB@LABEL@16_30
+000000F1                     1141  .BB@LABEL@16_29:	; if_then_bb154
+000000F1                     1142  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 460
+000000F1 8F0000              1143  	mov a, !LOWW(_g_rx_data+0x00001)
+000000F4 9F0000              1144  	mov !LOWW(_commnunication_flag+0x00007), a
+000000F7                     1145  .BB@LABEL@16_30:	; if_break_bb181
+000000F7 F6                  1146  	clrw ax
+000000F8                     1147  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 464
+000000F8 C1                  1148  	push ax
+000000F9 50FF                1149  	mov x, #0xFF
+000000FB C1                  1150  	push ax
+000000FC 325318              1151  	movw bc, #0x1853
+000000FF 300000              1152  	movw ax, #LOWW(_g_rx_data)
+00000102 FC000000            1153  	call !!_isThisCommand
+00000106 1004                1154  	addw sp, #0x04
+00000108 D1                  1155  	cmp0 a
+00000109 DD00                1156  	bz $.BB@LABEL@16_32
+0000010B                     1157  .BB@LABEL@16_31:	; if_then_bb187
+0000010B                     1158  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 465
+0000010B 8F0000              1159  	mov a, !LOWW(_g_rx_data+0x00005)
+0000010E 9F0000              1160  	mov !LOWW(_g_machine_mode), a
+00000111                     1161  .BB@LABEL@16_32:	; if_break_bb189
+00000111 F6                  1162  	clrw ax
+00000112                     1163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 467
+00000112 C1                  1164  	push ax
+00000113 50FF                1165  	mov x, #0xFF
+00000115 C1                  1166  	push ax
+00000116 325301              1167  	movw bc, #0x0153
+00000119 300000              1168  	movw ax, #LOWW(_g_rx_data)
+0000011C FC000000            1169  	call !!_isThisCommand
+00000120 1004                1170  	addw sp, #0x04
+00000122 D1                  1171  	cmp0 a
+00000123 61E8                1172  	skz
+00000125                     1173  .BB@LABEL@16_33:	; if_then_bb195
+00000125                     1174  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 468
+00000125 CF000002            1175  	mov !LOWW(_g_machine_state+0x00009), #0x02
+00000129                     1176  .BB@LABEL@16_34:	; if_break_bb219
+00000129                     1177  	;***      474 : 	}
+00000129                     1178  	;***      475 : 	g_uart2_receive++;
+00000129                     1179  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 475
+00000129 A00000              1180  	inc !LOWW(_g_uart2_receive)
+0000012C D7                  1181  	ret
+0000012D                     1182  _r_uart2_callback_softwareoverrun@1:
+0000012D                     1183  	.STACK _r_uart2_callback_softwareoverrun@1 = 4
+0000012D                     1184  	;***      476 : 
+0000012D                     1185  	;***      477 :     /* End user code. Do not edit comment generated here */
+0000012D                     1186  	;***      478 : }
+0000012D                     1187  	;***      479 : 
+0000012D                     1188  	;***      480 : /***********************************************************************************************************************
+0000012D                     1189  	;***      481 : * Function Name: r_uart2_callback_softwareoverrun
+0000012D                     1190  	;***      482 : * Description  : This function is a callback function when UART2 receives an overflow data.
+0000012D                     1191  	;***      483 : * Arguments    : rx_data -
+0000012D                     1192  	;***      484 : *                    receive data
+0000012D                     1193  	;***      485 : * Return Value : None
+0000012D                     1194  	;***      486 : ***********************************************************************************************************************/
+0000012D                     1195  	;***      487 : static void r_uart2_callback_softwareoverrun(uint16_t rx_data)
+0000012D                     1196  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 487
+0000012D D7                  1197  	ret
+0000012E                     1198  _r_uart2_callback_sendend@1:
+0000012E                     1199  	.STACK _r_uart2_callback_sendend@1 = 4
+0000012E                     1200  	;***      488 : {
+0000012E                     1201  	;***      489 :     /* Start user code. Do not edit comment generated here */
+0000012E                     1202  	;***      490 :     /* End user code. Do not edit comment generated here */
+0000012E                     1203  	;***      491 : }
+0000012E                     1204  	;***      492 : 
+0000012E                     1205  	;***      493 : /***********************************************************************************************************************
+0000012E                     1206  	;***      494 : * Function Name: r_uart2_callback_sendend
+0000012E                     1207  	;***      495 : * Description  : This function is a callback function when UART2 finishes transmission.
+0000012E                     1208  	;***      496 : * Arguments    : None
+0000012E                     1209  	;***      497 : * Return Value : None
+0000012E                     1210  	;***      498 : ***********************************************************************************************************************/
+0000012E                     1211  	;***      499 : static void r_uart2_callback_sendend(void)
+0000012E                     1212  	;***      500 : {
+0000012E                     1213  	;***      501 :     /* Start user code. Do not edit comment generated here */
+0000012E                     1214  	;***      502 : 	g_uart2_sendend++;
+0000012E                     1215  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 502
+0000012E A00000              1216  	inc !LOWW(_g_uart2_sendend)
+00000131 D7                  1217  	ret
+00000132                     1218  _r_uart2_callback_error@1:
+00000132                     1219  	.STACK _r_uart2_callback_error@1 = 4
+00000132                     1220  	;***      503 :     /* End user code. Do not edit comment generated here */
+00000132                     1221  	;***      504 : }
+00000132                     1222  	;***      505 : 
+00000132                     1223  	;***      506 : /***********************************************************************************************************************
+00000132                     1224  	;***      507 : * Function Name: r_uart2_callback_error
+00000132                     1225  	;***      508 : * Description  : This function is a callback function when UART2 reception error occurs.
+00000132                     1226  	;***      509 : * Arguments    : err_type -
+00000132                     1227  	;***      510 : *                    error type value
+00000132                     1228  	;***      511 : * Return Value : None
+00000132                     1229  	;***      512 : ***********************************************************************************************************************/
+00000132                     1230  	;***      513 : static void r_uart2_callback_error(uint8_t err_type)
+00000132                     1231  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 513
+00000132 D7                  1232  	ret
+000001EE                     1233  	.SECTION .text,TEXT
+000001EE                     1234  _r_uart3_interrupt_receive@1	.vector 0x003E
+000001EE                     1235  _r_uart3_interrupt_receive@1:
+000001EE                     1236  	.STACK _r_uart3_interrupt_receive@1 = 16
+000001EE                     1237  	;***      514 : {
+000001EE                     1238  	;***      515 :     /* Start user code. Do not edit comment generated here */
+000001EE                     1239  	;***      516 :     /* End user code. Do not edit comment generated here */
+000001EE                     1240  	;***      517 : }
+000001EE                     1241  	;***      518 : 
+000001EE                     1242  	;***      519 : /***********************************************************************************************************************
+000001EE                     1243  	;***      520 : * Function Name: r_uart3_interrupt_receive
+000001EE                     1244  	;***      521 : * Description  : This function is INTSR3 interrupt service routine.
+000001EE                     1245  	;***      522 : * Arguments    : None
+000001EE                     1246  	;***      523 : * Return Value : None
+000001EE                     1247  	;***      524 : ***********************************************************************************************************************/
+000001EE                     1248  	;***      525 : static void __near r_uart3_interrupt_receive(void)
+000001EE                     1249  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 525
+000001EE C1                  1250  	push ax
+000001EF C3                  1251  	push bc
+000001F0 C5                  1252  	push de
+000001F1 C7                  1253  	push hl
+000001F2 8EFD                1254  	mov a, es
+000001F4 70                  1255  	mov x, a
+000001F5 8EFC                1256  	mov a, cs
+000001F7 C1                  1257  	push ax
+000001F8 C7                  1258  	push hl
+000001F9                     1259  	;***      526 : {
+000001F9                     1260  	;***      527 :     volatile uint8_t rx_data;
+000001F9                     1261  	;***      528 :     volatile uint8_t err_type;
+000001F9                     1262  	;***      529 :     
+000001F9                     1263  	;***      530 :     err_type = (uint8_t)(SSR13 & 0x0007U);
+000001F9                     1264  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 530
+000001F9 AF4601              1265  	movw ax, !0x0146
+000001FC 60                  1266  	mov a, x
+000001FD 5C07                1267  	and a, #0x07
+000001FF 9800                1268  	mov [sp+0x00], a
+00000201                     1269  	;***      531 :     SIR13 = (uint16_t)err_type;
+00000201                     1270  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 531
+00000201 8800                1271  	mov a, [sp+0x00]
+00000203 318E                1272  	shrw ax, 8+0x00000
+00000205 BF4E01              1273  	movw !0x014E, ax
+00000208                     1274  	;***      532 : 
+00000208                     1275  	;***      533 :     if (err_type != 0U)
+00000208                     1276  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 533
+00000208 8800                1277  	mov a, [sp+0x00]
+0000020A D1                  1278  	cmp0 a
+0000020B DD00                1279  	bz $.BB@LABEL@20_2
+0000020D                     1280  .BB@LABEL@20_1:	; if_then_bb
+0000020D                     1281  	;***      534 :     {
+0000020D                     1282  	;***      535 :         r_uart3_callback_error(err_type);
+0000020D                     1283  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 535
+0000020D 8800                1284  	mov a, [sp+0x00]
+0000020F FC000000            1285  	call !!_r_uart3_callback_error@1
+00000213                     1286  .BB@LABEL@20_2:	; if_break_bb
+00000213                     1287  	;***      536 :     }
+00000213                     1288  	;***      537 :     
+00000213                     1289  	;***      538 :     rx_data = RXD3;
+00000213                     1290  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 538
+00000213 8D16                1291  	mov a, 0xFFF16
+00000215 9801                1292  	mov [sp+0x01], a
+00000217                     1293  	;***      539 : 
+00000217                     1294  	;***      540 :     if (g_uart3_rx_length > g_uart3_rx_count)
+00000217                     1295  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 540
+00000217 AF0000              1296  	movw ax, !LOWW(_g_uart3_rx_length)
+0000021A 420000              1297  	cmpw ax, !LOWW(_g_uart3_rx_count)
+0000021D 8801                1298  	mov a, [sp+0x01]
+0000021F 61D300              1299  	bnh $.BB@LABEL@20_6
+00000222                     1300  .BB@LABEL@20_3:	; if_then_bb18
+00000222                     1301  	;***      541 :     {
+00000222                     1302  	;***      542 :         *gp_uart3_rx_address = rx_data;
+00000222                     1303  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 542
+00000222 EB0000              1304  	movw de, !LOWW(_gp_uart3_rx_address)
+00000225 99                  1305  	mov [de], a
+00000226                     1306  	;***      543 :         gp_uart3_rx_address++;
+00000226                     1307  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 543
+00000226 A20000              1308  	incw !LOWW(_gp_uart3_rx_address)
+00000229                     1309  	;***      544 :         g_uart3_rx_count++;
+00000229                     1310  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 544
+00000229 A20000              1311  	incw !LOWW(_g_uart3_rx_count)
+0000022C                     1312  	;***      545 : 
+0000022C                     1313  	;***      546 :         if (g_uart3_rx_length == g_uart3_rx_count)
+0000022C                     1314  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 546
+0000022C AF0000              1315  	movw ax, !LOWW(_g_uart3_rx_length)
+0000022F 420000              1316  	cmpw ax, !LOWW(_g_uart3_rx_count)
+00000232 61F8                1317  	sknz
+00000234                     1318  .BB@LABEL@20_4:	; if_then_bb30
+00000234                     1319  	;***      547 :         {
+00000234                     1320  	;***      548 :             r_uart3_callback_receiveend();
+00000234                     1321  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 548
+00000234 FC000000            1322  	call !!_r_uart3_callback_receiveend@1
+00000238                     1323  .BB@LABEL@20_5:	; return
+00000238 C6                  1324  	pop hl
+00000239 C0                  1325  	pop ax
+0000023A 9EFC                1326  	mov cs, a
+0000023C 60                  1327  	mov a, x
+0000023D 9EFD                1328  	mov es, a
+0000023F C6                  1329  	pop hl
+00000240 C4                  1330  	pop de
+00000241 C2                  1331  	pop bc
+00000242 C0                  1332  	pop ax
+00000243                     1333  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 555
+00000243 61FC                1334  	reti
+00000245                     1335  .BB@LABEL@20_6:	; if_else_bb
+00000245                     1336  	;***      549 :         }
+00000245                     1337  	;***      550 :     }
+00000245                     1338  	;***      551 :     else
+00000245                     1339  	;***      552 :     {
+00000245                     1340  	;***      553 :         r_uart3_callback_softwareoverrun(rx_data);
+00000245                     1341  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 553
+00000245 318E                1342  	shrw ax, 8+0x00000
+00000247 FC000000            1343  	call !!_r_uart3_callback_softwareoverrun@1
+0000024B EF00                1344  	br $.BB@LABEL@20_5
+0000024D                     1345  _r_uart3_interrupt_send@1	.vector 0x003C
+0000024D                     1346  _r_uart3_interrupt_send@1:
+0000024D                     1347  	.STACK _r_uart3_interrupt_send@1 = 14
+0000024D                     1348  	;***      554 :     }
+0000024D                     1349  	;***      555 : }
+0000024D                     1350  	;***      556 : 
+0000024D                     1351  	;***      557 : /***********************************************************************************************************************
+0000024D                     1352  	;***      558 : * Function Name: r_uart3_interrupt_send
+0000024D                     1353  	;***      559 : * Description  : This function is INTST3 interrupt service routine.
+0000024D                     1354  	;***      560 : * Arguments    : None
+0000024D                     1355  	;***      561 : * Return Value : None
+0000024D                     1356  	;***      562 : ***********************************************************************************************************************/
+0000024D                     1357  	;***      563 : static void __near r_uart3_interrupt_send(void)
+0000024D                     1358  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 563
+0000024D C1                  1359  	push ax
+0000024E C3                  1360  	push bc
+0000024F C5                  1361  	push de
+00000250 C7                  1362  	push hl
+00000251 8EFD                1363  	mov a, es
+00000253 70                  1364  	mov x, a
+00000254 8EFC                1365  	mov a, cs
+00000256 C1                  1366  	push ax
+00000257                     1367  	;***      564 : {
+00000257                     1368  	;***      565 :     if (g_uart3_tx_count > 0U)
+00000257                     1369  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 565
+00000257 AF0000              1370  	movw ax, !LOWW(_g_uart3_tx_count)
+0000025A F7                  1371  	clrw bc
+0000025B 43                  1372  	cmpw ax, bc
+0000025C DF00                1373  	bnz $.BB@LABEL@21_3
+0000025E                     1374  .BB@LABEL@21_1:	; if_else_bb
+0000025E                     1375  	;***      566 :     {
+0000025E                     1376  	;***      567 :         TXD3 = *gp_uart3_tx_address;
+0000025E                     1377  	;***      568 :         gp_uart3_tx_address++;
+0000025E                     1378  	;***      569 :         g_uart3_tx_count--;
+0000025E                     1379  	;***      570 :     }
+0000025E                     1380  	;***      571 :     else
+0000025E                     1381  	;***      572 :     {
+0000025E                     1382  	;***      573 :         r_uart3_callback_sendend();
+0000025E                     1383  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 573
+0000025E FC000000            1384  	call !!_r_uart3_callback_sendend@1
+00000262                     1385  .BB@LABEL@21_2:	; if_else_bb
+00000262 C0                  1386  	pop ax
+00000263 9EFC                1387  	mov cs, a
+00000265 60                  1388  	mov a, x
+00000266 9EFD                1389  	mov es, a
+00000268 C6                  1390  	pop hl
+00000269 C4                  1391  	pop de
+0000026A C2                  1392  	pop bc
+0000026B C0                  1393  	pop ax
+0000026C                     1394  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 575
+0000026C 61FC                1395  	reti
+0000026E                     1396  .BB@LABEL@21_3:	; if_then_bb
+0000026E                     1397  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 567
+0000026E EB0000              1398  	movw de, !LOWW(_gp_uart3_tx_address)
+00000271 89                  1399  	mov a, [de]
+00000272 9D14                1400  	mov 0xFFF14, a
+00000274                     1401  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 568
+00000274 A5                  1402  	incw de
+00000275 15                  1403  	movw ax, de
+00000276 BF0000              1404  	movw !LOWW(_gp_uart3_tx_address), ax
+00000279                     1405  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 569
+00000279 B20000              1406  	decw !LOWW(_g_uart3_tx_count)
+0000027C EF00                1407  	br $.BB@LABEL@21_2
+00000133                     1408  	.SECTION .textf,TEXTF
+00000133                     1409  _r_uart3_callback_receiveend@1:
+00000133                     1410  	.STACK _r_uart3_callback_receiveend@1 = 4
+00000133                     1411  	;***      574 :     }
+00000133                     1412  	;***      575 : }
+00000133                     1413  	;***      576 : 
+00000133                     1414  	;***      577 : /***********************************************************************************************************************
+00000133                     1415  	;***      578 : * Function Name: r_uart3_callback_receiveend
+00000133                     1416  	;***      579 : * Description  : This function is a callback function when UART3 finishes reception.
+00000133                     1417  	;***      580 : * Arguments    : None
+00000133                     1418  	;***      581 : * Return Value : None
+00000133                     1419  	;***      582 : ***********************************************************************************************************************/
+00000133                     1420  	;***      583 : static void r_uart3_callback_receiveend(void)
+00000133                     1421  	;***      584 : {
+00000133                     1422  	;***      585 :     /* Start user code. Do not edit comment generated here */
+00000133                     1423  	;***      586 : 	R_UART3_Receive(g_uart3_rx_data, 7);
+00000133                     1424  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 586
+00000133 320700              1425  	movw bc, #0x0007
+00000136 300000              1426  	movw ax, #LOWW(_g_uart3_rx_data)
+00000139 FC000000            1427  	call !!_R_UART3_Receive
+0000013D                     1428  	;***      587 : 	if(g_uart3_rx_data[0] == 1){
+0000013D                     1429  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 587
+0000013D 8F0000              1430  	mov a, !LOWW(_g_uart3_rx_data)
+00000140 4C01                1431  	cmp a, #0x01
+00000142 DF00                1432  	bnz $.BB@LABEL@22_7
+00000144                     1433  .BB@LABEL@22_1:	; if_then_bb
+00000144                     1434  	;***      588 : 		//Read timer setting
+00000144                     1435  	;***      589 : 		if((rs485_rx_p[0] == H_READ) && (rs485_rx_p[1] == READ_TIME)){
+00000144                     1436  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 589
+00000144 40000052            1437  	cmp !LOWW(_g_uart3_rx_data+0x00001), #0x52
+00000148 DF00                1438  	bnz $.BB@LABEL@22_6
+0000014A                     1439  .BB@LABEL@22_2:	; bb
+0000014A 40000002            1440  	cmp !LOWW(_g_uart3_rx_data+0x00002), #0x02
+0000014E DF00                1441  	bnz $.BB@LABEL@22_4
+00000150                     1442  .BB@LABEL@22_3:	; if_then_bb25
+00000150                     1443  	;***      590 : 			commnunication_flag.rs485_send_to_watersolfner_response_flag = 1;
+00000150                     1444  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 590
+00000150 E50000              1445  	oneb !LOWW(_commnunication_flag+0x00008)
+00000153 D7                  1446  	ret
+00000154                     1447  .BB@LABEL@22_4:	; bb32
+00000154                     1448  	;***      591 : 		}else if((rs485_rx_p[0] == 82) && (rs485_rx_p[1] == 24)){
+00000154                     1449  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 591
+00000154 40000018            1450  	cmp !LOWW(_g_uart3_rx_data+0x00002), #0x18
+00000158 61F8                1451  	sknz
+0000015A                     1452  .BB@LABEL@22_5:	; if_then_bb47
+0000015A                     1453  	;***      592 : 			commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 1;
+0000015A                     1454  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 592
+0000015A E50000              1455  	oneb !LOWW(_commnunication_flag+0x00009)
+0000015D                     1456  .BB@LABEL@22_6:	; if_else_bb.if_else_bb48_crit_edge.critedge
+0000015D                     1457  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 609
+0000015D D7                  1458  	ret
+0000015E                     1459  .BB@LABEL@22_7:	; if_else_bb97
+0000015E                     1460  	;***      593 : 		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 70)){
+0000015E                     1461  	;***      594 : 			//TODO: Start Water Softener
+0000015E                     1462  	;***      595 : 
+0000015E                     1463  	;***      596 : 		}else if((rs485_rx_p[0] == 83) && (rs485_rx_p[1] == 80)){
+0000015E                     1464  	;***      597 : 			//TODO: Stop Water Softener + Time of SNP ON (4 bytes)
+0000015E                     1465  	;***      598 : 		}
+0000015E                     1466  	;***      599 : 	}else if(g_uart3_rx_data[0] == 2){
+0000015E                     1467  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 599
+0000015E 4C02                1468  	cmp a, #0x02
+00000160 DF00                1469  	bnz $.BB@LABEL@22_12
+00000162                     1470  .BB@LABEL@22_8:	; if_then_bb103
+00000162                     1471  	;***      600 : 		if((rs485_rx_p[0] == 11)){
+00000162                     1472  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 600
+00000162 8F0000              1473  	mov a, !LOWW(_g_uart3_rx_data+0x00001)
+00000165 4C0B                1474  	cmp a, #0x0B
+00000167 DF00                1475  	bnz $.BB@LABEL@22_10
+00000169                     1476  .BB@LABEL@22_9:	; if_then_bb111
+00000169                     1477  	;***      601 : 			commnunication_flag.rs485_send_to_valve_response_flag = 1;
+00000169                     1478  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 601
+00000169 E50000              1479  	oneb !LOWW(_commnunication_flag+0x0000A)
+0000016C D7                  1480  	ret
+0000016D                     1481  .BB@LABEL@22_10:	; if_else_bb112
+0000016D                     1482  	;***      602 : 		}else if((rs485_rx_p[0] == 12)){
+0000016D                     1483  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 602
+0000016D 4C0C                1484  	cmp a, #0x0C
+0000016F DF00                1485  	bnz $.BB@LABEL@22_14
+00000171                     1486  .BB@LABEL@22_11:	; if_then_bb120
+00000171                     1487  	;***      603 : 			commnunication_flag.rs485_get_valve_gesture_flag = 1;
+00000171                     1488  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 603
+00000171 E50000              1489  	oneb !LOWW(_commnunication_flag+0x0000B)
+00000174 D7                  1490  	ret
+00000175                     1491  .BB@LABEL@22_12:	; if_else_bb123
+00000175                     1492  	;***      604 : 		}
+00000175                     1493  	;***      605 : 	}else if(g_uart3_rx_data[0] != 0xff){
+00000175                     1494  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 605
+00000175 81                  1495  	inc a
+00000176 61E8                1496  	skz
+00000178                     1497  .BB@LABEL@22_13:	; if_then_bb129
+00000178                     1498  	;***      606 : 		commnunication_flag.rs485_fault = 1;
+00000178                     1499  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 606
+00000178 E50000              1500  	oneb !LOWW(_commnunication_flag+0x0000C)
+0000017B                     1501  .BB@LABEL@22_14:	; return
+0000017B                     1502  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 609
+0000017B D7                  1503  	ret
+0000017C                     1504  _r_uart3_callback_softwareoverrun@1:
+0000017C                     1505  	.STACK _r_uart3_callback_softwareoverrun@1 = 4
+0000017C                     1506  	;***      607 : 	}
+0000017C                     1507  	;***      608 :     /* End user code. Do not edit comment generated here */
+0000017C                     1508  	;***      609 : }
+0000017C                     1509  	;***      610 : 
+0000017C                     1510  	;***      611 : /***********************************************************************************************************************
+0000017C                     1511  	;***      612 : * Function Name: r_uart3_callback_softwareoverrun
+0000017C                     1512  	;***      613 : * Description  : This function is a callback function when UART3 receives an overflow data.
+0000017C                     1513  	;***      614 : * Arguments    : rx_data -
+0000017C                     1514  	;***      615 : *                    receive data
+0000017C                     1515  	;***      616 : * Return Value : None
+0000017C                     1516  	;***      617 : ***********************************************************************************************************************/
+0000017C                     1517  	;***      618 : static void r_uart3_callback_softwareoverrun(uint16_t rx_data)
+0000017C                     1518  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 618
+0000017C D7                  1519  	ret
+0000017D                     1520  _r_uart3_callback_sendend@1:
+0000017D                     1521  	.STACK _r_uart3_callback_sendend@1 = 4
+0000017D                     1522  	;***      619 : {
+0000017D                     1523  	;***      620 :     /* Start user code. Do not edit comment generated here */
+0000017D                     1524  	;***      621 :     /* End user code. Do not edit comment generated here */
+0000017D                     1525  	;***      622 : }
+0000017D                     1526  	;***      623 : 
+0000017D                     1527  	;***      624 : /***********************************************************************************************************************
+0000017D                     1528  	;***      625 : * Function Name: r_uart3_callback_sendend
+0000017D                     1529  	;***      626 : * Description  : This function is a callback function when UART3 finishes transmission.
+0000017D                     1530  	;***      627 : * Arguments    : None
+0000017D                     1531  	;***      628 : * Return Value : None
+0000017D                     1532  	;***      629 : ***********************************************************************************************************************/
+0000017D                     1533  	;***      630 : static void r_uart3_callback_sendend(void)
+0000017D                     1534  	;***      631 : {
+0000017D                     1535  	;***      632 :     /* Start user code. Do not edit comment generated here */
+0000017D                     1536  	;***      633 : 	g_uart3_sendend++;
+0000017D                     1537  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 633
+0000017D A00000              1538  	inc !LOWW(_g_uart3_sendend)
+00000180                     1539  	;***      634 : 	O_RS485_MODE_PIN = 0U;
+00000180                     1540  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 634
+00000180 710300              1541  	clr1 0xFFF00.0
+00000183 D7                  1542  	ret
+00000184                     1543  _r_uart3_callback_error@1:
+00000184                     1544  	.STACK _r_uart3_callback_error@1 = 4
+00000184                     1545  	;***      635 :     /* End user code. Do not edit comment generated here */
+00000184                     1546  	;***      636 : }
+00000184                     1547  	;***      637 : 
+00000184                     1548  	;***      638 : /***********************************************************************************************************************
+00000184                     1549  	;***      639 : * Function Name: r_uart3_callback_error
+00000184                     1550  	;***      640 : * Description  : This function is a callback function when UART3 reception error occurs.
+00000184                     1551  	;***      641 : * Arguments    : err_type -
+00000184                     1552  	;***      642 : *                    error type value
+00000184                     1553  	;***      643 : * Return Value : None
+00000184                     1554  	;***      644 : ***********************************************************************************************************************/
+00000184                     1555  	;***      645 : static void r_uart3_callback_error(uint8_t err_type)
+00000184                     1556  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 645
+00000184 D7                  1557  	ret
+00000185                     1558  	;***      646 : {
+00000185                     1559  	;***      647 :     /* Start user code. Do not edit comment generated here */
+00000185                     1560  	;***      648 :     /* End user code. Do not edit comment generated here */
+00000185                     1561  	;***      649 : }
+00000185                     1562  	;***      650 : 
+00000185                     1563  	;***      651 : /* Start user code for adding. Do not edit comment generated here */
+00000185                     1564  	;***      652 : /* End user code. Do not edit comment generated here */
+00000000                     1565  	.SECTION .bss,BSS
+00000000                     1566  _g_uart3_rx_data:
+00000000                     1567  	.DS (8)
+00000008                     1568  _send_response_flag:
+00000008                     1569  	.DS (1)
+00000009                     1570  _send_response_time_flag:
+00000009                     1571  	.DS (1)
+0000000A                     1572  _send_response_number_flag:
+0000000A                     1573  	.DS (1)
+0000000B                     1574  _recived_time_setting_flag:
+0000000B                     1575  	.DS (1)
+0000000C                     1576  _send_respone_status_flag:
+0000000C                     1577  	.DS (1)
+0000000D                     1578  _recived_number_setting_flag:
+0000000D                     1579  	.DS (1)
+0000000E                     1580  _commnunication_flag:
+0000000E                     1581  	.DS (13)
+0000001B                     1582  _g_csi_count:
+0000001B                     1583  	.DS (1)
+0000001C                     1584  _g_csi_err:
+0000001C                     1585  	.DS (1)
+0000001D                     1586  _g_csi_send_end:
+0000001D                     1587  	.DS (1)
+0000001E                     1588  _g_csi_rev_end:
+0000001E                     1589  	.DS (1)
+0000001F                     1590  _g_uart1_send:
+0000001F                     1591  	.DS (1)
+00000020                     1592  _g_uart2_sendend:
+00000020                     1593  	.DS (1)
+00000021                     1594  _g_uart2_receive:
+00000021                     1595  	.DS (1)
+00000022                     1596  _g_rx_data:
+00000022                     1597  	.DS (160)
+000000C2                     1598  _g_uart2_fault:
+000000C2                     1599  	.DS (1)
+000000C3                     1600  _g_uart3_sendend:
+000000C3                     1601  	.DS (1)
 
 Section List
 Attr     Size                Name
 
 TEXT                638 (0000027E) .text
-TEXTF               390 (00000186) .textf
+TEXTF               389 (00000185) .textf
 BSS                 196 (000000C4) .bss
 
 Command Line Parameter

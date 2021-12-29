@@ -41,6 +41,18 @@ void AcidWaterMode_nostop(void);
 void AlkalineWaterMode_nostop(void);
 void CallanCleaningMode_nostop(void);
 
+uint8_t isAcidTankFull(void);
+uint8_t isAcidTankAlmostFull(void);
+uint8_t isAcidTankHasSomething(void);
+uint8_t isAcidTankEmpty(void);
+
+uint8_t isAlkalineTankFull(void);
+uint8_t isAlkalineTankAlmostFull(void);
+uint8_t isAlkalineTankHasSomething(void);
+uint8_t isAlkalineTankEmpty(void);
 
 void main_loop_20211111(void);
+void realTimeResponse(void);
+void electrolyticOperationOFF_nostop(void);
+void electrolyticOperationON(void);
 #endif /* MAIN_H_ */

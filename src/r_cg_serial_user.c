@@ -458,11 +458,14 @@ static void r_uart2_callback_receiveend(void)
 //			commnunication_flag.send_response_flag = 0;
 		}else if((g_rx_data[0] == H_CLEAR)){
 			commnunication_flag.alarm_clear_flag = g_rx_data[1];
+		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == NEXT_ANIMATION)){
+//			g_machine_state.waitAnimationRes = 0;
 		}
 		if(isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0){
 			g_machine_mode = g_rx_data[5];
-		}else if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
-			g_machine_state.user = 1;
+		}
+		if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
+			g_machine_state.user = 2;
 		}
 	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
 		R_UART2_Receive(g_rx_data, 6);

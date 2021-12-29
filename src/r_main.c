@@ -73,7 +73,8 @@ union EEPROM_status_u set;
 uint32_t rx_data[3];
 float data_f;
 union byte_to_float data_f_test;
-struct UART_Buffer_s g_control_buffer;
+struct UART_Buffer_float_s g_control_buffer_f;
+struct UART_Buffer_u32_s g_control_buffer_u32;
 
 union {
 	struct{
@@ -147,9 +148,8 @@ void main(void)
 //    g_timerSetting.t2_flowSensorStartTime_s = 1;
 //    g_timerSetting.t3_flowSensorMonitorTime_s = 5;
     g_machine_mode = HAND_WASHING;
-    sendToRasPi(H_SET, OK_ALL, 0x0);
-    main_init_20211111();
-
+    sendToRasPi_f(H_SET, OK_ALL, 0x0);
+//    main_init_20211111();
     //Test
 //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
@@ -158,7 +158,7 @@ void main(void)
     sendRS485(0xff, 82, 2, 12);
     while (1U)
     {
-    	RaspberryResponse_nostop();
+    	realTimeResponse();
     	main_loop_20211111();
 
     	handSensorLED(g_color);
@@ -203,10 +203,10 @@ void main(void)
 
     	//Valve PCB
     	if(commnunication_flag.rs485_send_to_valve_response_flag == 1){
-    		// 0xff, Mode, {Valve 1, Valve 2, Valve 3, RSVD, 1}
+    		// 0xff, 12, {Mode, Valve 1, Valve 2, Valve 3, 1}
     		// 0 - Stand alone 1 - Control Valve
-    		uint8_t _b[5] = {g_uart3_sendend%2,g_systemTime%2,0,0,1};
-    		sendR485_7byte(0xff, vpcb_v, _b);
+    		uint8_t _b[5] = {vpcb_v, g_uart3_sendend%2,g_systemTime%2,0,1};
+    		sendR485_7byte(0xff, 12, _b);
     		vpcb++;
     		commnunication_flag.rs485_send_to_valve_response_flag  = 0;
     	}else if(commnunication_flag.rs485_get_valve_gesture_flag == 1){
@@ -237,12 +237,11 @@ void main(void)
 				commnunication_flag.rs485_fault = 0;
     		}
     	}
-    	g_pre_io_status = g_io_status;
 //--------------------------------- Testing code---------------------------------------------------------------
-    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
+//    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
 //    		P6_bit.no3 = ~P6_bit.no3;
 //    		O_SUPPLY_WATER_PIN_SV1 = ~O_SUPPLY_WATER_PIN_SV1;
-    	}
+//    	}
 //    	if(g_machine_state.user == 1){
 //    		HandWashingMode_nostop();
 //    	}else{
@@ -266,6 +265,13 @@ void main(void)
 				g_TickKeeper.SV2_OFF_minutes++;
 				g_TickKeeper.SV2_ON_minutes = 0;
 			}
+    	}
+    	if(ns_delay_ms(&g_Tick.tickCustom[2], 15000)){
+//    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
+//					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
+//				sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+//						g_io_status.refined.FlowValue);
+//			}
     	}
     	if(ns_delay_ms(&g_Tick.tick1s, 1000)){
 
@@ -331,6 +337,8 @@ void main(void)
 
     		}
     	}
+
+
 //--------------------------------End testing code---------------------------------------------------------
 //    	if(g_machine_state.mode == BUSY){
 //    		g_machine_state.user = 0;

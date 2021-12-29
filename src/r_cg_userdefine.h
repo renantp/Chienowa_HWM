@@ -193,7 +193,7 @@ extern union IO_Status_u{
 		float CVCCVoltage; // 4 bytes
 		float CVCCCurrent; // 4 bytes
 	}refined;
-}g_io_status, g_pre_io_status;
+}g_io_status, g_mean_io_status;
 
 extern union Alarm_Flag_u{
 	struct{
@@ -213,7 +213,8 @@ extern union Alarm_Flag_u{
 
 enum Machine_Mode_e{
 	INDIE, HAND_WASHING, WATER_WASHING, ACID_WASHING, ALKALINE_WASHING,
-	TEST_MODE, POWER_ON_MODE, BUSY, ELECTROLYTIC_GENERATION
+	TEST_MODE, POWER_ON_MODE, BUSY, ELECTROLYTIC_GENERATION,
+	CALLAN_MODE, DRAINAGE_MODE
 };
 
 
@@ -234,12 +235,15 @@ extern struct Tick_s{
 	uint32_t tickVoltage3Check;
 	uint32_t tickVoltageLowCheck;
 	uint32_t tickCurrentCheck;
+	uint32_t tickSV1SV2;
 	uint32_t tickElectrolyticOff;
 	uint32_t tickWaterSoftenerPCB;
 	uint32_t tickValvePCB;
 	uint32_t tickRS485;
-	uint32_t tickAcidLevel[3];
-	uint32_t tickAlkalineLevel[3];
+//	uint32_t tickAnimation;
+	uint32_t tickCallan;
+	uint32_t tickAcidLevel[4];
+	uint32_t tickAlkalineLevel[4];
 	uint32_t tickHandSensor[2];
 	uint32_t tickCustom[8]; //Use: 6,7 in Callan
 }g_Tick;
@@ -251,10 +255,13 @@ static struct Tick_Keeper_s{
 	uint32_t neutralization;
 }g_TickKeeper;
 enum Control_status{
-	OK_ALL, OK_USER, READ_TIME, READ_NUMBER, FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
+	OK_ALL, OK_USER, READ_TIME, READ_NUMBER,
+	FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION, SAVE_TIME, SAVE_NUMBER, SAVE_ERROR, READ_MACHINE_STATUS,
-	WASHING_MODE, GET_MODE
+	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
+	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
+	READ_MACHINE_STATUS, WASHING_MODE, GET_MODE,
+	TESTING_START, TESTING_DATA
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -263,6 +270,10 @@ extern struct Machine_State_u{
 	uint8_t handwash;
 	uint8_t waterSupply;
 	uint8_t flowSensor;
+	uint8_t callan;
+	uint8_t electrolyteOperation;
+	uint8_t electrolyteOFF;
+//	uint8_t waitAnimationRes;
 	/**
 	 * 0 - Non user
 	 * 1 - Valid
@@ -284,13 +295,18 @@ extern struct Machine_State_u{
 	 */
 	uint8_t mode;
 }g_machine_state;
-static uint8_t pre_machine_mode;
+static uint8_t pre_machine_washing_mode;
 
-extern struct UART_Buffer_s{
+extern struct UART_Buffer_float_s{
 	uint8_t head; // 1 byte
 	uint8_t set_number; // 1 byte
 	float set_value; // 4 byte
-}g_control_buffer;
+}g_control_buffer_f;
+extern struct UART_Buffer_u32_s{
+	uint8_t head; // 1 byte
+	uint8_t set_number; // 1 byte
+	uint32_t set_value; // 4 byte
+}g_control_buffer_u32;
 enum UART_header_e{
 	 H_READ =	82, //0x52
 	 H_SET = 	83,
@@ -302,7 +318,6 @@ enum UART_header_e{
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;
 extern uint8_t g_machine_mode;
-static uint8_t g_callan_clear_flag;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end;
 extern volatile uint8_t g_uart1_sendend;
@@ -316,7 +331,8 @@ extern void adc_int_handle(void);
 
 extern void setting_default(void);
 extern void main_init_20211111(void);
-void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
+void sendToRasPi_f(enum UART_header_e head, enum Control_status type, float value);
+void sendToRasPi_u32(enum UART_header_e head, enum Control_status type, uint32_t value);
 void sendRS485(uint8_t busy, uint8_t head, uint8_t type, uint32_t value);
 void sendR485_7byte(uint8_t addr, uint8_t head, uint8_t *val);
 extern void callAlarm(int _error);
@@ -357,11 +373,10 @@ void OpenSV1(void);
 void OpenSV2(void);
 void CloseSV1(void);
 void CloseSV2(void);
-uint8_t electrolyticOperationOFF_nostop(void);
-void electrolyticOperationON(void);
+
 uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);
-void sendToRasPi(enum UART_header_e head, enum Control_status type, float value);
+void sendToRasPi_f(enum UART_header_e head, enum Control_status type, float value);
 uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
 		enum Control_status control, uint32_t data);
 /* End user code. Do not edit comment generated here */
