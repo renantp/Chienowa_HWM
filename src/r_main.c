@@ -149,7 +149,7 @@ void main(void)
 //    g_timerSetting.t3_flowSensorMonitorTime_s = 5;
     g_machine_mode = HAND_WASHING;
     sendToRasPi_f(H_SET, OK_ALL, 0x0);
-//    main_init_20211111();
+    main_init_20211111();
     //Test
 //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
@@ -251,20 +251,20 @@ void main(void)
     	// Check
     	flow_p = I_FLOW_PLUSE_PIN == 1? 1: 0;
     	if(ns_delay_ms(&g_Tick.tickCustom[1], 60000)){
-    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
-				g_TickKeeper.SV1_ON_minutes++;
-				g_TickKeeper.SV1_OFF_minutes = 0;
-			}else{
-				g_TickKeeper.SV1_OFF_minutes++;
-				g_TickKeeper.SV1_ON_minutes = 0;
-			}
-			if(O_SPOUT_WATER_PIN_SV2 == ON){
-				g_TickKeeper.SV2_ON_minutes++;
-				g_TickKeeper.SV2_OFF_minutes = 0;
-			}else{
-				g_TickKeeper.SV2_OFF_minutes++;
-				g_TickKeeper.SV2_ON_minutes = 0;
-			}
+//    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
+//				g_TickKeeper.SV1_ON_minutes++;
+//				g_TickKeeper.SV1_OFF_minutes = 0;
+//			}else{
+//				g_TickKeeper.SV1_OFF_minutes++;
+//				g_TickKeeper.SV1_ON_minutes = 0;
+//			}
+//			if(O_SPOUT_WATER_PIN_SV2 == ON){
+//				g_TickKeeper.SV2_ON_minutes++;
+//				g_TickKeeper.SV2_OFF_minutes = 0;
+//			}else{
+//				g_TickKeeper.SV2_OFF_minutes++;
+//				g_TickKeeper.SV2_ON_minutes = 0;
+//			}
     	}
     	if(ns_delay_ms(&g_Tick.tickCustom[2], 15000)){
 //    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)

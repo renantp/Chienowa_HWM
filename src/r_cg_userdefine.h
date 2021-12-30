@@ -61,14 +61,14 @@ extern uint8_t rx_count;
 #define I_SALT_L_PIN 		(P5_bit.no4) // Low level salt sensor FL7
 #define O_SPOUT_WATER_PIN_SV2	(P5_bit.no5) // Valve SV2
 
-#define O_PUMP_SALT_PIN	(P6_bit.no0) // Pump SP
+#define O_PUMP_SALT_PIN_SP1	(P6_bit.no0) // Pump SP
 #define O_PUMP_ALK_PIN	(P6_bit.no1) // Pump P2
 #define O_PUMP_ACID_PIN	(P6_bit.no2) // Pump P1
 #define O_PUMP_PRESS_PIN	(P6_bit.no3) // Pressurized Pump (J37)
 #define O_ALARM_OUT_PIN	(P6_bit.no4)
 #define O_NEUTRALIZE_PIN	(P6_bit.no5)
 #define O_DRAIN_ALK_PIN_SV6	(P6_bit.no6) // Valve SV6
-#define O_DRAIN_ACID_PIN_SV7	(P6_bit.no7) // Valve SV7
+#define O_DRAIN_ACID_PIN_SV5	(P6_bit.no7) // Valve SV7
 
 #define I_ALKALI_L_PIN	(P0_bit.no5) // Low level Alkali sensor FL4
 #define I_ALKALI_M_PIN	(P0_bit.no6) // Medium level Alkali sensor FL5
@@ -187,7 +187,7 @@ extern union IO_Status_u{
 		uint8_t SaltPump: 1;
 		uint8_t RSVD1: 4; // Reserved
 
-		uint8_t MachineMode; //1 byte
+		uint8_t MachineMode_RSVD; //1 byte
 
 		float FlowValue; // 4 bytes
 		float CVCCVoltage; // 4 bytes
@@ -242,18 +242,20 @@ extern struct Tick_s{
 	uint32_t tickRS485;
 //	uint32_t tickAnimation;
 	uint32_t tickCallan;
+	uint32_t tickDrainage;
 	uint32_t tickAcidLevel[4];
 	uint32_t tickAlkalineLevel[4];
 	uint32_t tickHandSensor[2];
 	uint32_t tickCustom[8]; //Use: 6,7 in Callan
 }g_Tick;
 static struct Tick_Keeper_s{
-	uint32_t SV1_ON_minutes;
-	uint32_t SV1_OFF_minutes;
-	uint32_t SV2_ON_minutes;
-	uint32_t SV2_OFF_minutes;
+//	uint32_t SV1_ON_minutes;
+//	uint32_t SV1_OFF_minutes;
+//	uint32_t SV2_ON_minutes;
+//	uint32_t SV2_OFF_minutes;
+	uint8_t electrolyteOff_h;
 	uint32_t neutralization;
-}g_TickKeeper;
+}g_TimeKeeper;
 enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER,
 	FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
@@ -261,7 +263,7 @@ enum Control_status{
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
 	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
 	READ_MACHINE_STATUS, WASHING_MODE, GET_MODE,
-	TESTING_START, TESTING_DATA
+	TESTING_START, TESTING_DATA, MID_NIGHT
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -273,6 +275,8 @@ extern struct Machine_State_u{
 	uint8_t callan;
 	uint8_t electrolyteOperation;
 	uint8_t electrolyteOFF;
+	uint8_t drainage;
+	uint8_t isMidNight;
 //	uint8_t waitAnimationRes;
 	/**
 	 * 0 - Non user

@@ -7,7 +7,7 @@
 
 #ifndef MAIN_H_
 #define MAIN_H_
-
+#define electrolyticOperationOFF() (g_machine_state.electrolyteOFF = g_machine_state.electrolyteOFF == 0 ? 1 : g_machine_state.electrolyteOFF)
 //const uint8_t io_statusSize = sizeof(union IO_Status_u);
 static const uint8_t io_statusSize = 5;
 //const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s);
@@ -30,7 +30,7 @@ void RaspberryResponse_nostop(void);
 //void StopSV1OperationTime(void);
 //void StopSV2OperationTime(void);
 void UpdateMachineStatus(void);
-void InitialOperationModeStart(void);
+uint8_t InitialOperationModeStart_nostop(void);
 
 float measureFlowSensor(uint32_t *t);
 float measureFlowSensor_nostop(void);
@@ -53,6 +53,6 @@ uint8_t isAlkalineTankEmpty(void);
 
 void main_loop_20211111(void);
 void realTimeResponse(void);
-void electrolyticOperationOFF_nostop(void);
+void isElectrolyticOperationOFF_nostop(void);
 void electrolyticOperationON(void);
 #endif /* MAIN_H_ */

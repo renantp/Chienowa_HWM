@@ -90,9 +90,10 @@ uint8_t g_rx_data[4*40];
 uint8_t g_uart3_rx_data[8];
 volatile uint8_t g_uart2_fault;
 volatile uint8_t g_uart3_sendend;
-uint8_t isCommand(uint8_t *data){
-	if((data[0] == H_SET)&&(data[1] == NEXT_ANIMATION))
+uint8_t isCommandNeedResponse(uint8_t *data){
+	if((data[0] == H_SET)&&(data[1] == NEXT_ANIMATION)){
 		return 0;
+	}
 	switch ((enum UART_header_e)*data) {
 //		case H_ALARM:
 //			commnunication_flag.send_response_flag = 1;
@@ -440,7 +441,7 @@ static void r_uart2_callback_receiveend(void)
 	R_UART2_Receive(g_rx_data, 6);
 	commnunication_flag.recived_time_setting_flag = commnunication_flag.recived_time_setting_flag == 1 ? 2: commnunication_flag.recived_time_setting_flag;
 	commnunication_flag.recived_number_setting_flag = commnunication_flag.recived_number_setting_flag == 1 ? 2: commnunication_flag.recived_number_setting_flag;
-	if(isCommand(g_rx_data)){
+	if(isCommandNeedResponse(g_rx_data)){
 		if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_TIME)){
 			commnunication_flag.send_response_time_flag = 1;
 		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == SAVE_TIME)){
@@ -460,6 +461,9 @@ static void r_uart2_callback_receiveend(void)
 			commnunication_flag.alarm_clear_flag = g_rx_data[1];
 		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == NEXT_ANIMATION)){
 //			g_machine_state.waitAnimationRes = 0;
+		}else if((g_rx_data[0] == H_READ) && (g_rx_data[1] == MID_NIGHT)){
+			commnunication_flag.send_response_flag = 0;
+			g_machine_state.isMidNight = g_rx_data[5];
 		}
 		if(isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0){
 			g_machine_mode = g_rx_data[5];

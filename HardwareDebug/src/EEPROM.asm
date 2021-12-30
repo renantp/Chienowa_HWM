@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/EEPROM.obj
 #@   ../src/EEPROM.c
-#@  compiled at Wed Dec 29 17:56:51 2021
+#@  compiled at Thu Dec 30 13:18:35 2021
 
 	.EXTERN _g_csi_rev_end
 	.PUBLIC _eeprom_status

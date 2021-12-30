@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Wed Dec 29 17:59:00 2021
+#@  compiled at Thu Dec 30 14:35:53 2021
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -73,6 +73,7 @@
 	.EXTERN _R_UART3_Receive
 	.EXTERN _handSensorLED
 	.EXTERN _sendToRasPi_f
+	.EXTERN _main_init_20211111
 	.EXTERN _sendRS485
 	.EXTERN _realTimeResponse
 	.EXTERN _main_loop_20211111
@@ -206,7 +207,7 @@ _nostop_checkHandSensor:
 	clrw ax
 	movw de, ax
 	movw bc, #0x01F4
-	movw ax, #LOWW(_g_Tick+0x00078)
+	movw ax, #LOWW(_g_Tick+0x0007C)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
@@ -386,8 +387,10 @@ _main:
 	clrw bc
 	movw ax, #0x5300
 	call !!_sendToRasPi_f
+	;***      152 :     main_init_20211111();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 152
+	call !!_main_init_20211111
 	clrw ax
-	;***      152 : //    main_init_20211111();
 	;***      153 :     //Test
 	;***      154 : //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 	;***      155 : //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
@@ -406,7 +409,7 @@ _main:
 	mov [sp+0x02], a
 	mov [sp+0x01], a
 	mov [sp+0x00], a
-.BB@LABEL@3_1:	; bb249
+.BB@LABEL@3_1:	; bb222
 	;***      159 :     while (1U)
 	;***      160 :     {
 	;***      161 :     	realTimeResponse();
@@ -605,7 +608,7 @@ _main:
 	;***      213 :     		uint8_t _b[5] = {0,1,0,0,1};
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 213
 	movw de, #0x0005
-	movw bc, #SMRLW(.STR@1630)
+	movw bc, #SMRLW(.STR@1619)
 	call !!_memcpy
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -742,110 +745,29 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0xEA60
-	movw ax, #LOWW(_g_Tick+0x00084)
+	movw ax, #LOWW(_g_Tick+0x00088)
 	call !!_ns_delay_ms
-	clrw bc
-	cmpw ax, bc
-	bz $.BB@LABEL@3_44
-.BB@LABEL@3_33:	; if_then_bb170
-	;***      254 :     		if(O_SUPPLY_WATER_PIN_SV1 == ON){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 254
-	mov a, 0xFFF01
-	mov1 CY, a.7
-	clrw ax
-	movw bc, ax
-	bc $.BB@LABEL@3_37
-.BB@LABEL@3_34:	; if_else_bb180
-	;***      255 : 				g_TickKeeper.SV1_ON_minutes++;
-	;***      256 : 				g_TickKeeper.SV1_OFF_minutes = 0;
-	;***      257 : 			}else{
-	;***      258 : 				g_TickKeeper.SV1_OFF_minutes++;
-	;***      259 : 				g_TickKeeper.SV1_ON_minutes = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 259
-	movw !LOWW(_g_TickKeeper@1+0x00002), ax
-	movw !LOWW(_g_TickKeeper@1), ax
-	incw ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 258
-	addw ax, !LOWW(_g_TickKeeper@1+0x00004)
-	movw !LOWW(_g_TickKeeper@1+0x00004), ax
-	movw ax, bc
-	sknc
-.BB@LABEL@3_35:	; if_else_bb180
-	incw ax
-.BB@LABEL@3_36:	; if_else_bb180
-	addw ax, !LOWW(_g_TickKeeper@1+0x00006)
-	movw !LOWW(_g_TickKeeper@1+0x00006), ax
-	br $.BB@LABEL@3_40
-.BB@LABEL@3_37:	; if_then_bb177
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 256
-	movw !LOWW(_g_TickKeeper@1+0x00006), ax
-	movw !LOWW(_g_TickKeeper@1+0x00004), ax
-	incw ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 255
-	addw ax, !LOWW(_g_TickKeeper@1)
-	movw !LOWW(_g_TickKeeper@1), ax
-	movw ax, bc
-	sknc
-.BB@LABEL@3_38:	; if_then_bb177
-	incw ax
-.BB@LABEL@3_39:	; if_then_bb177
-	addw ax, !LOWW(_g_TickKeeper@1+0x00002)
-	movw !LOWW(_g_TickKeeper@1+0x00002), ax
-.BB@LABEL@3_40:	; if_break_bb183
-	;***      260 : 			}
-	;***      261 : 			if(O_SPOUT_WATER_PIN_SV2 == ON){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 261
-	mov a, 0xFFF05
-	mov1 CY, a.5
-	clrw ax
-	movw bc, ax
-	bc $.BB@LABEL@3_45
-.BB@LABEL@3_41:	; if_else_bb194
-	;***      262 : 				g_TickKeeper.SV2_ON_minutes++;
-	;***      263 : 				g_TickKeeper.SV2_OFF_minutes = 0;
-	;***      264 : 			}else{
-	;***      265 : 				g_TickKeeper.SV2_OFF_minutes++;
-	;***      266 : 				g_TickKeeper.SV2_ON_minutes = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 266
-	movw !LOWW(_g_TickKeeper@1+0x0000A), ax
-	movw !LOWW(_g_TickKeeper@1+0x00008), ax
-	incw ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 265
-	addw ax, !LOWW(_g_TickKeeper@1+0x0000C)
-	movw !LOWW(_g_TickKeeper@1+0x0000C), ax
-	movw ax, bc
-	sknc
-.BB@LABEL@3_42:	; if_else_bb194
-	incw ax
-.BB@LABEL@3_43:	; if_else_bb194
-	addw ax, !LOWW(_g_TickKeeper@1+0x0000E)
-	movw !LOWW(_g_TickKeeper@1+0x0000E), ax
-.BB@LABEL@3_44:	; if_else_bb194
-	br $.BB@LABEL@3_48
-.BB@LABEL@3_45:	; if_then_bb191
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 263
-	movw !LOWW(_g_TickKeeper@1+0x0000E), ax
-	movw !LOWW(_g_TickKeeper@1+0x0000C), ax
-	incw ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 262
-	addw ax, !LOWW(_g_TickKeeper@1+0x00008)
-	movw !LOWW(_g_TickKeeper@1+0x00008), ax
-	movw ax, bc
-	sknc
-.BB@LABEL@3_46:	; if_then_bb191
-	incw ax
-.BB@LABEL@3_47:	; if_then_bb191
-	addw ax, !LOWW(_g_TickKeeper@1+0x0000A)
-	movw !LOWW(_g_TickKeeper@1+0x0000A), ax
-.BB@LABEL@3_48:	; if_break_bb198
-	;***      267 : 			}
+	;***      254 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
+	;***      255 : //				g_TickKeeper.SV1_ON_minutes++;
+	;***      256 : //				g_TickKeeper.SV1_OFF_minutes = 0;
+	;***      257 : //			}else{
+	;***      258 : //				g_TickKeeper.SV1_OFF_minutes++;
+	;***      259 : //				g_TickKeeper.SV1_ON_minutes = 0;
+	;***      260 : //			}
+	;***      261 : //			if(O_SPOUT_WATER_PIN_SV2 == ON){
+	;***      262 : //				g_TickKeeper.SV2_ON_minutes++;
+	;***      263 : //				g_TickKeeper.SV2_OFF_minutes = 0;
+	;***      264 : //			}else{
+	;***      265 : //				g_TickKeeper.SV2_OFF_minutes++;
+	;***      266 : //				g_TickKeeper.SV2_ON_minutes = 0;
+	;***      267 : //			}
 	;***      268 :     	}
 	;***      269 :     	if(ns_delay_ms(&g_Tick.tickCustom[2], 15000)){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 269
 	clrw ax
 	movw de, ax
 	movw bc, #0x3A98
-	movw ax, #LOWW(_g_Tick+0x00088)
+	movw ax, #LOWW(_g_Tick+0x0008C)
 	call !!_ns_delay_ms
 	;***      270 : //    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 	;***      271 : //					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
@@ -862,17 +784,17 @@ _main:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_52
-.BB@LABEL@3_49:	; if_then_bb209
+	bz $.BB@LABEL@3_36
+.BB@LABEL@3_33:	; if_then_bb182
 	;***      277 : 
 	;***      278 :     		led_st = led_st == 0?0xff:0x00;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 278
 	cmp0 !LOWW(_led_st)
 	mov a, #0xFF
 	skz
-.BB@LABEL@3_50:	; bb215
+.BB@LABEL@3_34:	; bb188
 	clrb a
-.BB@LABEL@3_51:	; bb217
+.BB@LABEL@3_35:	; bb190
 	mov !LOWW(_led_st), a
 	;***      279 :     	    uint8_t state = g_uart2_sendend;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 279
@@ -913,7 +835,7 @@ _main:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 299
 	mov a, !LOWW(_dac_out+0x00001)
 	call !!_R_DAC1_Set_ConversionValue
-.BB@LABEL@3_52:	; if_break_bb234
+.BB@LABEL@3_36:	; if_break_bb207
 	;***      300 :     		if(led_st == 0x00){
 	;***      301 : 
 	;***      302 : //    			O_CVCC_ON_PIN = ON;
@@ -1082,10 +1004,29 @@ _R_MAIN_UserInit:
 	;***      410 : 
 	;***      411 : /* Start user code for adding. Do not edit comment generated here */
 	;***      412 : /* End user code. Do not edit comment generated here */
-	.SECTION .bss,BSS
+	.SECTION .data,DATA
 	.ALIGN 2
-_g_TickKeeper@1:
-	.DS (20)
+_g_error:
+	.DS (2)
+	.ALIGN 2
+_g_adc_ch:
+	.DS (2)
+_led_st:
+	.DB 0xFF
+_send_data:
+	.DB 0x23,0xAB
+_this_size:
+	.DB 0x12
+_this_size_2:
+	.DB 0x12
+_send_buf:
+	.DB 0x08,0x01,0x02,0x03,0x04,0x05,0x06
+	.ALIGN 2
+_data_crc:
+	.DB4 0x00007724,0x0000EB28
+_dac_out:
+	.DB 0xFF,0xFF
+	.SECTION .bss,BSS
 _g_e_status:
 	.DS (1)
 	.ALIGN 2
@@ -1130,33 +1071,11 @@ _g_crc_32:
 	.DS (32)
 _rx_count:
 	.DS (1)
-	.SECTION .data,DATA
-	.ALIGN 2
-_g_error:
-	.DS (2)
-	.ALIGN 2
-_g_adc_ch:
-	.DS (2)
-_led_st:
-	.DB 0xFF
-_send_data:
-	.DB 0x23,0xAB
-_this_size:
-	.DB 0x12
-_this_size_2:
-	.DB 0x12
-_send_buf:
-	.DB 0x08,0x01,0x02,0x03,0x04,0x05,0x06
-	.ALIGN 2
-_data_crc:
-	.DB4 0x00007724,0x0000EB28
-_dac_out:
-	.DB 0xFF,0xFF
 	.SECTION .const,CONST
 .STR@1:
 	.DS (4)
 	.DB 0x01
-.STR@1630:
+.STR@1619:
 	.DS (1)
 	.DB 0x01
 	.DS (2)
