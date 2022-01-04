@@ -441,6 +441,7 @@ static void r_uart2_callback_receiveend(void)
 	R_UART2_Receive(g_rx_data, 6);
 	commnunication_flag.recived_time_setting_flag = commnunication_flag.recived_time_setting_flag == 1 ? 2: commnunication_flag.recived_time_setting_flag;
 	commnunication_flag.recived_number_setting_flag = commnunication_flag.recived_number_setting_flag == 1 ? 2: commnunication_flag.recived_number_setting_flag;
+	commnunication_flag.recieve_status_flag = commnunication_flag.recieve_status_flag == 1? 2:commnunication_flag.recieve_status_flag;
 	if(isCommandNeedResponse(g_rx_data)){
 		if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_TIME)){
 			commnunication_flag.send_response_time_flag = 1;
@@ -448,7 +449,10 @@ static void r_uart2_callback_receiveend(void)
 			R_UART2_Receive(g_rx_data, timeSettingSize);
 			commnunication_flag.recived_time_setting_flag = 1;
 		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_MACHINE_STATUS)){
-			commnunication_flag.send_respone_status_flag = 1;
+			commnunication_flag.send_response_status_flag = 1;
+		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == READ_MACHINE_STATUS)){
+			commnunication_flag.recieve_status_flag = 1;
+			R_UART2_Receive(g_rx_data, io_statusSize);
 		}else if((g_rx_data[0] == H_READ)&&(g_rx_data[1] == READ_NUMBER)){
 			commnunication_flag.send_response_number_flag = 1;
 		}else if((g_rx_data[0] == H_SET)&&(g_rx_data[1] == SAVE_NUMBER)){
@@ -464,6 +468,16 @@ static void r_uart2_callback_receiveend(void)
 		}else if((g_rx_data[0] == H_READ) && (g_rx_data[1] == MID_NIGHT)){
 			commnunication_flag.send_response_flag = 0;
 			g_machine_state.isMidNight = g_rx_data[5];
+		}else if((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_POWER_ON)){
+			commnunication_flag.test_flag = TEST_POWER_ON;
+		}else if((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_FLOW_RATE)){
+			commnunication_flag.test_flag = TEST_FLOW_RATE;
+		}else if((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_CURRENT)){
+			commnunication_flag.test_flag = TEST_CURRENT;
+		}else if((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_INDIVIDUAL)){
+			commnunication_flag.test_flag = TEST_INDIVIDUAL;
+		}else if((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_ELECTROLYTIC)){
+			commnunication_flag.test_flag = TEST_ELECTROLYTIC;
 		}
 		if(isThisCommand(g_rx_data, H_SET, WASHING_MODE, 0xff) != 0){
 			g_machine_mode = g_rx_data[5];
@@ -471,6 +485,7 @@ static void r_uart2_callback_receiveend(void)
 		if (isThisCommand(g_rx_data, H_SET, OK_USER, 0xff) != 0) {
 			g_machine_state.user = 2;
 		}
+
 	}else if(commnunication_flag.recived_time_setting_flag != 0 || commnunication_flag.recived_number_setting_flag != 0){
 		R_UART2_Receive(g_rx_data, 6);
 	}else{

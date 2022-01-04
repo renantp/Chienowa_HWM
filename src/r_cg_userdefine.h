@@ -66,9 +66,9 @@ extern uint8_t rx_count;
 #define O_PUMP_ACID_PIN	(P6_bit.no2) // Pump P1
 #define O_PUMP_PRESS_PIN	(P6_bit.no3) // Pressurized Pump (J37)
 #define O_ALARM_OUT_PIN	(P6_bit.no4)
-#define O_NEUTRALIZE_PIN	(P6_bit.no5)
+#define O_NEUTRALIZE_PIN_SV7	(P6_bit.no5) // Valve SV7
 #define O_DRAIN_ALK_PIN_SV6	(P6_bit.no6) // Valve SV6
-#define O_DRAIN_ACID_PIN_SV5	(P6_bit.no7) // Valve SV7
+#define O_DRAIN_ACID_PIN_SV5	(P6_bit.no7) // Valve SV5
 
 #define I_ALKALI_L_PIN	(P0_bit.no5) // Low level Alkali sensor FL4
 #define I_ALKALI_M_PIN	(P0_bit.no6) // Medium level Alkali sensor FL5
@@ -195,7 +195,7 @@ extern union IO_Status_u{
 		float CVCCVoltage; // 4 bytes
 		float CVCCCurrent; // 4 bytes
 	}refined;
-}g_io_status, g_mean_io_status;
+}g_io_status, g_mean_io_status, g_res_io_status;
 
 extern union Alarm_Flag_u{
 	struct{
@@ -283,6 +283,7 @@ extern struct Machine_State_u{
 	uint8_t drainage;
 	uint8_t isMidNight;
 	uint8_t test;
+	uint8_t neutrlization;
 //	uint8_t waitAnimationRes;
 	/**
 	 * 0 - Non user
@@ -324,11 +325,20 @@ enum UART_header_e{
 	 H_ERROR = 	69,
 	 H_CLEAR = 	67
 };
-
+extern volatile struct Communicaition_flag_s{
+	volatile uint8_t send_response_flag, send_response_time_flag,
+	send_response_number_flag, recived_number_setting_flag,
+	recived_time_setting_flag, send_response_status_flag, send_response_mode_flag,
+	alarm_clear_flag, recieve_status_flag, test_flag;
+	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
+	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
+	rs485_fault;
+}commnunication_flag;
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;
 
 extern uint8_t g_machine_mode, g_machine_test_mode;
+extern uint32_t g_neutralization_time_s;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end;
 extern volatile uint8_t g_uart1_sendend;
@@ -366,15 +376,7 @@ enum HS_COLOR{
 	BLACK, RED, WHITE, BLUE
 };
 extern enum HS_COLOR g_color, g_pre_color;
-extern volatile struct Communicaition_flag_s{
-	volatile uint8_t send_response_flag, send_response_time_flag,
-	send_response_number_flag, recived_number_setting_flag,
-	recived_time_setting_flag, send_respone_status_flag, send_response_mode_flag,
-	alarm_clear_flag;
-	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
-	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
-	rs485_fault;
-}commnunication_flag;
+
 extern volatile uint8_t send_response_flag, send_response_time_flag,
 send_response_number_flag, recived_number_setting_flag,
 recived_time_setting_flag,

@@ -21,14 +21,16 @@
 
 struct Timer_Setting_s g_timerSetting = { 1000, 15 };
 struct Number_Setting_s g_numberSetting;
+uint32_t g_neutralization_time_s;
 enum HS_COLOR g_color, g_pre_color;
 float g_flow_value;
 union Alarm_Flag_u g_alarm;
 struct Machine_State_u g_machine_state;
-union IO_Status_u g_io_status, g_mean_io_status;
+union IO_Status_u g_io_status, g_mean_io_status, g_res_io_status;
 
 struct Timer_Setting_s _settingTime;
 struct Number_Setting_s _settingNumber;
+
 uint8_t g_machine_mode, g_machine_test_mode;
 union BytesToDouble {
 	struct {
@@ -298,13 +300,35 @@ void RaspberryResponse_nostop(void) {
 //		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
 		commnunication_flag.send_response_mode_flag = 0;
 	}
-	if (commnunication_flag.send_respone_status_flag) {
+	if (commnunication_flag.send_response_status_flag) {
 		uint8_t state = g_uart2_sendend;
 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
 		while (state == g_uart2_sendend) {
 			R_WDT_Restart();
 		}
-		commnunication_flag.send_respone_status_flag = 0;
+		commnunication_flag.send_response_status_flag = 0;
+	}else if(commnunication_flag.recieve_status_flag == 2){
+		uint8_t *const _io_p = (uint8_t *)g_res_io_status;
+		for (uint8_t i = 0; i < io_statusSize - 1; i++){
+			_io_p[i] = g_rx_data[i];
+//			switch (i % 4) {
+//			case 3:
+//				_io_p[i - 3] = g_rx_data[i];
+//				break;
+//			case 2:
+//				_io_p[i - 1] = g_rx_data[i];
+//				break;
+//			case 1:
+//				_io_p[1 + i] = g_rx_data[i];
+//				break;
+//			case 0:
+//				_io_p[3 + i] = g_rx_data[i];
+//				break;
+//			default:
+//				break;
+//			}
+		}
+		commnunication_flag.recieve_status_flag = 0;
 	}
 	if (commnunication_flag.send_response_time_flag) {
 		uint8_t state = g_uart2_sendend;
@@ -1224,7 +1248,7 @@ void NormalMode_nostop(void) {
  * Power ON test mode, state 0 - 1, end at 2
  * @param state: Machine state
  * @param tick: Tick for no stop delay
- * @return State
+ * @return 0 when done
  */
 uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	switch (*state) {
@@ -1250,7 +1274,7 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	default:
 		break;
 	}
-	return (*state);
+	return (*state) == 2? 1:0;
 }
 uint8_t FlowRateAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
 	measureFlowSensor_nostop();
@@ -1280,7 +1304,7 @@ uint8_t FlowRateAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
 		default:
 			break;
 	}
-	return (*state);
+	return (*state) == 6 ? 1:0;
 }
 uint8_t CurrentAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
 	switch (*state) {
@@ -1302,7 +1326,7 @@ uint8_t CurrentAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
 		default:
 			break;
 	}
-	return (*state);
+	return (*state) == 9 ? 1:0;
 }
 uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick){
 	switch (*state) {
@@ -1318,7 +1342,7 @@ uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick){
 			}
 			break;
 		case 11:
-			if(ns_delay_ms(tick, 10*60*1000)){
+			if(ns_delay_ms(tick, (uint32_t)10*60*1000)){
 				(*state)++;
 			}
 			break;
@@ -1328,16 +1352,51 @@ uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick){
 	return (*state);
 }
 void TestOperation_nostop(void) {
-	TestPowerOn_nostop_keepstate(&g_machine_state.test, &g_Tick.tickTestOperation);
+	uint8_t *state = &g_machine_state.test;
+	uint32_t *tick = &g_Tick.tickTestOperation;
+	switch (commnunication_flag.test_flag) {
+		case TEST_POWER_ON:
+			if(TestPowerOn_nostop_keepstate(state, &g_Tick.tickTestOperation)){
+				commnunication_flag.test_flag = 0;
+				*state = 0;
+			}
+			break;
+		case TEST_FLOW_RATE:
+			if(FlowRateAdjustmentMode_nostop_keepstate(state, tick)){
+				commnunication_flag.test_flag = 0;
+				*state = 0;
+			}
+			break;
+		case TEST_CURRENT:
+			if(CurrentAdjustmentMode_nostop_keepstate(state, tick)){
+				commnunication_flag.test_flag = 0;
+				*state = 0;
+			}
+			break;
+		case TEST_INDIVIDUAL:
 
+			break;
+		case TEST_ELECTROLYTIC:
+			if(ElectrolyteAdjustmentOperation(state, tick)){
+				commnunication_flag.test_flag = 0;
+				*state = 0;
+			}
+			break;
+		default:
+			break;
+	}
 }
-void NeutraliziationTreatment(uint32_t *tick){
-	if(ns_delay_ms(tick, g_timerSetting.t32_saltHighLevelDelay_s*1000)){
-
+void NeutralizationTreatment(uint32_t *tick){
+	if(g_neutralization_time_s >= g_timerSetting.t33_neutralizationStartTime_h*60*60){
+		g_machine_state.neutrlization = 1;
+		O_NEUTRALIZE_PIN_SV7 = ON;
+		g_neutralization_time_s = 0;
 	}
-	if(ns_delay_ms(tick, g_timerSetting.t31_saltLowLevelDelay_s*1000)){
-
+	if(ns_delay_ms(tick, g_timerSetting.t34_neutralizationOpenTime_s*1000) && (g_machine_state.neutrlization != 0)){
+		O_NEUTRALIZE_PIN_SV7 = ON;
+		g_machine_state.neutrlization = 0;
 	}
+
 }
 void main_loop_20211111(void) {
 	measureFlowSensor_nostop();
@@ -1373,6 +1432,9 @@ void isElectrolyticOperationOFF_nostop(void) {
 			sendToRasPi_u32(H_READ, MID_NIGHT, 0x00);
 			g_TimeKeeper.electrolyteOff_h++;
 		} else if (g_machine_state.electrolyteOperation == 1) {
+			if(ns_delay_ms(g_TimeKeeper.neutralization, 1000)){
+				g_neutralization_time_s++;
+			}
 			(*tick) = g_systemTime;
 		}
 		break;
@@ -1486,7 +1548,7 @@ void UpdateMachineStatus(void) {
 	O_DRAIN_ACID_PIN_SV5;
 	g_io_status.refined.Valve.SV6 = g_io_status.refined.Valve.SV9 =
 	O_DRAIN_ALK_PIN_SV6;
-	g_io_status.refined.Valve.SV7 = O_NEUTRALIZE_PIN;
+	g_io_status.refined.Valve.SV7 = O_NEUTRALIZE_PIN_SV7;
 
 	g_io_status.refined.Pump1 = O_PUMP_ACID_PIN;
 	g_io_status.refined.Pump2 = O_PUMP_ALK_PIN;
