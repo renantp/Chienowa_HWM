@@ -29,7 +29,7 @@ union IO_Status_u g_io_status, g_mean_io_status;
 
 struct Timer_Setting_s _settingTime;
 struct Number_Setting_s _settingNumber;
-uint8_t g_machine_mode;
+uint8_t g_machine_mode, g_machine_test_mode;
 union BytesToDouble {
 	struct {
 		uint8_t data[4];
@@ -496,12 +496,13 @@ uint8_t WaterSupplyOperation_nostop(void) {
 		break;
 	}
 	R_WDT_Restart();
-	if (*state == 6 + 1) {
-		g_machine_state.flowSensor = 0;
-		*state = 0;
-		return 0;
-	} else
-		return 1;
+//	if (*state == 6 + 1) {
+//		g_machine_state.flowSensor = 0;
+//		*state = 0;
+//		return 0;
+//	} else
+//		return 1;
+	return (*state) == 0 ? 0 : 1;
 }
 void stop_waitAlarmConfirm(enum Control_status alarm, uint8_t timeout_s) {
 	uint32_t _tick = g_systemTime;
@@ -1071,7 +1072,8 @@ void userAuthHandler_nostop(void) {
  * Tested!
  */
 void ElectrolyzeWaterGeneration_nostop(void) {
-	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION) &&(g_machine_state.mode == INDIE)) {
+	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION)
+			&& (g_machine_state.mode == INDIE)) {
 		if (isAcidTankEmpty() || isAlkalineTankEmpty()) {
 			// Start Electrolyte
 			g_machine_state.mode = ELECTROLYTIC_GENERATION;
@@ -1144,6 +1146,9 @@ void CallanCleaningMode_nostop(void) {
 		}
 	}
 }
+/*!
+ * Tested!
+ */
 void DrainageMode_nostop(void) {
 	uint8_t *state = &g_machine_state.drainage;
 	uint32_t *tick = &g_Tick.tickDrainage;
@@ -1215,8 +1220,124 @@ void NormalMode_nostop(void) {
 		}
 	}
 }
-void TestMode_nostop(void) {
+/*!
+ * Power ON test mode, state 0 - 1, end at 2
+ * @param state: Machine state
+ * @param tick: Tick for no stop delay
+ * @return State
+ */
+uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
+	switch (*state) {
+	case 0:
+		O_SUPPLY_WATER_PIN_SV1 = O_SPOUT_WATER_PIN_SV2 = O_SPOUT_ACID_PIN_SV3 =
+		O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 = O_DRAIN_ALK_PIN_SV6 =
+		O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 = OPTION_2_PIN_SV9 = ON;
+		O_PUMP_SALT_PIN_SP1 = ON;
+		(*tick) = g_systemTime;
+		break;
+	case 1:
+		if (ns_delay_ms(tick, 30 * 1000)) {
+			O_SUPPLY_WATER_PIN_SV1 = O_SPOUT_WATER_PIN_SV2 =
+					O_SPOUT_ACID_PIN_SV3 =
+					O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 =
+							O_DRAIN_ALK_PIN_SV6 =
+							O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 =
+									OPTION_2_PIN_SV9 = OFF;
+			O_PUMP_SALT_PIN_SP1 = OFF;
+			(*state)++;
+		}
+		break;
+	default:
+		break;
+	}
+	return (*state);
+}
+uint8_t FlowRateAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
+	measureFlowSensor_nostop();
+	switch (*state) {
+		case 2:
+			O_SPOUT_WATER_PIN_SV2 = ON;
+			(*state)++;
+			(*tick) = g_systemTime;
+			break;
+		case 3:
+			if(ns_delay_ms(tick, 30*1000)){
+				O_SUPPLY_WATER_PIN_SV1 = ON;
+				(*state)++;
+			}
+			break;
+		case 4:
+			if(ns_delay_ms(tick, 500)){
+				(*state)++;
+				O_SPOUT_WATER_PIN_SV2 = OFF;
+			}
+			break;
+		case 5:
+			if(ns_delay_ms(tick, (uint32_t)15*1000 + (uint32_t)10*60*1000)){
+				(*state)++;
+			}
+			break;
+		default:
+			break;
+	}
+	return (*state);
+}
+uint8_t CurrentAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
+	switch (*state) {
+		case 6:
+			electrolyticOperationON();
+			(*state)++;
+			break;
+		case 7:
+			if(ElectrolyticOperation_nostop()){
+				(*state)++;
+				(*tick) = g_systemTime;
+			}
+			break;
+		case 8:
+			if(ns_delay_ms(tick, (uint32_t)15*1000 + (uint32_t)10*60*1000)){
+				(*state)++;
+			}
+			break;
+		default:
+			break;
+	}
+	return (*state);
+}
+uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick){
+	switch (*state) {
+		case 9:
+			electrolyticOperationON();
+			(*state)++;
+			break;
+		case 10:
+			if(isAcidTankFull() && isAlkalineTankFull()){
+				electrolyticOperationOFF();
+				(*tick) = g_systemTime;
+				(*state)++;
+			}
+			break;
+		case 11:
+			if(ns_delay_ms(tick, 10*60*1000)){
+				(*state)++;
+			}
+			break;
+		default:
+			break;
+	}
+	return (*state);
+}
+void TestOperation_nostop(void) {
+	TestPowerOn_nostop_keepstate(&g_machine_state.test, &g_Tick.tickTestOperation);
 
+}
+void NeutraliziationTreatment(uint32_t *tick){
+	if(ns_delay_ms(tick, g_timerSetting.t32_saltHighLevelDelay_s*1000)){
+
+	}
+	if(ns_delay_ms(tick, g_timerSetting.t31_saltLowLevelDelay_s*1000)){
+
+	}
 }
 void main_loop_20211111(void) {
 	measureFlowSensor_nostop();

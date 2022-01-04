@@ -149,7 +149,7 @@ void main(void)
 //    g_timerSetting.t3_flowSensorMonitorTime_s = 5;
     g_machine_mode = HAND_WASHING;
     sendToRasPi_f(H_SET, OK_ALL, 0x0);
-    main_init_20211111();
+//    main_init_20211111();
     //Test
 //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;

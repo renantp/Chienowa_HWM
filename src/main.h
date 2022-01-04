@@ -9,9 +9,9 @@
 #define MAIN_H_
 #define electrolyticOperationOFF() (g_machine_state.electrolyteOFF = g_machine_state.electrolyteOFF == 0 ? 1 : g_machine_state.electrolyteOFF)
 //const uint8_t io_statusSize = sizeof(union IO_Status_u);
-static const uint8_t io_statusSize = 5;
+static const uint8_t io_statusSize = 5 + 12;
 //const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s);
-static const uint8_t timeSettingSize = 141;
+static const uint8_t timeSettingSize = 141 + 8;
 //const uint8_t numberSettingSize = sizeof(struct Number_Setting_s);
 static const uint8_t numberSettingSize = 37;
 extern struct Timer_Setting_s _settingTime;

@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_wdt.obj
 #@   ../src/r_cg_wdt.c
-#@  compiled at Thu Dec 30 13:18:43 2021
+#@  compiled at Fri Dec 31 09:01:37 2021
 
 	.PUBLIC _R_WDT_Create
 	.PUBLIC _R_WDT_Restart

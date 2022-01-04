@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_serial_user.obj
 00000000                       17  #@   ../src/r_cg_serial_user.c
-00000000                       18  #@  compiled at Thu Dec 30 13:18:42 2021
+00000000                       18  #@  compiled at Fri Dec 31 09:01:36 2021
 00000000                       19  
 00000000                       20  	.EXTERN _g_machine_state
 00000000                       21  	.EXTERN _g_machine_mode
@@ -1201,7 +1201,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000142 61E8                1197  	skz
 00000144                     1198  .BB@LABEL@16_39:	; if_then_bb216
 00000144                     1199  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 472
-00000144 CF000002            1200  	mov !LOWW(_g_machine_state+0x0000B), #0x02
+00000144 CF000002            1200  	mov !LOWW(_g_machine_state+0x0000C), #0x02
 00000148                     1201  .BB@LABEL@16_40:	; if_break_bb240
 00000148                     1202  	;***      478 : 	}
 00000148                     1203  	;***      479 : 	g_uart2_receive++;

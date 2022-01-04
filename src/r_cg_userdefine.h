@@ -127,6 +127,8 @@ extern struct Timer_Setting_s{
 	uint32_t t30_offDelayEmptyLevel_s;
 	uint32_t t31_saltLowLevelDelay_s;
 	uint32_t t32_saltHighLevelDelay_s;
+	uint32_t t33_neutralizationStartTime_h;
+	uint32_t t34_neutralizationOpenTime_s;
 	uint32_t t51_alkalineWaterSpoutingTime_s;
 	uint32_t t52_acidWaterSpoutingTime_s;
 	uint32_t t53_washingWaterSpoutingTime_s;
@@ -243,6 +245,7 @@ extern struct Tick_s{
 //	uint32_t tickAnimation;
 	uint32_t tickCallan;
 	uint32_t tickDrainage;
+	uint32_t tickTestOperation;
 	uint32_t tickAcidLevel[4];
 	uint32_t tickAlkalineLevel[4];
 	uint32_t tickHandSensor[2];
@@ -263,7 +266,9 @@ enum Control_status{
 	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
 	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
 	READ_MACHINE_STATUS, WASHING_MODE, GET_MODE,
-	TESTING_START, TESTING_DATA, MID_NIGHT
+	TESTING_START, TESTING_DATA, MID_NIGHT,
+	TEST_POWER_ON, TEST_FLOW_RATE, TEST_CURRENT, TEST_INDIVIDUAL, TEST_ELECTROLYTIC,
+	TEST_RUN_ADJUSTMENT
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -277,6 +282,7 @@ extern struct Machine_State_u{
 	uint8_t electrolyteOFF;
 	uint8_t drainage;
 	uint8_t isMidNight;
+	uint8_t test;
 //	uint8_t waitAnimationRes;
 	/**
 	 * 0 - Non user
@@ -321,7 +327,8 @@ enum UART_header_e{
 
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;
-extern uint8_t g_machine_mode;
+
+extern uint8_t g_machine_mode, g_machine_test_mode;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end;
 extern volatile uint8_t g_uart1_sendend;

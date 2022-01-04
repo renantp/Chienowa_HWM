@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Thu Dec 30 13:18:42 2021
+#@  compiled at Fri Dec 31 09:01:36 2021
 
 	.EXTERN _g_machine_state
 	.EXTERN _g_machine_mode
@@ -1197,7 +1197,7 @@ _r_uart2_callback_receiveend@1:
 	skz
 .BB@LABEL@16_39:	; if_then_bb216
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 472
-	mov !LOWW(_g_machine_state+0x0000B), #0x02
+	mov !LOWW(_g_machine_state+0x0000C), #0x02
 .BB@LABEL@16_40:	; if_break_bb240
 	;***      478 : 	}
 	;***      479 : 	g_uart2_receive++;

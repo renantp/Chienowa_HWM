@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Thu Dec 30 14:35:53 2021
+#@  compiled at Fri Dec 31 09:01:39 2021
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -73,7 +73,6 @@
 	.EXTERN _R_UART3_Receive
 	.EXTERN _handSensorLED
 	.EXTERN _sendToRasPi_f
-	.EXTERN _main_init_20211111
 	.EXTERN _sendRS485
 	.EXTERN _realTimeResponse
 	.EXTERN _main_loop_20211111
@@ -207,7 +206,7 @@ _nostop_checkHandSensor:
 	clrw ax
 	movw de, ax
 	movw bc, #0x01F4
-	movw ax, #LOWW(_g_Tick+0x0007C)
+	movw ax, #LOWW(_g_Tick+0x00080)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
@@ -387,10 +386,8 @@ _main:
 	clrw bc
 	movw ax, #0x5300
 	call !!_sendToRasPi_f
-	;***      152 :     main_init_20211111();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 152
-	call !!_main_init_20211111
 	clrw ax
+	;***      152 : //    main_init_20211111();
 	;***      153 :     //Test
 	;***      154 : //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 	;***      155 : //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
@@ -608,7 +605,7 @@ _main:
 	;***      213 :     		uint8_t _b[5] = {0,1,0,0,1};
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 213
 	movw de, #0x0005
-	movw bc, #SMRLW(.STR@1619)
+	movw bc, #SMRLW(.STR@1623)
 	call !!_memcpy
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -745,7 +742,7 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0xEA60
-	movw ax, #LOWW(_g_Tick+0x00088)
+	movw ax, #LOWW(_g_Tick+0x0008C)
 	call !!_ns_delay_ms
 	;***      254 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 	;***      255 : //				g_TickKeeper.SV1_ON_minutes++;
@@ -767,7 +764,7 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0x3A98
-	movw ax, #LOWW(_g_Tick+0x0008C)
+	movw ax, #LOWW(_g_Tick+0x00090)
 	call !!_ns_delay_ms
 	;***      270 : //    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 	;***      271 : //					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
@@ -1075,7 +1072,7 @@ _rx_count:
 .STR@1:
 	.DS (4)
 	.DB 0x01
-.STR@1619:
+.STR@1623:
 	.DS (1)
 	.DB 0x01
 	.DS (2)
