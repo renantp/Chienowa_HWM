@@ -137,7 +137,6 @@ void main(void)
 //    O_RS485_MODE_PIN = 1U;
 //    R_UART3_Send(send_buf, 7);
     EEPROM_PROTECT_EN();
-
     g_pre_color = BLUE;
     handSensorLED(BLACK);
 //    g_machine_state.mode = INDIE; // Set as indie-mode
@@ -150,6 +149,7 @@ void main(void)
     g_machine_mode = HAND_WASHING;
     sendToRasPi_f(H_SET, OK_ALL, 0x0);
 //    main_init_20211111();
+
     //Test
 //    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
 //    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;

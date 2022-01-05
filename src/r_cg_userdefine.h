@@ -102,16 +102,16 @@ extern uint8_t rx_count;
 
 extern struct Timer_Setting_s{
 	uint32_t t1_initialWaterDrainageOperation_s;
-	uint32_t t2_flowSensorStartTime_s; // 4 byte
-	uint32_t t3_flowSensorMonitorTime_s; // 4 byte
+	uint32_t t2_flowSensorStartTime_s;
+	uint32_t t3_flowSensorMonitorTime_s;
 	uint32_t t4_electrolysisOperationStart_s;
 	uint32_t t5_electrolysisStopDelay_s;
-	uint32_t t6_drainageOffTime_h; // 4 byte
+	uint32_t t6_drainageOffTime_h;
 	uint32_t t7_powerOnPreparation_s;
 	uint32_t t8_flowRateAdjustmentRelease_s;
 	uint32_t t9_currentAdjustmentRelease_s;
 	uint32_t t10_electrolysisCurrentAlarmSpecified_s;
-	uint32_t t11_overVoltage1Time_s; // 4 byte
+	uint32_t t11_overVoltage1Time_s;
 	uint32_t t12_overVoltage2Time_s;
 	uint32_t t13_overVoltage3Time_s;
 	uint32_t t14_lowVoltageStartTime_s;
@@ -127,8 +127,6 @@ extern struct Timer_Setting_s{
 	uint32_t t30_offDelayEmptyLevel_s;
 	uint32_t t31_saltLowLevelDelay_s;
 	uint32_t t32_saltHighLevelDelay_s;
-	uint32_t t33_neutralizationStartTime_h;
-	uint32_t t34_neutralizationOpenTime_s;
 	uint32_t t51_alkalineWaterSpoutingTime_s;
 	uint32_t t52_acidWaterSpoutingTime_s;
 	uint32_t t53_washingWaterSpoutingTime_s;
@@ -138,6 +136,8 @@ extern struct Timer_Setting_s{
 	uint32_t t59_alkalineWaterDownTime_s;
 	uint32_t t61_curranCleaningIntervalTime_h;
 	uint32_t t62_callanWashSpoutingTime_s;
+	uint32_t t33_t63_neutralizationStartTime_h;
+	uint32_t t34_t64_neutralizationOpenTime_s;
 	char crc;
 }g_timerSetting;
 extern struct Number_Setting_s{

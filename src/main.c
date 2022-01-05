@@ -308,25 +308,28 @@ void RaspberryResponse_nostop(void) {
 		}
 		commnunication_flag.send_response_status_flag = 0;
 	}else if(commnunication_flag.recieve_status_flag == 2){
-		uint8_t *const _io_p = (uint8_t *)g_res_io_status;
-		for (uint8_t i = 0; i < io_statusSize - 1; i++){
+		uint8_t *const _io_p = (uint8_t *)&g_res_io_status;
+		for(uint8_t i = 0; i < 5; i++){
 			_io_p[i] = g_rx_data[i];
-//			switch (i % 4) {
-//			case 3:
-//				_io_p[i - 3] = g_rx_data[i];
-//				break;
-//			case 2:
-//				_io_p[i - 1] = g_rx_data[i];
-//				break;
-//			case 1:
-//				_io_p[1 + i] = g_rx_data[i];
-//				break;
-//			case 0:
-//				_io_p[3 + i] = g_rx_data[i];
-//				break;
-//			default:
-//				break;
-//			}
+		}
+		for (uint8_t i = 5; i < io_statusSize - 1; i++){
+
+			switch (i % 4) {
+			case 3:
+				_io_p[i - 3] = g_rx_data[i];
+				break;
+			case 2:
+				_io_p[i - 1] = g_rx_data[i];
+				break;
+			case 1:
+				_io_p[1 + i] = g_rx_data[i];
+				break;
+			case 0:
+				_io_p[3 + i] = g_rx_data[i];
+				break;
+			default:
+				break;
+			}
 		}
 		commnunication_flag.recieve_status_flag = 0;
 	}
@@ -1387,12 +1390,12 @@ void TestOperation_nostop(void) {
 	}
 }
 void NeutralizationTreatment(uint32_t *tick){
-	if(g_neutralization_time_s >= g_timerSetting.t33_neutralizationStartTime_h*60*60){
+	if(g_neutralization_time_s >= g_timerSetting.t33_t63_neutralizationStartTime_h*60*60){
 		g_machine_state.neutrlization = 1;
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_neutralization_time_s = 0;
 	}
-	if(ns_delay_ms(tick, g_timerSetting.t34_neutralizationOpenTime_s*1000) && (g_machine_state.neutrlization != 0)){
+	if(ns_delay_ms(tick, g_timerSetting.t34_t64_neutralizationOpenTime_s*1000) && (g_machine_state.neutrlization != 0)){
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_machine_state.neutrlization = 0;
 	}
@@ -1432,7 +1435,7 @@ void isElectrolyticOperationOFF_nostop(void) {
 			sendToRasPi_u32(H_READ, MID_NIGHT, 0x00);
 			g_TimeKeeper.electrolyteOff_h++;
 		} else if (g_machine_state.electrolyteOperation == 1) {
-			if(ns_delay_ms(g_TimeKeeper.neutralization, 1000)){
+			if(ns_delay_ms(&g_TimeKeeper.neutralization, 1000)){
 				g_neutralization_time_s++;
 			}
 			(*tick) = g_systemTime;
