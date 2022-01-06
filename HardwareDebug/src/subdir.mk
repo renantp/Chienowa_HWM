@@ -27,6 +27,7 @@ C_SRCS += \
 ../src/r_cg_wdt_user.c \
 ../src/r_main.c \
 ../src/r_systeminit.c \
+../src/raspberry_pi_interface.c \
 ../src/usr_timer.c 
 
 COMPILER_OBJS += \
@@ -53,6 +54,7 @@ src/r_cg_wdt.obj \
 src/r_cg_wdt_user.obj \
 src/r_main.obj \
 src/r_systeminit.obj \
+src/raspberry_pi_interface.obj \
 src/usr_timer.obj 
 
 C_DEPS += \
@@ -79,6 +81,7 @@ src/r_cg_wdt.d \
 src/r_cg_wdt_user.d \
 src/r_main.d \
 src/r_systeminit.d \
+src/raspberry_pi_interface.d \
 src/usr_timer.d 
 
 # Each subdirectory must supply rules for building sources it contributes

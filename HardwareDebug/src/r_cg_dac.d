@@ -15,3 +15,23 @@ src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_serial.h
 ../src/r_cg_serial.h:
 src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/main.h
+../src/main.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/usr_setting_sheet.h
+../src/usr_setting_sheet.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/usr_timer.h
+../src/usr_timer.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_cgc.h
+../src/r_cg_cgc.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_port.h
+../src/r_cg_port.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_adc.h
+../src/r_cg_adc.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_timer.h
+../src/r_cg_timer.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/r_cg_wdt.h
+../src/r_cg_wdt.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/rasberry_pi_interface.h
+../src/rasberry_pi_interface.h:
+src/r_cg_dac.obj src/r_cg_dac.d: ../src/main.h
+../src/main.h:

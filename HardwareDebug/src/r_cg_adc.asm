@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_adc.obj
 #@   ../src/r_cg_adc.c
-#@  compiled at Wed Jan 05 10:55:51 2022
+#@  compiled at Thu Jan 06 15:40:31 2022
 
 	.PUBLIC _R_ADC_Create
 	.PUBLIC _R_ADC_Start

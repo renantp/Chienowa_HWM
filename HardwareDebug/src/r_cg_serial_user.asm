@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Wed Jan 05 10:55:58 2022
+#@  compiled at Thu Jan 06 15:40:36 2022
 
 	.EXTERN _g_machine_state
 	.EXTERN _g_machine_mode

@@ -125,37 +125,33 @@ void main(void)
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
 
+    //TODO: EEPROM Initialize and read Setting
     EEPROM_Init(&g_csi_rev_end, NONE_BLOCK);
     EE_SPI_Read((uint8_t *)&g_numberSetting, NUMBER_SETTING_ADDRESS, numberSettingSize);
     EE_SPI_Read((uint8_t *)&g_timerSetting, TIME_SETTING_ADDRESS, timeSettingSize);
     _settingNumber = g_numberSetting;
     _settingTime = g_timerSetting;
+    EEPROM_PROTECT_EN();
+
+    //TODO: Start receive command from Raspberry Pi
     R_UART2_Receive(g_rx_data, 6);
+
+    //TODO: Start receive data from RS485
     O_RS485_MODE_PIN = 0U;
     R_UART3_Receive(g_uart3_rx_data, 7);
-//    Test gui
-//    O_RS485_MODE_PIN = 1U;
-//    R_UART3_Send(send_buf, 7);
-    EEPROM_PROTECT_EN();
-    g_pre_color = BLUE;
-    handSensorLED(BLACK);
-//    g_machine_state.mode = INDIE; // Set as indie-mode
-//    g_timerSetting.t26_onDelayEmptyLevel_s = g_timerSetting.t26_onDelayEmptyLevel_s = 2;
-//    g_timerSetting.t55_waterDischargeDelay_s = 10;
-//    g_timerSetting.t26_onDelayEmptyLevel_s = 2;
-//    g_timerSetting.t4_electrolysisOperationStart_s = 5;
-//    g_timerSetting.t2_flowSensorStartTime_s = 1;
-//    g_timerSetting.t3_flowSensorMonitorTime_s = 5;
-    g_machine_mode = HAND_WASHING;
-    sendToRasPi_f(H_SET, OK_ALL, 0x0);
-//    main_init_20211111();
-
-    //Test
-//    g_timerSetting.t53_washingWaterSpoutingTime_s = 4;
-//    g_timerSetting.t51_alkalineWaterSpoutingTime_s = 5;
-//    g_timerSetting.t52_acidWaterSpoutingTime_s = 6;
     uint8_t wts, vpcb, vpcb_v = 1;
     sendRS485(0xff, 82, 2, 12);
+
+    //TODO: Turn off Hand Sensor LED
+    g_pre_color = BLUE;
+    handSensorLED(BLACK);
+
+    //TODO: Set default washing mode
+    g_machine_mode = HAND_WASHING;
+//    sendToRasPi_f(H_SET, OK_ALL, 0x0);
+
+    //TODO: Run Initialize Operation
+//    main_init_20211111();
     while (1U)
     {
     	realTimeResponse();

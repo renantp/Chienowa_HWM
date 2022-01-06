@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_rtc_user.obj
 #@   ../src/r_cg_rtc_user.c
-#@  compiled at Wed Jan 05 10:55:57 2022
+#@  compiled at Thu Jan 06 15:40:35 2022
 
 	.PUBLIC _g_rtc
 

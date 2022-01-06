@@ -27,9 +27,15 @@ src/r_main.obj src/r_main.d: ../src/crc8.h
 ../src/crc8.h:
 src/r_main.obj src/r_main.d: ../src/EEPROM.h
 ../src/EEPROM.h:
-src/r_main.obj src/r_main.d: ../src/usr_timer.h
-../src/usr_timer.h:
+src/r_main.obj src/r_main.d: ../src/main.h
+../src/main.h:
+src/r_main.obj src/r_main.d: ../src/r_cg_userdefine.h
+../src/r_cg_userdefine.h:
 src/r_main.obj src/r_main.d: ../src/usr_setting_sheet.h
 ../src/usr_setting_sheet.h:
+src/r_main.obj src/r_main.d: ../src/usr_timer.h
+../src/usr_timer.h:
+src/r_main.obj src/r_main.d: ../src/rasberry_pi_interface.h
+../src/rasberry_pi_interface.h:
 src/r_main.obj src/r_main.d: ../src/main.h
 ../src/main.h:

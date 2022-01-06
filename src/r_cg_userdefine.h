@@ -36,6 +36,7 @@ User definitions
 /* Start user code for function. Do not edit comment generated here */
 #include "crc8.h"
 #include "EEPROM.h"
+#include "main.h"
 extern uint8_t rx_count;
 
 #define NUMBER_SETTING_ADDRESS (0x000)
@@ -352,8 +353,7 @@ extern void adc_int_handle(void);
 
 extern void setting_default(void);
 extern void main_init_20211111(void);
-void sendToRasPi_f(enum UART_header_e head, enum Control_status type, float value);
-void sendToRasPi_u32(enum UART_header_e head, enum Control_status type, uint32_t value);
+
 void sendRS485(uint8_t busy, uint8_t head, uint8_t type, uint32_t value);
 void sendR485_7byte(uint8_t addr, uint8_t head, uint8_t *val);
 extern void callAlarm(int _error);
@@ -389,7 +389,7 @@ void CloseSV2(void);
 
 uint8_t readHS(void);
 void handSensorLED(enum HS_COLOR color);
-void sendToRasPi_f(enum UART_header_e head, enum Control_status type, float value);
+
 uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
 		enum Control_status control, uint32_t data);
 /* End user code. Do not edit comment generated here */

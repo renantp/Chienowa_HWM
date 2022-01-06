@@ -5,17 +5,9 @@
  *      Author: Renan
  */
 
-#include "r_cg_macrodriver.h"
-#include "r_cg_userdefine.h"
-#include "usr_setting_sheet.h"
-#include "usr_timer.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_serial.h"
-#include "r_cg_adc.h"
-#include "r_cg_timer.h"
-#include "r_cg_wdt.h"
 #include "main.h"
+
+#include <iodefine.h>
 
 #define VCC (24.0)
 
@@ -94,6 +86,8 @@ void setting_default(void) {
 	g_timerSetting.t53_washingWaterSpoutingTime_s = 3;
 }
 
+/********************** Check Input *******************/
+//TODO: Check Input
 uint8_t isAcidTankFull(void) {
 	if (I_ACID_H_PIN == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[0],
@@ -207,27 +201,6 @@ uint8_t isAlkalineTankEmpty(void) {
 	return 0;
 }
 
-//----------------------Begin code 11112021--------------------------------------
-void sendToRasPi_f(enum UART_header_e head, enum Control_status type,
-		float value) {
-	uint8_t state = g_uart2_sendend;
-	g_control_buffer_f.head = head;
-	g_control_buffer_f.set_number = type;
-	g_control_buffer_f.set_value = value;
-	R_UART2_Send((uint8_t*) &g_control_buffer_f, 6);
-	while (state == g_uart2_sendend)
-		;
-}
-void sendToRasPi_u32(enum UART_header_e head, enum Control_status type,
-		uint32_t value) {
-	uint8_t state = g_uart2_sendend;
-	g_control_buffer_u32.head = head;
-	g_control_buffer_u32.set_number = type;
-	g_control_buffer_u32.set_value = value;
-	R_UART2_Send((uint8_t*) &g_control_buffer_u32, 6);
-	while (state == g_uart2_sendend)
-		;
-}
 struct UART3_Buffer_s {
 	uint8_t busy;
 	uint8_t head; // 1 byte
@@ -275,201 +248,23 @@ uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
 	else
 		return 0;
 }
-/**
- * Handle all response to Raspberry command.
- */
-uint8_t *const time_setting_p = (uint8_t*) &_settingTime;
-uint8_t *const number_setting_p = (uint8_t*) &_settingNumber;
-struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
-void RaspberryResponse_nostop(void) {
-	//TODO: I'm doing here
-	if (commnunication_flag.send_response_flag) {
-		uint8_t state = g_uart2_sendend;
-		if (g_machine_state.user == 2) {
-			g_machine_state.user = 1;
-		}
-		R_UART2_Send(g_rx_data, 6);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		commnunication_flag.send_response_flag = 0;
-	}
-	if (commnunication_flag.send_response_mode_flag == 1) {
-		sendToRasPi_u32(H_READ, WASHING_MODE,
-				(uint32_t) g_machine_mode << (8 * 3));
-//		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
-		commnunication_flag.send_response_mode_flag = 0;
-	}
-	if (commnunication_flag.send_response_status_flag) {
-		uint8_t state = g_uart2_sendend;
-		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		commnunication_flag.send_response_status_flag = 0;
-	}else if(commnunication_flag.recieve_status_flag == 2){
-		uint8_t *const _io_p = (uint8_t *)&g_res_io_status;
-		for(uint8_t i = 0; i < 5; i++){
-			_io_p[i] = g_rx_data[i];
-		}
-		for (uint8_t i = 5; i < io_statusSize - 1; i++){
 
-			switch (i % 4) {
-			case 3:
-				_io_p[i - 3] = g_rx_data[i];
-				break;
-			case 2:
-				_io_p[i - 1] = g_rx_data[i];
-				break;
-			case 1:
-				_io_p[1 + i] = g_rx_data[i];
-				break;
-			case 0:
-				_io_p[3 + i] = g_rx_data[i];
-				break;
-			default:
-				break;
-			}
-		}
-		commnunication_flag.recieve_status_flag = 0;
-	}
-	if (commnunication_flag.send_response_time_flag) {
-		uint8_t state = g_uart2_sendend;
-		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
-				timeSettingSize - 1);
-		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		commnunication_flag.send_response_time_flag = 0;
-	}
-	if (commnunication_flag.send_response_number_flag) {
-		uint8_t state = g_uart2_sendend;
-		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
-				numberSettingSize - 1);
-		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		commnunication_flag.send_response_number_flag = 0;
-	}
-	if (commnunication_flag.recived_time_setting_flag == 2) {
-//		//Do not Edit this, must keep!!!!
-		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
-			switch (i % 4) {
-//			case 3:
-//				pointer0[timeSettingSize - 3 + 3 - i] = g_rx_data[i - 3];
-//				break;
-//			case 2:
-//				pointer0[timeSettingSize - 3 + 1 - i] = g_rx_data[i - 1];
-//				break;
-//			case 1:
-//				pointer0[timeSettingSize - 3 - 1 - i] = g_rx_data[1 + i];
-//				break;
-//			case 0:
-//				pointer0[timeSettingSize - 3 - 3 - i] = g_rx_data[3 + i];
-//				break;
-//			default:
-//				break;
-			case 3:
-				time_setting_p[i - 3] = g_rx_data[i];
-				break;
-			case 2:
-				time_setting_p[i - 1] = g_rx_data[i];
-				break;
-			case 1:
-				time_setting_p[1 + i] = g_rx_data[i];
-				break;
-			case 0:
-				time_setting_p[3 + i] = g_rx_data[i];
-				break;
-			default:
-				break;
-			}
-		}
-		_settingTime.crc = g_rx_data[timeSettingSize - 1];
-		if (g_rx_data[timeSettingSize - 1]
-				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
-			g_timerSetting = _settingTime;
-			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
-					timeSettingSize);
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-		} else {
-			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-		}
-//		sendToRasPi(H_SET, OK_ALL, 0x0);
-		commnunication_flag.recived_time_setting_flag = 0;
-	}
-
-	if (commnunication_flag.recived_number_setting_flag == 2) {
-//		//Do not Edit this, must keep!!!!
-		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
-			switch (i % 4) {
-			case 3:
-				number_setting_p[i - 3] = g_rx_data[i];
-				break;
-			case 2:
-				number_setting_p[i - 1] = g_rx_data[i];
-				break;
-			case 1:
-				number_setting_p[1 + i] = g_rx_data[i];
-				break;
-			case 0:
-				number_setting_p[3 + i] = g_rx_data[i];
-				break;
-			default:
-				break;
-			}
-		}
-		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
-				numberSettingSize - 1);
-		if (g_rx_data[numberSettingSize - 1]
-				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-			g_numberSetting = _settingNumber;
-			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
-					numberSettingSize);
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-		} else {
-			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-		}
-//		sendToRasPi(H_SET, OK_ALL, 0x0);
-		commnunication_flag.recived_number_setting_flag = 0;
-	}
-}
 /**
- * InitialOperationModeStart drain Tank 1 and Tank 2 if there are any liquid left
+ * Drain Tank 1 and Tank 2 if there are any liquid left
  * 13/12/2021: Checked!
  * @return: 0 - Done; 1 - Not done
  */
-uint8_t InitialOperationModeStart_nostop(void) {
-//	O_DRAIN_ACID_PIN_SV7 = I_ACID_L_PIN == I_ON ? ON : O_DRAIN_ACID_PIN_SV7; // Turn on SV5 if ACID tank empty
-//	O_DRAIN_ALK_PIN_SV6 = I_ALKALI_L_PIN == I_ON ? ON : O_DRAIN_ALK_PIN_SV6; // Turn on SV6 if ALK tank empty
+uint8_t DrainageAcidAndAlkalineTankStart_nostop(void) {
 	O_DRAIN_ACID_PIN_SV5 = isAcidTankEmpty() ? OFF : ON;
 	O_DRAIN_ALK_PIN_SV6 = isAlkalineTankEmpty() ? OFF : ON;
-//	return (!isAcidTankEmpty() || !isAcidTankEmpty());
 	return !(O_DRAIN_ACID_PIN_SV5 == OFF && O_DRAIN_ALK_PIN_SV6 == OFF);
 }
-///**
-// * FlowSensorCheck
-// * 30/11/2021: Checked!
-// * @return 0 is Error, 1 is OK, 2 Still taking
-// */
-//uint8_t FlowSensorCheck(uint32_t *_time) {
-////	g_flow_value = measureFlowSensor();
-//	if ((g_flow_value < g_numberSetting.upperFlow)
-//			& (g_flow_value > g_numberSetting.lowerFlow)) {
-//		return 1;
-//	} else {
-//		sendToRasPi(H_ALARM, FLOW_SENSOR_ERROR, 1);
-//		return 0;
-//	}
-//}
-/**
- * WaterSupplyOperation
- * 30/11/2021: Checked by An
+
+/*!
+ * Supply water to CVCC
+ * @return 0 - Done, 1 - Not done yet
  */
-uint8_t WaterSupplyOperation_nostop(void) {
+uint8_t WaterSupplyStart_nostop(void) {
 	uint8_t *state = &g_machine_state.waterSupply;
 	uint32_t *tick = &g_Tick.tickWaterSupply;
 	switch (*state) {
@@ -478,20 +273,20 @@ uint8_t WaterSupplyOperation_nostop(void) {
 		(*state)++;
 		break;
 	case 1:
-		O_SPOUT_WATER_PIN_SV2 = ON;		// SV2 On
+		O_SPOUT_WATER_PIN_SV2 = ON;
 		if (ns_delay_ms(tick, 30000)) {
 			(*state)++;
 		}
 		break;
 	case 2:
-		O_SUPPLY_WATER_PIN_SV1 = ON;	// SV1 On
+		O_SUPPLY_WATER_PIN_SV1 = ON;
 		if (ns_delay_ms(tick, 500)) {
 			(*state)++;
 			g_Tick.tickFlowMeasurment = g_systemTime;
 		}
 		break;
 	case 3:
-		O_SPOUT_WATER_PIN_SV2 = OFF;	// SV2 Off
+		O_SPOUT_WATER_PIN_SV2 = OFF;
 		if (ns_delay_ms(tick, 15000)) {
 			(*state)++;
 			g_machine_state.flowSensor = 0;
@@ -515,41 +310,14 @@ uint8_t WaterSupplyOperation_nostop(void) {
 	case 6:
 		if (ns_delay_ms(&g_Tick.tickWaterSupply,
 				g_timerSetting.t4_electrolysisOperationStart_s * 1000)) {
-			(*state)++;
+			(*state) = 0;
 		}
 		break;
 	default:
 		(*state) = 0;
 		break;
 	}
-	R_WDT_Restart();
-//	if (*state == 6 + 1) {
-//		g_machine_state.flowSensor = 0;
-//		*state = 0;
-//		return 0;
-//	} else
-//		return 1;
 	return (*state) == 0 ? 0 : 1;
-}
-void stop_waitAlarmConfirm(enum Control_status alarm, uint8_t timeout_s) {
-	uint32_t _tick = g_systemTime;
-	while (commnunication_flag.alarm_clear_flag != alarm) {
-		realTimeResponse();
-		if ((ns_delay_ms(&_tick, timeout_s * 1000)) && (timeout_s != 0)) {
-			break;
-		}
-	}
-	commnunication_flag.alarm_clear_flag = 0;
-}
-uint8_t nostop_waitAlarmConfirm(enum Control_status alarm) {
-	if (commnunication_flag.alarm_clear_flag != alarm) {
-		return 1;
-	}
-	commnunication_flag.alarm_clear_flag = OK_ALL;
-	return 0;
-}
-void resetAlarm(void) {
-	commnunication_flag.alarm_clear_flag = 1;
 }
 
 /**
@@ -1055,14 +823,14 @@ void AlkalineWaterMode_nostop(void) {
 // Newest
 void main_init_20211111(void) {
 	UpdateMachineStatus();
-	while (InitialOperationModeStart_nostop()) {
+	while (DrainageAcidAndAlkalineTankStart_nostop()) {
 		RaspberryResponse_nostop();
 		UpdateMachineStatus();
 		R_WDT_Restart();
 	}
 
 	UpdateMachineStatus();
-	while (WaterSupplyOperation_nostop()) {
+	while (WaterSupplyStart_nostop()) {
 		realTimeResponse();
 	}
 	if (g_io_status.refined.FlowValue < g_numberSetting.lowerFlow) {
@@ -1183,7 +951,7 @@ void DrainageMode_nostop(void) {
 		// Start Drainage Loop
 		switch (*state) {
 		case 0:
-			if (InitialOperationModeStart_nostop() == 0) {
+			if (DrainageAcidAndAlkalineTankStart_nostop() == 0) {
 				O_SUPPLY_WATER_PIN_SV1 = ON;
 				(*state)++;
 			}
@@ -1265,11 +1033,11 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	case 1:
 		if (ns_delay_ms(tick, 30 * 1000)) {
 			O_SUPPLY_WATER_PIN_SV1 = O_SPOUT_WATER_PIN_SV2 =
-					O_SPOUT_ACID_PIN_SV3 =
-					O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 =
-							O_DRAIN_ALK_PIN_SV6 =
-							O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 =
-									OPTION_2_PIN_SV9 = OFF;
+			O_SPOUT_ACID_PIN_SV3 =
+			O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 =
+			O_DRAIN_ALK_PIN_SV6 =
+			O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 =
+			OPTION_2_PIN_SV9 = OFF;
 			O_PUMP_SALT_PIN_SP1 = OFF;
 			(*state)++;
 		}
@@ -1277,80 +1045,82 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	default:
 		break;
 	}
-	return (*state) == 2? 1:0;
+	return (*state) == 2 ? 1 : 0;
 }
-uint8_t FlowRateAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
+uint8_t FlowRateAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	measureFlowSensor_nostop();
 	switch (*state) {
-		case 2:
-			O_SPOUT_WATER_PIN_SV2 = ON;
+	case 2:
+		O_SPOUT_WATER_PIN_SV2 = ON;
+		(*state)++;
+		(*tick) = g_systemTime;
+		break;
+	case 3:
+		if (ns_delay_ms(tick, 30 * 1000)) {
+			O_SUPPLY_WATER_PIN_SV1 = ON;
+			(*state)++;
+		}
+		break;
+	case 4:
+		if (ns_delay_ms(tick, 500)) {
+			(*state)++;
+			O_SPOUT_WATER_PIN_SV2 = OFF;
+		}
+		break;
+	case 5:
+		if (ns_delay_ms(tick,
+				(uint32_t) 15 * 1000 + (uint32_t) 10 * 60 * 1000)) {
+			(*state)++;
+		}
+		break;
+	default:
+		break;
+	}
+	return (*state) == 6 ? 1 : 0;
+}
+uint8_t CurrentAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick) {
+	switch (*state) {
+	case 6:
+		electrolyticOperationON();
+		(*state)++;
+		break;
+	case 7:
+		if (ElectrolyticOperation_nostop()) {
 			(*state)++;
 			(*tick) = g_systemTime;
-			break;
-		case 3:
-			if(ns_delay_ms(tick, 30*1000)){
-				O_SUPPLY_WATER_PIN_SV1 = ON;
-				(*state)++;
-			}
-			break;
-		case 4:
-			if(ns_delay_ms(tick, 500)){
-				(*state)++;
-				O_SPOUT_WATER_PIN_SV2 = OFF;
-			}
-			break;
-		case 5:
-			if(ns_delay_ms(tick, (uint32_t)15*1000 + (uint32_t)10*60*1000)){
-				(*state)++;
-			}
-			break;
-		default:
-			break;
-	}
-	return (*state) == 6 ? 1:0;
-}
-uint8_t CurrentAdjustmentMode_nostop_keepstate(uint8_t *state, uint32_t *tick){
-	switch (*state) {
-		case 6:
-			electrolyticOperationON();
+		}
+		break;
+	case 8:
+		if (ns_delay_ms(tick,
+				(uint32_t) 15 * 1000 + (uint32_t) 10 * 60 * 1000)) {
 			(*state)++;
-			break;
-		case 7:
-			if(ElectrolyticOperation_nostop()){
-				(*state)++;
-				(*tick) = g_systemTime;
-			}
-			break;
-		case 8:
-			if(ns_delay_ms(tick, (uint32_t)15*1000 + (uint32_t)10*60*1000)){
-				(*state)++;
-			}
-			break;
-		default:
-			break;
+		}
+		break;
+	default:
+		break;
 	}
-	return (*state) == 9 ? 1:0;
+	return (*state) == 9 ? 1 : 0;
 }
-uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick){
+uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick) {
 	switch (*state) {
-		case 9:
-			electrolyticOperationON();
+	case 9:
+		electrolyticOperationON();
+		(*state)++;
+		break;
+	case 10:
+		if (isAcidTankFull() && isAlkalineTankFull()) {
+			electrolyticOperationOFF();
+			(*tick) = g_systemTime;
 			(*state)++;
-			break;
-		case 10:
-			if(isAcidTankFull() && isAlkalineTankFull()){
-				electrolyticOperationOFF();
-				(*tick) = g_systemTime;
-				(*state)++;
-			}
-			break;
-		case 11:
-			if(ns_delay_ms(tick, (uint32_t)10*60*1000)){
-				(*state)++;
-			}
-			break;
-		default:
-			break;
+		}
+		break;
+	case 11:
+		if (ns_delay_ms(tick, (uint32_t) 10 * 60 * 1000)) {
+			(*state)++;
+		}
+		break;
+	default:
+		break;
 	}
 	return (*state);
 }
@@ -1358,44 +1128,47 @@ void TestOperation_nostop(void) {
 	uint8_t *state = &g_machine_state.test;
 	uint32_t *tick = &g_Tick.tickTestOperation;
 	switch (commnunication_flag.test_flag) {
-		case TEST_POWER_ON:
-			if(TestPowerOn_nostop_keepstate(state, &g_Tick.tickTestOperation)){
-				commnunication_flag.test_flag = 0;
-				*state = 0;
-			}
-			break;
-		case TEST_FLOW_RATE:
-			if(FlowRateAdjustmentMode_nostop_keepstate(state, tick)){
-				commnunication_flag.test_flag = 0;
-				*state = 0;
-			}
-			break;
-		case TEST_CURRENT:
-			if(CurrentAdjustmentMode_nostop_keepstate(state, tick)){
-				commnunication_flag.test_flag = 0;
-				*state = 0;
-			}
-			break;
-		case TEST_INDIVIDUAL:
+	case TEST_POWER_ON:
+		if (TestPowerOn_nostop_keepstate(state, &g_Tick.tickTestOperation)) {
+			commnunication_flag.test_flag = 0;
+			*state = 0;
+		}
+		break;
+	case TEST_FLOW_RATE:
+		if (FlowRateAdjustmentMode_nostop_keepstate(state, tick)) {
+			commnunication_flag.test_flag = 0;
+			*state = 0;
+		}
+		break;
+	case TEST_CURRENT:
+		if (CurrentAdjustmentMode_nostop_keepstate(state, tick)) {
+			commnunication_flag.test_flag = 0;
+			*state = 0;
+		}
+		break;
+	case TEST_INDIVIDUAL:
 
-			break;
-		case TEST_ELECTROLYTIC:
-			if(ElectrolyteAdjustmentOperation(state, tick)){
-				commnunication_flag.test_flag = 0;
-				*state = 0;
-			}
-			break;
-		default:
-			break;
+		break;
+	case TEST_ELECTROLYTIC:
+		if (ElectrolyteAdjustmentOperation(state, tick)) {
+			commnunication_flag.test_flag = 0;
+			*state = 0;
+		}
+		break;
+	default:
+		break;
 	}
 }
-void NeutralizationTreatment(uint32_t *tick){
-	if(g_neutralization_time_s >= g_timerSetting.t33_t63_neutralizationStartTime_h*60*60){
+void NeutralizationTreatment(uint32_t *tick) {
+	if (g_neutralization_time_s
+			>= g_timerSetting.t33_t63_neutralizationStartTime_h * 60 * 60) {
 		g_machine_state.neutrlization = 1;
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_neutralization_time_s = 0;
 	}
-	if(ns_delay_ms(tick, g_timerSetting.t34_t64_neutralizationOpenTime_s*1000) && (g_machine_state.neutrlization != 0)){
+	if (ns_delay_ms(tick,
+			g_timerSetting.t34_t64_neutralizationOpenTime_s * 1000)
+			&& (g_machine_state.neutrlization != 0)) {
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_machine_state.neutrlization = 0;
 	}
@@ -1435,7 +1208,7 @@ void isElectrolyticOperationOFF_nostop(void) {
 			sendToRasPi_u32(H_READ, MID_NIGHT, 0x00);
 			g_TimeKeeper.electrolyteOff_h++;
 		} else if (g_machine_state.electrolyteOperation == 1) {
-			if(ns_delay_ms(&g_TimeKeeper.neutralization, 1000)){
+			if (ns_delay_ms(&g_TimeKeeper.neutralization, 1000)) {
 				g_neutralization_time_s++;
 			}
 			(*tick) = g_systemTime;

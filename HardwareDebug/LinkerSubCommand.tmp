@@ -23,6 +23,7 @@
 -input=".\src\r_cg_wdt_user.obj"
 -input=".\src\r_main.obj"
 -input=".\src\r_systeminit.obj"
+-input=".\src\raspberry_pi_interface.obj"
 -input=".\src\usr_timer.obj"
 -library="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\lib\rl78em4s99.lib"
 -library="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\lib\rl78em4r.lib"
