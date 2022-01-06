@@ -43,8 +43,7 @@ Includes
 #include "usr_timer.h"
 #include "usr_setting_sheet.h"
 #include "crc8.h"
-#include "main.h"
-/* End user code. Do not edit comment generated here */
+#include "hwm/main.h"
 #include "r_cg_userdefine.h"
 
 /***********************************************************************************************************************
@@ -59,7 +58,7 @@ Pragma directive
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
-volatile int g_error = 0;
+
 volatile int g_adc_ch = 0;
 union EEPROM_status_u g_e_status;
 struct Number_Setting_s ret_number_setting;
@@ -84,22 +83,22 @@ union {
 }handsensor_status;
 uint8_t g_handsensor_status[2];
 void nostop_checkHandSensor(void){
-	if(DETECT_U == I_ON){
+	if(DETECT_U() == I_ON){
 		if(ns_delay_ms(&g_Tick.tickHandSensor[0], 500)){
 			g_handsensor_status[0] = g_handsensor_status[0] == 0? 1:0;
 		}
-	}else if(DETECT_D == I_ON){
+	}else if(DETECT_D() == I_ON){
 		g_handsensor_status[1] = 1;
-	}else if(DETECT_U == I_OFF){
+	}else if(DETECT_U() == I_OFF){
 
-	}else if(DETECT_D == I_OFF){
+	}else if(DETECT_D() == I_OFF){
 
 	}
 }
 uint8_t readHS(void){
-   if(DETECT_U){
+   if(DETECT_U()){
 	  delay_ms(2);
-      if(DETECT_U) return 1;return 0;
+      if(DETECT_U()) return 1;return 0;
    }else return 0;
 }
 uint8_t this_size = sizeof(g_io_status);

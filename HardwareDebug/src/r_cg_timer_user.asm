@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_timer_user.obj
 #@   ../src/r_cg_timer_user.c
-#@  compiled at Thu Jan 06 15:40:36 2022
+#@  compiled at Thu Jan 06 18:03:44 2022
 
 	.PUBLIC _timer0_ch0_flag
 	.PUBLIC _timer0_ch1_flag

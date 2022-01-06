@@ -8,7 +8,6 @@ C_SRCS += \
 ../src/crc32.c \
 ../src/crc8.c \
 ../src/interrupt_handle.c \
-../src/main.c \
 ../src/r_cg_adc.c \
 ../src/r_cg_adc_user.c \
 ../src/r_cg_cgc.c \
@@ -27,7 +26,6 @@ C_SRCS += \
 ../src/r_cg_wdt_user.c \
 ../src/r_main.c \
 ../src/r_systeminit.c \
-../src/raspberry_pi_interface.c \
 ../src/usr_timer.c 
 
 COMPILER_OBJS += \
@@ -35,7 +33,6 @@ src/EEPROM.obj \
 src/crc32.obj \
 src/crc8.obj \
 src/interrupt_handle.obj \
-src/main.obj \
 src/r_cg_adc.obj \
 src/r_cg_adc_user.obj \
 src/r_cg_cgc.obj \
@@ -54,7 +51,6 @@ src/r_cg_wdt.obj \
 src/r_cg_wdt_user.obj \
 src/r_main.obj \
 src/r_systeminit.obj \
-src/raspberry_pi_interface.obj \
 src/usr_timer.obj 
 
 C_DEPS += \
@@ -62,7 +58,6 @@ src/EEPROM.d \
 src/crc32.d \
 src/crc8.d \
 src/interrupt_handle.d \
-src/main.d \
 src/r_cg_adc.d \
 src/r_cg_adc_user.d \
 src/r_cg_cgc.d \
@@ -81,7 +76,6 @@ src/r_cg_wdt.d \
 src/r_cg_wdt_user.d \
 src/r_main.d \
 src/r_systeminit.d \
-src/raspberry_pi_interface.d \
 src/usr_timer.d 
 
 # Each subdirectory must supply rules for building sources it contributes

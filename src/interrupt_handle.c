@@ -28,6 +28,5 @@ void adc_int_handle(void){
 		default:
 			break;
 	}
-//	R_ADC_Stop();
 	R_ADC_Start();
 }

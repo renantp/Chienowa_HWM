@@ -29,12 +29,11 @@
 /***********************************************************************************************************************
 Includes
 ***********************************************************************************************************************/
+#include "hwm/main.h"
 #include "r_cg_macrodriver.h"
 #include "r_cg_serial.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "r_cg_wdt.h"
-#include "main.h"
-/* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
 /***********************************************************************************************************************

@@ -9,6 +9,7 @@ RM := rm -rf *.sni *.dbg *.lst *.lis *.lpp *.map *.x *.lbp *.h *.bls *.libelf *.
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include src/subdir.mk
+-include src/hwm/subdir.mk
 -include generate/subdir.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -121,6 +122,7 @@ clean:
 	-$(RM) $(LINKER_OUTPUT_OUTPUTS) $(CONVERTOR_OUTPUT_OUTPUTS)
 	-rm -rf $(OBJS) $(C_DEPS) $(ASM_DEPS) $(DSP_DEPS) 
 	-rm -rf src/*.asm src/*.p src/*.pp src/*.src src/*.jmp src/*.lst src/*.prn src/*.i src/*.ud 
+	-rm -rf src/hwm/*.asm src/hwm/*.p src/hwm/*.pp src/hwm/*.src src/hwm/*.jmp src/hwm/*.lst src/hwm/*.prn src/hwm/*.i src/hwm/*.ud 
 	-rm -rf generate/*.asm generate/*.p generate/*.pp generate/*.src generate/*.jmp generate/*.lst generate/*.prn generate/*.i generate/*.ud 
 	@echo
 	@echo 'Clean complete.'

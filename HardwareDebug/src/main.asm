@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/main.obj
 #@   ../src/main.c
-#@  compiled at Thu Jan 06 15:40:33 2022
+#@  compiled at Thu Jan 06 15:58:26 2022
 
 	.EXTERN _rx_count
 	.EXTERN _commnunication_flag
@@ -1441,9 +1441,9 @@ _Voltage1Check_waitReset:
 	clrw bc
 	cmpw ax, bc
 	bnz $.BB@LABEL@17_8
-.BB@LABEL@17_6:	; bb35
+.BB@LABEL@17_6:	; bb34
 	clrb a
-.BB@LABEL@17_7:	; bb35
+.BB@LABEL@17_7:	; bb34
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 344
 	ret
@@ -1467,9 +1467,9 @@ _Voltage1Check_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@17_9:	; if_then_bb11.bb24_crit_edge
+.BB@LABEL@17_9:	; if_then_bb11.bb23_crit_edge
 	oneb a
-.BB@LABEL@17_10:	; bb24
+.BB@LABEL@17_10:	; bb23
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      337 : 			stop_waitAlarmConfirm(OVER_VOLTAGE_1, 0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 337
@@ -1723,9 +1723,9 @@ _Voltage3Check_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@19_8:	; if_then_bb21.bb36_crit_edge
+.BB@LABEL@19_8:	; if_then_bb21.bb35_crit_edge
 	oneb a
-.BB@LABEL@19_9:	; bb36
+.BB@LABEL@19_9:	; bb35
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      385 : 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 385
@@ -1755,9 +1755,9 @@ _Voltage3Check_waitReset:
 	movw !LOWW(_g_Tick+0x00036), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00034), ax
-.BB@LABEL@19_11:	; bb49
+.BB@LABEL@19_11:	; bb48
 	clrb a
-.BB@LABEL@19_12:	; bb49
+.BB@LABEL@19_12:	; bb48
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 396
 	ret
@@ -1868,9 +1868,9 @@ _LowVoltageCheck_waitReset:
 	clrw bc
 	cmpw ax, bc
 	bnz $.BB@LABEL@20_13
-.BB@LABEL@20_11:	; bb48
+.BB@LABEL@20_11:	; bb47
 	clrb a
-.BB@LABEL@20_12:	; bb48
+.BB@LABEL@20_12:	; bb47
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 425
 	ret
@@ -1896,9 +1896,9 @@ _LowVoltageCheck_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@20_14:	; if_then_bb20.bb33_crit_edge
+.BB@LABEL@20_14:	; if_then_bb20.bb32_crit_edge
 	oneb a
-.BB@LABEL@20_15:	; bb33
+.BB@LABEL@20_15:	; bb32
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      414 : 				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 414
@@ -2200,9 +2200,9 @@ _OverCurrentCheck_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@21_31:	; if_then_bb88.bb103_crit_edge
+.BB@LABEL@21_31:	; if_then_bb88.bb102_crit_edge
 	oneb a
-.BB@LABEL@21_32:	; bb103
+.BB@LABEL@21_32:	; bb102
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      454 : 					sendToRasPi_f(H_ALARM, OVER_CURRENT,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 454
@@ -2231,9 +2231,9 @@ _OverCurrentCheck_waitReset:
 	movw !LOWW(_g_Tick+0x0003E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0003C), ax
-.BB@LABEL@21_34:	; bb118
+.BB@LABEL@21_34:	; bb117
 	clrb a
-.BB@LABEL@21_35:	; bb118
+.BB@LABEL@21_35:	; bb117
 	addw sp, #0x0E
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/main.c", 466
 	ret

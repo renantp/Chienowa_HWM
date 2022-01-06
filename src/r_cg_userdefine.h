@@ -36,7 +36,7 @@ User definitions
 /* Start user code for function. Do not edit comment generated here */
 #include "crc8.h"
 #include "EEPROM.h"
-#include "main.h"
+#include "hwm/main.h"
 extern uint8_t rx_count;
 
 #define NUMBER_SETTING_ADDRESS (0x000)
@@ -48,8 +48,6 @@ extern uint8_t rx_count;
 #define GPIO_ON (1U)
 #define GPIO_OFF (0U)
 #define WATER_HAMER_TIME_MS (10)
-#define DETECT_U I_HS_ODA_PIN
-#define DETECT_D I_HS_OCL_PIN
 
 #define O_HS_IDA_PIN	(P1_bit.no5)
 #define O_HS_ICL_PIN	(P1_bit.no6)
@@ -71,12 +69,12 @@ extern uint8_t rx_count;
 #define O_DRAIN_ALK_PIN_SV6	(P6_bit.no6) // Valve SV6
 #define O_DRAIN_ACID_PIN_SV5	(P6_bit.no7) // Valve SV5
 
-#define I_ALKALI_L_PIN	(P0_bit.no5) // Low level Alkali sensor FL4
-#define I_ALKALI_M_PIN	(P0_bit.no6) // Medium level Alkali sensor FL5
-#define I_ALKALI_H_PIN	(P7_bit.no0) // High level Alkali sensor FL6
-#define I_ACID_L_PIN		(P7_bit.no1) // Low level Acid sensor FL1
-#define I_ACID_M_PIN		(P7_bit.no2) // Medium level Acid sensor FL2
-#define I_ACID_H_PIN		(P7_bit.no3) // High level Acid sensor FL3
+#define I_ALKALI_L_PIN_FL4	(P0_bit.no5) // Low level Alkali sensor FL4
+#define I_ALKALI_M_PIN_FL5	(P0_bit.no6) // Medium level Alkali sensor FL5
+#define I_ALKALI_H_PIN_FL6	(P7_bit.no0) // High level Alkali sensor FL6
+#define I_ACID_L_PIN_FL1		(P7_bit.no1) // Low level Acid sensor FL1
+#define I_ACID_M_PIN_FL2		(P7_bit.no2) // Medium level Acid sensor FL2
+#define I_ACID_H_PIN_FL3		(P7_bit.no3) // High level Acid sensor FL3
 #define I_HS_OCL_PIN		(P7_bit.no4) // HandSensor (Gesture) Clock Pin
 #define I_HS_ODA_PIN		(P7_bit.no5) // HandSensor (Gesture) Data pin
 #define O_SPOUT_ACID_PIN_SV3	(P7_bit.no6) // Valve SV3
@@ -119,7 +117,7 @@ extern struct Timer_Setting_s{
 	uint32_t t15_lowVoltageDelayTime_s;
 	uint32_t t16_currentMonitoringStart_s;
 	uint32_t t17_solenoidLeakageStartTime_s;
-	uint32_t t18_fullWaterMonitoringStart_h;
+	uint32_t t18_fullSaltWaterMonitoringStart_h;
 	uint32_t t19_waterFilterAlarm_h;
 	uint32_t t20_waterFilterAlarmIgnore_h;
 	uint32_t t26_onDelayEmptyLevel_s;
@@ -198,21 +196,6 @@ extern union IO_Status_u{
 	}refined;
 }g_io_status, g_mean_io_status, g_res_io_status;
 
-extern union Alarm_Flag_u{
-	struct{
-		uint8_t overVoltage1 : 1;
-		uint8_t overVoltage2 : 1;
-		uint8_t overVoltage3 : 1;
-		uint8_t overCurrent : 1;
-		uint8_t overFlow : 1;
-		uint8_t underVoltage : 1;
-		uint8_t underCurrent : 1;
-
-		uint8_t cvcc : 1;
-		uint8_t underFlow : 1;
-	}refined;
-}g_alarm;
-
 
 enum Machine_Mode_e{
 	INDIE, HAND_WASHING, WATER_WASHING, ACID_WASHING, ALKALINE_WASHING,
@@ -238,6 +221,8 @@ extern struct Tick_s{
 	uint32_t tickVoltage3Check;
 	uint32_t tickVoltageLowCheck;
 	uint32_t tickCurrentCheck;
+	uint32_t tickSolenoidCheck;
+	uint32_t tickSaltFullCheck;
 	uint32_t tickSV1SV2;
 	uint32_t tickElectrolyticOff;
 	uint32_t tickWaterSoftenerPCB;
@@ -264,7 +249,7 @@ enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER,
 	FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_ERROR, ALKALINE_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
+	ACID_SKIP_ERROR, ALKALINE_SKIP_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
 	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
 	READ_MACHINE_STATUS, WASHING_MODE, GET_MODE,
 	TESTING_START, TESTING_DATA, MID_NIGHT,
@@ -326,6 +311,7 @@ enum UART_header_e{
 	 H_ERROR = 	69,
 	 H_CLEAR = 	67
 };
+
 extern volatile struct Communicaition_flag_s{
 	volatile uint8_t send_response_flag, send_response_time_flag,
 	send_response_number_flag, recived_number_setting_flag,
@@ -346,7 +332,6 @@ extern volatile uint8_t g_uart1_sendend;
 extern volatile uint8_t g_uart2_fault, g_uart2_sendend;
 extern volatile uint8_t g_uart3_sendend;
 extern volatile uint8_t timer0_ch0_flag, timer0_ch1_flag, timer0_ch2_flag;
-extern volatile int g_error, g_status;
 extern float g_flow_value;
 extern uint16_t g_adc_value[2];
 extern void adc_int_handle(void);
@@ -372,10 +357,8 @@ union byte_to_float{
 	float raw;
 };
 /* Hand Sensor Function */
-enum HS_COLOR{
-	BLACK, RED, WHITE, BLUE
-};
-extern enum HS_COLOR g_color, g_pre_color;
+
+
 
 extern volatile uint8_t send_response_flag, send_response_time_flag,
 send_response_number_flag, recived_number_setting_flag,
@@ -388,7 +371,6 @@ void CloseSV1(void);
 void CloseSV2(void);
 
 uint8_t readHS(void);
-void handSensorLED(enum HS_COLOR color);
 
 uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
 		enum Control_status control, uint32_t data);
