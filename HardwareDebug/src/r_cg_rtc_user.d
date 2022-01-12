@@ -43,3 +43,5 @@ src/r_cg_rtc_user.obj src/r_cg_rtc_user.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/r_cg_rtc_user.obj src/r_cg_rtc_user.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/r_cg_rtc_user.obj src/r_cg_rtc_user.d: ../src/hwm/operation.h
+../src/hwm/operation.h:

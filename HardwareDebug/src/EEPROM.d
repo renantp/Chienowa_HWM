@@ -43,3 +43,5 @@ src/EEPROM.obj src/EEPROM.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/EEPROM.obj src/EEPROM.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/EEPROM.obj src/EEPROM.d: ../src/hwm/operation.h
+../src/hwm/operation.h:

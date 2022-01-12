@@ -45,3 +45,5 @@ src/r_systeminit.obj src/r_systeminit.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/r_systeminit.obj src/r_systeminit.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/r_systeminit.obj src/r_systeminit.d: ../src/hwm/operation.h
+../src/hwm/operation.h:

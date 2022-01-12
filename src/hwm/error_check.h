@@ -41,5 +41,5 @@ uint8_t solenoidCheck_nonstop(void);
 uint8_t saltWaterTankFullCheck_nonstop(void);
 uint8_t saltWaterTankEmptyCheck(void);
 
-
+uint8_t filterReplacementErrorCheck(void);
 #endif /* HWM_ERROR_CHECK_H_ */

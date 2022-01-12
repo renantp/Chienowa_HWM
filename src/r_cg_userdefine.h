@@ -152,6 +152,37 @@ extern struct Number_Setting_s{
 	char crc;
 }g_numberSetting;
 
+struct IO_Struct{
+	uint8_t AlkalineEmptyLevel: 1;
+	uint8_t AlkalineLowLevel: 1;
+	uint8_t AlkalineHighLevel: 1;
+	uint8_t AcidEmptyLevel: 1;
+	uint8_t AcidLowLevel: 1;
+	uint8_t AcidHighLevel: 1;
+	uint8_t SaltLowLevel: 1;
+	uint8_t SaltHighLevel: 1;
+
+	struct{
+		uint8_t SV1: 1;
+		uint8_t SV2: 1;
+		uint8_t SV3: 1;
+		uint8_t SV4: 1;
+		uint8_t SV5: 1;
+		uint8_t SV6: 1;
+		uint8_t SV7: 1;
+		uint8_t SV8: 1;
+
+		uint8_t SV9: 1;
+		uint8_t RSVD: 7; //	Reserved
+	}Valve; // 2 byte
+
+	uint8_t Pump1: 1;
+	uint8_t Pump2: 1;
+	uint8_t SaltPump: 1;
+	uint8_t RSVD1: 4; // Reserved
+
+	uint8_t MachineMode_RSVD; //1 byte
+};
 /**
  * IO_Status Union content:
  *  - Input/Output of  MCU
@@ -160,36 +191,7 @@ extern struct Number_Setting_s{
  */
 extern union IO_Status_u{
 	struct{
-		uint8_t AlkalineEmptyLevel: 1;
-		uint8_t AlkalineLowLevel: 1;
-		uint8_t AlkalineHighLevel: 1;
-		uint8_t AcidEmptyLevel: 1;
-		uint8_t AcidLowLevel: 1;
-		uint8_t AcidHighLevel: 1;
-		uint8_t SaltLowLevel: 1;
-		uint8_t SaltHighLevel: 1;
-
-		struct{
-			uint8_t SV1: 1;
-			uint8_t SV2: 1;
-			uint8_t SV3: 1;
-			uint8_t SV4: 1;
-			uint8_t SV5: 1;
-			uint8_t SV6: 1;
-			uint8_t SV7: 1;
-			uint8_t SV8: 1;
-
-			uint8_t SV9: 1;
-			uint8_t RSVD: 7; //	Reserved
-		}Valve; // 2 byte
-
-		uint8_t Pump1: 1;
-		uint8_t Pump2: 1;
-		uint8_t SaltPump: 1;
-		uint8_t RSVD1: 4; // Reserved
-
-		uint8_t MachineMode_RSVD; //1 byte
-
+		struct IO_Struct io;
 		float FlowValue; // 4 bytes
 		float CVCCVoltage; // 4 bytes
 		float CVCCCurrent; // 4 bytes
@@ -232,6 +234,7 @@ extern struct Tick_s{
 	uint32_t tickCallan;
 	uint32_t tickDrainage;
 	uint32_t tickTestOperation;
+	uint32_t tickWaterFull;
 	uint32_t tickAcidLevel[4];
 	uint32_t tickAlkalineLevel[4];
 	uint32_t tickHandSensor[2];
@@ -243,18 +246,23 @@ static struct Tick_Keeper_s{
 //	uint32_t SV2_ON_minutes;
 //	uint32_t SV2_OFF_minutes;
 	uint8_t electrolyteOff_h;
+	uint16_t SV1SV2OnTime_s;
+	uint16_t SV1SV2OnTime_h;
 	uint32_t neutralization;
 }g_TimeKeeper;
 enum Control_status{
 	OK_ALL, OK_USER, READ_TIME, READ_NUMBER,
 	FLOW_SENSOR_ERROR, OVER_VOLTAGE_1, OVER_VOLTAGE_2, OVER_VOLTAGE_3, UNDER_VOLTAGE,
-	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR, SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
-	ACID_SKIP_ERROR, ALKALINE_SKIP_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR, CVCC_ALARM, NEXT_ANIMATION,
+	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR,
+	SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
+	ACID_SKIP_ERROR, ALKALINE_SKIP_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR,
+	CVCC_ALARM, NEXT_ANIMATION,
 	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
-	READ_MACHINE_STATUS, WASHING_MODE, GET_MODE,
-	TESTING_START, TESTING_DATA, MID_NIGHT,
+	MACHINE_IO_DATA, WASHING_MODE, GET_MODE,
+	TESTING_MODE_START, TESTING_DATA, TESTING_MODE_STOP, MID_NIGHT,
 	TEST_POWER_ON, TEST_FLOW_RATE, TEST_CURRENT, TEST_INDIVIDUAL, TEST_ELECTROLYTIC,
-	TEST_RUN_ADJUSTMENT
+	TEST_RUN_ADJUSTMENT,
+	FILTER_REPLACEMENT_E1, FILTER_REPLACEMENT_E2
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -320,7 +328,7 @@ extern volatile struct Communicaition_flag_s{
 	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
 	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
 	rs485_fault;
-}commnunication_flag;
+}g_commnunication_flag;
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;
 

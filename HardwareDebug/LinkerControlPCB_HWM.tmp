@@ -20,6 +20,7 @@
 -input=".\src/hwm\io_control.obj"
 -input=".\src/hwm\main.obj"
 -input=".\src/hwm\normal_operation.obj"
+-input=".\src/hwm\operation.obj"
 -input=".\src/hwm\raspberry_pi_interface.obj"
 -input=".\src\interrupt_handle.obj"
 -input=".\src\r_cg_adc.obj"

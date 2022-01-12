@@ -22,7 +22,7 @@ uint8_t Voltage1Check_waitReset(void) {
 					g_io_status.refined.CVCCVoltage);
 			g_alarm.refined.over_voltage_1 = 1;
 			electrolyticOperationOFF();
-			stop_waitAlarmConfirm(OVER_VOLTAGE_1, 0);
+			waitAlarmConfirm_stop(OVER_VOLTAGE_1, 0);
 			g_alarm.refined.over_voltage_1 = 0;
 			return 1;
 		}
@@ -72,7 +72,7 @@ uint8_t Voltage3Check_waitReset(void) {
 				electrolyticOperationOFF();
 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
 						g_io_status.refined.CVCCVoltage);
-				stop_waitAlarmConfirm(OVER_VOLTAGE_3, 0);
+				waitAlarmConfirm_stop(OVER_VOLTAGE_3, 0);
 				g_alarm.refined.over_voltage_3 = 0;
 				return 1;
 			}
@@ -101,7 +101,7 @@ uint8_t LowVoltageCheck_waitReset(void) {
 				electrolyticOperationOFF();
 				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
 						g_io_status.refined.CVCCVoltage);
-				stop_waitAlarmConfirm(UNDER_VOLTAGE, 0);
+				waitAlarmConfirm_stop(UNDER_VOLTAGE, 0);
 				g_alarm.refined.underVoltage = 0;
 				return 1;
 			}
@@ -141,7 +141,7 @@ uint8_t OverCurrentCheck_waitReset(void) {
 					electrolyticOperationOFF();
 					sendToRasPi_f(H_ALARM, OVER_CURRENT,
 							g_io_status.refined.CVCCCurrent);
-					stop_waitAlarmConfirm(OVER_CURRENT, 10);
+					waitAlarmConfirm_stop(OVER_CURRENT, 10);
 					g_alarm.refined.over_curent = 0;
 					return 1;
 				}
@@ -228,7 +228,7 @@ uint8_t acidSkipErrorCheck_nonstop(void) {
 	return 0;
 }
 
-uint8_t alkalineSkipErrorCheck(void){
+uint8_t alkalineSkipErrorCheck(void) {
 	if (((I_ALKALI_L_PIN_FL4 == I_OFF)
 			&& ((I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON)))
 			|| (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)) {
@@ -240,6 +240,38 @@ uint8_t alkalineSkipErrorCheck(void){
 	return 0;
 }
 
-void waterFullErrorCheck(void){
-	//TODO: Control OFF
+uint8_t waterFullErrorCheck(void) {
+
+	//Check g_color == BLACK for x hours
+	if (g_machine_state.mode != HAND_WASHING
+			&& g_machine_state.mode != WATER_WASHING
+			&& g_machine_state.mode != ACID_WASHING
+			&& g_machine_state.mode != ALKALINE_WASHING) {
+		if(ns_delay_ms(&g_Tick.tickWaterFull, (uint32_t)20*60*1000)){
+			sendToRasPi_f(H_ALARM, WATER_FULL_ERROR, 1);
+			//TODO: Control OFF
+			return 1;
+		}
+	}else
+		g_Tick.tickWaterFull = g_systemTime;
+	return 0;
+}
+
+uint8_t filterReplacementErrorCheck(void) {
+	if (g_TimeKeeper.SV1SV2OnTime_h
+			>= g_timerSetting.t20_waterFilterAlarmIgnore_h) {
+		g_alarm.refined.filter = FILTER_REPLACEMENT_E2;
+		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E2,
+				g_TimeKeeper.SV1SV2OnTime_h);
+		//TODO: Control OFF
+		return 2;
+
+	} else if (g_TimeKeeper.SV1SV2OnTime_h
+			>= g_timerSetting.t19_waterFilterAlarm_h) {
+		g_alarm.refined.filter = FILTER_REPLACEMENT_E1;
+		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E1,
+				g_TimeKeeper.SV1SV2OnTime_h);
+		return 1;
+	}
+	return 0;
 }

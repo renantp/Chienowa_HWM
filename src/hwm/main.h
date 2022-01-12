@@ -26,6 +26,7 @@
 #include "hand_sensor_interface.h"
 #include "normal_operation.h"
 #include "io_control.h"
+#include "operation.h"
 
 
 extern struct Timer_Setting_s _settingTime;
@@ -35,7 +36,7 @@ extern struct Number_Setting_s _settingNumber;
 
 
 //const uint8_t io_statusSize = sizeof(union IO_Status_u);
-static const uint8_t io_statusSize = 5 + 12;
+static const uint8_t io_statusSize = 5 + 13;
 //const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s);
 static const uint8_t timeSettingSize = 141 + 8;
 //const uint8_t numberSettingSize = sizeof(struct Number_Setting_s);
@@ -46,6 +47,5 @@ uint8_t DrainageAcidAndAlkalineTankStart_nostop(void);
 
 void main_loop_20211111(void);
 void realTimeResponse(void);
-void isElectrolyticOperationOFF_nostop(void);
-void electrolyticOperationON(void);
+
 #endif /* HWM_MAIN_H_ */

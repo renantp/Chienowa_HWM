@@ -20,7 +20,7 @@ uint8_t isAcidTankEmpty(void);
 
 uint8_t isAlkalineTankFull(void);
 uint8_t isAlkalineTankAlmostFull(void);
-uint8_t isAlkalineTankHasSomething(void);
-uint8_t isAlkalineTankEmpty(void);
+uint8_t isAlkalineTankHasSomething_nonstop(void);
+uint8_t isAlkalineTankEmpty_nonstop(void);
 
 #endif /* HWM_IO_CONTROL_H_ */

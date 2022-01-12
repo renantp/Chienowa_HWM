@@ -47,3 +47,5 @@ src/r_main.obj src/r_main.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/r_main.obj src/r_main.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/r_main.obj src/r_main.d: ../src/hwm/operation.h
+../src/hwm/operation.h:

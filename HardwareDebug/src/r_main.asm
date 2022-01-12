@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Thu Jan 06 18:03:46 2022
+#@  compiled at Wed Jan 12 13:55:54 2022
 
 	.EXTERN _g_color
 	.EXTERN _g_pre_color
@@ -25,7 +25,7 @@
 	.EXTERN _g_numberSetting
 	.EXTERN _g_io_status
 	.EXTERN _g_Tick
-	.EXTERN _commnunication_flag
+	.EXTERN _g_commnunication_flag
 	.EXTERN _g_machine_mode
 	.EXTERN _g_systemTime
 	.EXTERN _g_csi_rev_end
@@ -203,7 +203,7 @@ _nostop_checkHandSensor:
 	clrw ax
 	movw de, ax
 	movw bc, #0x01F4
-	movw ax, #LOWW(_g_Tick+0x00088)
+	movw ax, #LOWW(_g_Tick+0x0008C)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
@@ -433,9 +433,9 @@ _main:
 	;***      166 :     	}
 	;***      167 : 
 	;***      168 :     	// Communication with WaterSoftener
-	;***      169 :     	if(commnunication_flag.rs485_send_to_watersolfner_response_flag){
+	;***      169 :     	if(g_commnunication_flag.rs485_send_to_watersolfner_response_flag){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 169
-	cmp0 !LOWW(_commnunication_flag+0x0000A)
+	cmp0 !LOWW(_g_commnunication_flag+0x0000A)
 	bz $.BB@LABEL@3_5
 .BB@LABEL@3_4:	; if_then_bb23
 	clrw ax
@@ -450,20 +450,20 @@ _main:
 	addw sp, #0x04
 	;***      171 : //    		rx_count++;
 	;***      172 :     		wts = 1; //Test flag = 1
-	;***      173 : 			commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
+	;***      173 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 173
-	clrb !LOWW(_commnunication_flag+0x0000A)
+	clrb !LOWW(_g_commnunication_flag+0x0000A)
 	oneb a
 	mov [sp+0x00], a
 .BB@LABEL@3_5:	; if_break_bb24
 	;***      174 :     	}
-	;***      175 : 		if(commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
+	;***      175 : 		if(g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 175
-	cmp !LOWW(_commnunication_flag+0x0000B), #0x01
+	cmp !LOWW(_g_commnunication_flag+0x0000B), #0x01
 	bnz $.BB@LABEL@3_9
 .BB@LABEL@3_6:	; if_then_bb30
 	;***      176 :     		// Sand to Water softener SV state
-	;***      177 :     		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.Valve.SV1 == 1?1:0);
+	;***      177 :     		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.io.Valve.SV1 == 1?1:0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 177
 	movw hl, #LOWW(_g_io_status+0x00001)
 	onew bc
@@ -478,9 +478,9 @@ _main:
 	movw ax, #0xFF52
 	call !!_sendRS485
 	addw sp, #0x04
-	;***      178 :     		commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
+	;***      178 :     		g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 178
-	clrb !LOWW(_commnunication_flag+0x0000B)
+	clrb !LOWW(_g_commnunication_flag+0x0000B)
 .BB@LABEL@3_9:	; if_break_bb43
 	mov a, [sp+0x00]
 	;***      179 :     	}
@@ -540,9 +540,9 @@ _main:
 	;***      197 :     	}
 	;***      198 : 
 	;***      199 :     	//Valve PCB
-	;***      200 :     	if(commnunication_flag.rs485_send_to_valve_response_flag == 1){
+	;***      200 :     	if(g_commnunication_flag.rs485_send_to_valve_response_flag == 1){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 200
-	cmp !LOWW(_commnunication_flag+0x0000C), #0x01
+	cmp !LOWW(_g_commnunication_flag+0x0000C), #0x01
 	bnz $.BB@LABEL@3_17
 .BB@LABEL@3_16:	; if_then_bb71
 	movw ax, sp
@@ -572,18 +572,18 @@ _main:
 	movw ax, #0xFF0C
 	call !!_sendR485_7byte
 	;***      205 :     		vpcb++;
-	;***      206 :     		commnunication_flag.rs485_send_to_valve_response_flag  = 0;
+	;***      206 :     		g_commnunication_flag.rs485_send_to_valve_response_flag  = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 206
-	clrb !LOWW(_commnunication_flag+0x0000C)
+	clrb !LOWW(_g_commnunication_flag+0x0000C)
 	mov a, [sp+0x01]
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 205
 	inc a
 	mov [sp+0x01], a
 	br $.BB@LABEL@3_19
 .BB@LABEL@3_17:	; if_else_bb89
-	;***      207 :     	}else if(commnunication_flag.rs485_get_valve_gesture_flag == 1){
+	;***      207 :     	}else if(g_commnunication_flag.rs485_get_valve_gesture_flag == 1){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 207
-	cmp !LOWW(_commnunication_flag+0x0000D), #0x01
+	cmp !LOWW(_g_commnunication_flag+0x0000D), #0x01
 	bnz $.BB@LABEL@3_19
 .BB@LABEL@3_18:	; if_then_bb95
 	movw ax, sp
@@ -592,7 +592,7 @@ _main:
 	;***      208 :     		uint8_t _b[5] = {0,1,0,0,1};
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 208
 	movw de, #0x0005
-	movw bc, #SMRLW(.STR@1645)
+	movw bc, #SMRLW(.STR@1654)
 	call !!_memcpy
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -603,9 +603,9 @@ _main:
 	;***      210 :     		rx_count++;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 210
 	inc !LOWW(_rx_count)
-	;***      211 :     		commnunication_flag.rs485_get_valve_gesture_flag = 0;
+	;***      211 :     		g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 211
-	clrb !LOWW(_commnunication_flag+0x0000D)
+	clrb !LOWW(_g_commnunication_flag+0x0000D)
 .BB@LABEL@3_19:	; if_break_bb101
 	mov a, [sp+0x01]
 	;***      212 :     	}
@@ -650,17 +650,17 @@ _main:
 	;***      221 :     	}
 	;***      222 : 
 	;***      223 :     	//RS485 fault check
-	;***      224 :     	if(commnunication_flag.rs485_fault == 1){
+	;***      224 :     	if(g_commnunication_flag.rs485_fault == 1){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 224
-	cmp !LOWW(_commnunication_flag+0x0000E), #0x01
+	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x01
 	bnz $.BB@LABEL@3_27
 .BB@LABEL@3_25:	; if_then_bb133
 	;***      225 :     		R_UART3_Stop();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 225
 	call !!_R_UART3_Stop
-	;***      226 :     		commnunication_flag.rs485_fault++;
+	;***      226 :     		g_commnunication_flag.rs485_fault++;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 226
-	inc !LOWW(_commnunication_flag+0x0000E)
+	inc !LOWW(_g_commnunication_flag+0x0000E)
 	;***      227 :     		g_Tick.tickRS485 = g_systemTime;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 227
 	movw ax, !LOWW(_g_systemTime+0x00002)
@@ -672,9 +672,9 @@ _main:
 	oneb a
 	br $.BB@LABEL@3_23
 .BB@LABEL@3_27:	; if_else_bb137
-	;***      228 :     	}else if(commnunication_flag.rs485_fault == 2){
+	;***      228 :     	}else if(g_commnunication_flag.rs485_fault == 2){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 228
-	cmp !LOWW(_commnunication_flag+0x0000E), #0x02
+	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x02
 	bnz $.BB@LABEL@3_30
 .BB@LABEL@3_28:	; if_then_bb143
 	;***      229 :     		if(ns_delay_ms(&g_Tick.tickRS485, 500)){
@@ -696,9 +696,9 @@ _main:
 	movw bc, #0x0007
 	movw ax, #LOWW(_g_uart3_rx_data)
 	call !!_R_UART3_Receive
-	;***      232 : 				commnunication_flag.rs485_fault = 0;
+	;***      232 : 				g_commnunication_flag.rs485_fault = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 232
-	clrb !LOWW(_commnunication_flag+0x0000E)
+	clrb !LOWW(_g_commnunication_flag+0x0000E)
 .BB@LABEL@3_30:	; if_break_bb152
 	;***      233 :     		}
 	;***      234 :     	}
@@ -729,7 +729,7 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0xEA60
-	movw ax, #LOWW(_g_Tick+0x00094)
+	movw ax, #LOWW(_g_Tick+0x00098)
 	call !!_ns_delay_ms
 	;***      249 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 	;***      250 : //				g_TickKeeper.SV1_ON_minutes++;
@@ -751,7 +751,7 @@ _main:
 	clrw ax
 	movw de, ax
 	movw bc, #0x3A98
-	movw ax, #LOWW(_g_Tick+0x00098)
+	movw ax, #LOWW(_g_Tick+0x0009C)
 	call !!_ns_delay_ms
 	;***      265 : //    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 	;***      266 : //					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
@@ -1056,7 +1056,7 @@ _rx_count:
 .STR@1:
 	.DS (4)
 	.DB 0x01
-.STR@1645:
+.STR@1654:
 	.DS (1)
 	.DB 0x01
 	.DS (2)

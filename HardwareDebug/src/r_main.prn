@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_main.obj
 00000000                       17  #@   ../src/r_main.c
-00000000                       18  #@  compiled at Thu Jan 06 18:03:46 2022
+00000000                       18  #@  compiled at Wed Jan 12 13:55:54 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_color
 00000000                       21  	.EXTERN _g_pre_color
@@ -29,7 +29,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       25  	.EXTERN _g_numberSetting
 00000000                       26  	.EXTERN _g_io_status
 00000000                       27  	.EXTERN _g_Tick
-00000000                       28  	.EXTERN _commnunication_flag
+00000000                       28  	.EXTERN _g_commnunication_flag
 00000000                       29  	.EXTERN _g_machine_mode
 00000000                       30  	.EXTERN _g_systemTime
 00000000                       31  	.EXTERN _g_csi_rev_end
@@ -207,7 +207,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000005 F6                   203  	clrw ax
 00000006 14                   204  	movw de, ax
 00000007 32F401               205  	movw bc, #0x01F4
-0000000A 300000               206  	movw ax, #LOWW(_g_Tick+0x00088)
+0000000A 300000               206  	movw ax, #LOWW(_g_Tick+0x0008C)
 0000000D FC000000             207  	call !!_ns_delay_ms
 00000011 F7                   208  	clrw bc
 00000012 43                   209  	cmpw ax, bc
@@ -437,9 +437,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000000F6                      433  	;***      166 :     	}
 000000F6                      434  	;***      167 : 
 000000F6                      435  	;***      168 :     	// Communication with WaterSoftener
-000000F6                      436  	;***      169 :     	if(commnunication_flag.rs485_send_to_watersolfner_response_flag){
+000000F6                      436  	;***      169 :     	if(g_commnunication_flag.rs485_send_to_watersolfner_response_flag){
 000000F6                      437  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 169
-000000F6 D50000               438  	cmp0 !LOWW(_commnunication_flag+0x0000A)
+000000F6 D50000               438  	cmp0 !LOWW(_g_commnunication_flag+0x0000A)
 000000F9 DD00                 439  	bz $.BB@LABEL@3_5
 000000FB                      440  .BB@LABEL@3_4:	; if_then_bb23
 000000FB F6                   441  	clrw ax
@@ -454,20 +454,20 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000109 1004                 450  	addw sp, #0x04
 0000010B                      451  	;***      171 : //    		rx_count++;
 0000010B                      452  	;***      172 :     		wts = 1; //Test flag = 1
-0000010B                      453  	;***      173 : 			commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
+0000010B                      453  	;***      173 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
 0000010B                      454  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 173
-0000010B F50000               455  	clrb !LOWW(_commnunication_flag+0x0000A)
+0000010B F50000               455  	clrb !LOWW(_g_commnunication_flag+0x0000A)
 0000010E E1                   456  	oneb a
 0000010F 9800                 457  	mov [sp+0x00], a
 00000111                      458  .BB@LABEL@3_5:	; if_break_bb24
 00000111                      459  	;***      174 :     	}
-00000111                      460  	;***      175 : 		if(commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
+00000111                      460  	;***      175 : 		if(g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
 00000111                      461  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 175
-00000111 40000001             462  	cmp !LOWW(_commnunication_flag+0x0000B), #0x01
+00000111 40000001             462  	cmp !LOWW(_g_commnunication_flag+0x0000B), #0x01
 00000115 DF00                 463  	bnz $.BB@LABEL@3_9
 00000117                      464  .BB@LABEL@3_6:	; if_then_bb30
 00000117                      465  	;***      176 :     		// Sand to Water softener SV state
-00000117                      466  	;***      177 :     		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.Valve.SV1 == 1?1:0);
+00000117                      466  	;***      177 :     		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.io.Valve.SV1 == 1?1:0);
 00000117                      467  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 177
 00000117 360000               468  	movw hl, #LOWW(_g_io_status+0x00001)
 0000011A E7                   469  	onew bc
@@ -482,9 +482,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000124 3052FF               478  	movw ax, #0xFF52
 00000127 FC000000             479  	call !!_sendRS485
 0000012B 1004                 480  	addw sp, #0x04
-0000012D                      481  	;***      178 :     		commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
+0000012D                      481  	;***      178 :     		g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
 0000012D                      482  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 178
-0000012D F50000               483  	clrb !LOWW(_commnunication_flag+0x0000B)
+0000012D F50000               483  	clrb !LOWW(_g_commnunication_flag+0x0000B)
 00000130                      484  .BB@LABEL@3_9:	; if_break_bb43
 00000130 8800                 485  	mov a, [sp+0x00]
 00000132                      486  	;***      179 :     	}
@@ -544,9 +544,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000166                      540  	;***      197 :     	}
 00000166                      541  	;***      198 : 
 00000166                      542  	;***      199 :     	//Valve PCB
-00000166                      543  	;***      200 :     	if(commnunication_flag.rs485_send_to_valve_response_flag == 1){
+00000166                      543  	;***      200 :     	if(g_commnunication_flag.rs485_send_to_valve_response_flag == 1){
 00000166                      544  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 200
-00000166 40000001             545  	cmp !LOWW(_commnunication_flag+0x0000C), #0x01
+00000166 40000001             545  	cmp !LOWW(_g_commnunication_flag+0x0000C), #0x01
 0000016A DF00                 546  	bnz $.BB@LABEL@3_17
 0000016C                      547  .BB@LABEL@3_16:	; if_then_bb71
 0000016C AEF8                 548  	movw ax, sp
@@ -576,18 +576,18 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000195 300CFF               572  	movw ax, #0xFF0C
 00000198 FC000000             573  	call !!_sendR485_7byte
 0000019C                      574  	;***      205 :     		vpcb++;
-0000019C                      575  	;***      206 :     		commnunication_flag.rs485_send_to_valve_response_flag  = 0;
+0000019C                      575  	;***      206 :     		g_commnunication_flag.rs485_send_to_valve_response_flag  = 0;
 0000019C                      576  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 206
-0000019C F50000               577  	clrb !LOWW(_commnunication_flag+0x0000C)
+0000019C F50000               577  	clrb !LOWW(_g_commnunication_flag+0x0000C)
 0000019F 8801                 578  	mov a, [sp+0x01]
 000001A1                      579  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 205
 000001A1 81                   580  	inc a
 000001A2 9801                 581  	mov [sp+0x01], a
 000001A4 EF00                 582  	br $.BB@LABEL@3_19
 000001A6                      583  .BB@LABEL@3_17:	; if_else_bb89
-000001A6                      584  	;***      207 :     	}else if(commnunication_flag.rs485_get_valve_gesture_flag == 1){
+000001A6                      584  	;***      207 :     	}else if(g_commnunication_flag.rs485_get_valve_gesture_flag == 1){
 000001A6                      585  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 207
-000001A6 40000001             586  	cmp !LOWW(_commnunication_flag+0x0000D), #0x01
+000001A6 40000001             586  	cmp !LOWW(_g_commnunication_flag+0x0000D), #0x01
 000001AA DF00                 587  	bnz $.BB@LABEL@3_19
 000001AC                      588  .BB@LABEL@3_18:	; if_then_bb95
 000001AC AEF8                 589  	movw ax, sp
@@ -596,7 +596,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001B3                      592  	;***      208 :     		uint8_t _b[5] = {0,1,0,0,1};
 000001B3                      593  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 208
 000001B3 340500               594  	movw de, #0x0005
-000001B6 320000               595  	movw bc, #SMRLW(.STR@1645)
+000001B6 320000               595  	movw bc, #SMRLW(.STR@1654)
 000001B9 FC000000             596  	call !!_memcpy
 000001BD A804                 597  	movw ax, [sp+0x04]
 000001BF 12                   598  	movw bc, ax
@@ -607,9 +607,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001C7                      603  	;***      210 :     		rx_count++;
 000001C7                      604  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 210
 000001C7 A00000               605  	inc !LOWW(_rx_count)
-000001CA                      606  	;***      211 :     		commnunication_flag.rs485_get_valve_gesture_flag = 0;
+000001CA                      606  	;***      211 :     		g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
 000001CA                      607  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 211
-000001CA F50000               608  	clrb !LOWW(_commnunication_flag+0x0000D)
+000001CA F50000               608  	clrb !LOWW(_g_commnunication_flag+0x0000D)
 000001CD                      609  .BB@LABEL@3_19:	; if_break_bb101
 000001CD 8801                 610  	mov a, [sp+0x01]
 000001CF                      611  	;***      212 :     	}
@@ -654,17 +654,17 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001FA                      650  	;***      221 :     	}
 000001FA                      651  	;***      222 : 
 000001FA                      652  	;***      223 :     	//RS485 fault check
-000001FA                      653  	;***      224 :     	if(commnunication_flag.rs485_fault == 1){
+000001FA                      653  	;***      224 :     	if(g_commnunication_flag.rs485_fault == 1){
 000001FA                      654  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 224
-000001FA 40000001             655  	cmp !LOWW(_commnunication_flag+0x0000E), #0x01
+000001FA 40000001             655  	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x01
 000001FE DF00                 656  	bnz $.BB@LABEL@3_27
 00000200                      657  .BB@LABEL@3_25:	; if_then_bb133
 00000200                      658  	;***      225 :     		R_UART3_Stop();
 00000200                      659  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 225
 00000200 FC000000             660  	call !!_R_UART3_Stop
-00000204                      661  	;***      226 :     		commnunication_flag.rs485_fault++;
+00000204                      661  	;***      226 :     		g_commnunication_flag.rs485_fault++;
 00000204                      662  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 226
-00000204 A00000               663  	inc !LOWW(_commnunication_flag+0x0000E)
+00000204 A00000               663  	inc !LOWW(_g_commnunication_flag+0x0000E)
 00000207                      664  	;***      227 :     		g_Tick.tickRS485 = g_systemTime;
 00000207                      665  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 227
 00000207 AF0000               666  	movw ax, !LOWW(_g_systemTime+0x00002)
@@ -676,9 +676,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000215 E1                   672  	oneb a
 00000216 EF00                 673  	br $.BB@LABEL@3_23
 00000218                      674  .BB@LABEL@3_27:	; if_else_bb137
-00000218                      675  	;***      228 :     	}else if(commnunication_flag.rs485_fault == 2){
+00000218                      675  	;***      228 :     	}else if(g_commnunication_flag.rs485_fault == 2){
 00000218                      676  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 228
-00000218 40000002             677  	cmp !LOWW(_commnunication_flag+0x0000E), #0x02
+00000218 40000002             677  	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x02
 0000021C DF00                 678  	bnz $.BB@LABEL@3_30
 0000021E                      679  .BB@LABEL@3_28:	; if_then_bb143
 0000021E                      680  	;***      229 :     		if(ns_delay_ms(&g_Tick.tickRS485, 500)){
@@ -700,9 +700,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000232 320700               696  	movw bc, #0x0007
 00000235 300000               697  	movw ax, #LOWW(_g_uart3_rx_data)
 00000238 FC000000             698  	call !!_R_UART3_Receive
-0000023C                      699  	;***      232 : 				commnunication_flag.rs485_fault = 0;
+0000023C                      699  	;***      232 : 				g_commnunication_flag.rs485_fault = 0;
 0000023C                      700  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 232
-0000023C F50000               701  	clrb !LOWW(_commnunication_flag+0x0000E)
+0000023C F50000               701  	clrb !LOWW(_g_commnunication_flag+0x0000E)
 0000023F                      702  .BB@LABEL@3_30:	; if_break_bb152
 0000023F                      703  	;***      233 :     		}
 0000023F                      704  	;***      234 :     	}
@@ -733,7 +733,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000024A F6                   729  	clrw ax
 0000024B 14                   730  	movw de, ax
 0000024C 3260EA               731  	movw bc, #0xEA60
-0000024F 300000               732  	movw ax, #LOWW(_g_Tick+0x00094)
+0000024F 300000               732  	movw ax, #LOWW(_g_Tick+0x00098)
 00000252 FC000000             733  	call !!_ns_delay_ms
 00000256                      734  	;***      249 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
 00000256                      735  	;***      250 : //				g_TickKeeper.SV1_ON_minutes++;
@@ -755,7 +755,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000256 F6                   751  	clrw ax
 00000257 14                   752  	movw de, ax
 00000258 32983A               753  	movw bc, #0x3A98
-0000025B 300000               754  	movw ax, #LOWW(_g_Tick+0x00098)
+0000025B 300000               754  	movw ax, #LOWW(_g_Tick+0x0009C)
 0000025E FC000000             755  	call !!_ns_delay_ms
 00000262                      756  	;***      265 : //    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 00000262                      757  	;***      266 : //					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
@@ -1069,7 +1069,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                     1056  .STR@1:
 00000000 00000000            1057  	.DS (4)
 00000004 01                  1058  	.DB 0x01
-00000005                     1059  .STR@1645:
+00000005                     1059  .STR@1654:
 00000005 00                  1060  	.DS (1)
 00000006 01                  1061  	.DB 0x01
 00000007 0000                1062  	.DS (2)
@@ -1084,7 +1084,7 @@ DATA                 24 (00000018) .data
 BSS                 163 (000000A3) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\r_main.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\r_main.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_main.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_main.asm 

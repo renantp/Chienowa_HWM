@@ -43,3 +43,5 @@ src/usr_timer.obj src/usr_timer.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/usr_timer.obj src/usr_timer.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/usr_timer.obj src/usr_timer.d: ../src/hwm/operation.h
+../src/hwm/operation.h:

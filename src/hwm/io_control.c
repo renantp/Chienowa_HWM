@@ -12,13 +12,13 @@ uint8_t isAcidTankFull(void) {
 	if (I_ACID_H_PIN_FL3 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[0],
 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
-				|| (g_mean_io_status.refined.AcidHighLevel == 1)) {
-			g_mean_io_status.refined.AcidHighLevel = 1;
+				|| (g_mean_io_status.refined.io.AcidHighLevel == 1)) {
+			g_mean_io_status.refined.io.AcidHighLevel = 1;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAcidLevel[0] = g_systemTime;
-		g_mean_io_status.refined.AcidHighLevel = 0;
+		g_mean_io_status.refined.io.AcidHighLevel = 0;
 	}
 	return 0;
 }
@@ -26,13 +26,13 @@ uint8_t isAcidTankAlmostFull(void) {
 	if (I_ACID_M_PIN_FL2 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[1],
 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
-				|| (g_mean_io_status.refined.AcidLowLevel == 1)) {
-			g_mean_io_status.refined.AcidLowLevel = 1;
+				|| (g_mean_io_status.refined.io.AcidLowLevel == 1)) {
+			g_mean_io_status.refined.io.AcidLowLevel = 1;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAcidLevel[1] = g_systemTime;
-		g_mean_io_status.refined.AcidLowLevel = 0;
+		g_mean_io_status.refined.io.AcidLowLevel = 0;
 	}
 	return 0;
 }
@@ -40,8 +40,8 @@ uint8_t isAcidTankHasSomething(void) {
 	if (I_ACID_L_PIN_FL1 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[2],
 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
-				|| (g_mean_io_status.refined.AcidEmptyLevel == 1)) {
-			g_mean_io_status.refined.AcidEmptyLevel = 1;
+				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 1)) {
+			g_mean_io_status.refined.io.AcidEmptyLevel = 1;
 			return 1;
 		}
 	} else {
@@ -54,8 +54,8 @@ uint8_t isAcidTankEmpty(void) {
 	if (I_ACID_L_PIN_FL1 == I_OFF) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[3],
 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
-				|| (g_mean_io_status.refined.AcidEmptyLevel == 0)) {
-			g_mean_io_status.refined.AcidEmptyLevel = 0;
+				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 0)) {
+			g_mean_io_status.refined.io.AcidEmptyLevel = 0;
 			return 1;
 		}
 	} else {
@@ -68,13 +68,13 @@ uint8_t isAlkalineTankFull(void) {
 	if (I_ALKALI_H_PIN_FL6 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[0],
 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
-				|| (g_mean_io_status.refined.AlkalineHighLevel == 1)) {
-			g_mean_io_status.refined.AlkalineHighLevel = 1;
+				|| (g_mean_io_status.refined.io.AlkalineHighLevel == 1)) {
+			g_mean_io_status.refined.io.AlkalineHighLevel = 1;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAlkalineLevel[0] = g_systemTime;
-		g_mean_io_status.refined.AlkalineHighLevel = 0;
+		g_mean_io_status.refined.io.AlkalineHighLevel = 0;
 	}
 	return 0;
 }
@@ -82,47 +82,46 @@ uint8_t isAlkalineTankAlmostFull(void) {
 	if (I_ALKALI_M_PIN_FL5 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[1],
 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
-				|| (g_mean_io_status.refined.AlkalineLowLevel == 1)) {
-			g_mean_io_status.refined.AlkalineLowLevel = 1;
+				|| (g_mean_io_status.refined.io.AlkalineLowLevel == 1)) {
+			g_mean_io_status.refined.io.AlkalineLowLevel = 1;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAlkalineLevel[1] = g_systemTime;
-		g_mean_io_status.refined.AlkalineLowLevel = 0;
+		g_mean_io_status.refined.io.AlkalineLowLevel = 0;
 	}
 	return 0;
 }
-uint8_t isAlkalineTankHasSomething(void) {
+uint8_t isAlkalineTankHasSomething_nonstop(void) {
 	if (I_ALKALI_L_PIN_FL4 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[2],
 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
-				|| (g_mean_io_status.refined.AlkalineEmptyLevel == 1)) {
-			g_mean_io_status.refined.AlkalineEmptyLevel = 1;
+				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 1)) {
+			g_mean_io_status.refined.io.AlkalineEmptyLevel = 1;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAlkalineLevel[2] = g_systemTime;
-		isAlkalineTankEmpty();
+		isAlkalineTankEmpty_nonstop();
 	}
 	return 0;
 }
-uint8_t isAlkalineTankEmpty(void) {
+uint8_t isAlkalineTankEmpty_nonstop(void) {
 	if (I_ALKALI_L_PIN_FL4 == I_OFF) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[3],
 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
-				|| (g_mean_io_status.refined.AlkalineEmptyLevel == 0)) {
-			g_mean_io_status.refined.AlkalineEmptyLevel = 0;
+				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 0)) {
+			g_mean_io_status.refined.io.AlkalineEmptyLevel = 0;
 			return 1;
 		}
 	} else {
 		g_Tick.tickAlkalineLevel[3] = g_systemTime;
-		isAlkalineTankHasSomething();
+		isAlkalineTankHasSomething_nonstop();
 	}
 	return 0;
 }
-
 //TODO: Water flow measurement
-float measureFlowSensor(uint32_t *s) {
+inline float measureFlowSensor(uint32_t *s) {
 	uint32_t stamp_flow_sensor = g_systemTime;
 	float flow_pluse = 0.0;
 	uint8_t flow_pulse_state = I_OFF;

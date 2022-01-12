@@ -166,16 +166,16 @@ void main(void)
     	}
 
     	// Communication with WaterSoftener
-    	if(commnunication_flag.rs485_send_to_watersolfner_response_flag){
+    	if(g_commnunication_flag.rs485_send_to_watersolfner_response_flag){
     		sendRS485(0xff, 82, 2, 5);
 //    		rx_count++;
     		wts = 1; //Test flag = 1
-			commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
+			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
     	}
-		if(commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
+		if(g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1){
     		// Sand to Water softener SV state
-    		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.Valve.SV1 == 1?1:0);
-    		commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
+    		sendRS485(0xff, 82, 24,(uint32_t) g_io_status.refined.io.Valve.SV1 == 1?1:0);
+    		g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
     	}
 		// Test SV1 for Water Softener
     	if(wts != 0){
@@ -197,18 +197,18 @@ void main(void)
     	}
 
     	//Valve PCB
-    	if(commnunication_flag.rs485_send_to_valve_response_flag == 1){
+    	if(g_commnunication_flag.rs485_send_to_valve_response_flag == 1){
     		// 0xff, 12, {Mode, Valve 1, Valve 2, Valve 3, 1}
     		// 0 - Stand alone 1 - Control Valve
     		uint8_t _b[5] = {vpcb_v, g_uart3_sendend%2,g_systemTime%2,0,1};
     		sendR485_7byte(0xff, 12, _b);
     		vpcb++;
-    		commnunication_flag.rs485_send_to_valve_response_flag  = 0;
-    	}else if(commnunication_flag.rs485_get_valve_gesture_flag == 1){
+    		g_commnunication_flag.rs485_send_to_valve_response_flag  = 0;
+    	}else if(g_commnunication_flag.rs485_get_valve_gesture_flag == 1){
     		uint8_t _b[5] = {0,1,0,0,1};
     		sendR485_7byte(0xff, 1, _b);
     		rx_count++;
-    		commnunication_flag.rs485_get_valve_gesture_flag = 0;
+    		g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
     	}
 
     	if(vpcb != 0){
@@ -221,15 +221,15 @@ void main(void)
     	}
 
     	//RS485 fault check
-    	if(commnunication_flag.rs485_fault == 1){
+    	if(g_commnunication_flag.rs485_fault == 1){
     		R_UART3_Stop();
-    		commnunication_flag.rs485_fault++;
+    		g_commnunication_flag.rs485_fault++;
     		g_Tick.tickRS485 = g_systemTime;
-    	}else if(commnunication_flag.rs485_fault == 2){
+    	}else if(g_commnunication_flag.rs485_fault == 2){
     		if(ns_delay_ms(&g_Tick.tickRS485, 500)){
 				R_UART3_Start();
 				R_UART3_Receive(g_uart3_rx_data, 7);
-				commnunication_flag.rs485_fault = 0;
+				g_commnunication_flag.rs485_fault = 0;
     		}
     	}
 //--------------------------------- Testing code---------------------------------------------------------------

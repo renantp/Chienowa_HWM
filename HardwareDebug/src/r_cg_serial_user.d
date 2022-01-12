@@ -41,3 +41,5 @@ src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/hwm/normal_operation.h
 ../src/hwm/normal_operation.h:
 src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/hwm/io_control.h
 ../src/hwm/io_control.h:
+src/r_cg_serial_user.obj src/r_cg_serial_user.d: ../src/hwm/operation.h
+../src/hwm/operation.h:
