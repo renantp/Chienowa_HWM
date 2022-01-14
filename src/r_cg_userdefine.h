@@ -61,8 +61,8 @@ extern uint8_t rx_count;
 #define O_SPOUT_WATER_PIN_SV2	(P5_bit.no5) // Valve SV2
 
 #define O_PUMP_SALT_PIN_SP1	(P6_bit.no0) // Pump SP
-#define O_PUMP_ALK_PIN	(P6_bit.no1) // Pump P2
-#define O_PUMP_ACID_PIN	(P6_bit.no2) // Pump P1
+#define O_ALK_PUMP_PIN_P2	(P6_bit.no1) // Pump P2
+#define O_ACID_PUMP_PIN_P1	(P6_bit.no2) // Pump P1
 #define O_PUMP_PRESS_PIN	(P6_bit.no3) // Pressurized Pump (J37)
 #define O_ALARM_OUT_PIN	(P6_bit.no4)
 #define O_NEUTRALIZE_PIN_SV7	(P6_bit.no5) // Valve SV7
@@ -90,14 +90,14 @@ extern uint8_t rx_count;
 #define O_RST_LAN_PIN		(P4_bit.no1)
 #define I_INT_LAN_PIN		(P13_bit.no7)
 
-#define OPTION_1_PIN_SV8	(P11_bit.no0) //SV8
-#define OPTION_2_PIN_SV9	(P11_bit.no1) //SV9
-#define OPTION_3_PIN	(P14_bit.no6)
-#define OPTION_4_PIN	(P14_bit.no7)
-#define OPTION_5_PIN	(P10_bit.no0)
-#define OPTION_6_PIN	(P15_bit.no3)
+#define O_OPTION_1_BUZZER	(P11_bit.no0)
+#define O_OPTION_2_PIN_SV8	(P11_bit.no1)
+#define O_OPTION_3_PIN_SV9	(P14_bit.no6)
+#define I_OPTION_4_PIN_PX1	(P14_bit.no7)
+#define I_OPTION_5_PIN_PX2	(P10_bit.no0)
+#define I_OPTION_6_PIN	(P15_bit.no3)
 
-#define FLOW_PULSE_PIN	(P0_bit.no1)
+#define I_FLOW_PULSE_PIN	(P0_bit.no1)
 
 extern struct Timer_Setting_s{
 	uint32_t t1_initialWaterDrainageOperation_s;
@@ -152,7 +152,7 @@ extern struct Number_Setting_s{
 	char crc;
 }g_numberSetting;
 
-struct IO_Struct{
+extern struct IO_Struct{
 	uint8_t AlkalineEmptyLevel: 1;
 	uint8_t AlkalineLowLevel: 1;
 	uint8_t AlkalineHighLevel: 1;
@@ -179,10 +179,11 @@ struct IO_Struct{
 	uint8_t Pump1: 1;
 	uint8_t Pump2: 1;
 	uint8_t SaltPump: 1;
+	uint8_t CVCC_ON: 1;
 	uint8_t RSVD1: 4; // Reserved
 
 	uint8_t MachineMode_RSVD; //1 byte
-};
+}g_io_response;
 /**
  * IO_Status Union content:
  *  - Input/Output of  MCU
@@ -337,12 +338,14 @@ extern uint32_t g_neutralization_time_s;
 extern volatile uint32_t g_systemTime;
 extern volatile uint8_t g_csi_count, g_csi_err, g_csi_send_end, g_csi_rev_end;
 extern volatile uint8_t g_uart1_sendend;
-extern volatile uint8_t g_uart2_fault, g_uart2_sendend;
+extern volatile uint8_t g_uart2_fault, g_uart2_sendend, g_uart2_receive;
 extern volatile uint8_t g_uart3_sendend;
 extern volatile uint8_t timer0_ch0_flag, timer0_ch1_flag, timer0_ch2_flag;
 extern float g_flow_value;
 extern uint16_t g_adc_value[2];
+
 extern void adc_int_handle(void);
+extern void uart2_handle(void);
 
 extern void setting_default(void);
 extern void main_init_20211111(void);

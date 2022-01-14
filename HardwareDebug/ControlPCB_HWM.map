@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W3.03.00 )             12-Jan-2022 13:56:02
+Renesas Optimizing Linker (W3.03.00 )             14-Jan-2022 17:03:19
 
 *** Options ***
 
@@ -85,13 +85,13 @@ SECTION                            START      END         SIZE   ALIGN
 .const
                                   00003000  0000350f       510   2
 .textf
-                                  00003510  000065a9      309a   1
+                                  00003510  0000660e      30ff   1
 .monitor2
                                   0007fe00  0007ffff       200   1
 .bss
-                                  000f4700  000f4af2       3f3   2
+                                  000f4700  000f4af8       3f9   2
 .dataR
-                                  000f4af4  000f4ba9        b6   2
+                                  000f4afa  000f4baf        b6   2
 .sbss
                                   000ffe20  000ffe20         0   2
 .sdataR
@@ -99,9 +99,9 @@ SECTION                            START      END         SIZE   ALIGN
 
 *** Total Section Size ***
 
-RAMDATA SECTION:  000004a9 Byte(s)
+RAMDATA SECTION:  000004af Byte(s)
 ROMDATA SECTION:  0000085e Byte(s)
-PROGRAM SECTION:  0000384d Byte(s)
+PROGRAM SECTION:  000038b2 Byte(s)
 
 *** Symbol List ***
 
@@ -371,7 +371,7 @@ FILE=.\src\hwm\io_control.obj
   _measureFlowSensor_nostop
                                   0000430a        e4   func ,g         3
 FILE=.\src\hwm\main.obj
-                                  000043ee  00004f62       b75
+                                  000043ee  00004f66       b79
   _setting_default
                                   000043ee        a8   func ,g         0
   _sendRS485
@@ -401,267 +401,279 @@ FILE=.\src\hwm\main.obj
   _isSV1andSV2Off8h
                                   00004911        4e   func ,g         1
   _CallanCleaningMode_nostop
-                                  0000495f        6b   func ,g         1
+                                  0000495f        6e   func ,g         1
   _DrainageMode_nostop
-                                  000049ca        f1   func ,g         1
+                                  000049cd        f1   func ,g         1
   _NormalMode_nostop
-                                  00004abb        53   func ,g         1
+                                  00004abe        53   func ,g         1
   _TestPowerOn_nostop_keepstate
-                                  00004b0e        d7   func ,g         1
+                                  00004b11        d7   func ,g         1
   _FlowRateAdjustmentMode_nostop_keepstate
-                                  00004be5        7d   func ,g         1
+                                  00004be8        7d   func ,g         1
   _CurrentAdjustmentMode_nostop_keepstate
-                                  00004c62        4f   func ,g         1
+                                  00004c65        4f   func ,g         1
   _ElectrolyteAdjustmentOperation
-                                  00004cb1        57   func ,g         1
+                                  00004cb4        57   func ,g         1
   _TestOperation_nostop
-                                  00004d08        45   func ,g         0
+                                  00004d0b        45   func ,g         0
   _NeutralizationTreatment
-                                  00004d4d        6c   func ,g         0
+                                  00004d50        6c   func ,g         0
   _main_loop_20211111
-                                  00004db9        16   func ,g         1
+                                  00004dbc        17   func ,g         1
   _realTimeResponse
-                                  00004dcf        6e   func ,g         4
+                                  00004dd3        6e   func ,g         4
   _UpdateMachineStatus
-                                  00004e3d       126   func ,g         5
+                                  00004e41       126   func ,g         5
 FILE=.\src\hwm\normal_operation.obj
-                                  00004f63  000052d3       371
+                                  00004f67  000052d7       371
   _WaterWashingMode_nostop
-                                  00004f63        6f   func ,g         1
+                                  00004f67        6f   func ,g         1
   _HandWashingMode_nostop
-                                  00004fd2       1a5   func ,g         1
+                                  00004fd6       1a5   func ,g         1
   _AcidWaterMode_nostop
-                                  00005177        ac   func ,g         1
+                                  0000517b        ac   func ,g         1
   _AlkalineWaterMode_nostop
-                                  00005223        b1   func ,g         1
+                                  00005227        b1   func ,g         1
 FILE=.\src\hwm\operation.obj
-                                  000052d4  000053a6        d3
+                                  000052d8  000053aa        d3
   _electrolyticOperationON
-                                  000052d4        2a   func ,g         4
+                                  000052d8        2a   func ,g         4
   _isElectrolyticOperationOFF_nostop
-                                  000052fe        a5   func ,g         1
+                                  00005302        a5   func ,g         1
   _TestModeOperation
-                                  000053a3         4   func ,g         0
+                                  000053a7         4   func ,g         0
 FILE=.\src\hwm\raspberry_pi_interface.obj
-                                  000053a7  0000564d       2a7
-  _RaspberryResponse_nostop
-                                  000053a7       20b   func ,g         2
+                                  000053ab  000056d4       32a
+  _IO_Output
+                                  000053ab        67   func ,g         1
+  _RaspberryCommunication_nostop
+                                  00005412       196   func ,g         2
   _sendToRasPi_f
-                                  000055b2        28   func ,g        1c
+                                  000055a8        28   func ,g        1c
   _sendToRasPi_u32
-                                  000055da        28   func ,g         4
+                                  000055d0        28   func ,g         4
   _waitAlarmConfirm_stop
-                                  00005602        3c   func ,g         5
+                                  000055f8        3c   func ,g         5
   _waitAlarmConfirm_nonstop
-                                  0000563e         c   func ,g         0
+                                  00005634         c   func ,g         0
   _resetAlarm
-                                  0000564a         4   func ,g         5
+                                  00005640         4   func ,g         5
+  _ResponseHandler
+                                  00005644        32   func ,g         1
+  _ChangeWashingMode
+                                  00005676        16   func ,g         1
+  _MonitoringStatus
+                                  0000568c        28   func ,g         1
+  _TestIndividual
+                                  000056b4        21   func ,g         1
 FILE=.\src\interrupt_handle.obj
-                                  0000564e  000056c9        7c
+                                  000056d5  000058fa       226
   _adc_int_handle
-                                  0000564e        7c   func ,g         1
-FILE=.\src\r_cg_adc.obj
-                                  000056ca  0000572b        62
-  _R_ADC_Create
-                                  000056ca        33   func ,g         2
-  _R_ADC_Start
-                                  000056fd         a   func ,g         2
-  _R_ADC_Stop
-                                  00005707         a   func ,g         0
-  _R_ADC_Set_OperationOn
-                                  00005711         4   func ,g         1
-  _R_ADC_Set_OperationOff
-                                  00005715         4   func ,g         0
-  _R_ADC_Get_Result
-                                  00005719         7   func ,g         2
-  _R_ADC_Set_ADChannel
-                                  00005720         c   func ,g         0
-FILE=.\src\r_cg_cgc.obj
-                                  0000572c  00005741        16
-  _R_CGC_Create
-                                  0000572c        16   func ,g         1
-FILE=.\src\r_cg_cgc_user.obj
-                                  00005742  00005744         3
-  _R_CGC_Get_ResetSource
-                                  00005742         3   func ,g         1
-FILE=.\src\r_cg_dac.obj
-                                  00005745  00005777        33
-  _R_DAC_Create
-                                  00005745        1d   func ,g         2
-  _R_DAC0_Start
-                                  00005762         4   func ,g         1
-  _R_DAC0_Stop
-                                  00005766         4   func ,g         0
-  _R_DAC0_Set_ConversionValue
-                                  0000576a         3   func ,g         2
-  _R_DAC1_Start
-                                  0000576d         4   func ,g         1
-  _R_DAC1_Stop
-                                  00005771         4   func ,g         0
-  _R_DAC1_Set_ConversionValue
-                                  00005775         3   func ,g         2
-FILE=.\src\r_cg_port.obj
-                                  00005778  000057bf        48
-  _R_PORT_Create
-                                  00005778        48   func ,g         1
-FILE=.\src\r_cg_port_user.obj
-                                  000057c0  000057c0         1
-  _R_PORT_Create_UserInit
-                                  000057c0         1   func ,g         1
-FILE=.\src\r_cg_rtc.obj
-                                  000057c1  000058fe       13e
-  _R_RTC_Create
-                                  000057c1        27   func ,g         2
-  _R_RTC_Start
-                                  000057e8         4   func ,g         0
-  _R_RTC_Stop
-                                  000057ec         4   func ,g         0
-  _R_RTC_Get_CounterValue
-                                  000057f0        51   func ,g         0
-  _R_RTC_Set_CounterValue
-                                  00005841        be   func ,g         0
-FILE=.\src\r_cg_serial.obj
-                                  000058ff  00005df1       4f3
-  _R_CSI01_Receive
-                                  000058ff        1a   func ,g         0
-  _R_CSI01_Send
-                                  00005919        26   func ,g         0
-  _R_SAU0_Create
-                                  0000593f        17   func ,g         2
-  _R_UART1_Create
-                                  00005956        7e   func ,g         2
-  _R_UART1_Start
-                                  000059d4        26   func ,g         1
-  _R_UART1_Stop
-                                  000059fa        1e   func ,g         0
-  _R_UART1_Receive
-                                  00005a18        18   func ,g         0
-  _R_UART1_Send
-                                  00005a30        29   func ,g         0
-  _R_CSI00_Create
-                                  00005a59        53   func ,g         2
-  _R_CSI00_Start
-                                  00005aac        26   func ,g         1
-  _R_CSI00_Stop
-                                  00005ad2        18   func ,g         0
-  _R_CSI00_Send
-                                  00005aea        28   func ,g         0
-  _R_CSI01_Create
-                                  00005b12        5a   func ,g         3
-  _R_CSI01_Start
-                                  00005b6c        26   func ,g         1
-  _R_CSI01_Stop
-                                  00005b92        18   func ,g         1
-  _R_CSI01_Send_Receive
-                                  00005baa        36   func ,g         1
-  _R_SAU1_Create
-                                  00005be0        14   func ,g         2
-  _R_UART2_Create
-                                  00005bf4        7e   func ,g         2
-  _R_UART2_Start
-                                  00005c72        26   func ,g         2
-  _R_UART2_Stop
-                                  00005c98        1e   func ,g         1
-  _R_UART2_Receive
-                                  00005cb6        18   func ,g         6
-  _R_UART2_Send
-                                  00005cce        29   func ,g         6
-  _R_UART3_Create
-                                  00005cf7        76   func ,g         2
-  _R_UART3_Start
-                                  00005d6d        26   func ,g         2
-  _R_UART3_Stop
-                                  00005d93        1e   func ,g         1
-  _R_UART3_Receive
-                                  00005db1        18   func ,g         3
-  _R_UART3_Send
-                                  00005dc9        29   func ,g         2
-FILE=.\src\r_cg_serial_user.obj
-                                  00005df2  00006010       21f
+                                  000056d5        7c   func ,g         1
+  _uart2_handle
+                                  00005751       186   func ,g         1
   _isCommandNeedResponse
-                                  00005df2        24   func ,g         1
+                                  000058d7        24   func ,g         1
+FILE=.\src\r_cg_adc.obj
+                                  000058fb  0000595c        62
+  _R_ADC_Create
+                                  000058fb        33   func ,g         2
+  _R_ADC_Start
+                                  0000592e         a   func ,g         2
+  _R_ADC_Stop
+                                  00005938         a   func ,g         0
+  _R_ADC_Set_OperationOn
+                                  00005942         4   func ,g         1
+  _R_ADC_Set_OperationOff
+                                  00005946         4   func ,g         0
+  _R_ADC_Get_Result
+                                  0000594a         7   func ,g         2
+  _R_ADC_Set_ADChannel
+                                  00005951         c   func ,g         0
+FILE=.\src\r_cg_cgc.obj
+                                  0000595d  00005972        16
+  _R_CGC_Create
+                                  0000595d        16   func ,g         1
+FILE=.\src\r_cg_cgc_user.obj
+                                  00005973  00005975         3
+  _R_CGC_Get_ResetSource
+                                  00005973         3   func ,g         1
+FILE=.\src\r_cg_dac.obj
+                                  00005976  000059a8        33
+  _R_DAC_Create
+                                  00005976        1d   func ,g         2
+  _R_DAC0_Start
+                                  00005993         4   func ,g         1
+  _R_DAC0_Stop
+                                  00005997         4   func ,g         0
+  _R_DAC0_Set_ConversionValue
+                                  0000599b         3   func ,g         1
+  _R_DAC1_Start
+                                  0000599e         4   func ,g         1
+  _R_DAC1_Stop
+                                  000059a2         4   func ,g         0
+  _R_DAC1_Set_ConversionValue
+                                  000059a6         3   func ,g         1
+FILE=.\src\r_cg_port.obj
+                                  000059a9  000059f0        48
+  _R_PORT_Create
+                                  000059a9        48   func ,g         1
+FILE=.\src\r_cg_port_user.obj
+                                  000059f1  000059f1         1
+  _R_PORT_Create_UserInit
+                                  000059f1         1   func ,g         1
+FILE=.\src\r_cg_rtc.obj
+                                  000059f2  00005b2f       13e
+  _R_RTC_Create
+                                  000059f2        27   func ,g         2
+  _R_RTC_Start
+                                  00005a19         4   func ,g         0
+  _R_RTC_Stop
+                                  00005a1d         4   func ,g         0
+  _R_RTC_Get_CounterValue
+                                  00005a21        51   func ,g         0
+  _R_RTC_Set_CounterValue
+                                  00005a72        be   func ,g         0
+FILE=.\src\r_cg_serial.obj
+                                  00005b30  00006022       4f3
+  _R_CSI01_Receive
+                                  00005b30        1a   func ,g         0
+  _R_CSI01_Send
+                                  00005b4a        26   func ,g         0
+  _R_SAU0_Create
+                                  00005b70        17   func ,g         2
+  _R_UART1_Create
+                                  00005b87        7e   func ,g         2
+  _R_UART1_Start
+                                  00005c05        26   func ,g         1
+  _R_UART1_Stop
+                                  00005c2b        1e   func ,g         0
+  _R_UART1_Receive
+                                  00005c49        18   func ,g         0
+  _R_UART1_Send
+                                  00005c61        29   func ,g         0
+  _R_CSI00_Create
+                                  00005c8a        53   func ,g         2
+  _R_CSI00_Start
+                                  00005cdd        26   func ,g         1
+  _R_CSI00_Stop
+                                  00005d03        18   func ,g         0
+  _R_CSI00_Send
+                                  00005d1b        28   func ,g         0
+  _R_CSI01_Create
+                                  00005d43        5a   func ,g         3
+  _R_CSI01_Start
+                                  00005d9d        26   func ,g         1
+  _R_CSI01_Stop
+                                  00005dc3        18   func ,g         1
+  _R_CSI01_Send_Receive
+                                  00005ddb        36   func ,g         1
+  _R_SAU1_Create
+                                  00005e11        14   func ,g         2
+  _R_UART2_Create
+                                  00005e25        7e   func ,g         2
+  _R_UART2_Start
+                                  00005ea3        26   func ,g         2
+  _R_UART2_Stop
+                                  00005ec9        1e   func ,g         1
+  _R_UART2_Receive
+                                  00005ee7        18   func ,g         5
+  _R_UART2_Send
+                                  00005eff        29   func ,g         6
+  _R_UART3_Create
+                                  00005f28        76   func ,g         2
+  _R_UART3_Start
+                                  00005f9e        26   func ,g         2
+  _R_UART3_Stop
+                                  00005fc4        1e   func ,g         1
+  _R_UART3_Receive
+                                  00005fe2        18   func ,g         3
+  _R_UART3_Send
+                                  00005ffa        29   func ,g         2
+FILE=.\src\r_cg_serial_user.obj
+                                  00006023  0000608f        6d
   _r_uart1_callback_receiveend@1
-                                  00005e16         1   func ,l         1
+                                  00006023         1   func ,l         1
   _r_uart1_callback_softwareoverrun@1
-                                  00005e17         1   func ,l         1
+                                  00006024         1   func ,l         1
   _r_uart1_callback_sendend@1
-                                  00005e18         1   func ,l         1
+                                  00006025         1   func ,l         1
   _r_uart1_callback_error@1
-                                  00005e19         1   func ,l         1
+                                  00006026         1   func ,l         1
   _r_csi00_callback_sendend@1
-                                  00005e1a         1   func ,l         1
+                                  00006027         1   func ,l         1
   _r_csi01_callback_receiveend@1
-                                  00005e1b         7   func ,l         1
+                                  00006028         7   func ,l         1
   _r_csi01_callback_error@1
-                                  00005e22         1   func ,l         1
+                                  0000602f         1   func ,l         1
   _r_csi01_callback_sendend@1
-                                  00005e23         4   func ,l         1
+                                  00006030         4   func ,l         1
   _r_uart2_callback_receiveend@1
-                                  00005e27       192   func ,l         1
+                                  00006034         4   func ,l         1
   _r_uart2_callback_softwareoverrun@1
-                                  00005fb9         1   func ,l         1
+                                  00006038         1   func ,l         1
   _r_uart2_callback_sendend@1
-                                  00005fba         4   func ,l         1
+                                  00006039         4   func ,l         1
   _r_uart2_callback_error@1
-                                  00005fbe         1   func ,l         1
+                                  0000603d         1   func ,l         1
   _r_uart3_callback_receiveend@1
-                                  00005fbf        49   func ,l         1
+                                  0000603e        49   func ,l         1
   _r_uart3_callback_softwareoverrun@1
-                                  00006008         1   func ,l         1
+                                  00006087         1   func ,l         1
   _r_uart3_callback_sendend@1
-                                  00006009         7   func ,l         1
+                                  00006088         7   func ,l         1
   _r_uart3_callback_error@1
-                                  00006010         1   func ,l         1
+                                  0000608f         1   func ,l         1
 FILE=.\src\r_cg_timer.obj
-                                  00006011  0000611d       10d
+                                  00006090  0000619c       10d
   _R_TAU0_Create
-                                  00006011        ad   func ,g         2
+                                  00006090        ad   func ,g         2
   _R_TAU0_Channel0_Start
-                                  000060be        10   func ,g         1
+                                  0000613d        10   func ,g         1
   _R_TAU0_Channel0_Stop
-                                  000060ce        10   func ,g         0
+                                  0000614d        10   func ,g         0
   _R_TAU0_Channel1_Start
-                                  000060de        10   func ,g         0
+                                  0000615d        10   func ,g         0
   _R_TAU0_Channel1_Stop
-                                  000060ee        10   func ,g         0
+                                  0000616d        10   func ,g         0
   _R_TAU0_Channel2_Start
-                                  000060fe        10   func ,g         0
+                                  0000617d        10   func ,g         0
   _R_TAU0_Channel2_Stop
-                                  0000610e        10   func ,g         0
+                                  0000618d        10   func ,g         0
 FILE=.\src\r_cg_wdt.obj
-                                  0000611e  00006132        15
+                                  0000619d  000061b1        15
   _R_WDT_Create
-                                  0000611e        11   func ,g         1
+                                  0000619d        11   func ,g         1
   _R_WDT_Restart
-                                  0000612f         4   func ,g         9
+                                  000061ae         4   func ,g         9
 FILE=.\src\r_main.obj
-                                  00006133  00006440       30e
+                                  000061b2  000064a5       2f4
   _nostop_checkHandSensor
-                                  00006133        31   func ,g         0
+                                  000061b2        31   func ,g         0
   _readHS
-                                  00006164        15   func ,g         0
+                                  000061e3        15   func ,g         0
   _main
-                                  00006179       267   func ,g         1
+                                  000061f8       24d   func ,g         1
   _R_MAIN_UserInit
-                                  000063e0        61   func ,g         1
+                                  00006445        61   func ,g         1
 FILE=.\src\r_systeminit.obj
-                                  00006441  00006477        37
+                                  000064a6  000064dc        37
   _R_Systeminit
-                                  00006441        32   func ,g         1
+                                  000064a6        32   func ,g         1
   _hdwinit
-                                  00006473         5   func ,g         1
+                                  000064d8         5   func ,g         1
 FILE=.\src\usr_timer.obj
-                                  00006478  000065a9       132
+                                  000064dd  0000660e       132
   _delay_ms
-                                  00006478        68   func ,g         3
+                                  000064dd        68   func ,g         3
   _delay
-                                  000064e0        18   func ,g         0
+                                  00006545        18   func ,g         0
   _ns_delay_ms
-                                  000064f8        6c   func ,g        3e
+                                  0000655d        6c   func ,g        3d
   _non_block_delay
-                                  00006564         2   func ,g         0
+                                  000065c9         2   func ,g         0
   _mTask
-                                  00006566        44   func ,g         0
+                                  000065cb        44   func ,g         0
 
 SECTION=.monitor2
 FILE=rlink_generates_02
@@ -897,8 +909,10 @@ FILE=.\src\hwm\main.obj
                                   000f4785         1   unsigned char:1(6)
       _g_io_status.refined.io.SaltPump
                                   000f4785         1   unsigned char:1(5)
+      _g_io_status.refined.io.CVCC_ON
+                                  000f4785         1   unsigned char:1(4)
       _g_io_status.refined.io.RSVD1
-                                  000f4785         1   unsigned char:4(1)
+                                  000f4785         1   unsigned char:4(0)
       _g_io_status.refined.io.MachineMode_RSVD
                                   000f4786         1   unsigned char
     }
@@ -969,8 +983,10 @@ FILE=.\src\hwm\main.obj
                                   000f4797         1   unsigned char:1(6)
       _g_mean_io_status.refined.io.SaltPump
                                   000f4797         1   unsigned char:1(5)
+      _g_mean_io_status.refined.io.CVCC_ON
+                                  000f4797         1   unsigned char:1(4)
       _g_mean_io_status.refined.io.RSVD1
-                                  000f4797         1   unsigned char:4(1)
+                                  000f4797         1   unsigned char:4(0)
       _g_mean_io_status.refined.io.MachineMode_RSVD
                                   000f4798         1   unsigned char
     }
@@ -983,7 +999,7 @@ FILE=.\src\hwm\main.obj
     }
     }
   _g_res_io_status
-                                  000f47a6        12   data ,g         1
+                                  000f47a6        12   data ,g         0
     union  IO_Status_u {
                                                   12
       _g_res_io_status.refined
@@ -1041,8 +1057,10 @@ FILE=.\src\hwm\main.obj
                                   000f47a9         1   unsigned char:1(6)
       _g_res_io_status.refined.io.SaltPump
                                   000f47a9         1   unsigned char:1(5)
+      _g_res_io_status.refined.io.CVCC_ON
+                                  000f47a9         1   unsigned char:1(4)
       _g_res_io_status.refined.io.RSVD1
-                                  000f47a9         1   unsigned char:4(1)
+                                  000f47a9         1   unsigned char:4(0)
       _g_res_io_status.refined.io.MachineMode_RSVD
                                   000f47aa         1   unsigned char
     }
@@ -1179,7 +1197,7 @@ FILE=.\src\hwm\main.obj
                                   000f4876         4   unsigned long
     }
   _g_Tick
-                                  000f487a        b4   data ,g        8e
+                                  000f487a        b4   data ,g        8d
     struct Tick_s {
                                                   b4
       _g_Tick.tick500ms
@@ -1273,454 +1291,514 @@ FILE=.\src\hwm\operation.obj
       _g_TimeKeeper@1.neutralization
                                   000f493c         4   unsigned long
     }
+FILE=.\src\hwm\raspberry_pi_interface.obj
+                                  000f4940  000f4944         5
+  _g_io_response
+                                  000f4940         5   data ,g         2
+    struct IO_Struct {
+                                                   5
+      _g_io_response.AlkalineEmptyLevel
+                                  000f4940         1   unsigned char:1(7)
+      _g_io_response.AlkalineLowLevel
+                                  000f4940         1   unsigned char:1(6)
+      _g_io_response.AlkalineHighLevel
+                                  000f4940         1   unsigned char:1(5)
+      _g_io_response.AcidEmptyLevel
+                                  000f4940         1   unsigned char:1(4)
+      _g_io_response.AcidLowLevel
+                                  000f4940         1   unsigned char:1(3)
+      _g_io_response.AcidHighLevel
+                                  000f4940         1   unsigned char:1(2)
+      _g_io_response.SaltLowLevel
+                                  000f4940         1   unsigned char:1(1)
+      _g_io_response.SaltHighLevel
+                                  000f4940         1   unsigned char:1(0)
+      _g_io_response.Valve
+                                  000f4941         2
+    struct  {
+                                                   2
+      _g_io_response.Valve.SV1
+                                  000f4941         1   unsigned char:1(7)
+      _g_io_response.Valve.SV2
+                                  000f4941         1   unsigned char:1(6)
+      _g_io_response.Valve.SV3
+                                  000f4941         1   unsigned char:1(5)
+      _g_io_response.Valve.SV4
+                                  000f4941         1   unsigned char:1(4)
+      _g_io_response.Valve.SV5
+                                  000f4941         1   unsigned char:1(3)
+      _g_io_response.Valve.SV6
+                                  000f4941         1   unsigned char:1(2)
+      _g_io_response.Valve.SV7
+                                  000f4941         1   unsigned char:1(1)
+      _g_io_response.Valve.SV8
+                                  000f4941         1   unsigned char:1(0)
+      _g_io_response.Valve.SV9
+                                  000f4942         1   unsigned char:1(7)
+      _g_io_response.Valve.RSVD
+                                  000f4942         1   unsigned char:7(0)
+    }
+      _g_io_response.Pump1
+                                  000f4943         1   unsigned char:1(7)
+      _g_io_response.Pump2
+                                  000f4943         1   unsigned char:1(6)
+      _g_io_response.SaltPump
+                                  000f4943         1   unsigned char:1(5)
+      _g_io_response.CVCC_ON
+                                  000f4943         1   unsigned char:1(4)
+      _g_io_response.RSVD1
+                                  000f4943         1   unsigned char:4(0)
+      _g_io_response.MachineMode_RSVD
+                                  000f4944         1   unsigned char
+    }
 FILE=.\src\interrupt_handle.obj
-                                  000f4940  000f4943         4
+                                  000f4946  000f4949         4
   _g_adc_value
-                                  000f4940         4   data ,g         4
+                                  000f4946         4   data ,g         4
 FILE=.\src\r_cg_rtc_user.obj
-                                  000f4944  000f494a         7
+                                  000f494a  000f4950         7
   _g_rtc
-                                  000f4944         7   data ,g         0
+                                  000f494a         7   data ,g         0
     struct  {
                                                    7
       _g_rtc.sec
-                                  000f4944         1   unsigned char
-      _g_rtc.min
-                                  000f4945         1   unsigned char
-      _g_rtc.hour
-                                  000f4946         1   unsigned char
-      _g_rtc.day
-                                  000f4947         1   unsigned char
-      _g_rtc.week
-                                  000f4948         1   unsigned char
-      _g_rtc.month
-                                  000f4949         1   unsigned char
-      _g_rtc.year
                                   000f494a         1   unsigned char
+      _g_rtc.min
+                                  000f494b         1   unsigned char
+      _g_rtc.hour
+                                  000f494c         1   unsigned char
+      _g_rtc.day
+                                  000f494d         1   unsigned char
+      _g_rtc.week
+                                  000f494e         1   unsigned char
+      _g_rtc.month
+                                  000f494f         1   unsigned char
+      _g_rtc.year
+                                  000f4950         1   unsigned char
     }
 FILE=.\src\r_cg_serial.obj
-                                  000f494c  000f4981        36
+                                  000f4952  000f4987        36
   _gp_uart1_tx_address
-                                  000f494c         2   data ,g         5
+                                  000f4952         2   data ,g         5
   _g_uart1_tx_count
-                                  000f494e         2   data ,g         4
+                                  000f4954         2   data ,g         4
   _gp_uart1_rx_address
-                                  000f4950         2   data ,g         3
+                                  000f4956         2   data ,g         3
   _g_uart1_rx_count
-                                  000f4952         2   data ,g         4
+                                  000f4958         2   data ,g         4
   _g_uart1_rx_length
-                                  000f4954         2   data ,g         3
+                                  000f495a         2   data ,g         3
   _gp_csi00_rx_address
-                                  000f4956         2   data ,g         0
+                                  000f495c         2   data ,g         0
   _g_csi00_rx_length
-                                  000f4958         2   data ,g         0
-  _g_csi00_rx_count
-                                  000f495a         2   data ,g         0
-  _gp_csi00_tx_address
-                                  000f495c         2   data ,g         6
-  _g_csi00_send_length
                                   000f495e         2   data ,g         0
+  _g_csi00_rx_count
+                                  000f4960         2   data ,g         0
+  _gp_csi00_tx_address
+                                  000f4962         2   data ,g         6
+  _g_csi00_send_length
+                                  000f4964         2   data ,g         0
   _g_csi00_tx_count
-                                  000f4960         2   data ,g         4
+                                  000f4966         2   data ,g         4
   _gp_csi01_rx_address
-                                  000f4962         2   data ,g         5
+                                  000f4968         2   data ,g         5
   _g_csi01_rx_length
-                                  000f4964         2   data ,g         1
+                                  000f496a         2   data ,g         1
   _g_csi01_rx_count
-                                  000f4966         2   data ,g         1
+                                  000f496c         2   data ,g         1
   _gp_csi01_tx_address
-                                  000f4968         2   data ,g         7
+                                  000f496e         2   data ,g         7
   _g_csi01_send_length
-                                  000f496a         2   data ,g         0
+                                  000f4970         2   data ,g         0
   _g_csi01_tx_count
-                                  000f496c         2   data ,g         7
+                                  000f4972         2   data ,g         7
   _gp_uart2_tx_address
-                                  000f496e         2   data ,g         5
+                                  000f4974         2   data ,g         5
   _g_uart2_tx_count
-                                  000f4970         2   data ,g         4
+                                  000f4976         2   data ,g         4
   _gp_uart2_rx_address
-                                  000f4972         2   data ,g         3
+                                  000f4978         2   data ,g         3
   _g_uart2_rx_count
-                                  000f4974         2   data ,g         4
-  _g_uart2_rx_length
-                                  000f4976         2   data ,g         3
-  _gp_uart3_tx_address
-                                  000f4978         2   data ,g         5
-  _g_uart3_tx_count
                                   000f497a         2   data ,g         4
-  _gp_uart3_rx_address
+  _g_uart2_rx_length
                                   000f497c         2   data ,g         3
+  _gp_uart3_tx_address
+                                  000f497e         2   data ,g         5
+  _g_uart3_tx_count
+                                  000f4980         2   data ,g         4
+  _gp_uart3_rx_address
+                                  000f4982         2   data ,g         3
   _g_uart3_rx_count
-                                  000f497e         2   data ,g         4
+                                  000f4984         2   data ,g         4
   _g_uart3_rx_length
-                                  000f4980         2   data ,g         3
+                                  000f4986         2   data ,g         3
 FILE=.\src\r_cg_serial_user.obj
-                                  000f4982  000f4a47        c6
+                                  000f4988  000f4a4d        c6
   _g_uart3_rx_data
-                                  000f4982         8   data ,g         8
+                                  000f4988         8   data ,g         8
   _send_response_flag
-                                  000f498a         1   data ,g         0
+                                  000f4990         1   data ,g         0
   _send_response_time_flag
-                                  000f498b         1   data ,g         0
+                                  000f4991         1   data ,g         0
   _send_response_number_flag
-                                  000f498c         1   data ,g         0
+                                  000f4992         1   data ,g         0
   _recived_time_setting_flag
-                                  000f498d         1   data ,g         0
+                                  000f4993         1   data ,g         0
   _send_respone_status_flag
-                                  000f498e         1   data ,g         0
+                                  000f4994         1   data ,g         0
   _recived_number_setting_flag
-                                  000f498f         1   data ,g         0
+                                  000f4995         1   data ,g         0
   _g_commnunication_flag
-                                  000f4990         f   data ,g        49
+                                  000f4996         f   data ,g        4a
     struct Communicaition_flag_s {
                                                    f
       _g_commnunication_flag.send_response_flag
-                                  000f4990         1   unsigned char
-      _g_commnunication_flag.send_response_time_flag
-                                  000f4991         1   unsigned char
-      _g_commnunication_flag.send_response_number_flag
-                                  000f4992         1   unsigned char
-      _g_commnunication_flag.recived_number_setting_flag
-                                  000f4993         1   unsigned char
-      _g_commnunication_flag.recived_time_setting_flag
-                                  000f4994         1   unsigned char
-      _g_commnunication_flag.send_response_status_flag
-                                  000f4995         1   unsigned char
-      _g_commnunication_flag.send_response_mode_flag
                                   000f4996         1   unsigned char
-      _g_commnunication_flag.alarm_clear_flag
+      _g_commnunication_flag.send_response_time_flag
                                   000f4997         1   unsigned char
-      _g_commnunication_flag.recieve_status_flag
+      _g_commnunication_flag.send_response_number_flag
                                   000f4998         1   unsigned char
-      _g_commnunication_flag.test_flag
+      _g_commnunication_flag.recived_number_setting_flag
                                   000f4999         1   unsigned char
-      _g_commnunication_flag.rs485_send_to_watersolfner_response_flag
+      _g_commnunication_flag.recived_time_setting_flag
                                   000f499a         1   unsigned char
-      _g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag
+      _g_commnunication_flag.send_response_status_flag
                                   000f499b         1   unsigned char
-      _g_commnunication_flag.rs485_send_to_valve_response_flag
+      _g_commnunication_flag.send_response_mode_flag
                                   000f499c         1   unsigned char
-      _g_commnunication_flag.rs485_get_valve_gesture_flag
+      _g_commnunication_flag.alarm_clear_flag
                                   000f499d         1   unsigned char
-      _g_commnunication_flag.rs485_fault
+      _g_commnunication_flag.recieve_status_flag
                                   000f499e         1   unsigned char
+      _g_commnunication_flag.test_flag
+                                  000f499f         1   unsigned char
+      _g_commnunication_flag.rs485_send_to_watersolfner_response_flag
+                                  000f49a0         1   unsigned char
+      _g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag
+                                  000f49a1         1   unsigned char
+      _g_commnunication_flag.rs485_send_to_valve_response_flag
+                                  000f49a2         1   unsigned char
+      _g_commnunication_flag.rs485_get_valve_gesture_flag
+                                  000f49a3         1   unsigned char
+      _g_commnunication_flag.rs485_fault
+                                  000f49a4         1   unsigned char
     }
   _g_csi_count
-                                  000f499f         1   data ,g         0
+                                  000f49a5         1   data ,g         0
   _g_csi_err
-                                  000f49a0         1   data ,g         0
+                                  000f49a6         1   data ,g         0
   _g_csi_send_end
-                                  000f49a1         1   data ,g         1
+                                  000f49a7         1   data ,g         1
   _g_csi_rev_end
-                                  000f49a2         1   data ,g         3
+                                  000f49a8         1   data ,g         3
   _g_uart1_send
-                                  000f49a3         1   data ,g         0
+                                  000f49a9         1   data ,g         0
   _g_uart2_sendend
-                                  000f49a4         1   data ,g         e
+                                  000f49aa         1   data ,g         e
   _g_uart2_receive
-                                  000f49a5         1   data ,g         1
+                                  000f49ab         1   data ,g         1
   _g_rx_data
-                                  000f49a6        a0   data ,g        28
+                                  000f49ac        a0   data ,g        27
   _g_uart2_fault
-                                  000f4a46         1   data ,g         3
+                                  000f4a4c         1   data ,g         3
   _g_uart3_sendend
-                                  000f4a47         1   data ,g         6
+                                  000f4a4d         1   data ,g         6
 FILE=.\src\r_cg_timer_user.obj
-                                  000f4a48  000f4a4f         8
+                                  000f4a4e  000f4a55         8
   _timer0_ch0_flag
-                                  000f4a48         1   data ,g         1
+                                  000f4a4e         1   data ,g         1
   _timer0_ch1_flag
-                                  000f4a49         1   data ,g         1
+                                  000f4a4f         1   data ,g         1
   _timer0_ch2_flag
-                                  000f4a4a         1   data ,g         1
+                                  000f4a50         1   data ,g         1
   _g_systemTime
-                                  000f4a4c         4   data ,g        82
+                                  000f4a52         4   data ,g        82
 FILE=.\src\r_main.obj
-                                  000f4a50  000f4af2        a3
+                                  000f4a56  000f4af8        a3
   _g_e_status
-                                  000f4a50         1   data ,g         0
+                                  000f4a56         1   data ,g         0
     union  EEPROM_status_u {
                                                    1
       _g_e_status.refined
-                                  000f4a50         1
+                                  000f4a56         1
     struct  {
                                                    1
       _g_e_status.refined.RB
-                                  000f4a50         1   unsigned char:1(7)
+                                  000f4a56         1   unsigned char:1(7)
       _g_e_status.refined.WEN
-                                  000f4a50         1   unsigned char:1(6)
+                                  000f4a56         1   unsigned char:1(6)
       _g_e_status.refined.BP
-                                  000f4a50         1   unsigned char:2(4)
+                                  000f4a56         1   unsigned char:2(4)
       _g_e_status.refined.RSVD
-                                  000f4a50         1   unsigned char:3(1)
+                                  000f4a56         1   unsigned char:3(1)
       _g_e_status.refined.WPEN
-                                  000f4a50         1   unsigned char:1(0)
+                                  000f4a56         1   unsigned char:1(0)
     }
       _g_e_status.raw
-                                  000f4a50         1   unsigned char
+                                  000f4a56         1   unsigned char
     }
   _ret_number_setting
-                                  000f4a52        26   data ,g         0
+                                  000f4a58        26   data ,g         0
     struct Number_Setting_s {
                                                   26
       _ret_number_setting.upperVoltage1
-                                  000f4a52         4   float
+                                  000f4a58         4   float
       _ret_number_setting.upperVoltage2
-                                  000f4a56         4   float
+                                  000f4a5c         4   float
       _ret_number_setting.upperVoltage3
-                                  000f4a5a         4   float
+                                  000f4a60         4   float
       _ret_number_setting.lowerVoltage
-                                  000f4a5e         4   float
+                                  000f4a64         4   float
       _ret_number_setting.upperCurrent
-                                  000f4a62         4   float
+                                  000f4a68         4   float
       _ret_number_setting.lowerCurrent
-                                  000f4a66         4   float
+                                  000f4a6c         4   float
       _ret_number_setting.upperFlow
-                                  000f4a6a         4   float
+                                  000f4a70         4   float
       _ret_number_setting.lowerFlow
-                                  000f4a6e         4   float
+                                  000f4a74         4   float
       _ret_number_setting.cvccCurrent
-                                  000f4a72         4   float
+                                  000f4a78         4   float
       _ret_number_setting.crc
-                                  000f4a76         1   char
+                                  000f4a7c         1   char
     }
   _flow_p
-                                  000f4a78         1   data ,g         1
+                                  000f4a7e         1   data ,g         1
   _salt_h_p
-                                  000f4a79         1   data ,g         0
+                                  000f4a7f         1   data ,g         0
   _g_eeprom_wren
-                                  000f4a7a         1   data ,g         0
+                                  000f4a80         1   data ,g         0
   _receive_data
-                                  000f4a7b         2   data ,g         0
+                                  000f4a81         2   data ,g         0
   _receive_setting
-                                  000f4a7e        26   data ,g         0
+                                  000f4a84        26   data ,g         0
     struct Number_Setting_s {
                                                   26
       _receive_setting.upperVoltage1
-                                  000f4a7e         4   float
+                                  000f4a84         4   float
       _receive_setting.upperVoltage2
-                                  000f4a82         4   float
+                                  000f4a88         4   float
       _receive_setting.upperVoltage3
-                                  000f4a86         4   float
+                                  000f4a8c         4   float
       _receive_setting.lowerVoltage
-                                  000f4a8a         4   float
+                                  000f4a90         4   float
       _receive_setting.upperCurrent
-                                  000f4a8e         4   float
+                                  000f4a94         4   float
       _receive_setting.lowerCurrent
-                                  000f4a92         4   float
+                                  000f4a98         4   float
       _receive_setting.upperFlow
-                                  000f4a96         4   float
+                                  000f4a9c         4   float
       _receive_setting.lowerFlow
-                                  000f4a9a         4   float
+                                  000f4aa0         4   float
       _receive_setting.cvccCurrent
-                                  000f4a9e         4   float
+                                  000f4aa4         4   float
       _receive_setting.crc
-                                  000f4aa2         1   char
+                                  000f4aa8         1   char
     }
   _set
-                                  000f4aa4         1   data ,g         0
+                                  000f4aaa         1   data ,g         0
     union  EEPROM_status_u {
                                                    1
       _set.refined
-                                  000f4aa4         1
+                                  000f4aaa         1
     struct  {
                                                    1
       _set.refined.RB
-                                  000f4aa4         1   unsigned char:1(7)
+                                  000f4aaa         1   unsigned char:1(7)
       _set.refined.WEN
-                                  000f4aa4         1   unsigned char:1(6)
+                                  000f4aaa         1   unsigned char:1(6)
       _set.refined.BP
-                                  000f4aa4         1   unsigned char:2(4)
+                                  000f4aaa         1   unsigned char:2(4)
       _set.refined.RSVD
-                                  000f4aa4         1   unsigned char:3(1)
+                                  000f4aaa         1   unsigned char:3(1)
       _set.refined.WPEN
-                                  000f4aa4         1   unsigned char:1(0)
+                                  000f4aaa         1   unsigned char:1(0)
     }
       _set.raw
-                                  000f4aa4         1   unsigned char
+                                  000f4aaa         1   unsigned char
     }
   _rx_data
-                                  000f4aa6         c   data ,g         0
+                                  000f4aac         c   data ,g         0
   _data_f
-                                  000f4ab2         4   data ,g         0
+                                  000f4ab8         4   data ,g         0
   _data_f_test
-                                  000f4ab6         4   data ,g         0
+                                  000f4abc         4   data ,g         0
     union  byte_to_float {
                                                    4
       _data_f_test.refined
-                                  000f4ab6         4
+                                  000f4abc         4
     struct  {
                                                    4
       _data_f_test.refined.b
-                                  000f4ab6         4   unsigned char
+                                  000f4abc         4   unsigned char
     }
       _data_f_test.raw
-                                  000f4ab6         4   float
+                                  000f4abc         4   float
     }
   _g_control_buffer_f
-                                  000f4aba         6   data ,g         5
+                                  000f4ac0         6   data ,g         5
     struct UART_Buffer_float_s {
                                                    6
       _g_control_buffer_f.head
-                                  000f4aba         1   unsigned char
+                                  000f4ac0         1   unsigned char
       _g_control_buffer_f.set_number
-                                  000f4abb         1   unsigned char
+                                  000f4ac1         1   unsigned char
       _g_control_buffer_f.set_value
-                                  000f4abc         4   float
+                                  000f4ac2         4   float
     }
   _g_control_buffer_u32
-                                  000f4ac0         6   data ,g         5
+                                  000f4ac6         6   data ,g         5
     struct UART_Buffer_u32_s {
                                                    6
       _g_control_buffer_u32.head
-                                  000f4ac0         1   unsigned char
+                                  000f4ac6         1   unsigned char
       _g_control_buffer_u32.set_number
-                                  000f4ac1         1   unsigned char
+                                  000f4ac7         1   unsigned char
       _g_control_buffer_u32.set_value
-                                  000f4ac2         4   unsigned long
+                                  000f4ac8         4   unsigned long
     }
   _handsensor_status
-                                  000f4ac6         1   data ,g         0
+                                  000f4acc         1   data ,g         0
     union   {
                                                    1
       _handsensor_status.
-                                  000f4ac6         1
+                                  000f4acc         1
     struct  {
                                                    1
       _handsensor_status..up_signal
-                                  000f4ac6         1   unsigned char
+                                  000f4acc         1   unsigned char
     }
       _handsensor_status.status
-                                  000f4ac6         1   unsigned char
+                                  000f4acc         1   unsigned char
     }
   _g_handsensor_status
-                                  000f4ac7         2   data ,g         3
+                                  000f4acd         2   data ,g         3
   _g_crc
-                                  000f4ac9         8   data ,g         2
+                                  000f4acf         8   data ,g         2
   _g_crc_32
-                                  000f4ad2        20   data ,g         0
+                                  000f4ad8        20   data ,g         0
   _rx_count
-                                  000f4af2         1   data ,g         2
+                                  000f4af8         1   data ,g         3
 
 SECTION=.dataR
 FILE=.\src\hwm\io_control.obj
-                                  000f4af4  000f4af4         1
+                                  000f4afa  000f4afa         1
   __pre_flow_state
-                                  000f4af4         1   data ,g         2
+                                  000f4afa         1   data ,g         2
 FILE=.\src\hwm\main.obj
-                                  000f4af6  000f4b8b        96
+                                  000f4afc  000f4b91        96
   _g_timerSetting
-                                  000f4af6        96   data ,g        70
+                                  000f4afc        96   data ,g        70
     struct Timer_Setting_s {
                                                   96
       _g_timerSetting.t1_initialWaterDrainageOperation_s
-                                  000f4af6         4   unsigned long
+                                  000f4afc         4   unsigned long
       _g_timerSetting.t2_flowSensorStartTime_s
-                                  000f4afa         4   unsigned long
+                                  000f4b00         4   unsigned long
       _g_timerSetting.t3_flowSensorMonitorTime_s
-                                  000f4afe         4   unsigned long
+                                  000f4b04         4   unsigned long
       _g_timerSetting.t4_electrolysisOperationStart_s
-                                  000f4b02         4   unsigned long
+                                  000f4b08         4   unsigned long
       _g_timerSetting.t5_electrolysisStopDelay_s
-                                  000f4b06         4   unsigned long
+                                  000f4b0c         4   unsigned long
       _g_timerSetting.t6_drainageOffTime_h
-                                  000f4b0a         4   unsigned long
+                                  000f4b10         4   unsigned long
       _g_timerSetting.t7_powerOnPreparation_s
-                                  000f4b0e         4   unsigned long
+                                  000f4b14         4   unsigned long
       _g_timerSetting.t8_flowRateAdjustmentRelease_s
-                                  000f4b12         4   unsigned long
+                                  000f4b18         4   unsigned long
       _g_timerSetting.t9_currentAdjustmentRelease_s
-                                  000f4b16         4   unsigned long
+                                  000f4b1c         4   unsigned long
       _g_timerSetting.t10_electrolysisCurrentAlarmSpecified_s
-                                  000f4b1a         4   unsigned long
+                                  000f4b20         4   unsigned long
       _g_timerSetting.t11_overVoltage1Time_s
-                                  000f4b1e         4   unsigned long
+                                  000f4b24         4   unsigned long
       _g_timerSetting.t12_overVoltage2Time_s
-                                  000f4b22         4   unsigned long
+                                  000f4b28         4   unsigned long
       _g_timerSetting.t13_overVoltage3Time_s
-                                  000f4b26         4   unsigned long
+                                  000f4b2c         4   unsigned long
       _g_timerSetting.t14_lowVoltageStartTime_s
-                                  000f4b2a         4   unsigned long
+                                  000f4b30         4   unsigned long
       _g_timerSetting.t15_lowVoltageDelayTime_s
-                                  000f4b2e         4   unsigned long
+                                  000f4b34         4   unsigned long
       _g_timerSetting.t16_currentMonitoringStart_s
-                                  000f4b32         4   unsigned long
+                                  000f4b38         4   unsigned long
       _g_timerSetting.t17_solenoidLeakageStartTime_s
-                                  000f4b36         4   unsigned long
+                                  000f4b3c         4   unsigned long
       _g_timerSetting.t18_fullSaltWaterMonitoringStart_h
-                                  000f4b3a         4   unsigned long
+                                  000f4b40         4   unsigned long
       _g_timerSetting.t19_waterFilterAlarm_h
-                                  000f4b3e         4   unsigned long
+                                  000f4b44         4   unsigned long
       _g_timerSetting.t20_waterFilterAlarmIgnore_h
-                                  000f4b42         4   unsigned long
+                                  000f4b48         4   unsigned long
       _g_timerSetting.t26_onDelayEmptyLevel_s
-                                  000f4b46         4   unsigned long
+                                  000f4b4c         4   unsigned long
       _g_timerSetting.t27_onDelayLowLevel_s
-                                  000f4b4a         4   unsigned long
+                                  000f4b50         4   unsigned long
       _g_timerSetting.t28_onDelayHighLevel_s
-                                  000f4b4e         4   unsigned long
+                                  000f4b54         4   unsigned long
       _g_timerSetting.t30_offDelayEmptyLevel_s
-                                  000f4b52         4   unsigned long
+                                  000f4b58         4   unsigned long
       _g_timerSetting.t31_saltLowLevelDelay_s
-                                  000f4b56         4   unsigned long
+                                  000f4b5c         4   unsigned long
       _g_timerSetting.t32_saltHighLevelDelay_s
-                                  000f4b5a         4   unsigned long
+                                  000f4b60         4   unsigned long
       _g_timerSetting.t51_alkalineWaterSpoutingTime_s
-                                  000f4b5e         4   unsigned long
+                                  000f4b64         4   unsigned long
       _g_timerSetting.t52_acidWaterSpoutingTime_s
-                                  000f4b62         4   unsigned long
+                                  000f4b68         4   unsigned long
       _g_timerSetting.t53_washingWaterSpoutingTime_s
-                                  000f4b66         4   unsigned long
+                                  000f4b6c         4   unsigned long
       _g_timerSetting.t54_overLapTime_ms
-                                  000f4b6a         4   unsigned long
+                                  000f4b70         4   unsigned long
       _g_timerSetting.t55_waterDischargeDelay_s
-                                  000f4b6e         4   unsigned long
+                                  000f4b74         4   unsigned long
       _g_timerSetting.t56_acidWaterDownTime_s
-                                  000f4b72         4   unsigned long
+                                  000f4b78         4   unsigned long
       _g_timerSetting.t59_alkalineWaterDownTime_s
-                                  000f4b76         4   unsigned long
+                                  000f4b7c         4   unsigned long
       _g_timerSetting.t61_curranCleaningIntervalTime_h
-                                  000f4b7a         4   unsigned long
+                                  000f4b80         4   unsigned long
       _g_timerSetting.t62_callanWashSpoutingTime_s
-                                  000f4b7e         4   unsigned long
+                                  000f4b84         4   unsigned long
       _g_timerSetting.t33_t63_neutralizationStartTime_h
-                                  000f4b82         4   unsigned long
+                                  000f4b88         4   unsigned long
       _g_timerSetting.t34_t64_neutralizationOpenTime_s
-                                  000f4b86         4   unsigned long
+                                  000f4b8c         4   unsigned long
       _g_timerSetting.crc
-                                  000f4b8a         1   char
+                                  000f4b90         1   char
     }
 FILE=.\src\hwm\raspberry_pi_interface.obj
-                                  000f4b8c  000f4b91         6
+                                  000f4b92  000f4b97         6
   _test_control_buf
-                                  000f4b8c         6   data ,g         0
+                                  000f4b92         6   data ,g         0
     struct UART_Buffer_float_s {
                                                    6
       _test_control_buf.head
-                                  000f4b8c         1   unsigned char
+                                  000f4b92         1   unsigned char
       _test_control_buf.set_number
-                                  000f4b8d         1   unsigned char
+                                  000f4b93         1   unsigned char
       _test_control_buf.set_value
-                                  000f4b8e         4   float
+                                  000f4b94         4   float
     }
 FILE=.\src\r_main.obj
-                                  000f4b92  000f4ba9        18
+                                  000f4b98  000f4baf        18
   _g_adc_ch
-                                  000f4b92         2   data ,g         0
+                                  000f4b98         2   data ,g         0
   _led_st
-                                  000f4b94         1   data ,g         2
+                                  000f4b9a         1   data ,g         2
   _send_data
-                                  000f4b95         2   data ,g         0
+                                  000f4b9b         2   data ,g         0
   _this_size
-                                  000f4b97         1   data ,g         0
+                                  000f4b9d         1   data ,g         0
   _this_size_2
-                                  000f4b98         1   data ,g         0
+                                  000f4b9e         1   data ,g         0
   _send_buf
-                                  000f4b99         7   data ,g         0
+                                  000f4b9f         7   data ,g         0
   _data_crc
-                                  000f4ba0         8   data ,g         0
+                                  000f4ba6         8   data ,g         0
   _dac_out
-                                  000f4ba8         2   data ,g         2
+                                  000f4bae         2   data ,g         0
 
 Absolute value symbols
 FILE=rlink_generates_05
@@ -1731,7 +1809,7 @@ FILE=rlink_generates_05
   __s.textf
                                   00003510         0   none ,g         0
   __e.textf
-                                  000065aa         0   none ,g         0
+                                  0000660f         0   none ,g         0
   __s.const
                                   00003000         0   none ,g         0
   __e.const
@@ -1751,15 +1829,15 @@ FILE=rlink_generates_05
   __s.bss
                                   000f4700         0   none ,g         0
   __e.bss
-                                  000f4af3         0   none ,g         0
+                                  000f4af9         0   none ,g         0
   __s.sbss
                                   000ffe20         0   none ,g         0
   __e.sbss
                                   000ffe20         0   none ,g         0
   __s.dataR
-                                  000f4af4         0   none ,g         0
+                                  000f4afa         0   none ,g         0
   __e.dataR
-                                  000f4baa         0   none ,g         0
+                                  000f4bb0         0   none ,g         0
   __s.sdataR
                                   000ffe20         0   none ,g         0
   __e.sdataR
@@ -1799,7 +1877,7 @@ FILE=rlink_generates_05
   __STACK_ADDR_START
                                   000ffe20         0   none ,g         1
   __STACK_ADDR_END
-                                  000f4baa         0   none ,g         1
+                                  000f4bb0         0   none ,g         1
 
 *** Unfilled Areas ***
 
@@ -1907,7 +1985,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
 0003 EEPROM
      SECTION=.textf
                  _EEPROM_Init
-                                 00003554 0030(00006183:.textf)
+                                 00003554 0030(00006202:.textf)
                  _rEE_Status
                                  0000357f 0003(000035ec:.textf)
                                           0003(00003617:.textf)
@@ -1922,11 +2000,11 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _sEE_WriteDisable
                                  000035ac
                  _EE_SPI_Write
-                                 000035be 0012(000054f6:.textf)
-                                          0012(0000558d:.textf)
+                                 000035be 0012(000054ed:.textf)
+                                          0012(00005584:.textf)
                  _EE_SPI_Read
-                                 0000369d 0030(00006190:.textf)
-                                          0030(000061a1:.textf)
+                                 0000369d 0030(0000620f:.textf)
+                                          0030(00006220:.textf)
                  _sEE_Block
                                  00003754
                  _sEE_SendInstruction
@@ -1998,14 +2076,14 @@ No   Unit Name   Global.Symbol   Location External Infomation
 0005 crc8
      SECTION=.textf
                  _crc8_4
-                                 00003852 0030(000063b9:.textf)
+                                 00003852 0030(0000642c:.textf)
                  _crc8_1
-                                 00003895 0012(00005438:.textf)
-                                          0012(00005468:.textf)
-                                          0012(000054d2:.textf)
-                                          0012(00005551:.textf)
-                                          0012(00005562:.textf)
-                                          0030(000063c5:.textf)
+                                 00003895 0012(0000542f:.textf)
+                                          0012(0000545f:.textf)
+                                          0012(000054c9:.textf)
+                                          0012(00005548:.textf)
+                                          0012(00005559:.textf)
+                                          0030(00006438:.textf)
      SECTION=.const
 0006 error_check
      SECTION=.textf
@@ -2034,7 +2112,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _waterFullErrorCheck
                                  00003f2d
                  _filterReplacementErrorCheck
-                                 00003f6c 0009(00004e39:.textf)
+                                 00003f6c 0009(00004e3d:.textf)
      SECTION=.bss
                  _g_alarm
                                  000f4732 0006(00003930:.textf)
@@ -2066,18 +2144,18 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                  00003faa 0007(00003ff7:.textf)
                                           0009(0000490e:.textf)
                                           0009(000049c6:.textf)
-                                          0010(00004f90:.textf)
-                                          0010(00004fc4:.textf)
-                                          0010(00005060:.textf)
-                                          0010(000050bc:.textf)
-                                          0010(00005122:.textf)
-                                          0010(00005169:.textf)
-                                          0010(000051b5:.textf)
-                                          0010(0000521d:.textf)
-                                          0010(00005266:.textf)
-                                          0010(000052ce:.textf)
-                                          0030(000061f0:.textf)
-                                          0030(00006209:.textf)
+                                          0010(00004f94:.textf)
+                                          0010(00004fc8:.textf)
+                                          0010(00005064:.textf)
+                                          0010(000050c0:.textf)
+                                          0010(00005126:.textf)
+                                          0010(0000516d:.textf)
+                                          0010(000051b9:.textf)
+                                          0010(00005221:.textf)
+                                          0010(0000526a:.textf)
+                                          0010(000052d2:.textf)
+                                          0030(0000626f:.textf)
+                                          0030(00006288:.textf)
                  _handSensorLEDBlink
                                  00003fda 0009(000048eb:.textf)
                                           0009(00004997:.textf)
@@ -2087,8 +2165,8 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                  00003ff8 0009(00004739:.textf)
                                           0009(000048cd:.textf)
                                           0009(000048dd:.textf)
-                                          0009(00004a82:.textf)
-                                          0009(00004cd8:.textf)
+                                          0009(00004a85:.textf)
+                                          0009(00004cdb:.textf)
                  _isAcidTankAlmostFull
                                  00004041
                  _isAcidTankHasSomething
@@ -2101,8 +2179,8 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                  0000411a 0009(00004740:.textf)
                                           0009(000048d4:.textf)
                                           0009(000048ef:.textf)
-                                          0009(00004a89:.textf)
-                                          0009(00004cdf:.textf)
+                                          0009(00004a8c:.textf)
+                                          0009(00004ce2:.textf)
                  _isAlkalineTankAlmostFull
                                  00004163
                  _isAlkalineTankHasSomething_nonstop
@@ -2115,8 +2193,8 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                  0000423c 0009(00004658:.textf)
                  _measureFlowSensor_nostop
                                  0000430a 0009(0000464f:.textf)
-                                          0009(00004be8:.textf)
-                                          0009(00004dba:.textf)
+                                          0009(00004beb:.textf)
+                                          0009(00004dbd:.textf)
      SECTION=.bss
                  __flow_pulse
                                  000f4734 0008(0000434e:.textf)
@@ -2129,7 +2207,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0008(000043e9:.textf)
      SECTION=.dataR
                  __pre_flow_state
-                                 000f4af4 0008(0000432d:.textf)
+                                 000f4afa 0008(0000432d:.textf)
                                           0008(00004340:.textf)
      SECTION=.data
 0009 main
@@ -2137,24 +2215,24 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _setting_default
                                  000043ee
                  _sendRS485
-                                 00004496 0030(000061e5:.textf)
-                                          0030(00006239:.textf)
-                                          0030(0000625b:.textf)
+                                 00004496 0030(00006264:.textf)
+                                          0030(000062b8:.textf)
+                                          0030(000062da:.textf)
                  _sendR485_7byte
-                                 000044d5 0030(000062cc:.textf)
-                                          0030(000062f7:.textf)
+                                 000044d5 0030(0000634b:.textf)
+                                          0030(00006376:.textf)
                  _isThisCommand
-                                 0000452c 0025(00005f74:.textf)
-                                          0025(00005f8e:.textf)
+                                 0000452c 0013(0000589e:.textf)
+                                          0013(000058b8:.textf)
                  _DrainageAcidAndAlkalineTankStart_nostop
                                  0000456a 0009(000047e8:.textf)
-                                          0009(000049fa:.textf)
+                                          0009(000049fd:.textf)
                  _WaterSupplyStart_nostop
                                  0000459c 0009(000047fe:.textf)
                  _ElectrolyticOperation_nostop
                                  00004681 0009(00004856:.textf)
                                           0009(000048c7:.textf)
-                                          0009(00004c8e:.textf)
+                                          0009(00004c91:.textf)
                  _acidWaterTankSkipCheck
                                  00004764
                  _alkalineWaterTankSkipCheck
@@ -2164,42 +2242,42 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _main_init_20211111
                                  000047e2
                  _userAuthHandler_nostop
-                                 00004863 0009(00004aff:.textf)
+                                 00004863 0009(00004b02:.textf)
                  _ElectrolyzeWaterGeneration_nostop
-                                 00004889 0009(00004dc6:.textf)
+                                 00004889 0009(00004dcb:.textf)
                  _isSV1andSV2Off8h
                                  00004911 0009(00004960:.textf)
                  _CallanCleaningMode_nostop
-                                 0000495f 0009(00004dc9:.textf)
+                                 0000495f 0009(00004dce:.textf)
                  _DrainageMode_nostop
-                                 000049ca 0009(00004dc3:.textf)
+                                 000049cd 0009(00004dc8:.textf)
                  _NormalMode_nostop
-                                 00004abb 0009(00004dcc:.textf)
+                                 00004abe 0009(00004dd1:.textf)
                  _TestPowerOn_nostop_keepstate
-                                 00004b0e 0009(00004d2b:.textf)
+                                 00004b11 0009(00004d2e:.textf)
                  _FlowRateAdjustmentMode_nostop_keepstate
-                                 00004be5 0009(00004d36:.textf)
+                                 00004be8 0009(00004d39:.textf)
                  _CurrentAdjustmentMode_nostop_keepstate
-                                 00004c62 0009(00004d41:.textf)
+                                 00004c65 0009(00004d44:.textf)
                  _ElectrolyteAdjustmentOperation
-                                 00004cb1 0009(00004d20:.textf)
+                                 00004cb4 0009(00004d23:.textf)
                  _TestOperation_nostop
-                                 00004d08
+                                 00004d0b
                  _NeutralizationTreatment
-                                 00004d4d
+                                 00004d50
                  _main_loop_20211111
-                                 00004db9 0030(00006202:.textf)
+                                 00004dbc 0030(00006281:.textf)
                  _realTimeResponse
-                                 00004dcf 0009(00004804:.textf)
+                                 00004dd3 0009(00004804:.textf)
                                           0009(0000485c:.textf)
-                                          0012(00005617:.textf)
-                                          0030(000061fe:.textf)
+                                          0012(0000560d:.textf)
+                                          0030(0000627d:.textf)
                  _UpdateMachineStatus
-                                 00004e3d 0009(000047e5:.textf)
+                                 00004e41 0009(000047e5:.textf)
                                           0009(000047f2:.textf)
                                           0009(000047fb:.textf)
-                                          0009(00004dd0:.textf)
-                                          0030(0000620d:.textf)
+                                          0009(00004dd4:.textf)
+                                          0030(0000628c:.textf)
      SECTION=.bss
                  _g_numberSetting
                                  000f4742 0006(000038b5:.textf)
@@ -2244,42 +2322,42 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(0000445e:.textf)
                                           0009(00004809:.textf)
                                           0009(0000480f:.textf)
-                                          0009(00004a1a:.textf)
-                                          0009(00004a1e:.textf)
-                                          0009(00004a36:.textf)
-                                          0009(00004a3a:.textf)
-                                          0012(00005465:.textf)
-                                          0012(0000546c:.textf)
-                                          0012(00005472:.textf)
-                                          0012(0000557d:.textf)
-                                          0012(0000558a:.textf)
-                                          0030(0000618d:.textf)
-                                          0030(000061aa:.textf)
+                                          0009(00004a1d:.textf)
+                                          0009(00004a21:.textf)
+                                          0009(00004a39:.textf)
+                                          0009(00004a3d:.textf)
+                                          0012(0000545c:.textf)
+                                          0012(00005463:.textf)
+                                          0012(00005469:.textf)
+                                          0012(00005574:.textf)
+                                          0012(00005581:.textf)
+                                          0030(0000620c:.textf)
+                                          0030(00006229:.textf)
                  _g_neutralization_time_s
-                                 000f4768 0009(00004d68:.textf)
-                                          0009(00004d6f:.textf)
-                                          0009(00004d7c:.textf)
+                                 000f4768 0009(00004d6b:.textf)
+                                          0009(00004d72:.textf)
                                           0009(00004d7f:.textf)
-                                          0011(00005376:.textf)
-                                          0011(00005379:.textf)
-                                          0011(00005380:.textf)
-                                          0011(00005383:.textf)
+                                          0009(00004d82:.textf)
+                                          0011(0000537a:.textf)
+                                          0011(0000537d:.textf)
+                                          0011(00005384:.textf)
+                                          0011(00005387:.textf)
                  _g_color
                                  000f476c 0007(00003fab:.textf)
                                           0007(00003fd4:.textf)
                                           0007(00003fed:.textf)
                                           0007(00003ff3:.textf)
-                                          0010(00004f7b:.textf)
-                                          0010(00004fb9:.textf)
-                                          0010(000051b1:.textf)
-                                          0010(00005219:.textf)
-                                          0010(00005260:.textf)
-                                          0010(000052ca:.textf)
-                                          0030(00006206:.textf)
+                                          0010(00004f7f:.textf)
+                                          0010(00004fbd:.textf)
+                                          0010(000051b5:.textf)
+                                          0010(0000521d:.textf)
+                                          0010(00005264:.textf)
+                                          0010(000052ce:.textf)
+                                          0030(00006285:.textf)
                  _g_pre_color
                                  000f476d 0007(00003fae:.textf)
                                           0007(00003fd7:.textf)
-                                          0030(000061eb:.textf)
+                                          0030(0000626a:.textf)
                  _g_flow_value
                                  000f476e
                  _g_machine_state
@@ -2335,72 +2413,72 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(00004979:.textf)
                                           0009(0000498b:.textf)
                                           0009(000049bf:.textf)
-                                          0009(000049cd:.textf)
-                                          0009(000049d8:.textf)
-                                          0009(000049f2:.textf)
+                                          0009(000049ca:.textf)
+                                          0009(000049d0:.textf)
+                                          0009(000049db:.textf)
                                           0009(000049f5:.textf)
-                                          0009(00004a15:.textf)
-                                          0009(00004a4f:.textf)
-                                          0009(00004a57:.textf)
-                                          0009(00004a90:.textf)
-                                          0009(00004a97:.textf)
-                                          0009(00004aae:.textf)
-                                          0009(00004ab6:.textf)
-                                          0009(00004abc:.textf)
-                                          0009(00004af8:.textf)
+                                          0009(000049f8:.textf)
+                                          0009(00004a18:.textf)
+                                          0009(00004a52:.textf)
+                                          0009(00004a5a:.textf)
+                                          0009(00004a93:.textf)
+                                          0009(00004a9a:.textf)
+                                          0009(00004ab1:.textf)
+                                          0009(00004ab9:.textf)
+                                          0009(00004abf:.textf)
                                           0009(00004afb:.textf)
-                                          0009(00004ce6:.textf)
-                                          0009(00004ced:.textf)
-                                          0009(00004d1d:.textf)
-                                          0009(00004d28:.textf)
-                                          0009(00004d33:.textf)
-                                          0009(00004d3e:.textf)
-                                          0009(00004d4a:.textf)
-                                          0009(00004d75:.textf)
-                                          0009(00004dac:.textf)
-                                          0009(00004db4:.textf)
-                                          0009(00004dbe:.textf)
-                                          0010(00004f64:.textf)
-                                          0010(00004f70:.textf)
+                                          0009(00004afe:.textf)
+                                          0009(00004ce9:.textf)
+                                          0009(00004cf0:.textf)
+                                          0009(00004d20:.textf)
+                                          0009(00004d2b:.textf)
+                                          0009(00004d36:.textf)
+                                          0009(00004d41:.textf)
+                                          0009(00004d4d:.textf)
+                                          0009(00004d78:.textf)
+                                          0009(00004daf:.textf)
+                                          0009(00004db7:.textf)
+                                          0010(00004f68:.textf)
                                           0010(00004f74:.textf)
-                                          0010(00004f8b:.textf)
-                                          0010(00004fad:.textf)
-                                          0010(00004fbc:.textf)
-                                          0010(00004fbf:.textf)
-                                          0010(00004fd3:.textf)
-                                          0010(00005031:.textf)
+                                          0010(00004f78:.textf)
+                                          0010(00004f8f:.textf)
+                                          0010(00004fb1:.textf)
+                                          0010(00004fc0:.textf)
+                                          0010(00004fc3:.textf)
+                                          0010(00004fd7:.textf)
                                           0010(00005035:.textf)
-                                          0010(00005045:.textf)
-                                          0010(00005064:.textf)
-                                          0010(000050ea:.textf)
-                                          0010(0000516d:.textf)
-                                          0010(00005170:.textf)
-                                          0010(00005178:.textf)
-                                          0010(0000518a:.textf)
-                                          0010(00005196:.textf)
+                                          0010(00005039:.textf)
+                                          0010(00005049:.textf)
+                                          0010(00005068:.textf)
+                                          0010(000050ee:.textf)
+                                          0010(00005171:.textf)
+                                          0010(00005174:.textf)
+                                          0010(0000517c:.textf)
+                                          0010(0000518e:.textf)
                                           0010(0000519a:.textf)
                                           0010(0000519e:.textf)
-                                          0010(000051cc:.textf)
-                                          0010(00005204:.textf)
-                                          0010(00005224:.textf)
-                                          0010(00005239:.textf)
-                                          0010(00005245:.textf)
+                                          0010(000051a2:.textf)
+                                          0010(000051d0:.textf)
+                                          0010(00005208:.textf)
+                                          0010(00005228:.textf)
+                                          0010(0000523d:.textf)
                                           0010(00005249:.textf)
                                           0010(0000524d:.textf)
-                                          0010(0000527d:.textf)
-                                          0010(000052b5:.textf)
-                                          0011(000052de:.textf)
-                                          0011(000052ff:.textf)
-                                          0011(00005332:.textf)
-                                          0011(00005338:.textf)
-                                          0011(0000534d:.textf)
-                                          0011(0000535f:.textf)
-                                          0011(000053a0:.textf)
-                                          0012(000053b3:.textf)
-                                          0012(000053b9:.textf)
-                                          0012(000055ae:.textf)
-                                          0025(00005f0d:.textf)
-                                          0025(00005f97:.textf)
+                                          0010(00005251:.textf)
+                                          0010(00005281:.textf)
+                                          0010(000052b9:.textf)
+                                          0011(000052e2:.textf)
+                                          0011(00005303:.textf)
+                                          0011(00005336:.textf)
+                                          0011(0000533c:.textf)
+                                          0011(00005351:.textf)
+                                          0011(00005363:.textf)
+                                          0011(000053a4:.textf)
+                                          0012(000055a4:.textf)
+                                          0012(00005652:.textf)
+                                          0012(00005658:.textf)
+                                          0013(00005837:.textf)
+                                          0013(000058c1:.textf)
                  _g_io_status
                                  000f4782 0006(000038c1:.textf)
                                           0006(000038c7:.textf)
@@ -2440,21 +2518,21 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0008(000043e2:.textf)
                                           0009(00004815:.textf)
                                           0009(0000481b:.textf)
-                                          0009(00004a22:.textf)
-                                          0009(00004a28:.textf)
-                                          0009(00004ee4:.textf)
-                                          0009(00004eeb:.textf)
-                                          0009(00004efc:.textf)
-                                          0009(00004f03:.textf)
-                                          0009(00004f42:.textf)
-                                          0009(00004f47:.textf)
-                                          0009(00004f5f:.textf)
-                                          0012(000053f9:.textf)
-                                          0013(00005684:.textf)
-                                          0013(00005688:.textf)
-                                          0013(000056bd:.textf)
-                                          0013(000056c1:.textf)
-                                          0030(0000624b:.textf)
+                                          0009(00004a25:.textf)
+                                          0009(00004a2b:.textf)
+                                          0009(00004ee8:.textf)
+                                          0009(00004eef:.textf)
+                                          0009(00004f00:.textf)
+                                          0009(00004f07:.textf)
+                                          0009(00004f46:.textf)
+                                          0009(00004f4b:.textf)
+                                          0009(00004f63:.textf)
+                                          0012(0000569c:.textf)
+                                          0013(0000570b:.textf)
+                                          0013(0000570f:.textf)
+                                          0013(00005744:.textf)
+                                          0013(00005748:.textf)
+                                          0030(000062ca:.textf)
                  _g_mean_io_status
                                  000f4794 0008(00004022:.textf)
                                           0008(0000402b:.textf)
@@ -2476,34 +2554,34 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0008(000041df:.textf)
                                           0008(0000422f:.textf)
                                           0008(00004238:.textf)
-                                          0009(00004e66:.textf)
-                                          0009(00004e6c:.textf)
-                                          0009(00004ec5:.textf)
+                                          0009(00004e6a:.textf)
+                                          0009(00004e70:.textf)
+                                          0009(00004ec9:.textf)
                  _g_res_io_status
-                                 000f47a6 0012(0000541d:.textf)
+                                 000f47a6
                  __settingTime
-                                 000f47b8 0012(000054a2:.textf)
-                                          0012(000054ae:.textf)
-                                          0012(000054b6:.textf)
-                                          0012(000054be:.textf)
-                                          0012(000054ca:.textf)
-                                          0012(000054e1:.textf)
+                                 000f47b8 0012(00005499:.textf)
+                                          0012(000054a5:.textf)
+                                          0012(000054ad:.textf)
+                                          0012(000054b5:.textf)
+                                          0012(000054c1:.textf)
+                                          0012(000054d8:.textf)
                                           0012(00003502:.const)
-                                          0030(000061ba:.textf)
+                                          0030(00006239:.textf)
                  __settingNumber
-                                 000f484e 0012(00005529:.textf)
-                                          0012(00005535:.textf)
-                                          0012(0000553d:.textf)
-                                          0012(00005545:.textf)
-                                          0012(00005555:.textf)
-                                          0012(0000557a:.textf)
+                                 000f484e 0012(00005520:.textf)
+                                          0012(0000552c:.textf)
+                                          0012(00005534:.textf)
+                                          0012(0000553c:.textf)
+                                          0012(0000554c:.textf)
+                                          0012(00005571:.textf)
                                           0012(00003504:.const)
-                                          0030(000061ad:.textf)
+                                          0030(0000622c:.textf)
                  _g_machine_mode
                                  000f4874 0009(0000486a:.textf)
-                                          0012(000053dc:.textf)
-                                          0025(00005f80:.textf)
-                                          0030(000061f4:.textf)
+                                          0012(0000567d:.textf)
+                                          0013(000058aa:.textf)
+                                          0030(00006273:.textf)
                  _g_machine_test_mode
                                  000f4875
                  _btod
@@ -2602,60 +2680,59 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(0000497f:.textf)
                                           0009(00004985:.textf)
                                           0009(000049b4:.textf)
-                                          0009(00004a0a:.textf)
-                                          0009(00004a60:.textf)
-                                          0009(00004a66:.textf)
-                                          0009(00004a71:.textf)
-                                          0009(00004aed:.textf)
-                                          0009(00004b05:.textf)
-                                          0009(00004b0b:.textf)
-                                          0009(00004d1a:.textf)
-                                          0009(00004d25:.textf)
-                                          0009(00004d30:.textf)
-                                          0009(00004d3b:.textf)
-                                          0009(00004de4:.textf)
-                                          0009(00004e08:.textf)
-                                          0009(00004e0e:.textf)
-                                          0009(00004e17:.textf)
-                                          0010(00004f82:.textf)
-                                          0010(00004f88:.textf)
-                                          0010(00004f99:.textf)
-                                          0010(0000503b:.textf)
-                                          0010(00005041:.textf)
-                                          0010(00005050:.textf)
-                                          0010(00005095:.textf)
-                                          0010(000050ad:.textf)
-                                          0010(000050dc:.textf)
-                                          0010(00005112:.textf)
-                                          0010(00005131:.textf)
-                                          0010(0000515a:.textf)
-                                          0010(000051a4:.textf)
-                                          0010(000051aa:.textf)
-                                          0010(000051be:.textf)
-                                          0010(000051f1:.textf)
-                                          0010(0000520b:.textf)
-                                          0010(00005253:.textf)
-                                          0010(00005259:.textf)
-                                          0010(0000526f:.textf)
-                                          0010(000052a2:.textf)
-                                          0010(000052bc:.textf)
-                                          0011(00005327:.textf)
-                                          0011(00005342:.textf)
-                                          0011(00005389:.textf)
-                                          0011(0000538f:.textf)
-                                          0030(0000613e:.textf)
-                                          0030(0000626c:.textf)
-                                          0030(00006272:.textf)
-                                          0030(0000627c:.textf)
-                                          0030(00006309:.textf)
-                                          0030(0000630f:.textf)
-                                          0030(00006319:.textf)
-                                          0030(0000633e:.textf)
-                                          0030(00006344:.textf)
-                                          0030(00006357:.textf)
-                                          0030(00006383:.textf)
-                                          0030(0000638f:.textf)
-                                          0030(0000639b:.textf)
+                                          0009(00004a0d:.textf)
+                                          0009(00004a63:.textf)
+                                          0009(00004a69:.textf)
+                                          0009(00004a74:.textf)
+                                          0009(00004af0:.textf)
+                                          0009(00004b08:.textf)
+                                          0009(00004b0e:.textf)
+                                          0009(00004d1d:.textf)
+                                          0009(00004d28:.textf)
+                                          0009(00004d33:.textf)
+                                          0009(00004d3e:.textf)
+                                          0009(00004de8:.textf)
+                                          0009(00004e0c:.textf)
+                                          0009(00004e12:.textf)
+                                          0009(00004e1b:.textf)
+                                          0010(00004f86:.textf)
+                                          0010(00004f8c:.textf)
+                                          0010(00004f9d:.textf)
+                                          0010(0000503f:.textf)
+                                          0010(00005045:.textf)
+                                          0010(00005054:.textf)
+                                          0010(00005099:.textf)
+                                          0010(000050b1:.textf)
+                                          0010(000050e0:.textf)
+                                          0010(00005116:.textf)
+                                          0010(00005135:.textf)
+                                          0010(0000515e:.textf)
+                                          0010(000051a8:.textf)
+                                          0010(000051ae:.textf)
+                                          0010(000051c2:.textf)
+                                          0010(000051f5:.textf)
+                                          0010(0000520f:.textf)
+                                          0010(00005257:.textf)
+                                          0010(0000525d:.textf)
+                                          0010(00005273:.textf)
+                                          0010(000052a6:.textf)
+                                          0010(000052c0:.textf)
+                                          0011(0000532b:.textf)
+                                          0011(00005346:.textf)
+                                          0011(0000538d:.textf)
+                                          0011(00005393:.textf)
+                                          0030(000061bd:.textf)
+                                          0030(000062eb:.textf)
+                                          0030(000062f1:.textf)
+                                          0030(000062fb:.textf)
+                                          0030(00006388:.textf)
+                                          0030(0000638e:.textf)
+                                          0030(00006398:.textf)
+                                          0030(000063bd:.textf)
+                                          0030(000063c3:.textf)
+                                          0030(000063d6:.textf)
+                                          0030(00006402:.textf)
+                                          0030(0000640e:.textf)
                  _water_solfner_buf
                                  000f492e 0009(00004498:.textf)
                                           0009(0000449c:.textf)
@@ -2664,7 +2741,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(000044c6:.textf)
      SECTION=.dataR
                  _g_timerSetting
-                                 000f4af6 0006(000038f6:.textf)
+                                 000f4afc 0006(000038f6:.textf)
                                           0006(00003902:.textf)
                                           0006(0000399c:.textf)
                                           0006(000039a8:.textf)
@@ -2735,69 +2812,69 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(00004928:.textf)
                                           0009(0000499b:.textf)
                                           0009(000049a7:.textf)
-                                          0009(00004aa3:.textf)
-                                          0009(00004aa9:.textf)
-                                          0009(00004ad4:.textf)
-                                          0009(00004ae0:.textf)
-                                          0009(00004d51:.textf)
-                                          0009(00004d5e:.textf)
-                                          0009(00004d82:.textf)
-                                          0009(00004d8f:.textf)
-                                          0010(00004fda:.textf)
-                                          0010(00004fe1:.textf)
-                                          0010(00005002:.textf)
+                                          0009(00004aa6:.textf)
+                                          0009(00004aac:.textf)
+                                          0009(00004ad7:.textf)
+                                          0009(00004ae3:.textf)
+                                          0009(00004d54:.textf)
+                                          0009(00004d61:.textf)
+                                          0009(00004d85:.textf)
+                                          0009(00004d92:.textf)
+                                          0010(00004fde:.textf)
+                                          0010(00004fe5:.textf)
                                           0010(00005006:.textf)
-                                          0010(00005071:.textf)
-                                          0010(0000507d:.textf)
-                                          0010(00005089:.textf)
-                                          0010(00005091:.textf)
-                                          0010(000050cf:.textf)
-                                          0010(000050d8:.textf)
-                                          0010(000050ee:.textf)
-                                          0010(000050fa:.textf)
-                                          0010(00005106:.textf)
-                                          0010(0000510e:.textf)
-                                          0010(0000512b:.textf)
-                                          0010(0000512e:.textf)
-                                          0010(00005141:.textf)
-                                          0010(0000514d:.textf)
-                                          0010(000051d8:.textf)
-                                          0010(000051e4:.textf)
-                                          0010(00005289:.textf)
-                                          0010(00005295:.textf)
-                                          0011(0000530e:.textf)
-                                          0011(0000531a:.textf)
-                                          0012(00005435:.textf)
-                                          0012(0000543c:.textf)
-                                          0012(00005442:.textf)
-                                          0012(000054e4:.textf)
-                                          0012(000054f3:.textf)
-                                          0030(0000619e:.textf)
-                                          0030(000061b7:.textf)
-                                          0030(000063b6:.textf)
-                                          0030(000063c2:.textf)
+                                          0010(0000500a:.textf)
+                                          0010(00005075:.textf)
+                                          0010(00005081:.textf)
+                                          0010(0000508d:.textf)
+                                          0010(00005095:.textf)
+                                          0010(000050d3:.textf)
+                                          0010(000050dc:.textf)
+                                          0010(000050f2:.textf)
+                                          0010(000050fe:.textf)
+                                          0010(0000510a:.textf)
+                                          0010(00005112:.textf)
+                                          0010(0000512f:.textf)
+                                          0010(00005132:.textf)
+                                          0010(00005145:.textf)
+                                          0010(00005151:.textf)
+                                          0010(000051dc:.textf)
+                                          0010(000051e8:.textf)
+                                          0010(0000528d:.textf)
+                                          0010(00005299:.textf)
+                                          0011(00005312:.textf)
+                                          0011(0000531e:.textf)
+                                          0012(0000542c:.textf)
+                                          0012(00005433:.textf)
+                                          0012(00005439:.textf)
+                                          0012(000054db:.textf)
+                                          0012(000054ea:.textf)
+                                          0030(0000621d:.textf)
+                                          0030(00006236:.textf)
+                                          0030(00006429:.textf)
+                                          0030(00006435:.textf)
      SECTION=.data
 0010 normal_operation
      SECTION=.textf
                  _WaterWashingMode_nostop
-                                 00004f63 0009(00004881:.textf)
+                                 00004f67 0009(00004881:.textf)
                  _HandWashingMode_nostop
-                                 00004fd2 0009(0000487d:.textf)
+                                 00004fd6 0009(0000487d:.textf)
                  _AcidWaterMode_nostop
-                                 00005177 0009(00004885:.textf)
+                                 0000517b 0009(00004885:.textf)
                  _AlkalineWaterMode_nostop
-                                 00005223 0009(00004879:.textf)
+                                 00005227 0009(00004879:.textf)
 0011 operation
      SECTION=.textf
                  _electrolyticOperationON
-                                 000052d4 0009(0000469d:.textf)
-                                          0009(00004a7c:.textf)
-                                          0009(00004c88:.textf)
-                                          0009(00004cd2:.textf)
+                                 000052d8 0009(0000469d:.textf)
+                                          0009(00004a7f:.textf)
+                                          0009(00004c8b:.textf)
+                                          0009(00004cd5:.textf)
                  _isElectrolyticOperationOFF_nostop
-                                 000052fe 0009(00004dd7:.textf)
+                                 00005302 0009(00004ddb:.textf)
                  _TestModeOperation
-                                 000053a3
+                                 000053a7
      SECTION=.bss
 0012 raspberry_pi_interface
      SECTION=.const
@@ -2806,11 +2883,13 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  _number_setting_p
                                  00003504
      SECTION=.textf
-                 _RaspberryResponse_nostop
-                                 000053a7 0009(000047ee:.textf)
-                                          0009(00004dd3:.textf)
+                 _IO_Output
+                                 000053ab 0012(000056cc:.textf)
+                 _RaspberryCommunication_nostop
+                                 00005412 0009(000047ee:.textf)
+                                          0009(00004dd7:.textf)
                  _sendToRasPi_f
-                                 000055b2 0006(0000392b:.textf)
+                                 000055a8 0006(0000392b:.textf)
                                           0006(000039ea:.textf)
                                           0006(00003aa6:.textf)
                                           0006(00003b8f:.textf)
@@ -2827,533 +2906,544 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(0000479d:.textf)
                                           0009(000047dd:.textf)
                                           0009(00004852:.textf)
-                                          0010(00004fa9:.textf)
-                                          0010(00004fce:.textf)
-                                          0010(0000506d:.textf)
-                                          0010(000050c6:.textf)
-                                          0010(00005192:.textf)
-                                          0010(000051d4:.textf)
-                                          0010(00005241:.textf)
-                                          0010(00005285:.textf)
-                                          0012(00005507:.textf)
-                                          0012(00005574:.textf)
-                                          0012(0000559e:.textf)
+                                          0010(00004fad:.textf)
+                                          0010(00004fd2:.textf)
+                                          0010(00005071:.textf)
+                                          0010(000050ca:.textf)
+                                          0010(00005196:.textf)
+                                          0010(000051d8:.textf)
+                                          0010(00005245:.textf)
+                                          0010(00005289:.textf)
+                                          0012(000054fe:.textf)
+                                          0012(0000556b:.textf)
+                                          0012(00005595:.textf)
                  _sendToRasPi_u32
-                                 000055da 0006(00003f95:.textf)
+                                 000055d0 0006(00003f95:.textf)
                                           0006(00003fa4:.textf)
-                                          0011(00005357:.textf)
-                                          0012(000053e5:.textf)
+                                          0011(0000535b:.textf)
+                                          0012(00005686:.textf)
                  _waitAlarmConfirm_stop
-                                 00005602 0006(00003940:.textf)
+                                 000055f8 0006(00003940:.textf)
                                           0006(00003aad:.textf)
                                           0006(00003b96:.textf)
                                           0006(00003d42:.textf)
                                           0009(0000472c:.textf)
                  _waitAlarmConfirm_nonstop
-                                 0000563e
+                                 00005634
                  _resetAlarm
-                                 0000564a 0006(0000391e:.textf)
+                                 00005640 0006(0000391e:.textf)
                                           0006(000039d7:.textf)
                                           0006(00003a7f:.textf)
                                           0006(00003b68:.textf)
                                           0006(00003d14:.textf)
+                 _ResponseHandler
+                                 00005644 0012(00005414:.textf)
+                 _ChangeWashingMode
+                                 00005676 0012(00005417:.textf)
+                 _MonitoringStatus
+                                 0000568c 0012(0000541a:.textf)
+                 _TestIndividual
+                                 000056b4 0012(0000541d:.textf)
+     SECTION=.bss
+                 _g_io_response
+                                 000f4940 0012(000056c0:.textf)
+                                          0012(000056c9:.textf)
      SECTION=.dataR
                  _test_control_buf
-                                 000f4b8c
+                                 000f4b92
      SECTION=.data
 0013 interrupt_handle
      SECTION=.textf
                  _adc_int_handle
-                                 0000564e 0015(000001f3:.text)
+                                 000056d5 0015(000001f3:.text)
+                 _uart2_handle
+                                 00005751 0025(00006035:.textf)
+                 _isCommandNeedResponse
+                                 000058d7 0013(00005789:.textf)
      SECTION=.bss
                  _g_adc_value
-                                 000f4940 0013(00005657:.textf)
-                                          0013(0000565e:.textf)
-                                          0013(00005690:.textf)
-                                          0013(00005697:.textf)
+                                 000f4946 0013(000056de:.textf)
+                                          0013(000056e5:.textf)
+                                          0013(00005717:.textf)
+                                          0013(0000571e:.textf)
 0014 r_cg_adc
      SECTION=.textf
                  _R_ADC_Create
-                                 000056ca 0030(00006420:.textf)
-                                          0031(0000645c:.textf)
+                                 000058fb 0030(00006485:.textf)
+                                          0031(000064c1:.textf)
                  _R_ADC_Start
-                                 000056fd 0013(000056c7:.textf)
-                                          0030(00006428:.textf)
+                                 0000592e 0013(0000574e:.textf)
+                                          0030(0000648d:.textf)
                  _R_ADC_Stop
-                                 00005707
+                                 00005938
                  _R_ADC_Set_OperationOn
-                                 00005711 0030(00006424:.textf)
+                                 00005942 0030(00006489:.textf)
                  _R_ADC_Set_OperationOff
-                                 00005715
+                                 00005946
                  _R_ADC_Get_Result
-                                 00005719 0013(0000565a:.textf)
-                                          0013(00005693:.textf)
+                                 0000594a 0013(000056e1:.textf)
+                                          0013(0000571a:.textf)
                  _R_ADC_Set_ADChannel
-                                 00005720
+                                 00005951
 0015 r_cg_adc_user
      SECTION=.text
 0016 r_cg_cgc
      SECTION=.textf
                  _R_CGC_Create
-                                 0000572c 0031(0000644c:.textf)
+                                 0000595d 0031(000064b1:.textf)
 0017 r_cg_cgc_user
      SECTION=.textf
                  _R_CGC_Get_ResetSource
-                                 00005742 0031(00006448:.textf)
+                                 00005973 0031(000064ad:.textf)
 0018 r_cg_dac
      SECTION=.textf
                  _R_DAC_Create
-                                 00005745 0030(0000642c:.textf)
-                                          0031(0000646c:.textf)
+                                 00005976 0030(00006491:.textf)
+                                          0031(000064d1:.textf)
                  _R_DAC0_Start
-                                 00005762 0030(0000643a:.textf)
+                                 00005993 0030(0000649f:.textf)
                  _R_DAC0_Stop
-                                 00005766
+                                 00005997
                  _R_DAC0_Set_ConversionValue
-                                 0000576a 0030(000063cf:.textf)
-                                          0030(00006431:.textf)
+                                 0000599b 0030(00006496:.textf)
                  _R_DAC1_Start
-                                 0000576d 0030(0000643e:.textf)
+                                 0000599e 0030(000064a3:.textf)
                  _R_DAC1_Stop
-                                 00005771
+                                 000059a2
                  _R_DAC1_Set_ConversionValue
-                                 00005775 0030(000063d6:.textf)
-                                          0030(00006436:.textf)
+                                 000059a6 0030(0000649b:.textf)
 0019 r_cg_dac_user
 0020 r_cg_port
      SECTION=.textf
                  _R_PORT_Create
-                                 00005778 0031(00006450:.textf)
+                                 000059a9 0031(000064b5:.textf)
 0021 r_cg_port_user
      SECTION=.textf
                  _R_PORT_Create_UserInit
-                                 000057c0 0030(00006400:.textf)
+                                 000059f1 0030(00006465:.textf)
 0022 r_cg_rtc
      SECTION=.textf
                  _R_RTC_Create
-                                 000057c1 0030(000063fc:.textf)
-                                          0031(00006468:.textf)
+                                 000059f2 0030(00006461:.textf)
+                                          0031(000064cd:.textf)
                  _R_RTC_Start
-                                 000057e8
+                                 00005a19
                  _R_RTC_Stop
-                                 000057ec
+                                 00005a1d
                  _R_RTC_Get_CounterValue
-                                 000057f0
+                                 00005a21
                  _R_RTC_Set_CounterValue
-                                 00005841
+                                 00005a72
 0023 r_cg_rtc_user
      SECTION=.bss
                  _g_rtc
-                                 000f4944
+                                 000f494a
 0024 r_cg_serial
      SECTION=.textf
                  _R_CSI01_Receive
-                                 000058ff
+                                 00005b30
                  _R_CSI01_Send
-                                 00005919
+                                 00005b4a
                  _R_SAU0_Create
-                                 0000593f 0030(000063e8:.textf)
-                                          0031(00006454:.textf)
+                                 00005b70 0030(0000644d:.textf)
+                                          0031(000064b9:.textf)
                  _R_UART1_Create
-                                 00005956 0024(0000594e:.textf)
-                                          0030(000063f0:.textf)
+                                 00005b87 0024(00005b7f:.textf)
+                                          0030(00006455:.textf)
                  _R_UART1_Start
-                                 000059d4 0030(00006414:.textf)
+                                 00005c05 0030(00006479:.textf)
                  _R_UART1_Stop
-                                 000059fa
+                                 00005c2b
                  _R_UART1_Receive
-                                 00005a18
+                                 00005c49
                  _R_UART1_Send
-                                 00005a30
+                                 00005c61
                  _R_CSI00_Create
-                                 00005a59 0024(00005951:.textf)
-                                          0030(00006408:.textf)
+                                 00005c8a 0024(00005b82:.textf)
+                                          0030(0000646d:.textf)
                  _R_CSI00_Start
-                                 00005aac 0030(0000641c:.textf)
+                                 00005cdd 0030(00006481:.textf)
                  _R_CSI00_Stop
-                                 00005ad2
+                                 00005d03
                  _R_CSI00_Send
-                                 00005aea
+                                 00005d1b
                  _R_CSI01_Create
-                                 00005b12 0003(00003557:.textf)
-                                          0024(00005954:.textf)
-                                          0030(00006404:.textf)
+                                 00005d43 0003(00003557:.textf)
+                                          0024(00005b85:.textf)
+                                          0030(00006469:.textf)
                  _R_CSI01_Start
-                                 00005b6c 0003(00003778:.textf)
+                                 00005d9d 0003(00003778:.textf)
                  _R_CSI01_Stop
-                                 00005b92 0025(00005e1f:.textf)
+                                 00005dc3 0025(0000602c:.textf)
                  _R_CSI01_Send_Receive
-                                 00005baa 0003(00003787:.textf)
+                                 00005ddb 0003(00003787:.textf)
                  _R_SAU1_Create
-                                 00005be0 0030(000063ec:.textf)
-                                          0031(00006458:.textf)
+                                 00005e11 0030(00006451:.textf)
+                                          0031(000064bd:.textf)
                  _R_UART2_Create
-                                 00005bf4 0024(00005bef:.textf)
-                                          0030(000063f4:.textf)
+                                 00005e25 0024(00005e20:.textf)
+                                          0030(00006459:.textf)
                  _R_UART2_Start
-                                 00005c72 0030(00006223:.textf)
-                                          0030(00006418:.textf)
+                                 00005ea3 0030(000062a2:.textf)
+                                          0030(0000647d:.textf)
                  _R_UART2_Stop
-                                 00005c98 0030(00006217:.textf)
+                                 00005ec9 0030(00006296:.textf)
                  _R_UART2_Receive
-                                 00005cb6 0025(00005e2e:.textf)
-                                          0025(00005e9c:.textf)
-                                          0025(00005ecf:.textf)
-                                          0025(00005f59:.textf)
-                                          0025(00005fb2:.textf)
-                                          0030(000061ca:.textf)
+                                 00005ee7 0013(00005758:.textf)
+                                          0013(000057c6:.textf)
+                                          0013(000057f9:.textf)
+                                          0013(00005883:.textf)
+                                          0030(00006249:.textf)
                  _R_UART2_Send
-                                 00005cce 0012(000053c2:.textf)
-                                          0012(000053fc:.textf)
-                                          0012(00005445:.textf)
-                                          0012(00005475:.textf)
-                                          0012(000055ce:.textf)
-                                          0012(000055f6:.textf)
+                                 00005eff 0012(0000543c:.textf)
+                                          0012(0000546c:.textf)
+                                          0012(000055c4:.textf)
+                                          0012(000055ec:.textf)
+                                          0012(00005661:.textf)
+                                          0012(0000569f:.textf)
                  _R_UART3_Create
-                                 00005cf7 0024(00005bf2:.textf)
-                                          0030(000063f8:.textf)
+                                 00005f28 0024(00005e23:.textf)
+                                          0030(0000645d:.textf)
                  _R_UART3_Start
-                                 00005d6d 0030(00006362:.textf)
-                                          0030(00006410:.textf)
+                                 00005f9e 0030(000063e1:.textf)
+                                          0030(00006475:.textf)
                  _R_UART3_Stop
-                                 00005d93 0030(00006334:.textf)
+                                 00005fc4 0030(000063b3:.textf)
                  _R_UART3_Receive
-                                 00005db1 0025(00005fc6:.textf)
-                                          0030(000061d7:.textf)
-                                          0030(0000636c:.textf)
+                                 00005fe2 0025(00006045:.textf)
+                                          0030(00006256:.textf)
+                                          0030(000063eb:.textf)
                  _R_UART3_Send
-                                 00005dc9 0009(000044c9:.textf)
+                                 00005ffa 0009(000044c9:.textf)
                                           0009(0000451f:.textf)
      SECTION=.bss
                  _gp_uart1_tx_address
-                                 000f494c 0024(00005a3f:.textf)
-                                          0024(00005a48:.textf)
-                                          0024(00005a50:.textf)
+                                 000f4952 0024(00005c70:.textf)
+                                          0024(00005c79:.textf)
+                                          0024(00005c81:.textf)
                                           0025(00000283:.text)
                                           0025(0000028b:.text)
                  _g_uart1_tx_count
-                                 000f494e 0024(00005a43:.textf)
-                                          0024(00005a53:.textf)
+                                 000f4954 0024(00005c74:.textf)
+                                          0024(00005c84:.textf)
                                           0025(0000026c:.text)
                                           0025(0000028e:.text)
                  _gp_uart1_rx_address
-                                 000f4950 0024(00005a2c:.textf)
+                                 000f4956 0024(00005c5d:.textf)
                                           0025(00000237:.text)
                                           0025(0000023b:.text)
                  _g_uart1_rx_count
-                                 000f4952 0024(00005a24:.textf)
+                                 000f4958 0024(00005c55:.textf)
                                           0025(0000022f:.text)
                                           0025(0000023e:.text)
                                           0025(00000244:.text)
                  _g_uart1_rx_length
-                                 000f4954 0024(00005a28:.textf)
+                                 000f495a 0024(00005c59:.textf)
                                           0025(0000022c:.text)
                                           0025(00000241:.text)
                  _gp_csi00_rx_address
-                                 000f4956
+                                 000f495c
                  _g_csi00_rx_length
-                                 000f4958
+                                 000f495e
                  _g_csi00_rx_count
-                                 000f495a
+                                 000f4960
                  _gp_csi00_tx_address
-                                 000f495c 0024(00005930:.textf)
-                                          0024(00005afc:.textf)
-                                          0024(00005b01:.textf)
-                                          0024(00005b09:.textf)
+                                 000f4962 0024(00005b61:.textf)
+                                          0024(00005d2d:.textf)
+                                          0024(00005d32:.textf)
+                                          0024(00005d3a:.textf)
                                           0025(000002cc:.text)
                                           0025(000002d4:.text)
                  _g_csi00_send_length
-                                 000f495e
+                                 000f4964
                  _g_csi00_tx_count
-                                 000f4960 0024(00005af8:.textf)
-                                          0024(00005b0c:.textf)
+                                 000f4966 0024(00005d29:.textf)
+                                          0024(00005d3d:.textf)
                                           0025(000002bf:.text)
                                           0025(000002d7:.text)
                  _gp_csi01_rx_address
-                                 000f4962 0024(00005912:.textf)
-                                          0024(00005bbe:.textf)
+                                 000f4968 0024(00005b43:.textf)
+                                          0024(00005def:.textf)
                                           0025(00000310:.text)
                                           0025(0000032a:.text)
                                           0025(0000033a:.text)
                  _g_csi01_rx_length
-                                 000f4964 0024(0000590a:.textf)
+                                 000f496a 0024(00005b3b:.textf)
                  _g_csi01_rx_count
-                                 000f4966 0024(0000590e:.textf)
+                                 000f496c 0024(00005b3f:.textf)
                  _gp_csi01_tx_address
-                                 000f4968 0024(0000592b:.textf)
-                                          0024(00005936:.textf)
-                                          0024(00005bba:.textf)
-                                          0024(00005bc4:.textf)
-                                          0024(00005bd6:.textf)
+                                 000f496e 0024(00005b5c:.textf)
+                                          0024(00005b67:.textf)
+                                          0024(00005deb:.textf)
+                                          0024(00005df5:.textf)
+                                          0024(00005e07:.textf)
                                           0025(0000033d:.text)
                                           0025(0000034e:.text)
                  _g_csi01_send_length
-                                 000f496a
+                                 000f4970
                  _g_csi01_tx_count
-                                 000f496c 0024(00005927:.textf)
-                                          0024(00005939:.textf)
-                                          0024(00005bb6:.textf)
-                                          0024(00005bd9:.textf)
+                                 000f4972 0024(00005b58:.textf)
+                                          0024(00005b6a:.textf)
+                                          0024(00005de7:.textf)
+                                          0024(00005e0a:.textf)
                                           0025(00000303:.text)
                                           0025(0000030a:.text)
                                           0025(00000351:.text)
                  _gp_uart2_tx_address
-                                 000f496e 0024(00005cdd:.textf)
-                                          0024(00005ce6:.textf)
-                                          0024(00005cee:.textf)
+                                 000f4974 0024(00005f0e:.textf)
+                                          0024(00005f17:.textf)
+                                          0024(00005f1f:.textf)
                                           0025(000003e1:.text)
                                           0025(000003e9:.text)
                  _g_uart2_tx_count
-                                 000f4970 0024(00005ce1:.textf)
-                                          0024(00005cf1:.textf)
+                                 000f4976 0024(00005f12:.textf)
+                                          0024(00005f22:.textf)
                                           0025(000003ca:.text)
                                           0025(000003ec:.text)
                  _gp_uart2_rx_address
-                                 000f4972 0024(00005cca:.textf)
+                                 000f4978 0024(00005efb:.textf)
                                           0025(00000395:.text)
                                           0025(00000399:.text)
                  _g_uart2_rx_count
-                                 000f4974 0024(00005cc2:.textf)
+                                 000f497a 0024(00005ef3:.textf)
                                           0025(0000038d:.text)
                                           0025(0000039c:.text)
                                           0025(000003a2:.text)
                  _g_uart2_rx_length
-                                 000f4976 0024(00005cc6:.textf)
+                                 000f497c 0024(00005ef7:.textf)
                                           0025(0000038a:.text)
                                           0025(0000039f:.text)
                  _gp_uart3_tx_address
-                                 000f4978 0024(00005dd8:.textf)
-                                          0024(00005de1:.textf)
-                                          0024(00005de9:.textf)
+                                 000f497e 0024(00006009:.textf)
+                                          0024(00006012:.textf)
+                                          0024(0000601a:.textf)
                                           0025(00000471:.text)
                                           0025(00000479:.text)
                  _g_uart3_tx_count
-                                 000f497a 0024(00005ddc:.textf)
-                                          0024(00005dec:.textf)
+                                 000f4980 0024(0000600d:.textf)
+                                          0024(0000601d:.textf)
                                           0025(0000045a:.text)
                                           0025(0000047c:.text)
                  _gp_uart3_rx_address
-                                 000f497c 0024(00005dc5:.textf)
+                                 000f4982 0024(00005ff6:.textf)
                                           0025(00000425:.text)
                                           0025(00000429:.text)
                  _g_uart3_rx_count
-                                 000f497e 0024(00005dbd:.textf)
+                                 000f4984 0024(00005fee:.textf)
                                           0025(0000041d:.text)
                                           0025(0000042c:.text)
                                           0025(00000432:.text)
                  _g_uart3_rx_length
-                                 000f4980 0024(00005dc1:.textf)
+                                 000f4986 0024(00005ff2:.textf)
                                           0025(0000041a:.text)
                                           0025(0000042f:.text)
 0025 r_cg_serial_user
-     SECTION=.textf
-                 _isCommandNeedResponse
-                                 00005df2 0025(00005e5f:.textf)
      SECTION=.bss
                  _g_uart3_rx_data
-                                 000f4982 0025(00005fc3:.textf)
-                                          0025(00005fca:.textf)
-                                          0025(00005fd1:.textf)
-                                          0025(00005fd7:.textf)
-                                          0025(00005fe1:.textf)
-                                          0025(00005fef:.textf)
-                                          0030(000061d4:.textf)
-                                          0030(00006369:.textf)
+                                 000f4988 0025(00006042:.textf)
+                                          0025(00006049:.textf)
+                                          0025(00006050:.textf)
+                                          0025(00006056:.textf)
+                                          0025(00006060:.textf)
+                                          0025(0000606e:.textf)
+                                          0030(00006253:.textf)
+                                          0030(000063e8:.textf)
                  _send_response_flag
-                                 000f498a
+                                 000f4990
                  _send_response_time_flag
-                                 000f498b
+                                 000f4991
                  _send_response_number_flag
-                                 000f498c
+                                 000f4992
                  _recived_time_setting_flag
-                                 000f498d
+                                 000f4993
                  _send_respone_status_flag
-                                 000f498e
+                                 000f4994
                  _recived_number_setting_flag
-                                 000f498f
+                                 000f4995
                  _g_commnunication_flag
-                                 000f4990 0009(00004d09:.textf)
-                                          0009(00004d47:.textf)
-                                          0011(000053a4:.textf)
-                                          0012(000053a9:.textf)
-                                          0012(000053d3:.textf)
-                                          0012(000053d6:.textf)
-                                          0012(000053e8:.textf)
-                                          0012(000053eb:.textf)
-                                          0012(0000540d:.textf)
-                                          0012(00005412:.textf)
-                                          0012(00005426:.textf)
-                                          0012(00005429:.textf)
-                                          0012(00005456:.textf)
-                                          0012(00005459:.textf)
-                                          0012(00005486:.textf)
-                                          0012(00005489:.textf)
-                                          0012(0000550a:.textf)
-                                          0012(0000550d:.textf)
+                                 000f4996 0009(00004d0c:.textf)
+                                          0009(00004d4a:.textf)
+                                          0009(00004dc1:.textf)
+                                          0011(000053a8:.textf)
+                                          0012(00005420:.textf)
+                                          0012(0000544d:.textf)
+                                          0012(00005450:.textf)
+                                          0012(0000547d:.textf)
+                                          0012(00005480:.textf)
+                                          0012(00005501:.textf)
+                                          0012(00005504:.textf)
+                                          0012(00005598:.textf)
+                                          0012(0000559b:.textf)
                                           0012(000055a1:.textf)
-                                          0012(000055a4:.textf)
-                                          0012(000055ab:.textf)
-                                          0012(00005612:.textf)
-                                          0012(00005639:.textf)
-                                          0012(0000563f:.textf)
-                                          0012(00005644:.textf)
-                                          0012(0000564b:.textf)
-                                          0025(00005e10:.textf)
-                                          0025(00005e32:.textf)
-                                          0025(00005e3a:.textf)
-                                          0025(00005e3d:.textf)
-                                          0025(00005e40:.textf)
-                                          0025(00005e48:.textf)
-                                          0025(00005e4b:.textf)
-                                          0025(00005e4e:.textf)
-                                          0025(00005e56:.textf)
-                                          0025(00005e59:.textf)
-                                          0025(00005e68:.textf)
-                                          0025(00005e6d:.textf)
-                                          0025(00005e72:.textf)
-                                          0025(00005e87:.textf)
-                                          0025(00005ea0:.textf)
-                                          0025(00005eaf:.textf)
-                                          0025(00005eba:.textf)
-                                          0025(00005ed3:.textf)
-                                          0025(00005ee2:.textf)
-                                          0025(00005eee:.textf)
-                                          0025(00005f07:.textf)
-                                          0025(00005f1c:.textf)
-                                          0025(00005f28:.textf)
-                                          0025(00005f34:.textf)
-                                          0025(00005f40:.textf)
-                                          0025(00005f4c:.textf)
-                                          0025(00005f50:.textf)
-                                          0025(00005f65:.textf)
-                                          0025(00005f9d:.textf)
-                                          0025(00005fa2:.textf)
-                                          0025(00005fdd:.textf)
-                                          0025(00005fe7:.textf)
-                                          0025(00005ff6:.textf)
-                                          0025(00005ffe:.textf)
-                                          0025(00006005:.textf)
-                                          0030(0000622a:.textf)
-                                          0030(0000623f:.textf)
-                                          0030(00006245:.textf)
-                                          0030(00006261:.textf)
-                                          0030(0000629a:.textf)
-                                          0030(000062d0:.textf)
-                                          0030(000062da:.textf)
-                                          0030(000062fe:.textf)
-                                          0030(0000632e:.textf)
-                                          0030(00006338:.textf)
-                                          0030(0000634c:.textf)
-                                          0030(00006370:.textf)
+                                          0012(00005608:.textf)
+                                          0012(0000562f:.textf)
+                                          0012(00005635:.textf)
+                                          0012(0000563a:.textf)
+                                          0012(00005641:.textf)
+                                          0012(00005646:.textf)
+                                          0012(00005672:.textf)
+                                          0012(00005677:.textf)
+                                          0012(00005689:.textf)
+                                          0012(0000568e:.textf)
+                                          0012(000056b0:.textf)
+                                          0012(000056b5:.textf)
+                                          0012(000056d2:.textf)
+                                          0013(0000575c:.textf)
+                                          0013(00005764:.textf)
+                                          0013(00005767:.textf)
+                                          0013(0000576a:.textf)
+                                          0013(00005772:.textf)
+                                          0013(00005775:.textf)
+                                          0013(00005778:.textf)
+                                          0013(00005780:.textf)
+                                          0013(00005783:.textf)
+                                          0013(00005792:.textf)
+                                          0013(00005797:.textf)
+                                          0013(0000579c:.textf)
+                                          0013(000057b1:.textf)
+                                          0013(000057ca:.textf)
+                                          0013(000057d9:.textf)
+                                          0013(000057e4:.textf)
+                                          0013(000057fd:.textf)
+                                          0013(0000580c:.textf)
+                                          0013(00005818:.textf)
+                                          0013(00005831:.textf)
+                                          0013(00005846:.textf)
+                                          0013(00005852:.textf)
+                                          0013(0000585e:.textf)
+                                          0013(0000586a:.textf)
+                                          0013(00005876:.textf)
+                                          0013(0000587a:.textf)
+                                          0013(0000588f:.textf)
+                                          0013(000058c7:.textf)
+                                          0013(000058cc:.textf)
+                                          0013(000058f5:.textf)
+                                          0025(0000605c:.textf)
+                                          0025(00006066:.textf)
+                                          0025(00006075:.textf)
+                                          0025(0000607d:.textf)
+                                          0025(00006084:.textf)
+                                          0030(000062a9:.textf)
+                                          0030(000062be:.textf)
+                                          0030(000062c4:.textf)
+                                          0030(000062e0:.textf)
+                                          0030(00006319:.textf)
+                                          0030(0000634f:.textf)
+                                          0030(00006359:.textf)
+                                          0030(0000637d:.textf)
+                                          0030(000063ad:.textf)
+                                          0030(000063b7:.textf)
+                                          0030(000063cb:.textf)
+                                          0030(000063ef:.textf)
                  _g_csi_count
-                                 000f499f
+                                 000f49a5
                  _g_csi_err
-                                 000f49a0
+                                 000f49a6
                  _g_csi_send_end
-                                 000f49a1 0025(00005e24:.textf)
+                                 000f49a7 0025(00006031:.textf)
                  _g_csi_rev_end
-                                 000f49a2 0003(00003581:.textf)
-                                          0025(00005e1c:.textf)
-                                          0030(00006180:.textf)
+                                 000f49a8 0003(00003581:.textf)
+                                          0025(00006029:.textf)
+                                          0030(000061ff:.textf)
                  _g_uart1_send
-                                 000f49a3
+                                 000f49a9
                  _g_uart2_sendend
-                                 000f49a4 0012(000053ae:.textf)
-                                          0012(000053c8:.textf)
-                                          0012(000053f1:.textf)
-                                          0012(00005402:.textf)
-                                          0012(0000542e:.textf)
-                                          0012(0000544b:.textf)
-                                          0012(0000545e:.textf)
-                                          0012(0000547b:.textf)
-                                          0012(000055c3:.textf)
-                                          0012(000055d4:.textf)
-                                          0012(000055eb:.textf)
-                                          0012(000055fc:.textf)
-                                          0025(00005fbb:.textf)
-                                          0030(000063b1:.textf)
+                                 000f49aa 0012(00005425:.textf)
+                                          0012(00005442:.textf)
+                                          0012(00005455:.textf)
+                                          0012(00005472:.textf)
+                                          0012(000055b9:.textf)
+                                          0012(000055ca:.textf)
+                                          0012(000055e1:.textf)
+                                          0012(000055f2:.textf)
+                                          0012(0000564d:.textf)
+                                          0012(00005667:.textf)
+                                          0012(00005694:.textf)
+                                          0012(000056a5:.textf)
+                                          0025(0000603a:.textf)
+                                          0030(00006424:.textf)
                  _g_uart2_receive
-                                 000f49a5 0025(00005fb6:.textf)
+                                 000f49ab 0013(000058d4:.textf)
                  _g_rx_data
-                                 000f49a6 0012(000053bf:.textf)
-                                          0012(0000541a:.textf)
-                                          0012(000054a6:.textf)
-                                          0012(000054b3:.textf)
-                                          0012(000054bb:.textf)
-                                          0012(000054c5:.textf)
-                                          0012(000054cf:.textf)
-                                          0012(0000552d:.textf)
-                                          0012(0000553a:.textf)
-                                          0012(00005542:.textf)
-                                          0012(0000554e:.textf)
-                                          0012(00005558:.textf)
-                                          0012(0000555f:.textf)
-                                          0025(00005e2b:.textf)
-                                          0025(00005e5c:.textf)
-                                          0025(00005e7a:.textf)
-                                          0025(00005e81:.textf)
-                                          0025(00005e90:.textf)
-                                          0025(00005e99:.textf)
-                                          0025(00005ea9:.textf)
-                                          0025(00005eb4:.textf)
-                                          0025(00005ec3:.textf)
-                                          0025(00005ecc:.textf)
-                                          0025(00005edc:.textf)
-                                          0025(00005eeb:.textf)
-                                          0025(00005ef7:.textf)
-                                          0025(00005f01:.textf)
-                                          0025(00005f0a:.textf)
-                                          0025(00005f16:.textf)
-                                          0025(00005f22:.textf)
-                                          0025(00005f2e:.textf)
-                                          0025(00005f3a:.textf)
-                                          0025(00005f46:.textf)
-                                          0025(00005f56:.textf)
-                                          0025(00005f5f:.textf)
-                                          0025(00005f71:.textf)
-                                          0025(00005f7d:.textf)
-                                          0025(00005f8b:.textf)
-                                          0025(00005faf:.textf)
-                                          0030(000061c7:.textf)
+                                 000f49ac 0012(0000549d:.textf)
+                                          0012(000054aa:.textf)
+                                          0012(000054b2:.textf)
+                                          0012(000054bc:.textf)
+                                          0012(000054c6:.textf)
+                                          0012(00005524:.textf)
+                                          0012(00005531:.textf)
+                                          0012(00005539:.textf)
+                                          0012(00005545:.textf)
+                                          0012(0000554f:.textf)
+                                          0012(00005556:.textf)
+                                          0012(0000565e:.textf)
+                                          0012(000056bd:.textf)
+                                          0013(00005755:.textf)
+                                          0013(00005786:.textf)
+                                          0013(000057a4:.textf)
+                                          0013(000057ab:.textf)
+                                          0013(000057ba:.textf)
+                                          0013(000057c3:.textf)
+                                          0013(000057d3:.textf)
+                                          0013(000057de:.textf)
+                                          0013(000057ed:.textf)
+                                          0013(000057f6:.textf)
+                                          0013(00005806:.textf)
+                                          0013(00005815:.textf)
+                                          0013(00005821:.textf)
+                                          0013(0000582b:.textf)
+                                          0013(00005834:.textf)
+                                          0013(00005840:.textf)
+                                          0013(0000584c:.textf)
+                                          0013(00005858:.textf)
+                                          0013(00005864:.textf)
+                                          0013(00005870:.textf)
+                                          0013(00005880:.textf)
+                                          0013(00005889:.textf)
+                                          0013(0000589b:.textf)
+                                          0013(000058a7:.textf)
+                                          0013(000058b5:.textf)
+                                          0030(00006246:.textf)
                  _g_uart2_fault
-                                 000f4a46 0025(00005fa7:.textf)
-                                          0030(00006211:.textf)
-                                          0030(00006227:.textf)
+                                 000f4a4c 0013(000058d1:.textf)
+                                          0030(00006290:.textf)
+                                          0030(000062a6:.textf)
                  _g_uart3_sendend
-                                 000f4a47 0009(000044a3:.textf)
+                                 000f4a4d 0009(000044a3:.textf)
                                           0009(000044cf:.textf)
                                           0009(000044f7:.textf)
                                           0009(00004525:.textf)
-                                          0025(0000600a:.textf)
-                                          0030(000062b6:.textf)
+                                          0025(00006089:.textf)
+                                          0030(00006335:.textf)
      SECTION=.text
+     SECTION=.textf
 0026 r_cg_timer
      SECTION=.textf
                  _R_TAU0_Create
-                                 00006011 0030(000063e4:.textf)
-                                          0031(00006460:.textf)
+                                 00006090 0030(00006449:.textf)
+                                          0031(000064c5:.textf)
                  _R_TAU0_Channel0_Start
-                                 000060be 0030(0000640c:.textf)
+                                 0000613d 0030(00006471:.textf)
                  _R_TAU0_Channel0_Stop
-                                 000060ce
+                                 0000614d
                  _R_TAU0_Channel1_Start
-                                 000060de
+                                 0000615d
                  _R_TAU0_Channel1_Stop
-                                 000060ee
+                                 0000616d
                  _R_TAU0_Channel2_Start
-                                 000060fe
+                                 0000617d
                  _R_TAU0_Channel2_Stop
-                                 0000610e
+                                 0000618d
 0027 r_cg_timer_user
      SECTION=.bss
                  _timer0_ch0_flag
-                                 000f4a48 0027(00000496:.text)
+                                 000f4a4e 0027(00000496:.text)
                  _timer0_ch1_flag
-                                 000f4a49 0027(0000049d:.text)
+                                 000f4a4f 0027(0000049d:.text)
                  _timer0_ch2_flag
-                                 000f4a4a 0027(000004a2:.text)
+                                 000f4a50 0027(000004a2:.text)
                  _g_systemTime
-                                 000f4a4c 0006(0000394b:.textf)
+                                 000f4a52 0006(0000394b:.textf)
                                           0006(00003951:.textf)
                                           0006(000039ee:.textf)
                                           0006(000039f4:.textf)
@@ -3425,177 +3515,177 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(00004957:.textf)
                                           0009(0000497c:.textf)
                                           0009(00004982:.textf)
-                                          0009(00004a5d:.textf)
-                                          0009(00004a63:.textf)
-                                          0009(00004b02:.textf)
-                                          0009(00004b08:.textf)
-                                          0009(00004bd1:.textf)
+                                          0009(00004a60:.textf)
+                                          0009(00004a66:.textf)
+                                          0009(00004b05:.textf)
+                                          0009(00004b0b:.textf)
                                           0009(00004bd4:.textf)
-                                          0009(00004c1b:.textf)
-                                          0009(00004c21:.textf)
-                                          0009(00004c99:.textf)
-                                          0009(00004c9f:.textf)
-                                          0009(00004cf0:.textf)
-                                          0009(00004cf5:.textf)
-                                          0009(00004e05:.textf)
-                                          0009(00004e0b:.textf)
-                                          0010(00004f7f:.textf)
-                                          0010(00004f85:.textf)
-                                          0010(00005038:.textf)
-                                          0010(0000503e:.textf)
-                                          0010(000051a1:.textf)
-                                          0010(000051a7:.textf)
-                                          0010(00005250:.textf)
-                                          0010(00005256:.textf)
-                                          0011(000052f0:.textf)
-                                          0011(000052f3:.textf)
-                                          0011(00005386:.textf)
-                                          0011(0000538c:.textf)
-                                          0012(00005606:.textf)
-                                          0012(0000560b:.textf)
+                                          0009(00004bd7:.textf)
+                                          0009(00004c1e:.textf)
+                                          0009(00004c24:.textf)
+                                          0009(00004c9c:.textf)
+                                          0009(00004ca2:.textf)
+                                          0009(00004cf3:.textf)
+                                          0009(00004cf8:.textf)
+                                          0009(00004e09:.textf)
+                                          0009(00004e0f:.textf)
+                                          0010(00004f83:.textf)
+                                          0010(00004f89:.textf)
+                                          0010(0000503c:.textf)
+                                          0010(00005042:.textf)
+                                          0010(000051a5:.textf)
+                                          0010(000051ab:.textf)
+                                          0010(00005254:.textf)
+                                          0010(0000525a:.textf)
+                                          0011(000052f4:.textf)
+                                          0011(000052f7:.textf)
+                                          0011(0000538a:.textf)
+                                          0011(00005390:.textf)
+                                          0012(000055fc:.textf)
+                                          0012(00005601:.textf)
                                           0027(00000484:.text)
                                           0027(0000048c:.text)
                                           0027(0000048f:.text)
                                           0027(00000493:.text)
-                                          0030(00006269:.textf)
-                                          0030(0000626f:.textf)
-                                          0030(000062bb:.textf)
-                                          0030(000062be:.textf)
-                                          0030(00006306:.textf)
-                                          0030(0000630c:.textf)
-                                          0030(0000633b:.textf)
-                                          0030(00006341:.textf)
-                                          0032(0000647e:.textf)
-                                          0032(00006483:.textf)
-                                          0032(000064b2:.textf)
-                                          0032(000064b9:.textf)
-                                          0032(000064c0:.textf)
-                                          0032(000064c8:.textf)
-                                          0032(00006502:.textf)
-                                          0032(00006509:.textf)
-                                          0032(00006528:.textf)
-                                          0032(0000652e:.textf)
-                                          0032(00006534:.textf)
-                                          0032(00006537:.textf)
-                                          0032(00006541:.textf)
-                                          0032(00006544:.textf)
+                                          0030(000062e8:.textf)
+                                          0030(000062ee:.textf)
+                                          0030(0000633a:.textf)
+                                          0030(0000633d:.textf)
+                                          0030(00006385:.textf)
+                                          0030(0000638b:.textf)
+                                          0030(000063ba:.textf)
+                                          0030(000063c0:.textf)
+                                          0032(000064e3:.textf)
+                                          0032(000064e8:.textf)
+                                          0032(00006517:.textf)
+                                          0032(0000651e:.textf)
+                                          0032(00006525:.textf)
+                                          0032(0000652d:.textf)
+                                          0032(00006567:.textf)
                                           0032(0000656e:.textf)
-                                          0032(00006573:.textf)
+                                          0032(0000658d:.textf)
+                                          0032(00006593:.textf)
+                                          0032(00006599:.textf)
                                           0032(0000659c:.textf)
-                                          0032(000065a2:.textf)
+                                          0032(000065a6:.textf)
+                                          0032(000065a9:.textf)
+                                          0032(000065d3:.textf)
+                                          0032(000065d8:.textf)
+                                          0032(00006601:.textf)
+                                          0032(00006607:.textf)
      SECTION=.text
 0028 r_cg_wdt
      SECTION=.textf
                  _R_WDT_Create
-                                 0000611e 0031(00006464:.textf)
+                                 0000619d 0031(000064c9:.textf)
                  _R_WDT_Restart
-                                 0000612f 0008(000042ad:.textf)
+                                 000061ae 0008(000042ad:.textf)
                                           0009(000047f5:.textf)
-                                          0009(00004ddb:.textf)
-                                          0012(000053cd:.textf)
-                                          0012(00005407:.textf)
-                                          0012(00005450:.textf)
-                                          0012(00005480:.textf)
-                                          0030(000063da:.textf)
-                                          0032(000064ef:.textf)
+                                          0009(00004ddf:.textf)
+                                          0012(00005447:.textf)
+                                          0012(00005477:.textf)
+                                          0012(0000566c:.textf)
+                                          0012(000056aa:.textf)
+                                          0030(0000643f:.textf)
+                                          0032(00006554:.textf)
 0029 r_cg_wdt_user
      SECTION=.text
 0030 r_main
      SECTION=.textf
                  _nostop_checkHandSensor
-                                 00006133
+                                 000061b2
                  _readHS
-                                 00006164
+                                 000061e3
                  _main
-                                 00006179 0001(000001e2:.text)
+                                 000061f8 0001(000001e2:.text)
                  _R_MAIN_UserInit
-                                 000063e0 0030(0000617c:.textf)
+                                 00006445 0030(000061fb:.textf)
      SECTION=.bss
                  _g_e_status
-                                 000f4a50
+                                 000f4a56
                  _ret_number_setting
-                                 000f4a52
+                                 000f4a58
                  _flow_p
-                                 000f4a78 0030(0000637b:.textf)
+                                 000f4a7e 0030(000063fa:.textf)
                  _salt_h_p
-                                 000f4a79
+                                 000f4a7f
                  _g_eeprom_wren
-                                 000f4a7a
+                                 000f4a80
                  _receive_data
-                                 000f4a7b
+                                 000f4a81
                  _receive_setting
-                                 000f4a7e
+                                 000f4a84
                  _set
-                                 000f4aa4
+                                 000f4aaa
                  _rx_data
-                                 000f4aa6
+                                 000f4aac
                  _data_f
-                                 000f4ab2
+                                 000f4ab8
                  _data_f_test
-                                 000f4ab6
+                                 000f4abc
                  _g_control_buffer_f
-                                 000f4aba 0012(000055b4:.textf)
-                                          0012(000055b8:.textf)
-                                          0012(000055bc:.textf)
-                                          0012(000055c0:.textf)
-                                          0012(000055cb:.textf)
+                                 000f4ac0 0012(000055aa:.textf)
+                                          0012(000055ae:.textf)
+                                          0012(000055b2:.textf)
+                                          0012(000055b6:.textf)
+                                          0012(000055c1:.textf)
                  _g_control_buffer_u32
-                                 000f4ac0 0012(000055dc:.textf)
-                                          0012(000055e0:.textf)
-                                          0012(000055e4:.textf)
-                                          0012(000055e8:.textf)
-                                          0012(000055f3:.textf)
+                                 000f4ac6 0012(000055d2:.textf)
+                                          0012(000055d6:.textf)
+                                          0012(000055da:.textf)
+                                          0012(000055de:.textf)
+                                          0012(000055e9:.textf)
                  _handsensor_status
-                                 000f4ac6
+                                 000f4acc
                  _g_handsensor_status
-                                 000f4ac7 0030(00006149:.textf)
-                                          0030(00006150:.textf)
-                                          0030(00006159:.textf)
+                                 000f4acd 0030(000061c8:.textf)
+                                          0030(000061cf:.textf)
+                                          0030(000061d8:.textf)
                  _g_crc
-                                 000f4ac9 0030(000063bd:.textf)
-                                          0030(000063c9:.textf)
+                                 000f4acf 0030(00006430:.textf)
+                                          0030(0000643c:.textf)
                  _g_crc_32
-                                 000f4ad2
+                                 000f4ad8
                  _rx_count
-                                 000f4af2 0009(00004a5a:.textf)
-                                          0030(000062fb:.textf)
+                                 000f4af8 0009(00004a5d:.textf)
+                                          0012(000056cf:.textf)
+                                          0030(0000637a:.textf)
      SECTION=.dataR
                  _g_adc_ch
-                                 000f4b92
-                 _led_st
-                                 000f4b94 0030(000063a6:.textf)
-                                          0030(000063ae:.textf)
-                 _send_data
-                                 000f4b95
-                 _this_size
-                                 000f4b97
-                 _this_size_2
                                  000f4b98
+                 _led_st
+                                 000f4b9a 0030(00006419:.textf)
+                                          0030(00006421:.textf)
+                 _send_data
+                                 000f4b9b
+                 _this_size
+                                 000f4b9d
+                 _this_size_2
+                                 000f4b9e
                  _send_buf
-                                 000f4b99
+                                 000f4b9f
                  _data_crc
-                                 000f4ba0
+                                 000f4ba6
                  _dac_out
-                                 000f4ba8 0030(000063cc:.textf)
-                                          0030(000063d3:.textf)
+                                 000f4bae
      SECTION=.const
      SECTION=.data
 0031 r_systeminit
      SECTION=.textf
                  _R_Systeminit
-                                 00006441 0031(00006477:.textf)
+                                 000064a6 0031(000064dc:.textf)
                  _hdwinit
-                                 00006473 0001(0000019a:.text)
+                                 000064d8 0001(0000019a:.text)
 0032 usr_timer
      SECTION=.textf
                  _delay_ms
-                                 00006478 0030(0000616f:.textf)
-                                          0030(0000621f:.textf)
-                                          0032(000064ec:.textf)
+                                 000064dd 0030(000061ee:.textf)
+                                          0030(0000629e:.textf)
+                                          0032(00006551:.textf)
                  _delay
-                                 000064e0
+                                 00006545
                  _ns_delay_ms
-                                 000064f8 0006(00003912:.textf)
+                                 0000655d 0006(00003912:.textf)
                                           0006(000039b8:.textf)
                                           0006(00003a60:.textf)
                                           0006(00003b5c:.textf)
@@ -3620,56 +3710,55 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0009(00004641:.textf)
                                           0009(00004945:.textf)
                                           0009(000049b7:.textf)
-                                          0009(00004a0d:.textf)
-                                          0009(00004a74:.textf)
-                                          0009(00004af0:.textf)
-                                          0009(00004b21:.textf)
-                                          0009(00004c04:.textf)
-                                          0009(00004c32:.textf)
-                                          0009(00004c47:.textf)
-                                          0009(00004c79:.textf)
-                                          0009(00004cc8:.textf)
-                                          0009(00004da4:.textf)
-                                          0009(00004de7:.textf)
-                                          0009(00004e1a:.textf)
-                                          0010(00004f9c:.textf)
-                                          0010(00005053:.textf)
-                                          0010(00005098:.textf)
-                                          0010(000050b0:.textf)
-                                          0010(000050df:.textf)
-                                          0010(00005115:.textf)
-                                          0010(00005134:.textf)
-                                          0010(0000515d:.textf)
-                                          0010(000051c1:.textf)
-                                          0010(000051f4:.textf)
-                                          0010(0000520e:.textf)
-                                          0010(00005272:.textf)
-                                          0010(000052a5:.textf)
-                                          0010(000052bf:.textf)
-                                          0011(0000532a:.textf)
-                                          0011(00005345:.textf)
-                                          0011(0000536d:.textf)
-                                          0012(0000562c:.textf)
-                                          0030(00006141:.textf)
-                                          0030(0000627f:.textf)
-                                          0030(0000631c:.textf)
-                                          0030(0000635a:.textf)
-                                          0030(00006386:.textf)
-                                          0030(00006392:.textf)
-                                          0030(0000639e:.textf)
+                                          0009(00004a10:.textf)
+                                          0009(00004a77:.textf)
+                                          0009(00004af3:.textf)
+                                          0009(00004b24:.textf)
+                                          0009(00004c07:.textf)
+                                          0009(00004c35:.textf)
+                                          0009(00004c4a:.textf)
+                                          0009(00004c7c:.textf)
+                                          0009(00004ccb:.textf)
+                                          0009(00004da7:.textf)
+                                          0009(00004deb:.textf)
+                                          0009(00004e1e:.textf)
+                                          0010(00004fa0:.textf)
+                                          0010(00005057:.textf)
+                                          0010(0000509c:.textf)
+                                          0010(000050b4:.textf)
+                                          0010(000050e3:.textf)
+                                          0010(00005119:.textf)
+                                          0010(00005138:.textf)
+                                          0010(00005161:.textf)
+                                          0010(000051c5:.textf)
+                                          0010(000051f8:.textf)
+                                          0010(00005212:.textf)
+                                          0010(00005276:.textf)
+                                          0010(000052a9:.textf)
+                                          0010(000052c3:.textf)
+                                          0011(0000532e:.textf)
+                                          0011(00005349:.textf)
+                                          0011(00005371:.textf)
+                                          0012(00005622:.textf)
+                                          0030(000061c0:.textf)
+                                          0030(000062fe:.textf)
+                                          0030(0000639b:.textf)
+                                          0030(000063d9:.textf)
+                                          0030(00006405:.textf)
+                                          0030(00006411:.textf)
                  _non_block_delay
-                                 00006564
+                                 000065c9
                  _mTask
-                                 00006566
+                                 000065cb
 0033 memcpy
      SECTION=.RLIB
                  _memcpy
-                                 000004a8 0012(000054e7:.textf)
-                                          0012(00005580:.textf)
-                                          0030(000061b0:.textf)
-                                          0030(000061bd:.textf)
-                                          0030(000062ad:.textf)
-                                          0030(000062ed:.textf)
+                                 000004a8 0012(000054de:.textf)
+                                          0012(00005577:.textf)
+                                          0030(0000622f:.textf)
+                                          0030(0000623c:.textf)
+                                          0030(0000632c:.textf)
+                                          0030(0000636c:.textf)
 0034 _COM_faddsub
      SECTION=.RLIB
                  __COM_fsub
@@ -3697,7 +3786,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0006(00003c58:.textf)
                                           0006(00003ca5:.textf)
                                           0006(00003d88:.textf)
-                                          0009(00004a43:.textf)
+                                          0009(00004a46:.textf)
 0038 _COM_fle
      SECTION=.RLIB
                  __COM_fle
@@ -3712,7 +3801,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0006(00003ced:.textf)
                                           0006(00003d72:.textf)
                                           0006(00003dde:.textf)
-                                          0009(00004a2d:.textf)
+                                          0009(00004a30:.textf)
 0040 _COM_fmul
      SECTION=.RLIB
                  __COM_fmul
@@ -3720,10 +3809,10 @@ No   Unit Name   Global.Symbol   Location External Infomation
                                           0008(000042cd:.textf)
                                           0008(0000439e:.textf)
                                           0008(000043ac:.textf)
-                                          0013(0000566e:.textf)
-                                          0013(0000567c:.textf)
-                                          0013(000056a7:.textf)
-                                          0013(000056b5:.textf)
+                                          0013(000056f5:.textf)
+                                          0013(00005703:.textf)
+                                          0013(0000572e:.textf)
+                                          0013(0000573c:.textf)
 0041 _COM_funordered
      SECTION=.RLIB
                  __COM_funordered
@@ -3742,8 +3831,8 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  __COM_ultof
                                  00000872 0008(000042ed:.textf)
                                           0008(000043cb:.textf)
-                                          0013(00005662:.textf)
-                                          0013(0000569b:.textf)
+                                          0013(000056e9:.textf)
+                                          0013(00005722:.textf)
 0043 _REL_fcmp
      SECTION=.RLIB
                  __REL_fcmp
@@ -3842,7 +3931,7 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  __e.const
                                  00003510
                  __e.textf
-                                 000065aa
+                                 0000660f
                  __s.monitor2
                                  0007fe00
                  __e.monitor2
@@ -3852,13 +3941,13 @@ No   Unit Name   Global.Symbol   Location External Infomation
                  __s.bss
                                  000f4700
                  __e.bss
-                                 000f4af3
+                                 000f4af9
                  __s.dataR
-                                 000f4af4
+                                 000f4afa
                  __e.dataR
-                                 000f4baa
+                                 000f4bb0
                  __STACK_ADDR_END
-                                 000f4baa 0001(00000193:.text)
+                                 000f4bb0 0001(00000193:.text)
                  __s.sbss
                                  000ffe20
                  __e.sbss

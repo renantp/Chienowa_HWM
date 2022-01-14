@@ -73,7 +73,7 @@ void HandWashingMode_nostop(void) {
 		g_machine_state.mode = HAND_WASHING;
 		O_SPOUT_ALK_PIN_SV4 = ON;
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_PUMP_ALK_PIN = ON;
+			O_ALK_PUMP_PIN_P2 = ON;
 			handSensorLED(BLUE);
 			(*state)++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -85,14 +85,14 @@ void HandWashingMode_nostop(void) {
 		if (ns_delay_ms(tick,
 				g_timerSetting.t51_alkalineWaterSpoutingTime_s * 1000
 						- g_timerSetting.t54_overLapTime_ms)) {
-			O_PUMP_ALK_PIN = OFF;
+			O_ALK_PUMP_PIN_P2 = OFF;
 			O_SPOUT_ACID_PIN_SV3 = ON;
 			(*state)++;
 		}
 		break;
 	case 3:
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_PUMP_ACID_PIN = ON;
+			O_ACID_PUMP_PIN_P1 = ON;
 			handSensorLED(RED);
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
@@ -109,7 +109,7 @@ void HandWashingMode_nostop(void) {
 		if (ns_delay_ms(tick,
 				g_timerSetting.t52_acidWaterSpoutingTime_s * 1000
 						- g_timerSetting.t54_overLapTime_ms)) {
-			O_PUMP_ACID_PIN = OFF;
+			O_ACID_PUMP_PIN_P1 = OFF;
 			handSensorLED(WHITE);
 			O_SPOUT_WATER_PIN_SV2 = ON;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -157,7 +157,7 @@ void AcidWaterMode_nostop(void) {
 		g_color = RED;
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_PUMP_ACID_PIN = ON;
+			O_ACID_PUMP_PIN_P1 = ON;
 			(*state)++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		}
@@ -166,7 +166,7 @@ void AcidWaterMode_nostop(void) {
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
 				|| (DETECT_U() == I_ON)) {
-			O_PUMP_ACID_PIN = OFF;
+			O_ACID_PUMP_PIN_P1 = OFF;
 			(*state)++;
 		}
 		break;
@@ -204,7 +204,7 @@ void AlkalineWaterMode_nostop(void) {
 		g_color = BLUE;
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_PUMP_ALK_PIN = ON;
+			O_ALK_PUMP_PIN_P2 = ON;
 			(*state)++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		}
@@ -213,7 +213,7 @@ void AlkalineWaterMode_nostop(void) {
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
 				|| (DETECT_U() == I_ON)) {
-			O_PUMP_ALK_PIN = OFF;
+			O_ALK_PUMP_PIN_P2 = OFF;
 			(*state)++;
 		}
 		break;

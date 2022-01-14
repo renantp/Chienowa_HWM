@@ -254,7 +254,7 @@ uint8_t FilterReplacementCheck(void) {
 void main_init_20211111(void) {
 	UpdateMachineStatus();
 	while (DrainageAcidAndAlkalineTankStart_nostop()) {
-		RaspberryResponse_nostop();
+		RaspberryCommunication_nostop();
 		UpdateMachineStatus();
 		R_WDT_Restart();
 	}
@@ -306,7 +306,7 @@ void ElectrolyzeWaterGeneration_nostop(void) {
 			g_machine_state.user = 0;
 			g_machine_state.handwash = g_machine_state.water =
 					g_machine_state.acid = g_machine_state.akaline = 0;
-			O_PUMP_ACID_PIN = O_PUMP_ALK_PIN = OFF;
+			O_ACID_PUMP_PIN_P1 = O_ALK_PUMP_PIN_P2 = OFF;
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 
 		}
@@ -363,6 +363,7 @@ void CallanCleaningMode_nostop(void) {
 				(*state)++;
 				O_SPOUT_WATER_PIN_SV2 = OFF;
 				handSensorLED(BLACK);
+				g_machine_state.mode = INDIE;
 			}
 			break;
 		default:
@@ -456,7 +457,7 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 	case 0:
 		O_SUPPLY_WATER_PIN_SV1 = O_SPOUT_WATER_PIN_SV2 = O_SPOUT_ACID_PIN_SV3 =
 		O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 = O_DRAIN_ALK_PIN_SV6 =
-		O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 = OPTION_2_PIN_SV9 = ON;
+		O_DRAIN_ALK_PIN_SV6 = O_OPTION_2_PIN_SV8 = O_OPTION_3_PIN_SV9 = ON;
 		O_PUMP_SALT_PIN_SP1 = ON;
 		(*tick) = g_systemTime;
 		break;
@@ -466,8 +467,8 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 			O_SPOUT_ACID_PIN_SV3 =
 			O_SPOUT_ALK_PIN_SV4 = O_DRAIN_ACID_PIN_SV5 =
 			O_DRAIN_ALK_PIN_SV6 =
-			O_DRAIN_ALK_PIN_SV6 = OPTION_1_PIN_SV8 =
-			OPTION_2_PIN_SV9 = OFF;
+			O_DRAIN_ALK_PIN_SV6 = O_OPTION_2_PIN_SV8 =
+			O_OPTION_3_PIN_SV9 = OFF;
 			O_PUMP_SALT_PIN_SP1 = OFF;
 			(*state)++;
 		}
@@ -606,7 +607,8 @@ void NeutralizationTreatment(uint32_t *tick) {
 }
 void main_loop_20211111(void) {
 	measureFlowSensor_nostop();
-	if(g_machine_state.test == 0){
+//	if(g_machine_state.test == 0){
+	if(g_commnunication_flag.test_flag != TESTING_MODE_START){
 		DrainageMode_nostop();
 		// Check Acid and Alkaline tank to make Electrolytic Water
 		ElectrolyzeWaterGeneration_nostop();
@@ -616,13 +618,14 @@ void main_loop_20211111(void) {
 		NormalMode_nostop();
 	}else{
 		//TODO: Test mode
+
 	}
 }
 
 
 void realTimeResponse(void) {
 	UpdateMachineStatus();
-	RaspberryResponse_nostop();
+	RaspberryCommunication_nostop();
 	isElectrolyticOperationOFF_nostop();
 	R_WDT_Restart();
 	if (ns_delay_ms(&g_Tick.tickCustom[0], 200)) {
@@ -676,7 +679,7 @@ void UpdateMachineStatus(void) {
 	O_DRAIN_ALK_PIN_SV6;
 	g_io_status.refined.io.Valve.SV7 = O_NEUTRALIZE_PIN_SV7;
 
-	g_io_status.refined.io.Pump1 = O_PUMP_ACID_PIN;
-	g_io_status.refined.io.Pump2 = O_PUMP_ALK_PIN;
+	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1;
+	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2;
 	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1;
 }

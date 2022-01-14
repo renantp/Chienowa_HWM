@@ -13,59 +13,33 @@
 uint8_t *const time_setting_p = (uint8_t*) &_settingTime;
 uint8_t *const number_setting_p = (uint8_t*) &_settingNumber;
 struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
-void RaspberryResponse_nostop(void) {
-	if (g_commnunication_flag.send_response_flag) {
-		uint8_t state = g_uart2_sendend;
-		if (g_machine_state.user == 2) {
-			g_machine_state.user = 1;
-		}
-		R_UART2_Send(g_rx_data, 6);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		g_commnunication_flag.send_response_flag = 0;
-	}
-	if (g_commnunication_flag.send_response_mode_flag == 1) {
-		sendToRasPi_u32(H_READ, WASHING_MODE,
-				(uint32_t) g_machine_mode << (8 * 3));
-//		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
-		g_commnunication_flag.send_response_mode_flag = 0;
-	}
+struct IO_Struct g_io_response;
 
-	if (g_commnunication_flag.send_response_status_flag == 1) {
-		uint8_t state = g_uart2_sendend;
-		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		g_commnunication_flag.send_response_status_flag = 0;
-	} else if (g_commnunication_flag.recieve_status_flag == 2) {
-		uint8_t *const _io_p = (uint8_t*) &g_res_io_status;
-		for (uint8_t i = 0; i < 5; i++) {
-			_io_p[i] = g_rx_data[i];
-		}
-//		for (uint8_t i = 5; i < io_statusSize - 1; i++){
-//
-//			switch (i % 4) {
-//			case 3:
-//				_io_p[i - 3] = g_rx_data[i];
-//				break;
-//			case 2:
-//				_io_p[i - 1] = g_rx_data[i];
-//				break;
-//			case 1:
-//				_io_p[1 + i] = g_rx_data[i];
-//				break;
-//			case 0:
-//				_io_p[3 + i] = g_rx_data[i];
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-		g_commnunication_flag.recieve_status_flag = 0;
-	}
+void ResponseHandler(void);
+void ChangeWashingMode(void);
+void MonitoringStatus(void);
+void TestIndividual(void);
 
+void IO_Output(struct IO_Struct *io){
+	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
+	O_SPOUT_WATER_PIN_SV2 = io->Valve.SV2;
+	O_SPOUT_ACID_PIN_SV3 = io->Valve.SV3;
+	O_SPOUT_ALK_PIN_SV4 = io->Valve.SV4;
+	O_DRAIN_ACID_PIN_SV5 = io->Valve.SV5;
+	O_DRAIN_ALK_PIN_SV6 = io->Valve.SV6;
+	O_NEUTRALIZE_PIN_SV7 = io->Valve.SV7;
+
+	O_ACID_PUMP_PIN_P1 = io->Pump1;
+	O_ALK_PUMP_PIN_P2 = io->Pump2;
+	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
+	O_CVCC_ON_PIN = io->CVCC_ON;
+}
+void RaspberryCommunication_nostop(void) {
+
+	ResponseHandler();
+	ChangeWashingMode();
+	MonitoringStatus();
+	TestIndividual();
 	if (g_commnunication_flag.send_response_time_flag) {
 		uint8_t state = g_uart2_sendend;
 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
@@ -169,7 +143,7 @@ void RaspberryResponse_nostop(void) {
 //		sendToRasPi(H_SET, OK_ALL, 0x0);
 		g_commnunication_flag.recived_number_setting_flag = 0;
 	}
-	if (g_commnunication_flag.test_flag != 0) {
+	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
 		g_machine_state.test = g_commnunication_flag.test_flag;
 	}
 }
@@ -223,4 +197,46 @@ uint8_t waitAlarmConfirm_nonstop(enum Control_status alarm) {
 }
 void resetAlarm(void) {
 	g_commnunication_flag.alarm_clear_flag = 1;
+}
+void ResponseHandler(void){
+	if (g_commnunication_flag.send_response_flag) {
+		uint8_t state = g_uart2_sendend;
+		if (g_machine_state.user == 2) {
+			g_machine_state.user = 1;
+		}
+		R_UART2_Send(g_rx_data, 6);
+		while (state == g_uart2_sendend) {
+			R_WDT_Restart();
+		}
+		g_commnunication_flag.send_response_flag = 0;
+	}
+}
+void ChangeWashingMode(void){
+	if (g_commnunication_flag.send_response_mode_flag == 1) {
+		sendToRasPi_u32(H_READ, WASHING_MODE,
+				(uint32_t) g_machine_mode << (8 * 3));
+//		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
+		g_commnunication_flag.send_response_mode_flag = 0;
+	}
+}
+void MonitoringStatus(void){
+	if (g_commnunication_flag.send_response_status_flag == 1) {
+		uint8_t state = g_uart2_sendend;
+		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
+		while (state == g_uart2_sendend) {
+			R_WDT_Restart();
+		}
+		g_commnunication_flag.send_response_status_flag = 0;
+	}
+}
+void TestIndividual(void){
+	 if (g_commnunication_flag.recieve_status_flag == 2) {
+		uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
+		for (uint8_t i = 0; i < 4; i++) {
+			_io_p[i] = g_rx_data[i];
+		}
+		IO_Output(&g_io_response);
+		rx_count++;
+		g_commnunication_flag.recieve_status_flag = 0;
+	}
 }
