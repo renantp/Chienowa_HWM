@@ -173,11 +173,11 @@ void main(void) {
 		if (ns_delay_ms(&g_Tick.tickCustom[3], 1000)) {
 			O_HS_IDA_PIN = O_HS_ICL_PIN = O_SUPPLY_WATER_PIN_SV1 =
 			O_CTRL_OUT_PIN = O_SPOUT_WATER_PIN_SV2 = O_PUMP_SALT_PIN_SP1 =
-			O_PUMP_ALK_PIN = O_PUMP_ACID_PIN = O_PUMP_PRESS_PIN =
+			O_ALK_PUMP_PIN_P2 = O_ACID_PUMP_PIN_P1 = O_PUMP_PRESS_PIN =
 			O_ALARM_OUT_PIN = O_NEUTRALIZE_PIN_SV7 =
 			O_DRAIN_ALK_PIN_SV6 = O_DRAIN_ACID_PIN_SV5 = O_SPOUT_ACID_PIN_SV3 =
 			O_SPOUT_ALK_PIN_SV4 = O_CVCC_ON_PIN = O_CVCC_ALARM_RS =
-			O_OPTION_1_PIN_SV8 = O_OPTION_2_PIN_SV9 = O_OPTION_3_PIN = state;
+			O_OPTION_2_PIN_SV8 = O_OPTION_3_PIN_SV9 = O_OPTION_1_BUZZER = state;
 			state = ~state;
 		}
 		R_WDT_Restart();
@@ -240,7 +240,6 @@ void main(void) {
 		} else if (g_commnunication_flag.rs485_get_valve_gesture_flag == 1) {
 			uint8_t _b[5] = { 0, 1, 0, 0, 1 };
 			sendR485_7byte(0xff, 1, _b);
-			rx_count++;
 			g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
 		}
 

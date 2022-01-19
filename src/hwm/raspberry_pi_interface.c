@@ -16,7 +16,7 @@ struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 struct IO_Struct g_io_response;
 
 void ResponseHandler(void);
-void ChangeWashingMode(void);
+void ResponseWashingMode(void);
 void MonitoringStatus(void);
 void TestIndividual(void);
 
@@ -28,6 +28,8 @@ void IO_Output(struct IO_Struct *io){
 	O_DRAIN_ACID_PIN_SV5 = io->Valve.SV5;
 	O_DRAIN_ALK_PIN_SV6 = io->Valve.SV6;
 	O_NEUTRALIZE_PIN_SV7 = io->Valve.SV7;
+	O_OPTION_2_PIN_SV8 = io->Valve.SV8;
+	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
 
 	O_ACID_PUMP_PIN_P1 = io->Pump1;
 	O_ALK_PUMP_PIN_P2 = io->Pump2;
@@ -37,7 +39,7 @@ void IO_Output(struct IO_Struct *io){
 void RaspberryCommunication_nostop(void) {
 
 	ResponseHandler();
-	ChangeWashingMode();
+	ResponseWashingMode();
 	MonitoringStatus();
 	TestIndividual();
 	if (g_commnunication_flag.send_response_time_flag) {
@@ -145,6 +147,10 @@ void RaspberryCommunication_nostop(void) {
 	}
 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
 		g_machine_state.test = g_commnunication_flag.test_flag;
+	}else if(g_commnunication_flag.test_flag == TESTING_MODE_STOP){
+		struct IO_Struct _newIO;
+		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
+		IO_Output(&_newIO);
 	}
 }
 void sendToRasPi_f(enum UART_header_e head, enum Control_status type,
@@ -211,7 +217,7 @@ void ResponseHandler(void){
 		g_commnunication_flag.send_response_flag = 0;
 	}
 }
-void ChangeWashingMode(void){
+void ResponseWashingMode(void){
 	if (g_commnunication_flag.send_response_mode_flag == 1) {
 		sendToRasPi_u32(H_READ, WASHING_MODE,
 				(uint32_t) g_machine_mode << (8 * 3));
@@ -236,7 +242,6 @@ void TestIndividual(void){
 			_io_p[i] = g_rx_data[i];
 		}
 		IO_Output(&g_io_response);
-		rx_count++;
 		g_commnunication_flag.recieve_status_flag = 0;
 	}
 }

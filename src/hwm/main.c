@@ -318,7 +318,8 @@ void ElectrolyzeWaterGeneration_nostop(void) {
 			g_machine_state.user = 0;
 			handSensorLED(BLACK);
 			// Start Electrolyte Operation Off time keeper
-		} else if (!isAcidTankFull() && !isAlkalineTankFull()) {
+		}
+		if (!isAcidTankFull() && !isAlkalineTankFull()) {
 			handSensorLEDBlink(WHITE, 100);
 		} else if (!isAcidTankFull()) {
 			handSensorLEDBlink(RED, 100);
@@ -397,7 +398,6 @@ void DrainageMode_nostop(void) {
 					|| (g_io_status.refined.FlowValue
 							> g_numberSetting.upperFlow)) {
 				(*state)--;
-				rx_count++;
 			} else {
 				(*state)++;
 			}
@@ -628,9 +628,9 @@ void realTimeResponse(void) {
 	RaspberryCommunication_nostop();
 	isElectrolyticOperationOFF_nostop();
 	R_WDT_Restart();
-	if (ns_delay_ms(&g_Tick.tickCustom[0], 200)) {
-		P6_bit.no3 = ~P6_bit.no3;
-	}
+//	if (ns_delay_ms(&g_Tick.tickCustom[0], 200)) {
+//		P6_bit.no3 = ~P6_bit.no3;
+//	}
 
 	//Error Checking
 	if (O_SUPPLY_WATER_PIN_SV1 == ON || O_SPOUT_WATER_PIN_SV2 == ON) {

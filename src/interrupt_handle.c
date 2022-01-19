@@ -77,6 +77,9 @@ void uart2_handle(void){
 		} else if ((g_rx_data[0] == H_SET)
 				&& (g_rx_data[1] == TESTING_MODE_START)) {
 			g_commnunication_flag.test_flag = TESTING_MODE_START;
+		} else if((g_rx_data[0] == H_SET)
+				&& (g_rx_data[1] == TESTING_MODE_STOP)){
+			g_commnunication_flag.test_flag = TESTING_MODE_STOP;
 		} else if ((g_rx_data[0] == H_SET) && (g_rx_data[1] == TEST_POWER_ON)) {
 			g_commnunication_flag.test_flag = TEST_POWER_ON;
 		} else if ((g_rx_data[0] == H_SET)
