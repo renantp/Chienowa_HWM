@@ -267,6 +267,7 @@ enum Control_status{
 	CALLAN_MODE_SET = 0x26,
 	DRAINAGE_MODE_SET = 0x27,
 	BIOMECTRIC_SET = 0x28,
+	POWER_ON_TEST_SET = 0x29,
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
