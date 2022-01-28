@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_serial_user.obj
 00000000                       17  #@   ../src/r_cg_serial_user.c
-00000000                       18  #@  compiled at Fri Jan 14 16:28:00 2022
+00000000                       18  #@  compiled at Fri Jan 28 15:05:23 2022
 00000000                       19  
 00000000                       20  	.PUBLIC _g_uart3_rx_data
 00000000                       21  	.EXTERN _gp_uart1_tx_address
@@ -1258,37 +1258,37 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000000D                     1254  _recived_number_setting_flag:
 0000000D                     1255  	.DS (1)
 0000000E                     1256  _g_commnunication_flag:
-0000000E                     1257  	.DS (15)
-0000001D                     1258  _g_csi_count:
-0000001D                     1259  	.DS (1)
-0000001E                     1260  _g_csi_err:
-0000001E                     1261  	.DS (1)
-0000001F                     1262  _g_csi_send_end:
-0000001F                     1263  	.DS (1)
-00000020                     1264  _g_csi_rev_end:
-00000020                     1265  	.DS (1)
-00000021                     1266  _g_uart1_send:
-00000021                     1267  	.DS (1)
-00000022                     1268  _g_uart2_sendend:
-00000022                     1269  	.DS (1)
-00000023                     1270  _g_uart2_receive:
-00000023                     1271  	.DS (1)
-00000024                     1272  _g_rx_data:
-00000024                     1273  	.DS (160)
-000000C4                     1274  _g_uart2_fault:
-000000C4                     1275  	.DS (1)
-000000C5                     1276  _g_uart3_sendend:
-000000C5                     1277  	.DS (1)
+0000000E                     1257  	.DS (16)
+0000001E                     1258  _g_csi_count:
+0000001E                     1259  	.DS (1)
+0000001F                     1260  _g_csi_err:
+0000001F                     1261  	.DS (1)
+00000020                     1262  _g_csi_send_end:
+00000020                     1263  	.DS (1)
+00000021                     1264  _g_csi_rev_end:
+00000021                     1265  	.DS (1)
+00000022                     1266  _g_uart1_send:
+00000022                     1267  	.DS (1)
+00000023                     1268  _g_uart2_sendend:
+00000023                     1269  	.DS (1)
+00000024                     1270  _g_uart2_receive:
+00000024                     1271  	.DS (1)
+00000025                     1272  _g_rx_data:
+00000025                     1273  	.DS (160)
+000000C5                     1274  _g_uart2_fault:
+000000C5                     1275  	.DS (1)
+000000C6                     1276  _g_uart3_sendend:
+000000C6                     1277  	.DS (1)
 
 Section List
 Attr     Size                Name
 
 TEXT                638 (0000027E) .text
 TEXTF               109 (0000006D) .textf
-BSS                 198 (000000C6) .bss
+BSS                 199 (000000C7) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl000\r_cg_serial_user.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\r_cg_serial_user.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_serial_user.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_serial_user.asm 

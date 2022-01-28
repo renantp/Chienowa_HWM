@@ -11,8 +11,6 @@ src/r_cg_port.obj src/r_cg_port.d: ../src/crc8.h
 ../src/crc8.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/EEPROM.h
 ../src/EEPROM.h:
-src/r_cg_port.obj src/r_cg_port.d: ../src/r_cg_serial.h
-../src/r_cg_serial.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/hwm/main.h
@@ -23,6 +21,8 @@ src/r_cg_port.obj src/r_cg_port.d: ../src/../src/usr_timer.h
 ../src/../src/usr_timer.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/../src/r_cg_cgc.h
 ../src/../src/r_cg_cgc.h:
+src/r_cg_port.obj src/r_cg_port.d: ../src/../src/r_cg_serial.h
+../src/../src/r_cg_serial.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/../src/r_cg_adc.h
 ../src/../src/r_cg_adc.h:
 src/r_cg_port.obj src/r_cg_port.d: ../src/../src/r_cg_timer.h

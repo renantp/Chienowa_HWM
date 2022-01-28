@@ -28,9 +28,18 @@
 #include "io_control.h"
 #include "operation.h"
 
-
 extern struct Timer_Setting_s _settingTime;
 extern struct Number_Setting_s _settingNumber;
+struct Cotrol_s{
+	uint8_t drain : 1;
+	uint8_t power_on: 1;
+	uint8_t filter: 1;
+	uint8_t RSVD: 5;
+};
+union Control_u{
+	struct Cotrol_s raw;
+};
+extern union Control_u g_test_control;
 //void electrolyticOperationON(void);
 //void electrolyticOperationOFF(void);
 

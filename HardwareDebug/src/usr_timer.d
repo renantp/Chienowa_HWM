@@ -11,8 +11,6 @@ src/usr_timer.obj src/usr_timer.d: ../src/crc8.h
 ../src/crc8.h:
 src/usr_timer.obj src/usr_timer.d: ../src/EEPROM.h
 ../src/EEPROM.h:
-src/usr_timer.obj src/usr_timer.d: ../src/r_cg_serial.h
-../src/r_cg_serial.h:
 src/usr_timer.obj src/usr_timer.d: ../src/r_cg_userdefine.h
 ../src/r_cg_userdefine.h:
 src/usr_timer.obj src/usr_timer.d: ../src/hwm/main.h
@@ -25,6 +23,8 @@ src/usr_timer.obj src/usr_timer.d: ../src/../src/r_cg_cgc.h
 ../src/../src/r_cg_cgc.h:
 src/usr_timer.obj src/usr_timer.d: ../src/../src/r_cg_port.h
 ../src/../src/r_cg_port.h:
+src/usr_timer.obj src/usr_timer.d: ../src/../src/r_cg_serial.h
+../src/../src/r_cg_serial.h:
 src/usr_timer.obj src/usr_timer.d: ../src/../src/r_cg_adc.h
 ../src/../src/r_cg_adc.h:
 src/usr_timer.obj src/usr_timer.d: ../src/../src/r_cg_timer.h

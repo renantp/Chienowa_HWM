@@ -268,7 +268,7 @@ enum Control_status{
 	DRAINAGE_MODE_SET = 0x27,
 	BIOMECTRIC_SET = 0x28,
 	POWER_ON_TEST_SET = 0x29,
-	WATER_FILTERE_SET = 0x2A,
+	WATER_FILTER_SET = 0x2A,
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -334,6 +334,7 @@ extern volatile struct Communicaition_flag_s{
 	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
 	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
 	rs485_fault;
+	volatile uint8_t control_test_flag;
 }g_commnunication_flag;
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;

@@ -14,13 +14,15 @@ uint8_t *const time_setting_p = (uint8_t*) &_settingTime;
 uint8_t *const number_setting_p = (uint8_t*) &_settingNumber;
 struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 struct IO_Struct g_io_response;
+union Control_u g_test_control;
 
 void ResponseHandler(void);
 void ResponseWashingMode(void);
 void MonitoringStatus(void);
 void TestIndividual(void);
+void TestControl(void);
 
-void IO_Output(struct IO_Struct *io){
+void IO_Output(struct IO_Struct *io) {
 	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
 	O_SPOUT_WATER_PIN_SV2 = io->Valve.SV2;
 	O_SPOUT_ACID_PIN_SV3 = io->Valve.SV3;
@@ -147,7 +149,7 @@ void RaspberryCommunication_nostop(void) {
 	}
 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
 		g_machine_state.test = g_commnunication_flag.test_flag;
-	}else if(g_commnunication_flag.test_flag == TESTING_MODE_STOP){
+	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
 		struct IO_Struct _newIO;
 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
 		IO_Output(&_newIO);
@@ -204,7 +206,7 @@ uint8_t waitAlarmConfirm_nonstop(enum Control_status alarm) {
 void resetAlarm(void) {
 	g_commnunication_flag.alarm_clear_flag = 1;
 }
-void ResponseHandler(void){
+void ResponseHandler(void) {
 	if (g_commnunication_flag.send_response_flag) {
 		uint8_t state = g_uart2_sendend;
 		if (g_machine_state.user == 2) {
@@ -217,7 +219,7 @@ void ResponseHandler(void){
 		g_commnunication_flag.send_response_flag = 0;
 	}
 }
-void ResponseWashingMode(void){
+void ResponseWashingMode(void) {
 	if (g_commnunication_flag.send_response_mode_flag == 1) {
 		sendToRasPi_u32(H_READ, WASHING_MODE,
 				(uint32_t) g_machine_mode << (8 * 3));
@@ -225,7 +227,7 @@ void ResponseWashingMode(void){
 		g_commnunication_flag.send_response_mode_flag = 0;
 	}
 }
-void MonitoringStatus(void){
+void MonitoringStatus(void) {
 	if (g_commnunication_flag.send_response_status_flag == 1) {
 		uint8_t state = g_uart2_sendend;
 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
@@ -235,13 +237,34 @@ void MonitoringStatus(void){
 		g_commnunication_flag.send_response_status_flag = 0;
 	}
 }
-void TestIndividual(void){
-	 if (g_commnunication_flag.recieve_status_flag == 2) {
+void TestIndividual(void) {
+	if (g_commnunication_flag.recieve_status_flag == 2) {
 		uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
 		for (uint8_t i = 0; i < 4; i++) {
 			_io_p[i] = g_rx_data[i];
 		}
 		IO_Output(&g_io_response);
 		g_commnunication_flag.recieve_status_flag = 0;
+	}
+}
+void TestControl(void) {
+	if (g_commnunication_flag.control_test_flag != 0) {
+		switch (g_commnunication_flag.control_test_flag) {
+		case DRAINAGE_MODE_SET:
+			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+					(uint32_t) g_test_control.raw.drain << (8 * 3));
+			break;
+		case POWER_ON_TEST_SET:
+			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+					(uint32_t) g_test_control.raw.power_on << (8 * 3));
+			break;
+		case WATER_FILTER_SET:
+			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+					(uint32_t) g_test_control.raw.filter << (8 * 3));
+			break;
+		default:
+			break;
+		}
+		g_commnunication_flag.control_test_flag = 0;
 	}
 }

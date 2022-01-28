@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_main.obj
 00000000                       17  #@   ../src/r_main.c
-00000000                       18  #@  compiled at Tue Jan 18 11:54:24 2022
+00000000                       18  #@  compiled at Fri Jan 28 15:05:25 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_color
 00000000                       21  	.EXTERN _g_pre_color
@@ -629,7 +629,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001B3                      625  	;***      241 : 			uint8_t _b[5] = { 0, 1, 0, 0, 1 };
 000001B3                      626  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 241
 000001B3 340500               627  	movw de, #0x0005
-000001B6 320000               628  	movw bc, #SMRLW(.STR@1656)
+000001B6 320000               628  	movw bc, #SMRLW(.STR@1658)
 000001B9 FC000000             629  	call !!_memcpy
 000001BD A804                 630  	movw ax, [sp+0x04]
 000001BF 12                   631  	movw bc, ax
@@ -1077,7 +1077,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                     1064  .STR@1:
 00000000 00000000            1065  	.DS (4)
 00000004 01                  1066  	.DB 0x01
-00000005                     1067  .STR@1656:
+00000005                     1067  .STR@1658:
 00000005 00                  1068  	.DS (1)
 00000006 01                  1069  	.DB 0x01
 00000007 0000                1070  	.DS (2)

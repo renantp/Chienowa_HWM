@@ -11,6 +11,8 @@
 
 enum Control_status;
 enum UART_header_e;
+
+
 void sendToRasPi_f(enum UART_header_e head, enum Control_status type, float value);
 void sendToRasPi_u32(enum UART_header_e head, enum Control_status type, uint32_t value);
 void RaspberryCommunication_nostop(void);

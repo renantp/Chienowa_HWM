@@ -15,7 +15,7 @@ extern "C" {
 #endif
 
 //#include "r_cg_userdefine.h"
-#include "r_cg_serial.h"
+//#include "r_cg_serial.h"
 #include "r_cg_macrodriver.h"
 #include "r_cg_userdefine.h"
 
