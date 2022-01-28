@@ -268,6 +268,7 @@ enum Control_status{
 	DRAINAGE_MODE_SET = 0x27,
 	BIOMECTRIC_SET = 0x28,
 	POWER_ON_TEST_SET = 0x29,
+	WATER_FILTERE_SET = 0x2A,
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
