@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Fri Jan 28 15:05:25 2022
+#@  compiled at Thu Feb 10 14:43:59 2022
 
 	.EXTERN _g_color
 	.EXTERN _g_pre_color

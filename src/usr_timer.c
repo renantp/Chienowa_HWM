@@ -34,10 +34,6 @@ int ns_delay_ms(uint32_t *stamp, uint32_t ms){
 	*stamp = g_systemTime;
 	return 1;
 }
-int non_block_delay(uint32_t *stamp, uint32_t ms){
-	return 1;
-
-}
 
 void mTask(void (*func)(void), uint32_t *_p_stamp ,uint32_t ms){
 	if(g_systemTime - *_p_stamp >= ms){

@@ -134,6 +134,9 @@ void uart2_handle(void){
 				case WATER_FILTER_SET:
 					g_test_control.raw.filter = g_rx_data[5];
 					break;
+				case BIOMECTRIC_SET:
+					g_test_control.raw.biomectric = g_rx_data[5];
+					break;
 				default:
 					break;
 			}

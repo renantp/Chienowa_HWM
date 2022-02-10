@@ -269,6 +269,7 @@ enum Control_status{
 	BIOMECTRIC_SET = 0x28,
 	POWER_ON_TEST_SET = 0x29,
 	WATER_FILTER_SET = 0x2A,
+	START_WASHING = 0x2B,
 };
 extern struct Machine_State_u{
 	uint8_t akaline;

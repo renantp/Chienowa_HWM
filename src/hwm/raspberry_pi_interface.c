@@ -16,11 +16,11 @@ struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 struct IO_Struct g_io_response;
 union Control_u g_test_control;
 
-void ResponseHandler(void);
-void ResponseWashingMode(void);
-void MonitoringStatus(void);
-void TestIndividual(void);
-void TestControl(void);
+inline void ResponseHandler(void);
+inline void ResponseWashingMode(void);
+inline void MonitoringStatus(void);
+inline void TestIndividual(void);
+inline void TestControl(void);
 
 void IO_Output(struct IO_Struct *io) {
 	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
@@ -44,6 +44,7 @@ void RaspberryCommunication_nostop(void) {
 	ResponseWashingMode();
 	MonitoringStatus();
 	TestIndividual();
+	TestControl();
 	if (g_commnunication_flag.send_response_time_flag) {
 		uint8_t state = g_uart2_sendend;
 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
@@ -255,11 +256,11 @@ void TestControl(void) {
 					(uint32_t) g_test_control.raw.drain << (8 * 3));
 			break;
 		case POWER_ON_TEST_SET:
-			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+			sendToRasPi_u32(H_READ, POWER_ON_TEST_SET,
 					(uint32_t) g_test_control.raw.power_on << (8 * 3));
 			break;
 		case WATER_FILTER_SET:
-			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+			sendToRasPi_u32(H_READ, WATER_FILTER_SET,
 					(uint32_t) g_test_control.raw.filter << (8 * 3));
 			break;
 		default:

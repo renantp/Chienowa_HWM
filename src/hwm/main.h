@@ -30,25 +30,22 @@
 
 extern struct Timer_Setting_s _settingTime;
 extern struct Number_Setting_s _settingNumber;
-struct Cotrol_s{
-	uint8_t drain : 1;
-	uint8_t power_on: 1;
-	uint8_t filter: 1;
-	uint8_t RSVD: 5;
+struct Cotrol_s {
+	uint8_t drain :1;
+	uint8_t power_on :1;
+	uint8_t filter :1;
+	uint8_t biomectric :1;
+	uint8_t RSVD :4;
 };
-union Control_u{
+union Control_u {
 	struct Cotrol_s raw;
 };
 extern union Control_u g_test_control;
 //void electrolyticOperationON(void);
 //void electrolyticOperationOFF(void);
 
-
-//const uint8_t io_statusSize = sizeof(union IO_Status_u);
 static const uint8_t io_statusSize = 5 + 13;
-//const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s);
 static const uint8_t timeSettingSize = 141 + 8;
-//const uint8_t numberSettingSize = sizeof(struct Number_Setting_s);
 static const uint8_t numberSettingSize = 37;
 
 void UpdateMachineStatus(void);
