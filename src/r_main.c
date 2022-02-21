@@ -133,6 +133,8 @@ void main(void) {
 			numberSettingSize);
 	EE_SPI_Read((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
 			timeSettingSize);
+	EE_SPI_Read((uint8_t*) &g_test_control.data,
+			NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
 	_settingNumber = g_numberSetting;
 	_settingTime = g_timerSetting;
 	EEPROM_PROTECT_EN();
@@ -155,7 +157,10 @@ void main(void) {
 //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
 
 //TODO: Run Initialize Operation
-//    main_init_20211111();
+	if(g_test_control.raw.power_on == ON){
+		main_init_20211111();
+	}
+
 #ifdef TESTING_FIRMWARE
 	uint8_t state = OFF;
 	while (1) {
@@ -184,6 +189,7 @@ void main(void) {
 	}
 #endif
 	while (1U) {
+
 		realTimeResponse();
 		main_loop_20211111();
 

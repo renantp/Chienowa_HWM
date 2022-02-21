@@ -274,47 +274,29 @@ void main_init_20211111(void) {
 }
 
 void userAuthHandler_nostop(void) {
-	if(g_test_control.raw.biomectric == ON){
-		if (g_machine_state.user == 1) {
-			switch (g_machine_mode) {
-			case HAND_WASHING:
-				HandWashingMode_nostop();
-				break;
-			case WATER_WASHING:
-				WaterWashingMode_nostop();
-				break;
-			case ACID_WASHING:
-				AcidWaterMode_nostop();
-				break;
-			case ALKALINE_WASHING:
-				AlkalineWaterMode_nostop();
-				break;
-			default:
-				break;
-			}
-		}
-	}else{
-		if(DETECT_U() == I_ON && g_machine_state.user == 0){
+	if((g_test_control.raw.biomectric == OFF)){
+		if(DETECT_D() == I_ON && g_machine_state.user == 0){
 			sendToRasPi_u32(H_SET, START_WASHING, 0U);
 			g_machine_state.user = 1;
+			rx_count++;
 		}
-		if (g_machine_state.user == 1) {
-			switch (g_machine_mode) {
-			case HAND_WASHING:
-				HandWashingMode_nostop();
-				break;
-			case WATER_WASHING:
-				WaterWashingMode_nostop();
-				break;
-			case ACID_WASHING:
-				AcidWaterMode_nostop();
-				break;
-			case ALKALINE_WASHING:
-				AlkalineWaterMode_nostop();
-				break;
-			default:
-				break;
-			}
+	}
+	if (g_machine_state.user == 1) {
+		switch (g_machine_mode) {
+		case HAND_WASHING:
+			HandWashingMode_nostop();
+			break;
+		case WATER_WASHING:
+			WaterWashingMode_nostop();
+			break;
+		case ACID_WASHING:
+			AcidWaterMode_nostop();
+			break;
+		case ALKALINE_WASHING:
+			AlkalineWaterMode_nostop();
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -641,6 +623,8 @@ void main_loop_20211111(void) {
 		CallanCleaningMode_nostop();
 		// Washing handler
 		NormalMode_nostop();
+
+		realTimeResponse();
 	}else{
 		//TODO: Test mode
 

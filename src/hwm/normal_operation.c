@@ -7,7 +7,7 @@
 
 #include "normal_operation.h"
 
-
+uint8_t g_animation_queue;
 /**
  * Tested: 10/12/2021 by Mr.An
  */
@@ -24,7 +24,7 @@ void WaterWashingMode_nostop(void) {
 		handSensorLED(g_color);
 		break;
 	case 1:
-		if (ns_delay_ms(tick, 50)) {
+		if (ns_delay_ms(tick, 100)) {
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
 			(*state)++;
 		}
@@ -68,20 +68,38 @@ void HandWashingMode_nostop(void) {
 	case 0:
 		*state = 1;
 		*tick = g_systemTime;
-		break;
-	case 1:
 		g_machine_state.mode = HAND_WASHING;
 		O_SPOUT_ALK_PIN_SV4 = ON;
+		g_Tick.tickAnimation = g_systemTime;
+		break;
+	case 1:
+		//RDVS
+		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
+			(*state)++;
+			g_animation_queue++;
+			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			break;
+		}
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_ALK_PUMP_PIN_P2 = ON;
 			handSensorLED(BLUE);
-			(*state)++;
+			g_animation_queue++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			(*state)++;
 //			g_Tick.tickAnimation = g_systemTime;
 //			g_machine_state.waitAnimationRes = 1;
 		}
 		break;
 	case 2:
+		if (ns_delay_ms(tick, delayPump_ms)) {
+			O_ALK_PUMP_PIN_P2 = ON;
+			handSensorLED(BLUE);
+			(*state)++;
+//			g_Tick.tickAnimation = g_systemTime;
+//			g_machine_state.waitAnimationRes = 1;
+		}
+		break;
+	case 3:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t51_alkalineWaterSpoutingTime_s * 1000
 						- g_timerSetting.t54_overLapTime_ms)) {
@@ -90,45 +108,48 @@ void HandWashingMode_nostop(void) {
 			(*state)++;
 		}
 		break;
-	case 3:
+	case 4:
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_ACID_PUMP_PIN_P1 = ON;
 			handSensorLED(RED);
+			g_animation_queue++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
-	case 4:
+	case 5:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t54_overLapTime_ms - delayPump_ms)) {
 			O_SPOUT_ALK_PIN_SV4 = OFF;
 			(*state)++;
 		}
 		break;
-	case 5:
+	case 6:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t52_acidWaterSpoutingTime_s * 1000
 						- g_timerSetting.t54_overLapTime_ms)) {
 			O_ACID_PUMP_PIN_P1 = OFF;
 			handSensorLED(WHITE);
 			O_SPOUT_WATER_PIN_SV2 = ON;
+			g_animation_queue++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
-	case 6:
+	case 7:
 		if (ns_delay_ms(tick, g_timerSetting.t54_overLapTime_ms)) {
 			O_SPOUT_ACID_PIN_SV3 = OFF;
 			(*state)++;
 		}
 		break;
-	case 7:
+	case 8:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t53_washingWaterSpoutingTime_s * 1000)) {
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 			handSensorLED(BLACK);
 			(*state) = 0;
 			g_machine_state.mode = BUSY;
+			g_animation_queue++;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		}
 		break;
@@ -149,20 +170,34 @@ void AcidWaterMode_nostop(void) {
 	case 0:
 //		*state = DETECT_U == I_ON ? 1 : 0;
 		g_machine_state.mode = ACID_WASHING;
+		O_SPOUT_ACID_PIN_SV3 = ON;
+		g_color = RED;
+		handSensorLED(g_color);
 		*state = 1;
 		*tick = g_systemTime;
 		break;
 	case 1:
-		O_SPOUT_ACID_PIN_SV3 = ON;
-		g_color = RED;
-		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_ACID_PUMP_PIN_P1 = ON;
 			(*state)++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			g_Tick.tickAnimation = g_systemTime;
 		}
 		break;
 	case 2:
+		//RDVS
+		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
+			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			(*state)++;
+		}
+		//TODO: Change turn OFF signal here
+		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
+				|| (DETECT_U() == I_ON)) {
+			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			O_ACID_PUMP_PIN_P1 = OFF;
+			(*state)++;
+		}
+		break;
+	case 3:
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
 				|| (DETECT_U() == I_ON)) {
@@ -170,7 +205,7 @@ void AcidWaterMode_nostop(void) {
 			(*state)++;
 		}
 		break;
-	case 3:
+	case 4:
 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
 			O_SPOUT_ACID_PIN_SV3 = OFF;
 			g_color = BLACK;
@@ -205,11 +240,25 @@ void AlkalineWaterMode_nostop(void) {
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_ALK_PUMP_PIN_P2 = ON;
+			g_Tick.tickAnimation = g_systemTime;
 			(*state)++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		}
 		break;
 	case 2:
+		//RDVS
+		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
+			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			(*state)++;
+		}
+		//TODO: Change turn OFF signal here
+		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+						|| (DETECT_U() == I_ON)) {
+			O_ALK_PUMP_PIN_P2 = OFF;
+			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			(*state)++;
+		}
+		break;
+	case 3:
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
 				|| (DETECT_U() == I_ON)) {
@@ -217,7 +266,7 @@ void AlkalineWaterMode_nostop(void) {
 			(*state)++;
 		}
 		break;
-	case 3:
+	case 4:
 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
 			O_SPOUT_ALK_PIN_SV4 = OFF;
 			g_color = BLACK;

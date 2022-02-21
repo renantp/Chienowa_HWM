@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Thu Feb 10 14:43:53 2022
+#@  compiled at Mon Feb 21 08:59:29 2022
 
 	.PUBLIC _g_uart3_rx_data
 	.EXTERN _gp_uart1_tx_address
@@ -1254,7 +1254,7 @@ _send_respone_status_flag:
 _recived_number_setting_flag:
 	.DS (1)
 _g_commnunication_flag:
-	.DS (16)
+	.DS (17)
 _g_csi_count:
 	.DS (1)
 _g_csi_err:

@@ -80,6 +80,12 @@ void uart2_handle(void){
 				case WATER_FILTER_SET:
 					g_commnunication_flag.control_test_flag = WATER_FILTER_SET;
 					break;
+				case BIOMECTRIC_SET:
+					g_commnunication_flag.control_test_flag = BIOMECTRIC_SET;
+					break;
+				case CONTROL_SETTING:
+					g_commnunication_flag.control_test_flag = CONTROL_SETTING;
+					break;
 				default:
 					break;
 			}
@@ -126,16 +132,23 @@ void uart2_handle(void){
 					g_machine_state.user = 2;
 					break;
 				case DRAINAGE_MODE_SET:
+					g_commnunication_flag.control_test_save_flag = 1;
 					g_test_control.raw.drain = g_rx_data[5];
 					break;
 				case POWER_ON_TEST_SET:
+					g_commnunication_flag.control_test_save_flag = 1;
 					g_test_control.raw.power_on = g_rx_data[5];
 					break;
 				case WATER_FILTER_SET:
+					g_commnunication_flag.control_test_save_flag = 1;
 					g_test_control.raw.filter = g_rx_data[5];
 					break;
 				case BIOMECTRIC_SET:
+					g_commnunication_flag.control_test_save_flag = 1;
 					g_test_control.raw.biomectric = g_rx_data[5];
+					break;
+				case START_WASHING:
+					g_commnunication_flag.send_response_flag = 0;
 					break;
 				default:
 					break;

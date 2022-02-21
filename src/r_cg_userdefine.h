@@ -231,7 +231,7 @@ extern struct Tick_s{
 	uint32_t tickWaterSoftenerPCB;
 	uint32_t tickValvePCB;
 	uint32_t tickRS485;
-//	uint32_t tickAnimation;
+	uint32_t tickAnimation;
 	uint32_t tickCallan;
 	uint32_t tickDrainage;
 	uint32_t tickTestOperation;
@@ -270,6 +270,7 @@ enum Control_status{
 	POWER_ON_TEST_SET = 0x29,
 	WATER_FILTER_SET = 0x2A,
 	START_WASHING = 0x2B,
+	CONTROL_SETTING = 0x2C,
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -335,7 +336,7 @@ extern volatile struct Communicaition_flag_s{
 	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
 	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
 	rs485_fault;
-	volatile uint8_t control_test_flag;
+	volatile uint8_t control_test_flag, control_test_save_flag;
 }g_commnunication_flag;
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;
@@ -375,9 +376,7 @@ union byte_to_float{
 	float raw;
 };
 /* Hand Sensor Function */
-
-
-
+extern uint8_t g_animation_queue;
 extern volatile uint8_t send_response_flag, send_response_time_flag,
 send_response_number_flag, recived_number_setting_flag,
 recived_time_setting_flag,

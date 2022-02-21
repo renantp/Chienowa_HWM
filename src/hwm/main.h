@@ -39,6 +39,7 @@ struct Cotrol_s {
 };
 union Control_u {
 	struct Cotrol_s raw;
+	uint8_t data;
 };
 extern union Control_u g_test_control;
 //void electrolyticOperationON(void);

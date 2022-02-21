@@ -248,6 +248,7 @@ void TestIndividual(void) {
 		g_commnunication_flag.recieve_status_flag = 0;
 	}
 }
+
 void TestControl(void) {
 	if (g_commnunication_flag.control_test_flag != 0) {
 		switch (g_commnunication_flag.control_test_flag) {
@@ -263,9 +264,21 @@ void TestControl(void) {
 			sendToRasPi_u32(H_READ, WATER_FILTER_SET,
 					(uint32_t) g_test_control.raw.filter << (8 * 3));
 			break;
+		case BIOMECTRIC_SET:
+			sendToRasPi_u32(H_READ, BIOMECTRIC_SET,
+					(uint32_t) g_test_control.raw.biomectric << (8 * 3));
+			break;
+		case CONTROL_SETTING:
+			rx_count++;
+			sendToRasPi_u32(H_READ, CONTROL_SETTING, (uint32_t) g_test_control.data << (8 * 3));
+			break;
 		default:
 			break;
 		}
 		g_commnunication_flag.control_test_flag = 0;
+	}
+	if(g_commnunication_flag.control_test_save_flag == 1){
+		EE_SPI_Write((uint8_t *)&g_test_control.data, NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
+		g_commnunication_flag.control_test_save_flag = 0;
 	}
 }
