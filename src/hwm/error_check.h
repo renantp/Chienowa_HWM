@@ -8,7 +8,7 @@
 #ifndef HWM_ERROR_CHECK_H_
 #define HWM_ERROR_CHECK_H_
 
-#include "main.h"
+#include "hwm_main.h"
 
 extern union Alarm_Flag_u{
 	struct{

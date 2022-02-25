@@ -7,7 +7,7 @@
 
 #ifndef HWM_RASBERRY_PI_INTERFACE_H_
 #define HWM_RASBERRY_PI_INTERFACE_H_
-#include "main.h"
+#include "hwm_main.h"
 
 enum Control_status;
 enum UART_header_e;

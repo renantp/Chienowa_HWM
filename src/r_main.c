@@ -43,7 +43,7 @@
 #include "usr_timer.h"
 #include "usr_setting_sheet.h"
 #include "crc8.h"
-#include "hwm/main.h"
+#include "hwm/hwm_main.h"
 #include "r_cg_userdefine.h"
 
 /***********************************************************************************************************************

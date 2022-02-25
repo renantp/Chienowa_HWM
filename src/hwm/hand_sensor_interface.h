@@ -8,7 +8,7 @@
 #ifndef HWM_HAND_SENSOR_INTERFACE_H_
 #define HWM_HAND_SENSOR_INTERFACE_H_
 
-#include "main.h"
+#include "hwm_main.h"
 
 #define DETECT_U() (I_HS_ODA_PIN == ON ? 1:0)
 #define DETECT_D() (I_HS_OCL_PIN == ON ? 1:0)

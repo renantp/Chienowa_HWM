@@ -5,8 +5,8 @@
  *      Author: Hung
  */
 
-#ifndef HWM_MAIN_H_
-#define HWM_MAIN_H_
+#ifndef HWM_HWM_MAIN_H_
+#define HWM_HWM_MAIN_H_
 
 #define electrolyticOperationOFF() (g_machine_state.electrolyteOFF = g_machine_state.electrolyteOFF == 0 ? 1 : g_machine_state.electrolyteOFF)
 
@@ -55,4 +55,4 @@ uint8_t DrainageAcidAndAlkalineTankStart_nostop(void);
 void main_loop_20211111(void);
 void realTimeResponse(void);
 
-#endif /* HWM_MAIN_H_ */
+#endif /* HWM_HWM_MAIN_H_ */

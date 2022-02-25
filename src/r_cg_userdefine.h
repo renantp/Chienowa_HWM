@@ -36,7 +36,7 @@ User definitions
 /* Start user code for function. Do not edit comment generated here */
 #include "crc8.h"
 #include "EEPROM.h"
-#include "hwm/main.h"
+#include "hwm/hwm_main.h"
 extern uint8_t rx_count;
 
 #define NUMBER_SETTING_ADDRESS (0x000)

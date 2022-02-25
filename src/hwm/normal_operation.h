@@ -8,7 +8,7 @@
 #ifndef NORMAL_OPERATION_H_
 #define NORMAL_OPERATION_H_
 
-#include "main.h"
+#include "hwm_main.h"
 
 void WaterWashingMode_nostop(void);
 void HandWashingMode_nostop(void);

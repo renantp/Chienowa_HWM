@@ -5,7 +5,7 @@
  *      Author: Renan
  */
 
-#include "main.h"
+#include "hwm_main.h"
 
 #include <iodefine.h>
 

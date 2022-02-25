@@ -8,7 +8,7 @@
 #ifndef HWM_IO_CONTROL_H_
 #define HWM_IO_CONTROL_H_
 
-#include "main.h"
+#include "hwm_main.h"
 
 float measureFlowSensor(uint32_t *t);
 float measureFlowSensor_nostop(void);
