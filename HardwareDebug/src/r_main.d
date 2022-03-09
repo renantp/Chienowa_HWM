@@ -27,8 +27,8 @@ src/r_main.obj src/r_main.d: ../src/crc8.h
 ../src/crc8.h:
 src/r_main.obj src/r_main.d: ../src/EEPROM.h
 ../src/EEPROM.h:
-src/r_main.obj src/r_main.d: ../src/hwm/main.h
-../src/hwm/main.h:
+src/r_main.obj src/r_main.d: ../src/hwm/hwm_main.h
+../src/hwm/hwm_main.h:
 src/r_main.obj src/r_main.d: ../src/../src/r_cg_userdefine.h
 ../src/../src/r_cg_userdefine.h:
 src/r_main.obj src/r_main.d: ../src/../src/usr_setting_sheet.h
@@ -37,8 +37,8 @@ src/r_main.obj src/r_main.d: ../src/../src/usr_timer.h
 ../src/../src/usr_timer.h:
 src/r_main.obj src/r_main.d: ../src/hwm/rasberry_pi_interface.h
 ../src/hwm/rasberry_pi_interface.h:
-src/r_main.obj src/r_main.d: ../src/hwm/main.h
-../src/hwm/main.h:
+src/r_main.obj src/r_main.d: ../src/hwm/hwm_main.h
+../src/hwm/hwm_main.h:
 src/r_main.obj src/r_main.d: ../src/hwm/error_check.h
 ../src/hwm/error_check.h:
 src/r_main.obj src/r_main.d: ../src/hwm/hand_sensor_interface.h

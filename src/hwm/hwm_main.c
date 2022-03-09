@@ -629,6 +629,7 @@ void main_loop_20211111(void) {
 		//TODO: Test mode
 
 	}
+	levelSkipErrorCheck();
 }
 
 

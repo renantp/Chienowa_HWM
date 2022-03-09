@@ -20,6 +20,7 @@
 #include "../src/r_cg_adc.h"
 #include "../src/r_cg_timer.h"
 #include "../src/r_cg_wdt.h"
+#include "../src/r_cg_dac.h"
 
 #include "rasberry_pi_interface.h"
 #include "error_check.h"
@@ -47,7 +48,7 @@ extern union Control_u g_test_control;
 
 static const uint8_t io_statusSize = 5 + 13;
 static const uint8_t timeSettingSize = 141 + 8;
-static const uint8_t numberSettingSize = 37;
+static const uint8_t numberSettingSize = 40 + 1;
 
 void UpdateMachineStatus(void);
 uint8_t DrainageAcidAndAlkalineTankStart_nostop(void);

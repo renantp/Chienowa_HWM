@@ -275,3 +275,21 @@ uint8_t filterReplacementErrorCheck(void) {
 	}
 	return 0;
 }
+
+uint8_t levelSkipErrorCheck(void){
+	if(I_ACID_L_PIN_FL1 == I_OFF && (I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON))
+		g_alarm.refined.acid_skip = ON;
+	else if (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)
+		g_alarm.refined.acid_skip = ON;
+	else
+		g_alarm.refined.acid_skip = OFF;
+
+	if(I_ALKALI_L_PIN_FL4 == I_OFF && (I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON))
+		g_alarm.refined.alkaline_skip = ON;
+	else if(I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)
+		g_alarm.refined.alkaline_skip = ON;
+	else
+		g_alarm.refined.alkaline_skip = OFF;
+
+	return g_alarm.refined.acid_skip == ON || g_alarm.refined.alkaline_skip == ON ? 1 : 0;
+}

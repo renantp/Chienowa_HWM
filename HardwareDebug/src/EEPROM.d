@@ -11,8 +11,8 @@ src/EEPROM.obj src/EEPROM.d: ../src/crc8.h
 ../src/crc8.h:
 src/EEPROM.obj src/EEPROM.d: ../src/EEPROM.h
 ../src/EEPROM.h:
-src/EEPROM.obj src/EEPROM.d: ../src/hwm/main.h
-../src/hwm/main.h:
+src/EEPROM.obj src/EEPROM.d: ../src/hwm/hwm_main.h
+../src/hwm/hwm_main.h:
 src/EEPROM.obj src/EEPROM.d: ../src/../src/r_cg_userdefine.h
 ../src/../src/r_cg_userdefine.h:
 src/EEPROM.obj src/EEPROM.d: ../src/../src/usr_setting_sheet.h
@@ -31,10 +31,12 @@ src/EEPROM.obj src/EEPROM.d: ../src/../src/r_cg_timer.h
 ../src/../src/r_cg_timer.h:
 src/EEPROM.obj src/EEPROM.d: ../src/../src/r_cg_wdt.h
 ../src/../src/r_cg_wdt.h:
+src/EEPROM.obj src/EEPROM.d: ../src/../src/r_cg_dac.h
+../src/../src/r_cg_dac.h:
 src/EEPROM.obj src/EEPROM.d: ../src/hwm/rasberry_pi_interface.h
 ../src/hwm/rasberry_pi_interface.h:
-src/EEPROM.obj src/EEPROM.d: ../src/hwm/main.h
-../src/hwm/main.h:
+src/EEPROM.obj src/EEPROM.d: ../src/hwm/hwm_main.h
+../src/hwm/hwm_main.h:
 src/EEPROM.obj src/EEPROM.d: ../src/hwm/error_check.h
 ../src/hwm/error_check.h:
 src/EEPROM.obj src/EEPROM.d: ../src/hwm/hand_sensor_interface.h

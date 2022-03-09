@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Fri Feb 25 09:28:38 2022
+#@  compiled at Wed Mar 09 09:37:11 2022
 
 	.PUBLIC _g_uart3_rx_data
 	.EXTERN _gp_uart1_tx_address
@@ -94,13 +94,13 @@ _r_uart1_interrupt_receive@1:
 	;***       29 : /***********************************************************************************************************************
 	;***       30 :  Includes
 	;***       31 :  ***********************************************************************************************************************/
-	;***       32 : #include "hwm/main.h"
+	;***       32 : #include "hwm/hwm_main.h"
 	;***       33 : #include "r_cg_macrodriver.h"
 	;***       34 : #include "r_cg_serial.h"
 	;***       35 : /* Start user code for include. Do not edit comment generated here */
 	;***       36 : #include "r_cg_wdt.h"
 	;***       37 : #include "r_cg_userdefine.h"
-	;***       38 : 
+	;***       38 : /* End user code. Do not edit comment generated here */
 	;***       39 : /***********************************************************************************************************************
 	;***       40 :  Pragma directive
 	;***       41 :  ***********************************************************************************************************************/

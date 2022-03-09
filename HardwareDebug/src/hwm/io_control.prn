@@ -1,0 +1,879 @@
+RL78 Family Assembler V1.10.00.01 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RL Compiler RL78 Assembler Source
+00000000                        2  #@  CC-RL Version : V1.10.00 [20 Nov 2020]
+00000000                        3  #@  Commmand :
+00000000                        4  #@   -cpu=S3
+00000000                        5  #@   -c
+00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+00000000                        7  #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm
+00000000                        8  #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
+00000000                        9  #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
+00000000                       10  #@   -character_set=utf8
+00000000                       11  #@   -lang=c99
+00000000                       12  #@   -g
+00000000                       13  #@   -asmopt=-prn_path=src/hwm
+00000000                       14  #@   -asm_path=src/hwm/
+00000000                       15  #@   -pass_source
+00000000                       16  #@   -o src/hwm/io_control.obj
+00000000                       17  #@   ../src/hwm/io_control.c
+00000000                       18  #@  compiled at Wed Mar 09 09:37:16 2022
+00000000                       19  
+00000000                       20  	.EXTERN _g_timerSetting
+00000000                       21  	.EXTERN _g_io_status
+00000000                       22  	.EXTERN _g_mean_io_status
+00000000                       23  	.EXTERN _g_Tick
+00000000                       24  	.EXTERN _g_machine_state
+00000000                       25  	.EXTERN _g_systemTime
+00000000                       26  	.PUBLIC __pre_flow_state
+00000000                       27  	.PUBLIC __flow_pulse
+00000000                       28  	.PUBLIC _isAcidTankFull
+00000000                       29  	.EXTERN _ns_delay_ms
+00000000                       30  	.PUBLIC _isAcidTankAlmostFull
+00000000                       31  	.PUBLIC _isAcidTankHasSomething
+00000000                       32  	.PUBLIC _isAcidTankEmpty
+00000000                       33  	.PUBLIC _isAlkalineTankFull
+00000000                       34  	.PUBLIC _isAlkalineTankAlmostFull
+00000000                       35  	.PUBLIC _isAlkalineTankHasSomething_nonstop
+00000000                       36  	.PUBLIC _isAlkalineTankEmpty_nonstop
+00000000                       37  	.PUBLIC _measureFlowSensor
+00000000                       38  	.EXTERN _R_WDT_Restart
+00000000                       39  	.PUBLIC _measureFlowSensor_nostop
+00000000                       40  
+00000000                       41  	.SECTION .textf,TEXTF
+00000000                       42  _isAcidTankFull:
+00000000                       43  	.STACK _isAcidTankFull = 6
+00000000                       44  	;***        1 : /*
+00000000                       45  	;***        2 :  * io_control.c
+00000000                       46  	;***        3 :  *
+00000000                       47  	;***        4 :  *  Created on: 6 Jan 2022
+00000000                       48  	;***        5 :  *      Author: Hung
+00000000                       49  	;***        6 :  */
+00000000                       50  	;***        7 : 
+00000000                       51  	;***        8 : #include "io_control.h"
+00000000                       52  	;***        9 : 
+00000000                       53  	;***       10 : /********************** Check Input *******************/
+00000000                       54  	;***       11 : uint8_t isAcidTankFull(void) {
+00000000                       55  	;***       12 : 	if (I_ACID_H_PIN_FL3 == I_ON) {
+00000000                       56  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 12
+00000000 8D07                  57  	mov a, 0xFFF07
+00000002 313300                58  	bt a.3, $.BB@LABEL@1_5
+00000005                       59  .BB@LABEL@1_1:	; if_then_bb
+00000005                       60  	;***       13 : 		if (ns_delay_ms(&g_Tick.tickAcidLevel[0],
+00000005                       61  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 13
+00000005 AF0000                62  	movw ax, !LOWW(_g_timerSetting+0x00058)
+00000008 32E803                63  	movw bc, #0x03E8
+0000000B CEFB01                64  	mulhu
+0000000E 14                    65  	movw de, ax
+0000000F C3                    66  	push bc
+00000010 C6                    67  	pop hl
+00000011 AF0000                68  	movw ax, !LOWW(_g_timerSetting+0x0005A)
+00000014 32E803                69  	movw bc, #0x03E8
+00000017 CEFB02                70  	mulh
+0000001A C5                    71  	push de
+0000001B C2                    72  	pop bc
+0000001C 07                    73  	addw ax, hl
+0000001D 14                    74  	movw de, ax
+0000001E 300000                75  	movw ax, #LOWW(_g_Tick+0x00070)
+00000021 FC000000              76  	call !!_ns_delay_ms
+00000025 F7                    77  	clrw bc
+00000026 43                    78  	cmpw ax, bc
+00000027 DF00                  79  	bnz $.BB@LABEL@1_4
+00000029                       80  .BB@LABEL@1_2:	; bb
+00000029 360000                81  	movw hl, #LOWW(_g_mean_io_status)
+0000002C 31D300                82  	bt [hl].5, $.BB@LABEL@1_4
+0000002F                       83  .BB@LABEL@1_3:	; bb36
+0000002F F1                    84  	clrb a
+00000030                       85  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 24
+00000030 D7                    86  	ret
+00000031                       87  .BB@LABEL@1_4:	; if_then_bb25
+00000031                       88  	;***       14 : 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+00000031                       89  	;***       15 : 				|| (g_mean_io_status.refined.io.AcidHighLevel == 1)) {
+00000031                       90  	;***       16 : 			g_mean_io_status.refined.io.AcidHighLevel = 1;
+00000031                       91  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 16
+00000031 71500000              92  	set1 !LOWW(_g_mean_io_status).5
+00000035                       93  	;***       17 : 			return 1;
+00000035                       94  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 17
+00000035 E1                    95  	oneb a
+00000036 D7                    96  	ret
+00000037                       97  .BB@LABEL@1_5:	; if_else_bb
+00000037                       98  	;***       18 : 		}
+00000037                       99  	;***       19 : 	} else {
+00000037                      100  	;***       20 : 		g_Tick.tickAcidLevel[0] = g_systemTime;
+00000037                      101  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 20
+00000037 AF0000               102  	movw ax, !LOWW(_g_systemTime+0x00002)
+0000003A BF0000               103  	movw !LOWW(_g_Tick+0x00072), ax
+0000003D AF0000               104  	movw ax, !LOWW(_g_systemTime)
+00000040 BF0000               105  	movw !LOWW(_g_Tick+0x00070), ax
+00000043                      106  	;***       21 : 		g_mean_io_status.refined.io.AcidHighLevel = 0;
+00000043                      107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 21
+00000043 71580000             108  	clr1 !LOWW(_g_mean_io_status).5
+00000047 EF00                 109  	br $.BB@LABEL@1_3
+00000049                      110  _isAcidTankAlmostFull:
+00000049                      111  	.STACK _isAcidTankAlmostFull = 6
+00000049                      112  	;***       22 : 	}
+00000049                      113  	;***       23 : 	return 0;
+00000049                      114  	;***       24 : }
+00000049                      115  	;***       25 : uint8_t isAcidTankAlmostFull(void) {
+00000049                      116  	;***       26 : 	if (I_ACID_M_PIN_FL2 == I_ON) {
+00000049                      117  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 26
+00000049 8D07                 118  	mov a, 0xFFF07
+0000004B 312300               119  	bt a.2, $.BB@LABEL@2_5
+0000004E                      120  .BB@LABEL@2_1:	; if_then_bb
+0000004E                      121  	;***       27 : 		if (ns_delay_ms(&g_Tick.tickAcidLevel[1],
+0000004E                      122  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 27
+0000004E AF0000               123  	movw ax, !LOWW(_g_timerSetting+0x00054)
+00000051 32E803               124  	movw bc, #0x03E8
+00000054 CEFB01               125  	mulhu
+00000057 14                   126  	movw de, ax
+00000058 C3                   127  	push bc
+00000059 C6                   128  	pop hl
+0000005A AF0000               129  	movw ax, !LOWW(_g_timerSetting+0x00056)
+0000005D 32E803               130  	movw bc, #0x03E8
+00000060 CEFB02               131  	mulh
+00000063 C5                   132  	push de
+00000064 C2                   133  	pop bc
+00000065 07                   134  	addw ax, hl
+00000066 14                   135  	movw de, ax
+00000067 300000               136  	movw ax, #LOWW(_g_Tick+0x00074)
+0000006A FC000000             137  	call !!_ns_delay_ms
+0000006E F7                   138  	clrw bc
+0000006F 43                   139  	cmpw ax, bc
+00000070 DF00                 140  	bnz $.BB@LABEL@2_4
+00000072                      141  .BB@LABEL@2_2:	; bb
+00000072 360000               142  	movw hl, #LOWW(_g_mean_io_status)
+00000075 31C300               143  	bt [hl].4, $.BB@LABEL@2_4
+00000078                      144  .BB@LABEL@2_3:	; bb36
+00000078 F1                   145  	clrb a
+00000079                      146  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 38
+00000079 D7                   147  	ret
+0000007A                      148  .BB@LABEL@2_4:	; if_then_bb25
+0000007A                      149  	;***       28 : 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+0000007A                      150  	;***       29 : 				|| (g_mean_io_status.refined.io.AcidLowLevel == 1)) {
+0000007A                      151  	;***       30 : 			g_mean_io_status.refined.io.AcidLowLevel = 1;
+0000007A                      152  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 30
+0000007A 71400000             153  	set1 !LOWW(_g_mean_io_status).4
+0000007E                      154  	;***       31 : 			return 1;
+0000007E                      155  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 31
+0000007E E1                   156  	oneb a
+0000007F D7                   157  	ret
+00000080                      158  .BB@LABEL@2_5:	; if_else_bb
+00000080                      159  	;***       32 : 		}
+00000080                      160  	;***       33 : 	} else {
+00000080                      161  	;***       34 : 		g_Tick.tickAcidLevel[1] = g_systemTime;
+00000080                      162  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 34
+00000080 AF0000               163  	movw ax, !LOWW(_g_systemTime+0x00002)
+00000083 BF0000               164  	movw !LOWW(_g_Tick+0x00076), ax
+00000086 AF0000               165  	movw ax, !LOWW(_g_systemTime)
+00000089 BF0000               166  	movw !LOWW(_g_Tick+0x00074), ax
+0000008C                      167  	;***       35 : 		g_mean_io_status.refined.io.AcidLowLevel = 0;
+0000008C                      168  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 35
+0000008C 71480000             169  	clr1 !LOWW(_g_mean_io_status).4
+00000090 EF00                 170  	br $.BB@LABEL@2_3
+00000092                      171  _isAcidTankHasSomething:
+00000092                      172  	.STACK _isAcidTankHasSomething = 6
+00000092                      173  	;***       36 : 	}
+00000092                      174  	;***       37 : 	return 0;
+00000092                      175  	;***       38 : }
+00000092                      176  	;***       39 : uint8_t isAcidTankHasSomething(void) {
+00000092                      177  	;***       40 : 	if (I_ACID_L_PIN_FL1 == I_ON) {
+00000092                      178  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 40
+00000092 8D07                 179  	mov a, 0xFFF07
+00000094 311300               180  	bt a.1, $.BB@LABEL@3_5
+00000097                      181  .BB@LABEL@3_1:	; if_then_bb
+00000097                      182  	;***       41 : 		if (ns_delay_ms(&g_Tick.tickAcidLevel[2],
+00000097                      183  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 41
+00000097 AF0000               184  	movw ax, !LOWW(_g_timerSetting+0x00050)
+0000009A 32E803               185  	movw bc, #0x03E8
+0000009D CEFB01               186  	mulhu
+000000A0 14                   187  	movw de, ax
+000000A1 C3                   188  	push bc
+000000A2 C6                   189  	pop hl
+000000A3 AF0000               190  	movw ax, !LOWW(_g_timerSetting+0x00052)
+000000A6 32E803               191  	movw bc, #0x03E8
+000000A9 CEFB02               192  	mulh
+000000AC C5                   193  	push de
+000000AD C2                   194  	pop bc
+000000AE 07                   195  	addw ax, hl
+000000AF 14                   196  	movw de, ax
+000000B0 300000               197  	movw ax, #LOWW(_g_Tick+0x00078)
+000000B3 FC000000             198  	call !!_ns_delay_ms
+000000B7 F7                   199  	clrw bc
+000000B8 43                   200  	cmpw ax, bc
+000000B9 DF00                 201  	bnz $.BB@LABEL@3_4
+000000BB                      202  .BB@LABEL@3_2:	; bb
+000000BB 360000               203  	movw hl, #LOWW(_g_mean_io_status)
+000000BE 31B300               204  	bt [hl].3, $.BB@LABEL@3_4
+000000C1                      205  .BB@LABEL@3_3:	; bb34
+000000C1 F1                   206  	clrb a
+000000C2                      207  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 52
+000000C2 D7                   208  	ret
+000000C3                      209  .BB@LABEL@3_4:	; if_then_bb25
+000000C3                      210  	;***       42 : 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+000000C3                      211  	;***       43 : 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 1)) {
+000000C3                      212  	;***       44 : 			g_mean_io_status.refined.io.AcidEmptyLevel = 1;
+000000C3                      213  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 44
+000000C3 71300000             214  	set1 !LOWW(_g_mean_io_status).3
+000000C7                      215  	;***       45 : 			return 1;
+000000C7                      216  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 45
+000000C7 E1                   217  	oneb a
+000000C8 D7                   218  	ret
+000000C9                      219  .BB@LABEL@3_5:	; if_else_bb
+000000C9                      220  	;***       46 : 		}
+000000C9                      221  	;***       47 : 	} else {
+000000C9                      222  	;***       48 : 		g_Tick.tickAcidLevel[2] = g_systemTime;
+000000C9                      223  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 48
+000000C9 AF0000               224  	movw ax, !LOWW(_g_systemTime+0x00002)
+000000CC BF0000               225  	movw !LOWW(_g_Tick+0x0007A), ax
+000000CF AF0000               226  	movw ax, !LOWW(_g_systemTime)
+000000D2 BF0000               227  	movw !LOWW(_g_Tick+0x00078), ax
+000000D5                      228  	;***       49 : 		isAcidTankEmpty();
+000000D5                      229  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 49
+000000D5 FE0000               230  	call $!_isAcidTankEmpty
+000000D8 EF00                 231  	br $.BB@LABEL@3_3
+000000DA                      232  _isAcidTankEmpty:
+000000DA                      233  	.STACK _isAcidTankEmpty = 6
+000000DA                      234  	;***       50 : 	}
+000000DA                      235  	;***       51 : 	return 0;
+000000DA                      236  	;***       52 : }
+000000DA                      237  	;***       53 : uint8_t isAcidTankEmpty(void) {
+000000DA                      238  	;***       54 : 	if (I_ACID_L_PIN_FL1 == I_OFF) {
+000000DA                      239  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 54
+000000DA 8D07                 240  	mov a, 0xFFF07
+000000DC 311300               241  	bt a.1, $.BB@LABEL@4_2
+000000DF                      242  .BB@LABEL@4_1:	; if_else_bb
+000000DF                      243  	;***       55 : 		if (ns_delay_ms(&g_Tick.tickAcidLevel[3],
+000000DF                      244  	;***       56 : 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+000000DF                      245  	;***       57 : 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 0)) {
+000000DF                      246  	;***       58 : 			g_mean_io_status.refined.io.AcidEmptyLevel = 0;
+000000DF                      247  	;***       59 : 			return 1;
+000000DF                      248  	;***       60 : 		}
+000000DF                      249  	;***       61 : 	} else {
+000000DF                      250  	;***       62 : 		g_Tick.tickAcidLevel[3] = g_systemTime;
+000000DF                      251  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 62
+000000DF AF0000               252  	movw ax, !LOWW(_g_systemTime+0x00002)
+000000E2 BF0000               253  	movw !LOWW(_g_Tick+0x0007E), ax
+000000E5 AF0000               254  	movw ax, !LOWW(_g_systemTime)
+000000E8 BF0000               255  	movw !LOWW(_g_Tick+0x0007C), ax
+000000EB                      256  	;***       63 : 		isAcidTankHasSomething();
+000000EB                      257  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 63
+000000EB FE0000               258  	call $!_isAcidTankHasSomething
+000000EE EF00                 259  	br $.BB@LABEL@4_4
+000000F0                      260  .BB@LABEL@4_2:	; if_then_bb
+000000F0                      261  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 55
+000000F0 AF0000               262  	movw ax, !LOWW(_g_timerSetting+0x0005C)
+000000F3 32E803               263  	movw bc, #0x03E8
+000000F6 CEFB01               264  	mulhu
+000000F9 14                   265  	movw de, ax
+000000FA C3                   266  	push bc
+000000FB C6                   267  	pop hl
+000000FC AF0000               268  	movw ax, !LOWW(_g_timerSetting+0x0005E)
+000000FF 32E803               269  	movw bc, #0x03E8
+00000102 CEFB02               270  	mulh
+00000105 C5                   271  	push de
+00000106 C2                   272  	pop bc
+00000107 07                   273  	addw ax, hl
+00000108 14                   274  	movw de, ax
+00000109 300000               275  	movw ax, #LOWW(_g_Tick+0x0007C)
+0000010C FC000000             276  	call !!_ns_delay_ms
+00000110 F7                   277  	clrw bc
+00000111 43                   278  	cmpw ax, bc
+00000112 DF00                 279  	bnz $.BB@LABEL@4_5
+00000114                      280  .BB@LABEL@4_3:	; bb
+00000114 360000               281  	movw hl, #LOWW(_g_mean_io_status)
+00000117 31B500               282  	bf [hl].3, $.BB@LABEL@4_5
+0000011A                      283  .BB@LABEL@4_4:	; bb34
+0000011A F1                   284  	clrb a
+0000011B                      285  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 66
+0000011B D7                   286  	ret
+0000011C                      287  .BB@LABEL@4_5:	; if_then_bb25
+0000011C                      288  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 58
+0000011C 71380000             289  	clr1 !LOWW(_g_mean_io_status).3
+00000120                      290  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 59
+00000120 E1                   291  	oneb a
+00000121 D7                   292  	ret
+00000122                      293  _isAlkalineTankFull:
+00000122                      294  	.STACK _isAlkalineTankFull = 6
+00000122                      295  	;***       64 : 	}
+00000122                      296  	;***       65 : 	return 0;
+00000122                      297  	;***       66 : }
+00000122                      298  	;***       67 : uint8_t isAlkalineTankFull(void) {
+00000122                      299  	;***       68 : 	if (I_ALKALI_H_PIN_FL6 == I_ON) {
+00000122                      300  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 68
+00000122 8D07                 301  	mov a, 0xFFF07
+00000124 310300               302  	bt a.0, $.BB@LABEL@5_5
+00000127                      303  .BB@LABEL@5_1:	; if_then_bb
+00000127                      304  	;***       69 : 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[0],
+00000127                      305  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 69
+00000127 AF0000               306  	movw ax, !LOWW(_g_timerSetting+0x00058)
+0000012A 32E803               307  	movw bc, #0x03E8
+0000012D CEFB01               308  	mulhu
+00000130 14                   309  	movw de, ax
+00000131 C3                   310  	push bc
+00000132 C6                   311  	pop hl
+00000133 AF0000               312  	movw ax, !LOWW(_g_timerSetting+0x0005A)
+00000136 32E803               313  	movw bc, #0x03E8
+00000139 CEFB02               314  	mulh
+0000013C C5                   315  	push de
+0000013D C2                   316  	pop bc
+0000013E 07                   317  	addw ax, hl
+0000013F 14                   318  	movw de, ax
+00000140 300000               319  	movw ax, #LOWW(_g_Tick+0x00080)
+00000143 FC000000             320  	call !!_ns_delay_ms
+00000147 F7                   321  	clrw bc
+00000148 43                   322  	cmpw ax, bc
+00000149 DF00                 323  	bnz $.BB@LABEL@5_4
+0000014B                      324  .BB@LABEL@5_2:	; bb
+0000014B 360000               325  	movw hl, #LOWW(_g_mean_io_status)
+0000014E 31A300               326  	bt [hl].2, $.BB@LABEL@5_4
+00000151                      327  .BB@LABEL@5_3:	; bb36
+00000151 F1                   328  	clrb a
+00000152                      329  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 80
+00000152 D7                   330  	ret
+00000153                      331  .BB@LABEL@5_4:	; if_then_bb25
+00000153                      332  	;***       70 : 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+00000153                      333  	;***       71 : 				|| (g_mean_io_status.refined.io.AlkalineHighLevel == 1)) {
+00000153                      334  	;***       72 : 			g_mean_io_status.refined.io.AlkalineHighLevel = 1;
+00000153                      335  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 72
+00000153 71200000             336  	set1 !LOWW(_g_mean_io_status).2
+00000157                      337  	;***       73 : 			return 1;
+00000157                      338  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 73
+00000157 E1                   339  	oneb a
+00000158 D7                   340  	ret
+00000159                      341  .BB@LABEL@5_5:	; if_else_bb
+00000159                      342  	;***       74 : 		}
+00000159                      343  	;***       75 : 	} else {
+00000159                      344  	;***       76 : 		g_Tick.tickAlkalineLevel[0] = g_systemTime;
+00000159                      345  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 76
+00000159 AF0000               346  	movw ax, !LOWW(_g_systemTime+0x00002)
+0000015C BF0000               347  	movw !LOWW(_g_Tick+0x00082), ax
+0000015F AF0000               348  	movw ax, !LOWW(_g_systemTime)
+00000162 BF0000               349  	movw !LOWW(_g_Tick+0x00080), ax
+00000165                      350  	;***       77 : 		g_mean_io_status.refined.io.AlkalineHighLevel = 0;
+00000165                      351  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 77
+00000165 71280000             352  	clr1 !LOWW(_g_mean_io_status).2
+00000169 EF00                 353  	br $.BB@LABEL@5_3
+0000016B                      354  _isAlkalineTankAlmostFull:
+0000016B                      355  	.STACK _isAlkalineTankAlmostFull = 6
+0000016B                      356  	;***       78 : 	}
+0000016B                      357  	;***       79 : 	return 0;
+0000016B                      358  	;***       80 : }
+0000016B                      359  	;***       81 : uint8_t isAlkalineTankAlmostFull(void) {
+0000016B                      360  	;***       82 : 	if (I_ALKALI_M_PIN_FL5 == I_ON) {
+0000016B                      361  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 82
+0000016B 8D00                 362  	mov a, 0xFFF00
+0000016D 316300               363  	bt a.6, $.BB@LABEL@6_5
+00000170                      364  .BB@LABEL@6_1:	; if_then_bb
+00000170                      365  	;***       83 : 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[1],
+00000170                      366  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 83
+00000170 AF0000               367  	movw ax, !LOWW(_g_timerSetting+0x00054)
+00000173 32E803               368  	movw bc, #0x03E8
+00000176 CEFB01               369  	mulhu
+00000179 14                   370  	movw de, ax
+0000017A C3                   371  	push bc
+0000017B C6                   372  	pop hl
+0000017C AF0000               373  	movw ax, !LOWW(_g_timerSetting+0x00056)
+0000017F 32E803               374  	movw bc, #0x03E8
+00000182 CEFB02               375  	mulh
+00000185 C5                   376  	push de
+00000186 C2                   377  	pop bc
+00000187 07                   378  	addw ax, hl
+00000188 14                   379  	movw de, ax
+00000189 300000               380  	movw ax, #LOWW(_g_Tick+0x00084)
+0000018C FC000000             381  	call !!_ns_delay_ms
+00000190 F7                   382  	clrw bc
+00000191 43                   383  	cmpw ax, bc
+00000192 DF00                 384  	bnz $.BB@LABEL@6_4
+00000194                      385  .BB@LABEL@6_2:	; bb
+00000194 360000               386  	movw hl, #LOWW(_g_mean_io_status)
+00000197 319300               387  	bt [hl].1, $.BB@LABEL@6_4
+0000019A                      388  .BB@LABEL@6_3:	; bb36
+0000019A F1                   389  	clrb a
+0000019B                      390  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 94
+0000019B D7                   391  	ret
+0000019C                      392  .BB@LABEL@6_4:	; if_then_bb25
+0000019C                      393  	;***       84 : 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+0000019C                      394  	;***       85 : 				|| (g_mean_io_status.refined.io.AlkalineLowLevel == 1)) {
+0000019C                      395  	;***       86 : 			g_mean_io_status.refined.io.AlkalineLowLevel = 1;
+0000019C                      396  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 86
+0000019C 71100000             397  	set1 !LOWW(_g_mean_io_status).1
+000001A0                      398  	;***       87 : 			return 1;
+000001A0                      399  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 87
+000001A0 E1                   400  	oneb a
+000001A1 D7                   401  	ret
+000001A2                      402  .BB@LABEL@6_5:	; if_else_bb
+000001A2                      403  	;***       88 : 		}
+000001A2                      404  	;***       89 : 	} else {
+000001A2                      405  	;***       90 : 		g_Tick.tickAlkalineLevel[1] = g_systemTime;
+000001A2                      406  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 90
+000001A2 AF0000               407  	movw ax, !LOWW(_g_systemTime+0x00002)
+000001A5 BF0000               408  	movw !LOWW(_g_Tick+0x00086), ax
+000001A8 AF0000               409  	movw ax, !LOWW(_g_systemTime)
+000001AB BF0000               410  	movw !LOWW(_g_Tick+0x00084), ax
+000001AE                      411  	;***       91 : 		g_mean_io_status.refined.io.AlkalineLowLevel = 0;
+000001AE                      412  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 91
+000001AE 71180000             413  	clr1 !LOWW(_g_mean_io_status).1
+000001B2 EF00                 414  	br $.BB@LABEL@6_3
+000001B4                      415  _isAlkalineTankHasSomething_nonstop:
+000001B4                      416  	.STACK _isAlkalineTankHasSomething_nonstop = 6
+000001B4                      417  	;***       92 : 	}
+000001B4                      418  	;***       93 : 	return 0;
+000001B4                      419  	;***       94 : }
+000001B4                      420  	;***       95 : uint8_t isAlkalineTankHasSomething_nonstop(void) {
+000001B4                      421  	;***       96 : 	if (I_ALKALI_L_PIN_FL4 == I_ON) {
+000001B4                      422  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 96
+000001B4 8D00                 423  	mov a, 0xFFF00
+000001B6 315300               424  	bt a.5, $.BB@LABEL@7_5
+000001B9                      425  .BB@LABEL@7_1:	; if_then_bb
+000001B9                      426  	;***       97 : 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[2],
+000001B9                      427  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 97
+000001B9 AF0000               428  	movw ax, !LOWW(_g_timerSetting+0x00050)
+000001BC 32E803               429  	movw bc, #0x03E8
+000001BF CEFB01               430  	mulhu
+000001C2 14                   431  	movw de, ax
+000001C3 C3                   432  	push bc
+000001C4 C6                   433  	pop hl
+000001C5 AF0000               434  	movw ax, !LOWW(_g_timerSetting+0x00052)
+000001C8 32E803               435  	movw bc, #0x03E8
+000001CB CEFB02               436  	mulh
+000001CE C5                   437  	push de
+000001CF C2                   438  	pop bc
+000001D0 07                   439  	addw ax, hl
+000001D1 14                   440  	movw de, ax
+000001D2 300000               441  	movw ax, #LOWW(_g_Tick+0x00088)
+000001D5 FC000000             442  	call !!_ns_delay_ms
+000001D9 F7                   443  	clrw bc
+000001DA 43                   444  	cmpw ax, bc
+000001DB DF00                 445  	bnz $.BB@LABEL@7_4
+000001DD                      446  .BB@LABEL@7_2:	; bb
+000001DD 360000               447  	movw hl, #LOWW(_g_mean_io_status)
+000001E0 318300               448  	bt [hl].0, $.BB@LABEL@7_4
+000001E3                      449  .BB@LABEL@7_3:	; bb34
+000001E3 F1                   450  	clrb a
+000001E4                      451  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 108
+000001E4 D7                   452  	ret
+000001E5                      453  .BB@LABEL@7_4:	; if_then_bb25
+000001E5                      454  	;***       98 : 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+000001E5                      455  	;***       99 : 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 1)) {
+000001E5                      456  	;***      100 : 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 1;
+000001E5                      457  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 100
+000001E5 71000000             458  	set1 !LOWW(_g_mean_io_status).0
+000001E9                      459  	;***      101 : 			return 1;
+000001E9                      460  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 101
+000001E9 E1                   461  	oneb a
+000001EA D7                   462  	ret
+000001EB                      463  .BB@LABEL@7_5:	; if_else_bb
+000001EB                      464  	;***      102 : 		}
+000001EB                      465  	;***      103 : 	} else {
+000001EB                      466  	;***      104 : 		g_Tick.tickAlkalineLevel[2] = g_systemTime;
+000001EB                      467  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 104
+000001EB AF0000               468  	movw ax, !LOWW(_g_systemTime+0x00002)
+000001EE BF0000               469  	movw !LOWW(_g_Tick+0x0008A), ax
+000001F1 AF0000               470  	movw ax, !LOWW(_g_systemTime)
+000001F4 BF0000               471  	movw !LOWW(_g_Tick+0x00088), ax
+000001F7                      472  	;***      105 : 		isAlkalineTankEmpty_nonstop();
+000001F7                      473  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 105
+000001F7 FE0000               474  	call $!_isAlkalineTankEmpty_nonstop
+000001FA EF00                 475  	br $.BB@LABEL@7_3
+000001FC                      476  _isAlkalineTankEmpty_nonstop:
+000001FC                      477  	.STACK _isAlkalineTankEmpty_nonstop = 6
+000001FC                      478  	;***      106 : 	}
+000001FC                      479  	;***      107 : 	return 0;
+000001FC                      480  	;***      108 : }
+000001FC                      481  	;***      109 : uint8_t isAlkalineTankEmpty_nonstop(void) {
+000001FC                      482  	;***      110 : 	if (I_ALKALI_L_PIN_FL4 == I_OFF) {
+000001FC                      483  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 110
+000001FC 8D00                 484  	mov a, 0xFFF00
+000001FE 315300               485  	bt a.5, $.BB@LABEL@8_2
+00000201                      486  .BB@LABEL@8_1:	; if_else_bb
+00000201                      487  	;***      111 : 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[3],
+00000201                      488  	;***      112 : 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+00000201                      489  	;***      113 : 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 0)) {
+00000201                      490  	;***      114 : 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 0;
+00000201                      491  	;***      115 : 			return 1;
+00000201                      492  	;***      116 : 		}
+00000201                      493  	;***      117 : 	} else {
+00000201                      494  	;***      118 : 		g_Tick.tickAlkalineLevel[3] = g_systemTime;
+00000201                      495  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 118
+00000201 AF0000               496  	movw ax, !LOWW(_g_systemTime+0x00002)
+00000204 BF0000               497  	movw !LOWW(_g_Tick+0x0008E), ax
+00000207 AF0000               498  	movw ax, !LOWW(_g_systemTime)
+0000020A BF0000               499  	movw !LOWW(_g_Tick+0x0008C), ax
+0000020D                      500  	;***      119 : 		isAlkalineTankHasSomething_nonstop();
+0000020D                      501  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 119
+0000020D FE0000               502  	call $!_isAlkalineTankHasSomething_nonstop
+00000210 EF00                 503  	br $.BB@LABEL@8_4
+00000212                      504  .BB@LABEL@8_2:	; if_then_bb
+00000212                      505  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 111
+00000212 AF0000               506  	movw ax, !LOWW(_g_timerSetting+0x0005C)
+00000215 32E803               507  	movw bc, #0x03E8
+00000218 CEFB01               508  	mulhu
+0000021B 14                   509  	movw de, ax
+0000021C C3                   510  	push bc
+0000021D C6                   511  	pop hl
+0000021E AF0000               512  	movw ax, !LOWW(_g_timerSetting+0x0005E)
+00000221 32E803               513  	movw bc, #0x03E8
+00000224 CEFB02               514  	mulh
+00000227 C5                   515  	push de
+00000228 C2                   516  	pop bc
+00000229 07                   517  	addw ax, hl
+0000022A 14                   518  	movw de, ax
+0000022B 300000               519  	movw ax, #LOWW(_g_Tick+0x0008C)
+0000022E FC000000             520  	call !!_ns_delay_ms
+00000232 F7                   521  	clrw bc
+00000233 43                   522  	cmpw ax, bc
+00000234 DF00                 523  	bnz $.BB@LABEL@8_5
+00000236                      524  .BB@LABEL@8_3:	; bb
+00000236 360000               525  	movw hl, #LOWW(_g_mean_io_status)
+00000239 318500               526  	bf [hl].0, $.BB@LABEL@8_5
+0000023C                      527  .BB@LABEL@8_4:	; bb34
+0000023C F1                   528  	clrb a
+0000023D                      529  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 122
+0000023D D7                   530  	ret
+0000023E                      531  .BB@LABEL@8_5:	; if_then_bb25
+0000023E                      532  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 114
+0000023E 71080000             533  	clr1 !LOWW(_g_mean_io_status).0
+00000242                      534  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 115
+00000242 E1                   535  	oneb a
+00000243 D7                   536  	ret
+00000244                      537  _measureFlowSensor:
+00000244                      538  	.STACK _measureFlowSensor = 22
+00000244                      539  	;***      120 : 	}
+00000244                      540  	;***      121 : 	return 0;
+00000244                      541  	;***      122 : }
+00000244                      542  	;***      123 : //TODO: Water flow measurement
+00000244                      543  	;***      124 : inline float measureFlowSensor(uint32_t *s) {
+00000244                      544  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 124
+00000244 C1                   545  	push ax
+00000245 200C                 546  	subw sp, #0x0C
+00000247                      547  	;***      125 : 	uint32_t stamp_flow_sensor = g_systemTime;
+00000247                      548  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 125
+00000247 AF0000               549  	movw ax, !LOWW(_g_systemTime+0x00002)
+0000024A B80A                 550  	movw [sp+0x0A], ax
+0000024C AF0000               551  	movw ax, !LOWW(_g_systemTime)
+0000024F B808                 552  	movw [sp+0x08], ax
+00000251 F6                   553  	clrw ax
+00000252 B800                 554  	movw [sp+0x00], ax
+00000254 E1                   555  	oneb a
+00000255 9802                 556  	mov [sp+0x02], a
+00000257 F6                   557  	clrw ax
+00000258 B804                 558  	movw [sp+0x04], ax
+0000025A                      559  .BB@LABEL@9_1:	; bb27
+0000025A A80C                 560  	movw ax, [sp+0x0C]
+0000025C 14                   561  	movw de, ax
+0000025D                      562  	;***      126 : 	float flow_pluse = 0.0;
+0000025D                      563  	;***      127 : 	uint8_t flow_pulse_state = I_OFF;
+0000025D                      564  	;***      128 : 	while (!ns_delay_ms(&stamp_flow_sensor, (*s) * 1000)) {
+0000025D                      565  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 128
+0000025D 32E803               566  	movw bc, #0x03E8
+00000260 A9                   567  	movw ax, [de]
+00000261 CEFB01               568  	mulhu
+00000264 16                   569  	movw hl, ax
+00000265 13                   570  	movw ax, bc
+00000266 B806                 571  	movw [sp+0x06], ax
+00000268 AA02                 572  	movw ax, [de+0x02]
+0000026A 32E803               573  	movw bc, #0x03E8
+0000026D CEFB02               574  	mulh
+00000270 14                   575  	movw de, ax
+00000271 C7                   576  	push hl
+00000272 C2                   577  	pop bc
+00000273 A806                 578  	movw ax, [sp+0x06]
+00000275 05                   579  	addw ax, de
+00000276 14                   580  	movw de, ax
+00000277 AEF8                 581  	movw ax, sp
+00000279 040800               582  	addw ax, #0x0008
+0000027C FC000000             583  	call !!_ns_delay_ms
+00000280 F7                   584  	clrw bc
+00000281 43                   585  	cmpw ax, bc
+00000282 DF00                 586  	bnz $.BB@LABEL@9_7
+00000284                      587  .BB@LABEL@9_2:	; bb
+00000284 8802                 588  	mov a, [sp+0x02]
+00000286 70                   589  	mov x, a
+00000287                      590  	;***      129 : 		if (I_FLOW_PLUSE_PIN != flow_pulse_state) {
+00000287                      591  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 129
+00000287 8D00                 592  	mov a, 0xFFF00
+00000289 311A                 593  	shr a, 0x01
+0000028B 5C01                 594  	and a, #0x01
+0000028D 6148                 595  	cmp a, x
+0000028F DD00                 596  	bz $.BB@LABEL@9_6
+00000291                      597  .BB@LABEL@9_3:	; if_then_bb
+00000291                      598  	;***      130 : 			if (I_FLOW_PLUSE_PIN == 0)
+00000291                      599  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 130
+00000291 8D00                 600  	mov a, 0xFFF00
+00000293 311300               601  	bt a.1, $.BB@LABEL@9_5
+00000296                      602  .BB@LABEL@9_4:	; if_then_bb20
+00000296 30803F               603  	movw ax, #0x3F80
+00000299                      604  	;***      131 : 				flow_pluse++;
+00000299                      605  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 131
+00000299 C1                   606  	push ax
+0000029A F6                   607  	clrw ax
+0000029B C1                   608  	push ax
+0000029C A808                 609  	movw ax, [sp+0x08]
+0000029E 12                   610  	movw bc, ax
+0000029F A804                 611  	movw ax, [sp+0x04]
+000002A1 FC000000             612  	call !!__COM_fadd
+000002A5 B804                 613  	movw [sp+0x04], ax
+000002A7 13                   614  	movw ax, bc
+000002A8 B808                 615  	movw [sp+0x08], ax
+000002AA 1004                 616  	addw sp, #0x04
+000002AC                      617  .BB@LABEL@9_5:	; if_break_bb
+000002AC                      618  	;***      132 : 			flow_pulse_state = I_FLOW_PLUSE_PIN;
+000002AC                      619  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 132
+000002AC 8D00                 620  	mov a, 0xFFF00
+000002AE 311A                 621  	shr a, 0x01
+000002B0 5C01                 622  	and a, #0x01
+000002B2 9802                 623  	mov [sp+0x02], a
+000002B4                      624  .BB@LABEL@9_6:	; if_break_bb26
+000002B4                      625  	;***      133 : 		}
+000002B4                      626  	;***      134 : 		R_WDT_Restart();
+000002B4                      627  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 134
+000002B4 FC000000             628  	call !!_R_WDT_Restart
+000002B8 EF00                 629  	br $.BB@LABEL@9_1
+000002BA                      630  .BB@LABEL@9_7:	; bb40
+000002BA 30333F               631  	movw ax, #0x3F33
+000002BD                      632  	;***      135 : 	}
+000002BD                      633  	;***      136 : 	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (*s); // L/minutes
+000002BD                      634  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 136
+000002BD C1                   635  	push ax
+000002BE 5133                 636  	mov a, #0x33
+000002C0 C1                   637  	push ax
+000002C1 A808                 638  	movw ax, [sp+0x08]
+000002C3 12                   639  	movw bc, ax
+000002C4 A804                 640  	movw ax, [sp+0x04]
+000002C6 FC000000             641  	call !!__COM_fmul
+000002CA 14                   642  	movw de, ax
+000002CB 1004                 643  	addw sp, #0x04
+000002CD 307042               644  	movw ax, #0x4270
+000002D0 C1                   645  	push ax
+000002D1 F6                   646  	clrw ax
+000002D2 C1                   647  	push ax
+000002D3 15                   648  	movw ax, de
+000002D4 FC000000             649  	call !!__COM_fmul
+000002D8 14                   650  	movw de, ax
+000002D9 1004                 651  	addw sp, #0x04
+000002DB 307A44               652  	movw ax, #0x447A
+000002DE C1                   653  	push ax
+000002DF F6                   654  	clrw ax
+000002E0 C1                   655  	push ax
+000002E1 15                   656  	movw ax, de
+000002E2 FC000000             657  	call !!__COM_fdiv
+000002E6 B806                 658  	movw [sp+0x06], ax
+000002E8 13                   659  	movw ax, bc
+000002E9 B804                 660  	movw [sp+0x04], ax
+000002EB 1004                 661  	addw sp, #0x04
+000002ED A80C                 662  	movw ax, [sp+0x0C]
+000002EF 14                   663  	movw de, ax
+000002F0 AA02                 664  	movw ax, [de+0x02]
+000002F2 12                   665  	movw bc, ax
+000002F3 A9                   666  	movw ax, [de]
+000002F4 FC000000             667  	call !!__COM_ultof
+000002F8 C3                   668  	push bc
+000002F9 C1                   669  	push ax
+000002FA A804                 670  	movw ax, [sp+0x04]
+000002FC 12                   671  	movw bc, ax
+000002FD A806                 672  	movw ax, [sp+0x06]
+000002FF FC000000             673  	call !!__COM_fdiv
+00000303 14                   674  	movw de, ax
+00000304 BF0000               675  	movw !LOWW(_g_io_status+0x00006), ax
+00000307 13                   676  	movw ax, bc
+00000308 BF0000               677  	movw !LOWW(_g_io_status+0x00008), ax
+0000030B 1004                 678  	addw sp, #0x04
+0000030D                      679  	;***      137 : 	return g_io_status.refined.FlowValue;
+0000030D                      680  	;***      138 : }
+0000030D                      681  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 138
+0000030D 12                   682  	movw bc, ax
+0000030E 15                   683  	movw ax, de
+0000030F 100E                 684  	addw sp, #0x0E
+00000311 D7                   685  	ret
+00000312                      686  _measureFlowSensor_nostop:
+00000312                      687  	.STACK _measureFlowSensor_nostop = 12
+00000312                      688  	;***      139 : 
+00000312                      689  	;***      140 : uint8_t _pre_flow_state = I_OFF;
+00000312                      690  	;***      141 : float _flow_pulse;
+00000312                      691  	;***      142 : float measureFlowSensor_nostop(void) {
+00000312                      692  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 142
+00000312 2004                 693  	subw sp, #0x04
+00000314                      694  	;***      143 : 	uint8_t *state = &g_machine_state.flowSensor;
+00000314                      695  	;***      144 : 	uint32_t *tick = &g_Tick.tickFlowMeasurment;
+00000314                      696  	;***      145 : 	switch (*state) {
+00000314                      697  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 145
+00000314 8F0000               698  	mov a, !LOWW(_g_machine_state+0x00005)
+00000317 D1                   699  	cmp0 a
+00000318 DD00                 700  	bz $.BB@LABEL@10_4
+0000031A                      701  .BB@LABEL@10_1:	; entry
+0000031A 91                   702  	dec a
+0000031B DD00                 703  	bz $.BB@LABEL@10_5
+0000031D                      704  .BB@LABEL@10_2:	; entry
+0000031D 91                   705  	dec a
+0000031E DD00                 706  	bz $.BB@LABEL@10_12
+00000320                      707  .BB@LABEL@10_3:	; switch_clause_bb61
+00000320 F50000               708  	clrb !LOWW(_g_machine_state+0x00005)
+00000323 EF00                 709  	br $.BB@LABEL@10_11
+00000325                      710  .BB@LABEL@10_4:	; switch_clause_bb
+00000325                      711  	;***      146 : 	case 0:
+00000325                      712  	;***      147 : 		if (ns_delay_ms(tick, g_timerSetting.t2_flowSensorStartTime_s * 1000)) {
+00000325                      713  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 147
+00000325 AF0000               714  	movw ax, !LOWW(_g_timerSetting+0x00004)
+00000328 32E803               715  	movw bc, #0x03E8
+0000032B CEFB01               716  	mulhu
+0000032E 14                   717  	movw de, ax
+0000032F AF0000               718  	movw ax, !LOWW(_g_timerSetting+0x00006)
+00000332 EF00                 719  	br $.BB@LABEL@10_9
+00000334                      720  .BB@LABEL@10_5:	; switch_clause_bb14
+00000334                      721  	;***      148 : 			(*state)++;
+00000334                      722  	;***      149 : 		}
+00000334                      723  	;***      150 : 		break;
+00000334                      724  	;***      151 : 	case 1:
+00000334                      725  	;***      152 : 		if (_pre_flow_state != I_FLOW_PLUSE_PIN) {
+00000334                      726  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 152
+00000334 D90000               727  	mov x, !LOWW(__pre_flow_state)
+00000337 8D00                 728  	mov a, 0xFFF00
+00000339 311A                 729  	shr a, 0x01
+0000033B 5C01                 730  	and a, #0x01
+0000033D 6148                 731  	cmp a, x
+0000033F DD00                 732  	bz $.BB@LABEL@10_8
+00000341                      733  .BB@LABEL@10_6:	; if_then_bb24
+00000341                      734  	;***      153 : 			_pre_flow_state = I_FLOW_PLUSE_PIN;
+00000341                      735  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 153
+00000341 8D00                 736  	mov a, 0xFFF00
+00000343 311A                 737  	shr a, 0x01
+00000345 5C01                 738  	and a, #0x01
+00000347 9F0000               739  	mov !LOWW(__pre_flow_state), a
+0000034A                      740  	;***      154 : 			if (I_FLOW_PLUSE_PIN == I_ON) {
+0000034A                      741  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 154
+0000034A 8D00                 742  	mov a, 0xFFF00
+0000034C 311300               743  	bt a.1, $.BB@LABEL@10_8
+0000034F                      744  .BB@LABEL@10_7:	; if_then_bb35
+0000034F 30803F               745  	movw ax, #0x3F80
+00000352                      746  	;***      155 : 				_flow_pulse++;
+00000352                      747  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 155
+00000352 C1                   748  	push ax
+00000353 F6                   749  	clrw ax
+00000354 C1                   750  	push ax
+00000355 DB0000               751  	movw bc, !LOWW(__flow_pulse+0x00002)
+00000358 AF0000               752  	movw ax, !LOWW(__flow_pulse)
+0000035B FC000000             753  	call !!__COM_fadd
+0000035F BF0000               754  	movw !LOWW(__flow_pulse), ax
+00000362 13                   755  	movw ax, bc
+00000363 BF0000               756  	movw !LOWW(__flow_pulse+0x00002), ax
+00000366 1004                 757  	addw sp, #0x04
+00000368                      758  .BB@LABEL@10_8:	; if_break_bb39
+00000368                      759  	;***      156 : 			}
+00000368                      760  	;***      157 : 		}
+00000368                      761  	;***      158 : 		if (ns_delay_ms(tick,
+00000368                      762  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 158
+00000368 AF0000               763  	movw ax, !LOWW(_g_timerSetting+0x00008)
+0000036B 32E803               764  	movw bc, #0x03E8
+0000036E CEFB01               765  	mulhu
+00000371 14                   766  	movw de, ax
+00000372 AF0000               767  	movw ax, !LOWW(_g_timerSetting+0x0000A)
+00000375                      768  .BB@LABEL@10_9:	; if_break_bb39
+00000375 C3                   769  	push bc
+00000376 C6                   770  	pop hl
+00000377 32E803               771  	movw bc, #0x03E8
+0000037A CEFB02               772  	mulh
+0000037D C5                   773  	push de
+0000037E C2                   774  	pop bc
+0000037F 07                   775  	addw ax, hl
+00000380 14                   776  	movw de, ax
+00000381 300000               777  	movw ax, #LOWW(_g_Tick+0x00024)
+00000384 FC000000             778  	call !!_ns_delay_ms
+00000388 F7                   779  	clrw bc
+00000389 43                   780  	cmpw ax, bc
+0000038A 61E8                 781  	skz
+0000038C                      782  .BB@LABEL@10_10:	; if_then_bb47
+0000038C A00000               783  	inc !LOWW(_g_machine_state+0x00005)
+0000038F                      784  .BB@LABEL@10_11:	; switch_break_bb
+0000038F                      785  	;***      159 : 				g_timerSetting.t3_flowSensorMonitorTime_s * 1000)) {
+0000038F                      786  	;***      160 : 			(*state)++;
+0000038F                      787  	;***      161 : 		}
+0000038F                      788  	;***      162 : 		break;
+0000038F                      789  	;***      163 : 	case 2:
+0000038F                      790  	;***      164 : 		g_io_status.refined.FlowValue = (_flow_pulse * 0.7 * 60 / 1000)
+0000038F                      791  	;***      165 : 				/ g_timerSetting.t3_flowSensorMonitorTime_s;
+0000038F                      792  	;***      166 : 		_flow_pulse = 0;
+0000038F                      793  	;***      167 : 		(*state) = 0;
+0000038F                      794  	;***      168 : 		break;
+0000038F                      795  	;***      169 : 	default:
+0000038F                      796  	;***      170 : 		(*state) = 0;
+0000038F                      797  	;***      171 : 		break;
+0000038F                      798  	;***      172 : 	}
+0000038F                      799  	;***      173 : 	return g_io_status.refined.FlowValue;
+0000038F                      800  	;***      174 : }
+0000038F                      801  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 174
+0000038F DB0000               802  	movw bc, !LOWW(_g_io_status+0x00008)
+00000392 AF0000               803  	movw ax, !LOWW(_g_io_status+0x00006)
+00000395 1004                 804  	addw sp, #0x04
+00000397 D7                   805  	ret
+00000398                      806  .BB@LABEL@10_12:	; switch_clause_bb52
+00000398 30333F               807  	movw ax, #0x3F33
+0000039B                      808  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 164
+0000039B C1                   809  	push ax
+0000039C 5133                 810  	mov a, #0x33
+0000039E C1                   811  	push ax
+0000039F DB0000               812  	movw bc, !LOWW(__flow_pulse+0x00002)
+000003A2 AF0000               813  	movw ax, !LOWW(__flow_pulse)
+000003A5 FC000000             814  	call !!__COM_fmul
+000003A9 14                   815  	movw de, ax
+000003AA 1004                 816  	addw sp, #0x04
+000003AC 307042               817  	movw ax, #0x4270
+000003AF C1                   818  	push ax
+000003B0 F6                   819  	clrw ax
+000003B1 C1                   820  	push ax
+000003B2 15                   821  	movw ax, de
+000003B3 FC000000             822  	call !!__COM_fmul
+000003B7 14                   823  	movw de, ax
+000003B8 1004                 824  	addw sp, #0x04
+000003BA 307A44               825  	movw ax, #0x447A
+000003BD C1                   826  	push ax
+000003BE F6                   827  	clrw ax
+000003BF C1                   828  	push ax
+000003C0 15                   829  	movw ax, de
+000003C1 FC000000             830  	call !!__COM_fdiv
+000003C5 B806                 831  	movw [sp+0x06], ax
+000003C7 13                   832  	movw ax, bc
+000003C8 B804                 833  	movw [sp+0x04], ax
+000003CA 1004                 834  	addw sp, #0x04
+000003CC DB0000               835  	movw bc, !LOWW(_g_timerSetting+0x0000A)
+000003CF AF0000               836  	movw ax, !LOWW(_g_timerSetting+0x00008)
+000003D2 FC000000             837  	call !!__COM_ultof
+000003D6 C3                   838  	push bc
+000003D7 C1                   839  	push ax
+000003D8 A804                 840  	movw ax, [sp+0x04]
+000003DA 12                   841  	movw bc, ax
+000003DB A806                 842  	movw ax, [sp+0x06]
+000003DD FC000000             843  	call !!__COM_fdiv
+000003E1 14                   844  	movw de, ax
+000003E2 13                   845  	movw ax, bc
+000003E3 1004                 846  	addw sp, #0x04
+000003E5 BF0000               847  	movw !LOWW(_g_io_status+0x00008), ax
+000003E8 15                   848  	movw ax, de
+000003E9 BF0000               849  	movw !LOWW(_g_io_status+0x00006), ax
+000003EC F6                   850  	clrw ax
+000003ED                      851  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 166
+000003ED BF0000               852  	movw !LOWW(__flow_pulse+0x00002), ax
+000003F0 BF0000               853  	movw !LOWW(__flow_pulse), ax
+000003F3 EE0000               854  	br $!.BB@LABEL@10_3
+00000000                      855  	.SECTION .data,DATA
+00000000                      856  __pre_flow_state:
+00000000 01                   857  	.DB 0x01
+00000000                      858  	.SECTION .bss,BSS
+00000000                      859  	.ALIGN 2
+00000000                      860  __flow_pulse:
+00000000                      861  	.DS (4)
+
+Section List
+Attr     Size                Name
+
+TEXTF              1014 (000003F6) .textf
+DATA                  1 (00000001) .data
+BSS                   4 (00000004) .bss
+
+Command Line Parameter
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl\io_control.asm.cmd 
+
+Command File Parameter
+-cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\io_control.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\io_control.asm 
+

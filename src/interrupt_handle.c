@@ -37,7 +37,9 @@ void adc_int_handle(void){
 	}
 	R_ADC_Start();
 }
-
+/*!
+ * Use in uart2 interrupt function
+ */
 void uart2_handle(void){
 	R_UART2_Receive(g_rx_data, 6);
 	g_commnunication_flag.recived_time_setting_flag =

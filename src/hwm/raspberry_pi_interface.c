@@ -16,6 +16,7 @@ struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 struct IO_Struct g_io_response;
 union Control_u g_test_control;
 
+// ------------------ LOCAL FUNCTION -------------------------------
 inline void ResponseHandler(void);
 inline void ResponseWashingMode(void);
 inline void MonitoringStatus(void);
@@ -38,6 +39,8 @@ void IO_Output(struct IO_Struct *io) {
 	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
 	O_CVCC_ON_PIN = io->CVCC_ON;
 }
+
+//------------------- EXTERNAL FUNCTION ----------------------------------
 void RaspberryCommunication_nostop(void) {
 
 	ResponseHandler();
@@ -142,6 +145,12 @@ void RaspberryCommunication_nostop(void) {
 			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
 					numberSettingSize);
 			sendToRasPi_f(H_SET, OK_ALL, 0x0);
+			if(g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
+				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
+			if(g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
+				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
+			R_DAC0_Set_ConversionValue((uint8_t)(g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
+			R_DAC1_Set_ConversionValue((uint8_t)(g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
 		} else {
 			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
 		}

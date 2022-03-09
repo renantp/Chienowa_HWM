@@ -39,6 +39,11 @@ User definitions
 #include "hwm/hwm_main.h"
 extern uint8_t rx_count;
 
+#define CVCC_Current_Set(a) R_DAC0_Set_ConversionValue(a)
+#define Salt_Analog_Set(a) R_DAC1_Set_ConversionValue(a)
+#define SALT_PUMP_MAX_VOLTAGE (4.844)
+#define CVCC_MAX_VOLTAGE (5.0)
+
 #define NUMBER_SETTING_ADDRESS (0x000)
 #define TIME_SETTING_ADDRESS (0x800)
 #define ON	(1U)
@@ -149,6 +154,7 @@ extern struct Number_Setting_s{
 	float upperFlow;
 	float lowerFlow;
 	float cvccCurrent;
+	float saltPumpVoltage;
 	char crc;
 }g_numberSetting;
 

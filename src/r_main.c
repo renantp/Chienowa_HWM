@@ -50,8 +50,7 @@
  Pragma directive
  ***********************************************************************************************************************/
 /* Start user code for pragma. Do not edit comment generated here */
-#define CVCC_Current_Set(a) R_DAC0_Set_ConversionValue(a)
-#define Salt_Analog_Set(a) R_DAC1_Set_ConversionValue(a)
+
 //#define TESTING_FIRMWARE
 /* End user code. Do not edit comment generated here */
 
@@ -138,7 +137,6 @@ void main(void) {
 	_settingNumber = g_numberSetting;
 	_settingTime = g_timerSetting;
 	EEPROM_PROTECT_EN();
-
 	//TODO: Start receive command from Raspberry Pi
 	R_UART2_Receive(g_rx_data, 6);
 
@@ -160,6 +158,9 @@ void main(void) {
 	if(g_test_control.raw.power_on == ON){
 		main_init_20211111();
 	}
+	//TODO: Output CVCC and Salt pump voltage
+	CVCC_Current_Set((uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
+	Salt_Analog_Set((uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
 
 #ifdef TESTING_FIRMWARE
 	uint8_t state = OFF;
@@ -424,8 +425,8 @@ void R_MAIN_UserInit(void) {
 	R_ADC_Start();
 
 	R_DAC_Create();
-	CVCC_Current_Set(0x0);
-	Salt_Analog_Set(0x0);
+//	CVCC_Current_Set(0x0);
+//	Salt_Analog_Set(0x0);
 	R_DAC0_Start();
 	R_DAC1_Start();
 	/* End user code. Do not edit comment generated here */

@@ -28,6 +28,7 @@ extern union Alarm_Flag_u{
 		uint8_t water_full: 1;
 		uint8_t filter: 1;
 		uint8_t cvcc : 1;
+
 	}refined;
 }g_alarm;
 
@@ -42,4 +43,5 @@ uint8_t saltWaterTankFullCheck_nonstop(void);
 uint8_t saltWaterTankEmptyCheck(void);
 
 uint8_t filterReplacementErrorCheck(void);
+uint8_t levelSkipErrorCheck(void);
 #endif /* HWM_ERROR_CHECK_H_ */
