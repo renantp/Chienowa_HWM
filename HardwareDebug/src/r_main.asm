@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Wed Mar 09 09:37:13 2022
+#@  compiled at Wed Mar 09 14:07:27 2022
 
 	.EXTERN _g_color
 	.EXTERN _g_pre_color
@@ -69,6 +69,7 @@
 	.PUBLIC _R_MAIN_UserInit
 	.EXTERN _EEPROM_Init
 	.EXTERN _EE_SPI_Read
+	.EXTERN _manufactureReset
 	.EXTERN _R_UART2_Receive
 	.EXTERN _R_UART3_Receive
 	.EXTERN _sendRS485
@@ -345,41 +346,97 @@ _main:
 	call !!_EE_SPI_Read
 	addw sp, #0x04
 	;***      136 : 			NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
-	;***      137 : 	_settingNumber = g_numberSetting;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 137
+	;***      137 : 	// Set to default valve
+	;***      138 : 	if(g_timerSetting.t1_initialWaterDrainageOperation_s > 180 && g_numberSetting.upperVoltage1 > 100.0){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 138
+	movw ax, !LOWW(_g_timerSetting+0x00002)
+	clrw bc
+	cmpw ax, bc
+	movw ax, !LOWW(_g_timerSetting)
+	sknz
+.BB@LABEL@3_1:	; entry
+	cmpw ax, #0x00B5
+.BB@LABEL@3_2:	; entry
+	bc $.BB@LABEL@3_9
+.BB@LABEL@3_3:	; bb
+	movw ax, #0x42C8
+	push ax
+	clrw ax
+	push ax
+	movw bc, !LOWW(_g_numberSetting+0x00002)
+	movw ax, bc
+	movw [sp+0x06], ax
+	movw ax, !LOWW(_g_numberSetting)
+	movw [sp+0x08], ax
+	call !!__COM_funordered
+	mov [sp+0x04], a
+	addw sp, #0x04
+	movw ax, #0x42C8
+	push ax
+	clrw ax
+	push ax
+	movw ax, [sp+0x06]
+	movw bc, ax
+	movw ax, [sp+0x08]
+	call !!__COM_fle
+	addw sp, #0x04
+	mov x, a
+	mov a, [sp+0x00]
+	cmp0 a
+	oneb a
+	sknz
+.BB@LABEL@3_4:	; bb
+	clrb a
+.BB@LABEL@3_5:	; bb
+	cmp0 x
+	oneb x
+	sknz
+.BB@LABEL@3_6:	; bb
+	clrb x
+.BB@LABEL@3_7:	; bb
+	or x, a
+	sknz
+.BB@LABEL@3_8:	; if_then_bb
+	;***      139 : 		manufactureReset();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 139
+	call !!_manufactureReset
+.BB@LABEL@3_9:	; if_break_bb
+	;***      140 : 	}
+	;***      141 : 	_settingNumber = g_numberSetting;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 141
 	movw de, #0x002A
 	movw bc, #LOWW(_g_numberSetting)
 	movw ax, #LOWW(__settingNumber)
 	call !!_memcpy
-	;***      138 : 	_settingTime = g_timerSetting;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 138
+	;***      142 : 	_settingTime = g_timerSetting;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 142
 	movw de, #0x0096
 	movw bc, #LOWW(_g_timerSetting)
 	movw ax, #LOWW(__settingTime)
 	call !!_memcpy
-	;***      139 : 	EEPROM_PROTECT_EN();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 139
+	;***      143 : 	EEPROM_PROTECT_EN();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 143
 	clr1 0xFFF0E.0
-	;***      140 : 	//TODO: Start receive command from Raspberry Pi
-	;***      141 : 	R_UART2_Receive(g_rx_data, 6);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 141
+	;***      144 : 	//TODO: Start receive command from Raspberry Pi
+	;***      145 : 	R_UART2_Receive(g_rx_data, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 145
 	movw bc, #0x0006
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
-	;***      142 : 
-	;***      143 : 	//TODO: Start receive data from RS485
-	;***      144 : 	O_RS485_MODE_PIN = 0U;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 144
+	;***      146 : 
+	;***      147 : 	//TODO: Start receive data from RS485
+	;***      148 : 	O_RS485_MODE_PIN = 0U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 148
 	clr1 0xFFF00.0
-	;***      145 : 	R_UART3_Receive(g_uart3_rx_data, 7);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 145
+	;***      149 : 	R_UART3_Receive(g_uart3_rx_data, 7);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 149
 	movw bc, #0x0007
 	movw ax, #LOWW(_g_uart3_rx_data)
 	call !!_R_UART3_Receive
 	clrw ax
-	;***      146 : 	uint8_t wts, vpcb, vpcb_v = 1;
-	;***      147 : 	sendRS485(0xff, 82, 2, 12);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 147
+	;***      150 : 	uint8_t wts, vpcb, vpcb_v = 1;
+	;***      151 : 	sendRS485(0xff, 82, 2, 12);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 151
 	push ax
 	mov x, #0x0C
 	push ax
@@ -387,36 +444,36 @@ _main:
 	movw ax, #0xFF52
 	call !!_sendRS485
 	addw sp, #0x04
-	;***      148 : 
-	;***      149 : 	//TODO: Turn off Hand Sensor LED
-	;***      150 : 	g_pre_color = BLUE;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 150
+	;***      152 : 
+	;***      153 : 	//TODO: Turn off Hand Sensor LED
+	;***      154 : 	g_pre_color = BLUE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 154
 	mov !LOWW(_g_pre_color), #0x03
-	;***      151 : 	handSensorLED(BLACK);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 151
+	;***      155 : 	handSensorLED(BLACK);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 155
 	clrb a
 	call !!_handSensorLED
 	movw hl, #LOWW(_g_test_control)
-	;***      152 : 
-	;***      153 : 	//TODO: Set default washing mode
-	;***      154 : 	g_machine_mode = HAND_WASHING;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 154
-	oneb !LOWW(_g_machine_mode)
-	bf [hl].1, $.BB@LABEL@3_2
-.BB@LABEL@3_1:	; if_then_bb
-	;***      155 : //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
 	;***      156 : 
-	;***      157 : //TODO: Run Initialize Operation
-	;***      158 : 	if(g_test_control.raw.power_on == ON){
-	;***      159 : 		main_init_20211111();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 159
+	;***      157 : 	//TODO: Set default washing mode
+	;***      158 : 	g_machine_mode = HAND_WASHING;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 158
+	oneb !LOWW(_g_machine_mode)
+	bf [hl].1, $.BB@LABEL@3_11
+.BB@LABEL@3_10:	; if_then_bb35
+	;***      159 : //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
+	;***      160 : 
+	;***      161 : //TODO: Run Initialize Operation
+	;***      162 : 	if(g_test_control.raw.power_on == ON){
+	;***      163 : 		main_init_20211111();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 163
 	call !!_main_init_20211111
-.BB@LABEL@3_2:	; if_break_bb
+.BB@LABEL@3_11:	; if_break_bb36
 	movw ax, #0x40A0
-	;***      160 : 	}
-	;***      161 : 	//TODO: Output CVCC and Salt pump voltage
-	;***      162 : 	CVCC_Current_Set((uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 162
+	;***      164 : 	}
+	;***      165 : 	//TODO: Output CVCC and Salt pump voltage
+	;***      166 : 	CVCC_Current_Set((uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 166
 	push ax
 	clrw ax
 	push ax
@@ -436,8 +493,8 @@ _main:
 	mov a, x
 	call !!_R_DAC0_Set_ConversionValue
 	movw ax, #0x409B
-	;***      163 : 	Salt_Analog_Set((uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 163
+	;***      167 : 	Salt_Analog_Set((uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 167
 	push ax
 	movw ax, #0x020C
 	push ax
@@ -460,82 +517,82 @@ _main:
 	mov [sp+0x02], a
 	mov [sp+0x01], a
 	mov [sp+0x00], a
-.BB@LABEL@3_3:	; bb232
-	;***      164 : 
-	;***      165 : #ifdef TESTING_FIRMWARE
-	;***      166 : 	uint8_t state = OFF;
-	;***      167 : 	while (1) {
-	;***      168 : 		if (ns_delay_ms(&g_Tick.tickCustom[2], 500)) {
-	;***      169 : 			//    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
-	;***      170 : 			//					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
-	;***      171 : 			//				sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-	;***      172 : 			//						g_io_status.refined.FlowValue);
-	;***      173 : 			//			}
-	;***      174 : 			dac_out[0] += 13;
-	;***      175 : 			CVCC_Current_Set(dac_out[0]);
-	;***      176 : 			dac_out[1] += 13;
-	;***      177 : 			Salt_Analog_Set(dac_out[1]);
-	;***      178 : 		}
-	;***      179 : 		if (ns_delay_ms(&g_Tick.tickCustom[3], 1000)) {
-	;***      180 : 			O_HS_IDA_PIN = O_HS_ICL_PIN = O_SUPPLY_WATER_PIN_SV1 =
-	;***      181 : 			O_CTRL_OUT_PIN = O_SPOUT_WATER_PIN_SV2 = O_PUMP_SALT_PIN_SP1 =
-	;***      182 : 			O_ALK_PUMP_PIN_P2 = O_ACID_PUMP_PIN_P1 = O_PUMP_PRESS_PIN =
-	;***      183 : 			O_ALARM_OUT_PIN = O_NEUTRALIZE_PIN_SV7 =
-	;***      184 : 			O_DRAIN_ALK_PIN_SV6 = O_DRAIN_ACID_PIN_SV5 = O_SPOUT_ACID_PIN_SV3 =
-	;***      185 : 			O_SPOUT_ALK_PIN_SV4 = O_CVCC_ON_PIN = O_CVCC_ALARM_RS =
-	;***      186 : 			O_OPTION_2_PIN_SV8 = O_OPTION_3_PIN_SV9 = O_OPTION_1_BUZZER = state;
-	;***      187 : 			state = ~state;
-	;***      188 : 		}
-	;***      189 : 		R_WDT_Restart();
-	;***      190 : 	}
-	;***      191 : #endif
-	;***      192 : 	while (1U) {
-	;***      193 : 
-	;***      194 : 		realTimeResponse();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 194
+.BB@LABEL@3_12:	; bb249
+	;***      168 : 
+	;***      169 : #ifdef TESTING_FIRMWARE
+	;***      170 : 	uint8_t state = OFF;
+	;***      171 : 	while (1) {
+	;***      172 : 		if (ns_delay_ms(&g_Tick.tickCustom[2], 500)) {
+	;***      173 : 			//    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
+	;***      174 : 			//					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
+	;***      175 : 			//				sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+	;***      176 : 			//						g_io_status.refined.FlowValue);
+	;***      177 : 			//			}
+	;***      178 : 			dac_out[0] += 13;
+	;***      179 : 			CVCC_Current_Set(dac_out[0]);
+	;***      180 : 			dac_out[1] += 13;
+	;***      181 : 			Salt_Analog_Set(dac_out[1]);
+	;***      182 : 		}
+	;***      183 : 		if (ns_delay_ms(&g_Tick.tickCustom[3], 1000)) {
+	;***      184 : 			O_HS_IDA_PIN = O_HS_ICL_PIN = O_SUPPLY_WATER_PIN_SV1 =
+	;***      185 : 			O_CTRL_OUT_PIN = O_SPOUT_WATER_PIN_SV2 = O_PUMP_SALT_PIN_SP1 =
+	;***      186 : 			O_ALK_PUMP_PIN_P2 = O_ACID_PUMP_PIN_P1 = O_PUMP_PRESS_PIN =
+	;***      187 : 			O_ALARM_OUT_PIN = O_NEUTRALIZE_PIN_SV7 =
+	;***      188 : 			O_DRAIN_ALK_PIN_SV6 = O_DRAIN_ACID_PIN_SV5 = O_SPOUT_ACID_PIN_SV3 =
+	;***      189 : 			O_SPOUT_ALK_PIN_SV4 = O_CVCC_ON_PIN = O_CVCC_ALARM_RS =
+	;***      190 : 			O_OPTION_2_PIN_SV8 = O_OPTION_3_PIN_SV9 = O_OPTION_1_BUZZER = state;
+	;***      191 : 			state = ~state;
+	;***      192 : 		}
+	;***      193 : 		R_WDT_Restart();
+	;***      194 : 	}
+	;***      195 : #endif
+	;***      196 : 	while (1U) {
+	;***      197 : 
+	;***      198 : 		realTimeResponse();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 198
 	call !!_realTimeResponse
-	;***      195 : 		main_loop_20211111();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 195
+	;***      199 : 		main_loop_20211111();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 199
 	call !!_main_loop_20211111
-	;***      196 : 
-	;***      197 : 		handSensorLED(g_color);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 197
+	;***      200 : 
+	;***      201 : 		handSensorLED(g_color);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 201
 	mov a, !LOWW(_g_color)
 	call !!_handSensorLED
-	;***      198 : 		UpdateMachineStatus();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 198
+	;***      202 : 		UpdateMachineStatus();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 202
 	call !!_UpdateMachineStatus
-	;***      199 : 		if (g_uart2_fault == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 199
+	;***      203 : 		if (g_uart2_fault == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 203
 	cmp !LOWW(_g_uart2_fault), #0x01
-	bnz $.BB@LABEL@3_5
-.BB@LABEL@3_4:	; if_then_bb36
-	;***      200 : 			R_UART2_Stop();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 200
+	bnz $.BB@LABEL@3_14
+.BB@LABEL@3_13:	; if_then_bb52
+	;***      204 : 			R_UART2_Stop();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 204
 	call !!_R_UART2_Stop
-	;***      201 : 			delay_ms(10);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 201
+	;***      205 : 			delay_ms(10);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 205
 	clrw bc
 	movw ax, #0x000A
 	call !!_delay_ms
-	;***      202 : 			R_UART2_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 202
+	;***      206 : 			R_UART2_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 206
 	call !!_R_UART2_Start
-	;***      203 : 			g_uart2_fault = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 203
-	clrb !LOWW(_g_uart2_fault)
-.BB@LABEL@3_5:	; if_break_bb37
-	;***      204 : 		}
-	;***      205 : 
-	;***      206 : 		// Communication with WaterSoftener
-	;***      207 : 		if (g_commnunication_flag.rs485_send_to_watersolfner_response_flag) {
+	;***      207 : 			g_uart2_fault = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 207
+	clrb !LOWW(_g_uart2_fault)
+.BB@LABEL@3_14:	; if_break_bb53
+	;***      208 : 		}
+	;***      209 : 
+	;***      210 : 		// Communication with WaterSoftener
+	;***      211 : 		if (g_commnunication_flag.rs485_send_to_watersolfner_response_flag) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 211
 	cmp0 !LOWW(_g_commnunication_flag+0x0000A)
-	bz $.BB@LABEL@3_7
-.BB@LABEL@3_6:	; if_then_bb43
+	bz $.BB@LABEL@3_16
+.BB@LABEL@3_15:	; if_then_bb59
 	clrw ax
-	;***      208 : 			sendRS485(0xff, 82, 2, 5);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 208
+	;***      212 : 			sendRS485(0xff, 82, 2, 5);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 212
 	push ax
 	mov x, #0x05
 	push ax
@@ -543,29 +600,29 @@ _main:
 	movw ax, #0xFF52
 	call !!_sendRS485
 	addw sp, #0x04
-	;***      209 : //    		rx_count++;
-	;***      210 : 			wts = 1; //Test flag = 1
-	;***      211 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 211
+	;***      213 : //    		rx_count++;
+	;***      214 : 			wts = 1; //Test flag = 1
+	;***      215 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 215
 	clrb !LOWW(_g_commnunication_flag+0x0000A)
 	oneb a
 	mov [sp+0x00], a
-.BB@LABEL@3_7:	; if_break_bb44
-	;***      212 : 		}
-	;***      213 : 		if (g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 213
+.BB@LABEL@3_16:	; if_break_bb60
+	;***      216 : 		}
+	;***      217 : 		if (g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 217
 	cmp !LOWW(_g_commnunication_flag+0x0000B), #0x01
-	bnz $.BB@LABEL@3_11
-.BB@LABEL@3_8:	; if_then_bb50
-	;***      214 : 			// Sand to Water softener SV state
-	;***      215 : 			sendRS485(0xff, 82, 24,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 215
+	bnz $.BB@LABEL@3_20
+.BB@LABEL@3_17:	; if_then_bb66
+	;***      218 : 			// Sand to Water softener SV state
+	;***      219 : 			sendRS485(0xff, 82, 24,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 219
 	movw hl, #LOWW(_g_io_status+0x00001)
 	onew bc
-	bt [hl].0, $.BB@LABEL@3_10
-.BB@LABEL@3_9:	; bb58
+	bt [hl].0, $.BB@LABEL@3_19
+.BB@LABEL@3_18:	; bb74
 	decw bc
-.BB@LABEL@3_10:	; bb59
+.BB@LABEL@3_19:	; bb76
 	clrw ax
 	push ax
 	push bc
@@ -573,42 +630,42 @@ _main:
 	movw ax, #0xFF52
 	call !!_sendRS485
 	addw sp, #0x04
-	;***      216 : 					(uint32_t) g_io_status.refined.io.Valve.SV1 == 1 ? 1 : 0);
-	;***      217 : 			g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 217
+	;***      220 : 					(uint32_t) g_io_status.refined.io.Valve.SV1 == 1 ? 1 : 0);
+	;***      221 : 			g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 221
 	clrb !LOWW(_g_commnunication_flag+0x0000B)
-.BB@LABEL@3_11:	; if_break_bb63
+.BB@LABEL@3_20:	; if_break_bb80
 	mov a, [sp+0x00]
-	;***      218 : 		}
-	;***      219 : 		// Test SV1 for Water Softener
-	;***      220 : 		if (wts != 0) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 220
+	;***      222 : 		}
+	;***      223 : 		// Test SV1 for Water Softener
+	;***      224 : 		if (wts != 0) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 224
 	cmp0 a
-	bnz $.BB@LABEL@3_13
-.BB@LABEL@3_12:	; if_else_bb83
-	;***      221 : 			if (ns_delay_ms(&g_Tick.tickWaterSoftenerPCB, 5000)) {
-	;***      222 : 				if (wts == 1) {
-	;***      223 : 					O_SUPPLY_WATER_PIN_SV1 = ON;
-	;***      224 : //					sendRS485(1, 82, 24,(uint32_t) 1);
-	;***      225 : //					sendRS485(0xff, 82, 24,(uint32_t) 1);
-	;***      226 : 					wts = 2;
-	;***      227 : 				} else {
-	;***      228 : 					O_SUPPLY_WATER_PIN_SV1 = OFF;
-	;***      229 : //    				sendRS485(1, 82, 24,(uint32_t) 0);
-	;***      230 : //					sendRS485(0xff, 82, 24,(uint32_t) 0);
-	;***      231 : 					wts = 0;
-	;***      232 : 				}
-	;***      233 : 			}
-	;***      234 : 		} else {
-	;***      235 : 			g_Tick.tickWaterSoftenerPCB = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 235
+	bnz $.BB@LABEL@3_22
+.BB@LABEL@3_21:	; if_else_bb100
+	;***      225 : 			if (ns_delay_ms(&g_Tick.tickWaterSoftenerPCB, 5000)) {
+	;***      226 : 				if (wts == 1) {
+	;***      227 : 					O_SUPPLY_WATER_PIN_SV1 = ON;
+	;***      228 : //					sendRS485(1, 82, 24,(uint32_t) 1);
+	;***      229 : //					sendRS485(0xff, 82, 24,(uint32_t) 1);
+	;***      230 : 					wts = 2;
+	;***      231 : 				} else {
+	;***      232 : 					O_SUPPLY_WATER_PIN_SV1 = OFF;
+	;***      233 : //    				sendRS485(1, 82, 24,(uint32_t) 0);
+	;***      234 : //					sendRS485(0xff, 82, 24,(uint32_t) 0);
+	;***      235 : 					wts = 0;
+	;***      236 : 				}
+	;***      237 : 			}
+	;***      238 : 		} else {
+	;***      239 : 			g_Tick.tickWaterSoftenerPCB = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 239
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00052), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00050), ax
-	br $.BB@LABEL@3_17
-.BB@LABEL@3_13:	; if_then_bb69
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 221
+	br $.BB@LABEL@3_26
+.BB@LABEL@3_22:	; if_then_bb86
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 225
 	clrw ax
 	movw de, ax
 	movw bc, #0x1388
@@ -616,38 +673,38 @@ _main:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_17
-.BB@LABEL@3_14:	; if_then_bb74
+	bz $.BB@LABEL@3_26
+.BB@LABEL@3_23:	; if_then_bb91
 	mov a, [sp+0x00]
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 222
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 226
 	dec a
-	bnz $.BB@LABEL@3_16
-.BB@LABEL@3_15:	; if_then_bb80
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 223
+	bnz $.BB@LABEL@3_25
+.BB@LABEL@3_24:	; if_then_bb97
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 227
 	set1 0xFFF01.7
 	mov [sp+0x00], #0x02
-	br $.BB@LABEL@3_17
-.BB@LABEL@3_16:	; if_else_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 228
+	br $.BB@LABEL@3_26
+.BB@LABEL@3_25:	; if_else_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 232
 	clr1 0xFFF01.7
 	clrb a
 	mov [sp+0x00], a
-.BB@LABEL@3_17:	; if_break_bb85
-	;***      236 : 		}
-	;***      237 : 
-	;***      238 : 		//Valve PCB
-	;***      239 : 		if (g_commnunication_flag.rs485_send_to_valve_response_flag == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 239
+.BB@LABEL@3_26:	; if_break_bb102
+	;***      240 : 		}
+	;***      241 : 
+	;***      242 : 		//Valve PCB
+	;***      243 : 		if (g_commnunication_flag.rs485_send_to_valve_response_flag == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 243
 	cmp !LOWW(_g_commnunication_flag+0x0000C), #0x01
-	bnz $.BB@LABEL@3_19
-.BB@LABEL@3_18:	; if_then_bb91
+	bnz $.BB@LABEL@3_28
+.BB@LABEL@3_27:	; if_then_bb108
 	movw ax, sp
 	addw ax, #0x0006
 	movw [sp+0x04], ax
-	;***      240 : 			// 0xff, 12, {Mode, Valve 1, Valve 2, Valve 3, 1}
-	;***      241 : 			// 0 - Stand alone 1 - Control Valve
-	;***      242 : 			uint8_t _b[5] = { vpcb_v, g_uart3_sendend % 2, g_systemTime % 2, 0,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 242
+	;***      244 : 			// 0xff, 12, {Mode, Valve 1, Valve 2, Valve 3, 1}
+	;***      245 : 			// 0 - Stand alone 1 - Control Valve
+	;***      246 : 			uint8_t _b[5] = { vpcb_v, g_uart3_sendend % 2, g_systemTime % 2, 0,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 246
 	movw de, #0x0005
 	movw bc, #SMRLW(.STR@1)
 	call !!_memcpy
@@ -663,66 +720,66 @@ _main:
 	mov [sp+0x08], a
 	movw ax, [sp+0x04]
 	movw bc, ax
-	;***      243 : 					1 };
-	;***      244 : 			sendR485_7byte(0xff, 12, _b);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 244
+	;***      247 : 					1 };
+	;***      248 : 			sendR485_7byte(0xff, 12, _b);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 248
 	movw ax, #0xFF0C
 	call !!_sendR485_7byte
-	;***      245 : 			vpcb++;
-	;***      246 : 			g_commnunication_flag.rs485_send_to_valve_response_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 246
+	;***      249 : 			vpcb++;
+	;***      250 : 			g_commnunication_flag.rs485_send_to_valve_response_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 250
 	clrb !LOWW(_g_commnunication_flag+0x0000C)
 	mov a, [sp+0x01]
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 245
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 249
 	inc a
 	mov [sp+0x01], a
-	br $.BB@LABEL@3_21
-.BB@LABEL@3_19:	; if_else_bb109
-	;***      247 : 		} else if (g_commnunication_flag.rs485_get_valve_gesture_flag == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 247
+	br $.BB@LABEL@3_30
+.BB@LABEL@3_28:	; if_else_bb126
+	;***      251 : 		} else if (g_commnunication_flag.rs485_get_valve_gesture_flag == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 251
 	cmp !LOWW(_g_commnunication_flag+0x0000D), #0x01
-	bnz $.BB@LABEL@3_21
-.BB@LABEL@3_20:	; if_then_bb115
+	bnz $.BB@LABEL@3_30
+.BB@LABEL@3_29:	; if_then_bb132
 	movw ax, sp
 	addw ax, #0x000B
 	movw [sp+0x04], ax
-	;***      248 : 			uint8_t _b[5] = { 0, 1, 0, 0, 1 };
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 248
+	;***      252 : 			uint8_t _b[5] = { 0, 1, 0, 0, 1 };
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 252
 	movw de, #0x0005
 	movw bc, #SMRLW(.STR@1685)
 	call !!_memcpy
 	movw ax, [sp+0x04]
 	movw bc, ax
-	;***      249 : 			sendR485_7byte(0xff, 1, _b);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 249
+	;***      253 : 			sendR485_7byte(0xff, 1, _b);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 253
 	movw ax, #0xFF01
 	call !!_sendR485_7byte
-	;***      250 : 			g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 250
+	;***      254 : 			g_commnunication_flag.rs485_get_valve_gesture_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 254
 	clrb !LOWW(_g_commnunication_flag+0x0000D)
-.BB@LABEL@3_21:	; if_break_bb119
+.BB@LABEL@3_30:	; if_break_bb136
 	mov a, [sp+0x01]
-	;***      251 : 		}
-	;***      252 : 
-	;***      253 : 		if (vpcb != 0) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 253
+	;***      255 : 		}
+	;***      256 : 
+	;***      257 : 		if (vpcb != 0) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 257
 	cmp0 a
-	bnz $.BB@LABEL@3_23
-.BB@LABEL@3_22:	; if_else_bb143
-	;***      254 : 			if (ns_delay_ms(&g_Tick.tickValvePCB, 5000)) {
-	;***      255 : 				vpcb_v = vpcb_v == 1 ? 0 : 1;
-	;***      256 : 				vpcb = 0;
-	;***      257 : 			}
-	;***      258 : 		} else {
-	;***      259 : 			g_Tick.tickValvePCB = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 259
+	bnz $.BB@LABEL@3_32
+.BB@LABEL@3_31:	; if_else_bb160
+	;***      258 : 			if (ns_delay_ms(&g_Tick.tickValvePCB, 5000)) {
+	;***      259 : 				vpcb_v = vpcb_v == 1 ? 0 : 1;
+	;***      260 : 				vpcb = 0;
+	;***      261 : 			}
+	;***      262 : 		} else {
+	;***      263 : 			g_Tick.tickValvePCB = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 263
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00056), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00054), ax
-	br $.BB@LABEL@3_26
-.BB@LABEL@3_23:	; if_then_bb125
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 254
+	br $.BB@LABEL@3_35
+.BB@LABEL@3_32:	; if_then_bb142
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 258
 	clrw ax
 	movw de, ax
 	movw bc, #0x1388
@@ -730,49 +787,49 @@ _main:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_26
-.BB@LABEL@3_24:	; if_then_bb130
+	bz $.BB@LABEL@3_35
+.BB@LABEL@3_33:	; if_then_bb147
 	mov a, [sp+0x02]
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 255
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 259
 	dec a
 	clrb a
 	mov [sp+0x01], a
-	bnz $.BB@LABEL@3_28
-.BB@LABEL@3_25:	; if_then_bb130.if_break_bb145_crit_edge
+	bnz $.BB@LABEL@3_37
+.BB@LABEL@3_34:	; if_then_bb147.if_break_bb162_crit_edge
 	mov [sp+0x02], a
-.BB@LABEL@3_26:	; if_break_bb145
-	;***      260 : 		}
-	;***      261 : 
-	;***      262 : 		//RS485 fault check
-	;***      263 : 		if (g_commnunication_flag.rs485_fault == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 263
+.BB@LABEL@3_35:	; if_break_bb162
+	;***      264 : 		}
+	;***      265 : 
+	;***      266 : 		//RS485 fault check
+	;***      267 : 		if (g_commnunication_flag.rs485_fault == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 267
 	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x01
-	bnz $.BB@LABEL@3_29
-.BB@LABEL@3_27:	; if_then_bb151
-	;***      264 : 			R_UART3_Stop();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 264
+	bnz $.BB@LABEL@3_38
+.BB@LABEL@3_36:	; if_then_bb168
+	;***      268 : 			R_UART3_Stop();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 268
 	call !!_R_UART3_Stop
-	;***      265 : 			g_commnunication_flag.rs485_fault++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 265
+	;***      269 : 			g_commnunication_flag.rs485_fault++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 269
 	inc !LOWW(_g_commnunication_flag+0x0000E)
-	;***      266 : 			g_Tick.tickRS485 = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 266
+	;***      270 : 			g_Tick.tickRS485 = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 270
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0005A), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00058), ax
-	br $.BB@LABEL@3_32
-.BB@LABEL@3_28:	; bb136
+	br $.BB@LABEL@3_41
+.BB@LABEL@3_37:	; bb153
 	oneb a
-	br $.BB@LABEL@3_25
-.BB@LABEL@3_29:	; if_else_bb155
-	;***      267 : 		} else if (g_commnunication_flag.rs485_fault == 2) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 267
+	br $.BB@LABEL@3_34
+.BB@LABEL@3_38:	; if_else_bb172
+	;***      271 : 		} else if (g_commnunication_flag.rs485_fault == 2) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 271
 	cmp !LOWW(_g_commnunication_flag+0x0000E), #0x02
-	bnz $.BB@LABEL@3_32
-.BB@LABEL@3_30:	; if_then_bb161
-	;***      268 : 			if (ns_delay_ms(&g_Tick.tickRS485, 500)) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 268
+	bnz $.BB@LABEL@3_41
+.BB@LABEL@3_39:	; if_then_bb178
+	;***      272 : 			if (ns_delay_ms(&g_Tick.tickRS485, 500)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 272
 	clrw ax
 	movw de, ax
 	movw bc, #0x01F4
@@ -780,69 +837,69 @@ _main:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_32
-.BB@LABEL@3_31:	; if_then_bb166
-	;***      269 : 				R_UART3_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 269
+	bz $.BB@LABEL@3_41
+.BB@LABEL@3_40:	; if_then_bb183
+	;***      273 : 				R_UART3_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 273
 	call !!_R_UART3_Start
-	;***      270 : 				R_UART3_Receive(g_uart3_rx_data, 7);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 270
+	;***      274 : 				R_UART3_Receive(g_uart3_rx_data, 7);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 274
 	movw bc, #0x0007
 	movw ax, #LOWW(_g_uart3_rx_data)
 	call !!_R_UART3_Receive
-	;***      271 : 				g_commnunication_flag.rs485_fault = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 271
+	;***      275 : 				g_commnunication_flag.rs485_fault = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 275
 	clrb !LOWW(_g_commnunication_flag+0x0000E)
-.BB@LABEL@3_32:	; if_break_bb170
-	;***      272 : 			}
-	;***      273 : 		}
-	;***      274 : //--------------------------------- Testing code---------------------------------------------------------------
-	;***      275 : //    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
-	;***      276 : //    		P6_bit.no3 = ~P6_bit.no3;
-	;***      277 : //    		O_SUPPLY_WATER_PIN_SV1 = ~O_SUPPLY_WATER_PIN_SV1;
-	;***      278 : //    	}
-	;***      279 : //    	if(g_machine_state.user == 1){
-	;***      280 : //    		HandWashingMode_nostop();
-	;***      281 : //    	}else{
-	;***      282 : //    		g_Tick.tickCustom[1] = g_systemTime;
-	;***      283 : //    	}
-	;***      284 : 
-	;***      285 : 		// Check
-	;***      286 : 		flow_p = I_FLOW_PLUSE_PIN == 1 ? 1 : 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 286
+.BB@LABEL@3_41:	; if_break_bb187
+	;***      276 : 			}
+	;***      277 : 		}
+	;***      278 : //--------------------------------- Testing code---------------------------------------------------------------
+	;***      279 : //    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
+	;***      280 : //    		P6_bit.no3 = ~P6_bit.no3;
+	;***      281 : //    		O_SUPPLY_WATER_PIN_SV1 = ~O_SUPPLY_WATER_PIN_SV1;
+	;***      282 : //    	}
+	;***      283 : //    	if(g_machine_state.user == 1){
+	;***      284 : //    		HandWashingMode_nostop();
+	;***      285 : //    	}else{
+	;***      286 : //    		g_Tick.tickCustom[1] = g_systemTime;
+	;***      287 : //    	}
+	;***      288 : 
+	;***      289 : 		// Check
+	;***      290 : 		flow_p = I_FLOW_PLUSE_PIN == 1 ? 1 : 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 290
 	mov a, 0xFFF00
 	mov1 CY, a.1
 	oneb a
 	skc
-.BB@LABEL@3_33:	; bb178
+.BB@LABEL@3_42:	; bb195
 	clrb a
-.BB@LABEL@3_34:	; bb180
+.BB@LABEL@3_43:	; bb197
 	mov !LOWW(_flow_p), a
-	;***      287 : 		if (ns_delay_ms(&g_Tick.tickCustom[1], 60000)) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 287
+	;***      291 : 		if (ns_delay_ms(&g_Tick.tickCustom[1], 60000)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 291
 	clrw ax
 	movw de, ax
 	movw bc, #0xEA60
 	movw ax, #LOWW(_g_Tick+0x0009C)
 	call !!_ns_delay_ms
-	;***      288 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
-	;***      289 : //				g_TickKeeper.SV1_ON_minutes++;
-	;***      290 : //				g_TickKeeper.SV1_OFF_minutes = 0;
-	;***      291 : //			}else{
-	;***      292 : //				g_TickKeeper.SV1_OFF_minutes++;
-	;***      293 : //				g_TickKeeper.SV1_ON_minutes = 0;
-	;***      294 : //			}
-	;***      295 : //			if(O_SPOUT_WATER_PIN_SV2 == ON){
-	;***      296 : //				g_TickKeeper.SV2_ON_minutes++;
-	;***      297 : //				g_TickKeeper.SV2_OFF_minutes = 0;
-	;***      298 : //			}else{
-	;***      299 : //				g_TickKeeper.SV2_OFF_minutes++;
-	;***      300 : //				g_TickKeeper.SV2_ON_minutes = 0;
-	;***      301 : //			}
-	;***      302 : 		}
-	;***      303 : 
-	;***      304 : 		if (ns_delay_ms(&g_Tick.tick1s, 1000)) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 304
+	;***      292 : //    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
+	;***      293 : //				g_TickKeeper.SV1_ON_minutes++;
+	;***      294 : //				g_TickKeeper.SV1_OFF_minutes = 0;
+	;***      295 : //			}else{
+	;***      296 : //				g_TickKeeper.SV1_OFF_minutes++;
+	;***      297 : //				g_TickKeeper.SV1_ON_minutes = 0;
+	;***      298 : //			}
+	;***      299 : //			if(O_SPOUT_WATER_PIN_SV2 == ON){
+	;***      300 : //				g_TickKeeper.SV2_ON_minutes++;
+	;***      301 : //				g_TickKeeper.SV2_OFF_minutes = 0;
+	;***      302 : //			}else{
+	;***      303 : //				g_TickKeeper.SV2_OFF_minutes++;
+	;***      304 : //				g_TickKeeper.SV2_ON_minutes = 0;
+	;***      305 : //			}
+	;***      306 : 		}
+	;***      307 : 
+	;***      308 : 		if (ns_delay_ms(&g_Tick.tick1s, 1000)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 308
 	clrw ax
 	movw de, ax
 	movw bc, #0x03E8
@@ -850,210 +907,210 @@ _main:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_38
-.BB@LABEL@3_35:	; if_then_bb194
-	;***      305 : 
-	;***      306 : 			led_st = led_st == 0 ? 0xff : 0x00;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 306
+	bz $.BB@LABEL@3_47
+.BB@LABEL@3_44:	; if_then_bb211
+	;***      309 : 
+	;***      310 : 			led_st = led_st == 0 ? 0xff : 0x00;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 310
 	cmp0 !LOWW(_led_st)
 	mov a, #0xFF
 	skz
-.BB@LABEL@3_36:	; bb200
+.BB@LABEL@3_45:	; bb217
 	clrb a
-.BB@LABEL@3_37:	; bb202
+.BB@LABEL@3_46:	; bb219
 	mov !LOWW(_led_st), a
-	;***      307 : 			uint8_t state = g_uart2_sendend;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 307
+	;***      311 : 			uint8_t state = g_uart2_sendend;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 311
 	mov a, !LOWW(_g_uart2_sendend)
-	;***      308 : 			g_crc[6] = crc8_4((uint8_t*) &g_timerSetting,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 308
+	;***      312 : 			g_crc[6] = crc8_4((uint8_t*) &g_timerSetting,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 312
 	mov c, #0x94
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_crc8_4
 	mov !LOWW(_g_crc+0x00006), a
-	;***      309 : 					sizeof(struct Timer_Setting_s) - 2);
-	;***      310 : 			g_crc[7] = crc8_1((uint8_t*) &g_timerSetting,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 310
+	;***      313 : 					sizeof(struct Timer_Setting_s) - 2);
+	;***      314 : 			g_crc[7] = crc8_1((uint8_t*) &g_timerSetting,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 314
 	mov c, #0x94
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_crc8_1
 	mov !LOWW(_g_crc+0x00007), a
-.BB@LABEL@3_38:	; if_break_bb217
-	;***      311 : 					sizeof(struct Timer_Setting_s) - 2);
-	;***      312 : //    	    switch (g_color) {
-	;***      313 : //				case BLACK:
-	;***      314 : //					g_color = RED;
-	;***      315 : //					break;
-	;***      316 : //				case RED:
-	;***      317 : //					g_color = BLUE;
-	;***      318 : //					break;
-	;***      319 : //				case BLUE:
-	;***      320 : //					g_color = WHITE;
-	;***      321 : //					break;
-	;***      322 : //				default:
-	;***      323 : //					g_color = BLACK;
-	;***      324 : //					break;
-	;***      325 : //			}
-	;***      326 : 			if (led_st == 0x00) {
-	;***      327 : 
-	;***      328 : //    			O_CVCC_ON_PIN = ON;
-	;***      329 : //    			O_HS_ICL_PIN = 0;
-	;***      330 : //    			O_HS_IDA_PIN = 1;
-	;***      331 : //    			handSensorLED(RED);
-	;***      332 : //    			O_CVCC_ALARM_RS = 1;
-	;***      333 : //    			O_PUMP_SALT_PIN = ON;
-	;***      334 : //    			electrolyticOperationON();
-	;***      335 : //    			g_io_status.refined.Valve.SV4 = 1;
-	;***      336 : //				g_io_status.refined.Pump2 = 1;
-	;***      337 : //				g_io_status.refined.Valve.SV5 = 0;
-	;***      338 : //				g_io_status.refined.Pump1 = 0;
-	;***      339 : //				g_io_status.refined.SaltLowLevel = 1;
-	;***      340 : //    			e_send[0]++;
-	;***      341 : //    			g_numberSetting.upperVoltage1++;
-	;***      342 : //    			g_numberSetting.crc--;
-	;***      343 : //    			g_numberSetting.crc2++;
-	;***      344 : //    			g_numberSetting.lowerFlow++;
-	;***      345 : //    			g_numberSetting.hello++;
-	;***      346 : //    			EE_SPI_Write((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
-	;***      347 : //    			EE_SPI_Write((uint8_t *)&g_numberSetting.crc, 0x800, 6);
-	;***      348 : //    			EE_SPI_Write((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
-	;***      349 : 			} else {
-	;***      350 : //    			O_CVCC_ON_PIN = OFF;
-	;***      351 : //    			O_HS_ICL_PIN = 1;
-	;***      352 : //				O_HS_IDA_PIN = 0;
-	;***      353 : //    			handSensorLED(WHITE);
-	;***      354 : //    			O_CVCC_ALARM_RS = 0;
-	;***      355 : //    			O_PUMP_SALT_PIN = OFF;
-	;***      356 : //    			electrolyticOperationOFF();
-	;***      357 : //    			g_io_status.refined.Valve.SV4 = 0;
-	;***      358 : //				g_io_status.refined.Pump2 = 0;
-	;***      359 : //				g_io_status.refined.Valve.SV5 = 1;
-	;***      360 : //				g_io_status.refined.Pump1 = 1;
-	;***      361 : //				g_io_status.refined.SaltLowLevel = 0;
-	;***      362 : //    			EE_SPI_Read((uint8_t *)&ret_number_setting, 0x000, sizeof(g_numberSetting));
-	;***      363 : 
-	;***      364 : 			}
-	;***      365 : 		}
-	;***      366 : 
-	;***      367 : //--------------------------------End testing code---------------------------------------------------------
-	;***      368 : //    	if(g_machine_state.mode == BUSY){
-	;***      369 : //    		g_machine_state.user = 0;
-	;***      370 : //    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, g_timerSetting.t55_waterDischargeDelay_s*1000)){
-	;***      371 : //    			g_machine_state.mode = INDIE;
-	;***      372 : //    		}
-	;***      373 : //    	}else{
-	;***      374 : //    		g_Tick.tickDebouceHandSensor = g_systemTime;
-	;***      375 : //    	}
-	;***      376 : 
-	;***      377 : 		if ((g_machine_state.mode == WATER_WASHING)
-	;***      378 : 				| (g_machine_state.mode == INDIE)) {
-	;***      379 : //			nostop_WaterWashingMode();
-	;***      380 : 		}
-	;***      381 : //    	InitialOperationModeStart();
-	;***      382 : 
-	;***      383 : //    	if(g_color != g_pre_color){
-	;***      384 : //			O_RS485_MODE_PIN = 1U;
-	;***      385 : //			uint8_t _uart3 = g_uart3_sendend;
-	;***      386 : //			send_buf[3]++;
-	;***      387 : //			R_UART3_Send(send_buf, 7);
-	;***      388 : //			while(_uart3 == g_uart3_sendend);
-	;***      389 : //			O_RS485_MODE_PIN = 0U;
-	;***      390 : //    	}
-	;***      391 : 		R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 391
+.BB@LABEL@3_47:	; if_break_bb234
+	;***      315 : 					sizeof(struct Timer_Setting_s) - 2);
+	;***      316 : //    	    switch (g_color) {
+	;***      317 : //				case BLACK:
+	;***      318 : //					g_color = RED;
+	;***      319 : //					break;
+	;***      320 : //				case RED:
+	;***      321 : //					g_color = BLUE;
+	;***      322 : //					break;
+	;***      323 : //				case BLUE:
+	;***      324 : //					g_color = WHITE;
+	;***      325 : //					break;
+	;***      326 : //				default:
+	;***      327 : //					g_color = BLACK;
+	;***      328 : //					break;
+	;***      329 : //			}
+	;***      330 : 			if (led_st == 0x00) {
+	;***      331 : 
+	;***      332 : //    			O_CVCC_ON_PIN = ON;
+	;***      333 : //    			O_HS_ICL_PIN = 0;
+	;***      334 : //    			O_HS_IDA_PIN = 1;
+	;***      335 : //    			handSensorLED(RED);
+	;***      336 : //    			O_CVCC_ALARM_RS = 1;
+	;***      337 : //    			O_PUMP_SALT_PIN = ON;
+	;***      338 : //    			electrolyticOperationON();
+	;***      339 : //    			g_io_status.refined.Valve.SV4 = 1;
+	;***      340 : //				g_io_status.refined.Pump2 = 1;
+	;***      341 : //				g_io_status.refined.Valve.SV5 = 0;
+	;***      342 : //				g_io_status.refined.Pump1 = 0;
+	;***      343 : //				g_io_status.refined.SaltLowLevel = 1;
+	;***      344 : //    			e_send[0]++;
+	;***      345 : //    			g_numberSetting.upperVoltage1++;
+	;***      346 : //    			g_numberSetting.crc--;
+	;***      347 : //    			g_numberSetting.crc2++;
+	;***      348 : //    			g_numberSetting.lowerFlow++;
+	;***      349 : //    			g_numberSetting.hello++;
+	;***      350 : //    			EE_SPI_Write((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
+	;***      351 : //    			EE_SPI_Write((uint8_t *)&g_numberSetting.crc, 0x800, 6);
+	;***      352 : //    			EE_SPI_Write((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
+	;***      353 : 			} else {
+	;***      354 : //    			O_CVCC_ON_PIN = OFF;
+	;***      355 : //    			O_HS_ICL_PIN = 1;
+	;***      356 : //				O_HS_IDA_PIN = 0;
+	;***      357 : //    			handSensorLED(WHITE);
+	;***      358 : //    			O_CVCC_ALARM_RS = 0;
+	;***      359 : //    			O_PUMP_SALT_PIN = OFF;
+	;***      360 : //    			electrolyticOperationOFF();
+	;***      361 : //    			g_io_status.refined.Valve.SV4 = 0;
+	;***      362 : //				g_io_status.refined.Pump2 = 0;
+	;***      363 : //				g_io_status.refined.Valve.SV5 = 1;
+	;***      364 : //				g_io_status.refined.Pump1 = 1;
+	;***      365 : //				g_io_status.refined.SaltLowLevel = 0;
+	;***      366 : //    			EE_SPI_Read((uint8_t *)&ret_number_setting, 0x000, sizeof(g_numberSetting));
+	;***      367 : 
+	;***      368 : 			}
+	;***      369 : 		}
+	;***      370 : 
+	;***      371 : //--------------------------------End testing code---------------------------------------------------------
+	;***      372 : //    	if(g_machine_state.mode == BUSY){
+	;***      373 : //    		g_machine_state.user = 0;
+	;***      374 : //    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, g_timerSetting.t55_waterDischargeDelay_s*1000)){
+	;***      375 : //    			g_machine_state.mode = INDIE;
+	;***      376 : //    		}
+	;***      377 : //    	}else{
+	;***      378 : //    		g_Tick.tickDebouceHandSensor = g_systemTime;
+	;***      379 : //    	}
+	;***      380 : 
+	;***      381 : 		if ((g_machine_state.mode == WATER_WASHING)
+	;***      382 : 				| (g_machine_state.mode == INDIE)) {
+	;***      383 : //			nostop_WaterWashingMode();
+	;***      384 : 		}
+	;***      385 : //    	InitialOperationModeStart();
+	;***      386 : 
+	;***      387 : //    	if(g_color != g_pre_color){
+	;***      388 : //			O_RS485_MODE_PIN = 1U;
+	;***      389 : //			uint8_t _uart3 = g_uart3_sendend;
+	;***      390 : //			send_buf[3]++;
+	;***      391 : //			R_UART3_Send(send_buf, 7);
+	;***      392 : //			while(_uart3 == g_uart3_sendend);
+	;***      393 : //			O_RS485_MODE_PIN = 0U;
+	;***      394 : //    	}
+	;***      395 : 		R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 395
 	call !!_R_WDT_Restart
-	br $!.BB@LABEL@3_3
+	br $!.BB@LABEL@3_12
 _R_MAIN_UserInit:
 	.STACK _R_MAIN_UserInit = 4
-	;***      392 : 	}
-	;***      393 : 	/* End user code. Do not edit comment generated here */
-	;***      394 : }
-	;***      395 : 
-	;***      396 : /***********************************************************************************************************************
-	;***      397 :  * Function Name: R_MAIN_UserInit
-	;***      398 :  * Description  : This function adds user code before implementing main function.
-	;***      399 :  * Arguments    : None
-	;***      400 :  * Return Value : None
-	;***      401 :  ***********************************************************************************************************************/
-	;***      402 : void R_MAIN_UserInit(void) {
-	;***      403 : 	/* Start user code. Do not edit comment generated here */
-	;***      404 : 	EI();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 404
-	ei
-	;***      405 : 	R_TAU0_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 405
-	call !!_R_TAU0_Create
-	;***      406 : 	R_SAU0_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 406
-	call !!_R_SAU0_Create
-	;***      407 : 	R_SAU1_Create();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 407
-	call !!_R_SAU1_Create
-	;***      408 : 	R_UART1_Create();
+	;***      396 : 	}
+	;***      397 : 	/* End user code. Do not edit comment generated here */
+	;***      398 : }
+	;***      399 : 
+	;***      400 : /***********************************************************************************************************************
+	;***      401 :  * Function Name: R_MAIN_UserInit
+	;***      402 :  * Description  : This function adds user code before implementing main function.
+	;***      403 :  * Arguments    : None
+	;***      404 :  * Return Value : None
+	;***      405 :  ***********************************************************************************************************************/
+	;***      406 : void R_MAIN_UserInit(void) {
+	;***      407 : 	/* Start user code. Do not edit comment generated here */
+	;***      408 : 	EI();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 408
-	call !!_R_UART1_Create
-	;***      409 : 	R_UART2_Create();
+	ei
+	;***      409 : 	R_TAU0_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 409
-	call !!_R_UART2_Create
-	;***      410 : 	R_UART3_Create();
+	call !!_R_TAU0_Create
+	;***      410 : 	R_SAU0_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 410
-	call !!_R_UART3_Create
-	;***      411 : 	R_RTC_Create();
+	call !!_R_SAU0_Create
+	;***      411 : 	R_SAU1_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 411
-	call !!_R_RTC_Create
-	;***      412 : 	R_PORT_Create_UserInit();
+	call !!_R_SAU1_Create
+	;***      412 : 	R_UART1_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 412
-	call !!_R_PORT_Create_UserInit
-	;***      413 : 	R_CSI01_Create();
+	call !!_R_UART1_Create
+	;***      413 : 	R_UART2_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 413
-	call !!_R_CSI01_Create
-	;***      414 : 	R_CSI00_Create();
+	call !!_R_UART2_Create
+	;***      414 : 	R_UART3_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 414
-	call !!_R_CSI00_Create
-	;***      415 : 
-	;***      416 : 	R_TAU0_Channel0_Start();
+	call !!_R_UART3_Create
+	;***      415 : 	R_RTC_Create();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 415
+	call !!_R_RTC_Create
+	;***      416 : 	R_PORT_Create_UserInit();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 416
-	call !!_R_TAU0_Channel0_Start
-	;***      417 : 	R_UART3_Start();
+	call !!_R_PORT_Create_UserInit
+	;***      417 : 	R_CSI01_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 417
-	call !!_R_UART3_Start
-	;***      418 : 	R_UART1_Start();
+	call !!_R_CSI01_Create
+	;***      418 : 	R_CSI00_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 418
-	call !!_R_UART1_Start
-	;***      419 : 	R_UART2_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 419
-	call !!_R_UART2_Start
-	;***      420 : 	R_CSI00_Start();
+	call !!_R_CSI00_Create
+	;***      419 : 
+	;***      420 : 	R_TAU0_Channel0_Start();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 420
-	call !!_R_CSI00_Start
-	;***      421 : //    R_CSI01_Start();
-	;***      422 : 
-	;***      423 : 	R_ADC_Create();
+	call !!_R_TAU0_Channel0_Start
+	;***      421 : 	R_UART3_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 421
+	call !!_R_UART3_Start
+	;***      422 : 	R_UART1_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 422
+	call !!_R_UART1_Start
+	;***      423 : 	R_UART2_Start();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 423
-	call !!_R_ADC_Create
-	;***      424 : 	R_ADC_Set_OperationOn();
+	call !!_R_UART2_Start
+	;***      424 : 	R_CSI00_Start();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 424
-	call !!_R_ADC_Set_OperationOn
-	;***      425 : 	R_ADC_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 425
-	call !!_R_ADC_Start
+	call !!_R_CSI00_Start
+	;***      425 : //    R_CSI01_Start();
 	;***      426 : 
-	;***      427 : 	R_DAC_Create();
+	;***      427 : 	R_ADC_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 427
-	call !!_R_DAC_Create
-	;***      428 : //	CVCC_Current_Set(0x0);
-	;***      429 : //	Salt_Analog_Set(0x0);
-	;***      430 : 	R_DAC0_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 430
-	call !!_R_DAC0_Start
-	;***      431 : 	R_DAC1_Start();
+	call !!_R_ADC_Create
+	;***      428 : 	R_ADC_Set_OperationOn();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 428
+	call !!_R_ADC_Set_OperationOn
+	;***      429 : 	R_ADC_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 429
+	call !!_R_ADC_Start
+	;***      430 : 
+	;***      431 : 	R_DAC_Create();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 431
+	call !!_R_DAC_Create
+	;***      432 : //	CVCC_Current_Set(0x0);
+	;***      433 : //	Salt_Analog_Set(0x0);
+	;***      434 : 	R_DAC0_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 434
+	call !!_R_DAC0_Start
+	;***      435 : 	R_DAC1_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 435
 	br !!_R_DAC1_Start
-	;***      432 : 	/* End user code. Do not edit comment generated here */
-	;***      433 : }
-	;***      434 : 
-	;***      435 : /* Start user code for adding. Do not edit comment generated here */
-	;***      436 : /* End user code. Do not edit comment generated here */
+	;***      436 : 	/* End user code. Do not edit comment generated here */
+	;***      437 : }
+	;***      438 : 
+	;***      439 : /* Start user code for adding. Do not edit comment generated here */
+	;***      440 : /* End user code. Do not edit comment generated here */
 	.SECTION .data,DATA
 	.ALIGN 2
 _g_adc_ch:

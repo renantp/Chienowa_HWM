@@ -251,7 +251,7 @@ void AlkalineWaterMode_nostop(void) {
 			(*state)++;
 		}
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 						|| (DETECT_U() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -260,7 +260,7 @@ void AlkalineWaterMode_nostop(void) {
 		break;
 	case 3:
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 				|| (DETECT_U() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
 			(*state)++;

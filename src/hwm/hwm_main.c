@@ -306,7 +306,7 @@ void userAuthHandler_nostop(void) {
 void ElectrolyzeWaterGeneration_nostop(void) {
 	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION)
 			&& (g_machine_state.mode == INDIE)) {
-		if (isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) {
+		if ((isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) && !levelSkipErrorCheck()) {
 			// Start Electrolyte
 			g_machine_state.mode = ELECTROLYTIC_GENERATION;
 			//Stop what ever operation is happening
@@ -692,4 +692,50 @@ void UpdateMachineStatus(void) {
 	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1;
 	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2;
 	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1;
+}
+
+void manufactureReset(void){
+	g_timerSetting.t1_initialWaterDrainageOperation_s = 60;
+	g_timerSetting.t2_flowSensorStartTime_s = 10;
+	g_timerSetting.t3_flowSensorMonitorTime_s = 5;
+	g_timerSetting.t4_electrolysisOperationStart_s = 10;
+	g_timerSetting.t5_electrolysisStopDelay_s = 5;
+	g_timerSetting.t6_drainageOffTime_h = 168;
+	g_timerSetting.t7_powerOnPreparation_s = 600;
+	g_timerSetting.t8_flowRateAdjustmentRelease_s = 600;
+	g_timerSetting.t9_currentAdjustmentRelease_s = 600;
+
+	g_timerSetting.t10_electrolysisCurrentAlarmSpecified_s = 60;
+	g_timerSetting.t11_overVoltage1Time_s = 5;
+	g_timerSetting.t12_overVoltage2Time_s = 10;
+	g_timerSetting.t13_overVoltage3Time_s = 20;
+	g_timerSetting.t14_lowVoltageStartTime_s = 60;
+	g_timerSetting.t15_lowVoltageDelayTime_s = 10;
+	g_timerSetting.t16_currentMonitoringStart_s = 5;
+	g_timerSetting.t17_solenoidLeakageStartTime_s = 10;
+	g_timerSetting.t18_fullSaltWaterMonitoringStart_h = 3;
+	g_timerSetting.t19_waterFilterAlarm_h = 4000;
+
+	g_timerSetting.t20_waterFilterAlarmIgnore_h = 4800;
+	g_timerSetting.t26_onDelayEmptyLevel_s = 5;
+	g_timerSetting.t27_onDelayLowLevel_s = 5;
+	g_timerSetting.t28_onDelayHighLevel_s = 5;
+
+	g_timerSetting.t30_offDelayEmptyLevel_s = 10;
+	g_timerSetting.t31_saltLowLevelDelay_s = 5;
+	g_timerSetting.t32_saltHighLevelDelay_s = 5;
+	g_timerSetting.t33_t63_neutralizationStartTime_h = 1;
+	g_timerSetting.t34_t64_neutralizationOpenTime_s = 300;
+
+	g_timerSetting.t51_alkalineWaterSpoutingTime_s = 15;
+	g_timerSetting.t52_acidWaterSpoutingTime_s = 15;
+	g_timerSetting.t53_washingWaterSpoutingTime_s = 15;
+	g_timerSetting.t54_overLapTime_ms = 0.5;
+	g_timerSetting.t55_waterDischargeDelay_s = 5;
+	g_timerSetting.t56_acidWaterDownTime_s = 300;
+	g_timerSetting.t57_alkalineWaterDownTime_s = 300;
+
+	g_timerSetting.t61_curranCleaningIntervalTime_h = 8;
+	g_timerSetting.t62_callanWashSpoutingTime_s = 30;
+
 }

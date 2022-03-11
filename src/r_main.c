@@ -134,6 +134,10 @@ void main(void) {
 			timeSettingSize);
 	EE_SPI_Read((uint8_t*) &g_test_control.data,
 			NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
+	// Set to default valve
+	if(g_timerSetting.t1_initialWaterDrainageOperation_s > 180 && g_numberSetting.upperVoltage1 > 100.0){
+		manufactureReset();
+	}
 	_settingNumber = g_numberSetting;
 	_settingTime = g_timerSetting;
 	EEPROM_PROTECT_EN();

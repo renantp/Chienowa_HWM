@@ -137,7 +137,7 @@ extern struct Timer_Setting_s{
 	uint32_t t54_overLapTime_ms;
 	uint32_t t55_waterDischargeDelay_s;
 	uint32_t t56_acidWaterDownTime_s;
-	uint32_t t59_alkalineWaterDownTime_s;
+	uint32_t t57_alkalineWaterDownTime_s;
 	uint32_t t61_curranCleaningIntervalTime_h;
 	uint32_t t62_callanWashSpoutingTime_s;
 	uint32_t t33_t63_neutralizationStartTime_h;

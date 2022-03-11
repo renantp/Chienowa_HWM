@@ -55,5 +55,5 @@ uint8_t DrainageAcidAndAlkalineTankStart_nostop(void);
 
 void main_loop_20211111(void);
 void realTimeResponse(void);
-
+void manufactureReset(void);
 #endif /* HWM_HWM_MAIN_H_ */

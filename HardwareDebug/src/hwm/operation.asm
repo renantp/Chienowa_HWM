@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/operation.obj
 #@   ../src/hwm/operation.c
-#@  compiled at Wed Mar 09 09:37:16 2022
+#@  compiled at Wed Mar 09 14:07:30 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick

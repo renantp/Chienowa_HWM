@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/normal_operation.obj
 00000000                       17  #@   ../src/hwm/normal_operation.c
-00000000                       18  #@  compiled at Wed Mar 09 09:37:16 2022
+00000000                       18  #@  compiled at Wed Mar 09 14:07:30 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_Tick
@@ -892,7 +892,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000380                      864  	;***      251 : 			(*state)++;
 00000380                      865  	;***      252 : 		}
 00000380                      866  	;***      253 : 		//TODO: Change turn OFF signal here
-00000380                      867  	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+00000380                      867  	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 00000380                      868  	;***      255 : 						|| (DETECT_U() == I_ON)) {
 00000380                      869  	;***      256 : 			O_ALK_PUMP_PIN_P2 = OFF;
 00000380                      870  	;***      257 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -901,7 +901,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000380                      873  	;***      260 : 		break;
 00000380                      874  	;***      261 : 	case 3:
 00000380                      875  	;***      262 : 		//TODO: Change turn OFF signal here
-00000380                      876  	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+00000380                      876  	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 00000380                      877  	;***      264 : 				|| (DETECT_U() == I_ON)) {
 00000380                      878  	;***      265 : 			O_ALK_PUMP_PIN_P2 = OFF;
 00000380                      879  	;***      266 : 			(*state)++;

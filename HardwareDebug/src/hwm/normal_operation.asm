@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/normal_operation.obj
 #@   ../src/hwm/normal_operation.c
-#@  compiled at Wed Mar 09 09:37:16 2022
+#@  compiled at Wed Mar 09 14:07:30 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick
@@ -864,7 +864,7 @@ _AlkalineWaterMode_nostop:
 	;***      251 : 			(*state)++;
 	;***      252 : 		}
 	;***      253 : 		//TODO: Change turn OFF signal here
-	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 	;***      255 : 						|| (DETECT_U() == I_ON)) {
 	;***      256 : 			O_ALK_PUMP_PIN_P2 = OFF;
 	;***      257 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -873,7 +873,7 @@ _AlkalineWaterMode_nostop:
 	;***      260 : 		break;
 	;***      261 : 	case 3:
 	;***      262 : 		//TODO: Change turn OFF signal here
-	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t59_alkalineWaterDownTime_s * 1000)
+	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 	;***      264 : 				|| (DETECT_U() == I_ON)) {
 	;***      265 : 			O_ALK_PUMP_PIN_P2 = OFF;
 	;***      266 : 			(*state)++;

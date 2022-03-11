@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/hwm_main.obj
 #@   ../src/hwm/hwm_main.c
-#@  compiled at Wed Mar 09 09:37:16 2022
+#@  compiled at Fri Mar 11 08:04:43 2022
 
 	.EXTERN _rx_count
 	.EXTERN _g_commnunication_flag
@@ -77,6 +77,7 @@
 	.EXTERN _AcidWaterMode_nostop
 	.EXTERN _AlkalineWaterMode_nostop
 	.PUBLIC _ElectrolyzeWaterGeneration_nostop
+	.EXTERN _levelSkipErrorCheck
 	.EXTERN _handSensorLED
 	.EXTERN _handSensorLEDBlink
 	.PUBLIC _isSV1andSV2Off8h
@@ -92,9 +93,9 @@
 	.PUBLIC _main_loop_20211111
 	.PUBLIC _realTimeResponse
 	.PUBLIC _UpdateMachineStatus
-	.EXTERN _levelSkipErrorCheck
 	.EXTERN _isElectrolyticOperationOFF_nostop
 	.EXTERN _filterReplacementErrorCheck
+	.PUBLIC _manufactureReset
 
 	.SECTION .textf,TEXTF
 _setting_default:
@@ -1244,10 +1245,10 @@ _ElectrolyzeWaterGeneration_nostop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 307
 	mov a, !LOWW(_g_machine_state+0x0000E)
 	cmp0 a
-	bnz $.BB@LABEL@13_4
+	bnz $.BB@LABEL@13_5
 .BB@LABEL@13_1:	; if_then_bb
 	;***      308 : 			&& (g_machine_state.mode == INDIE)) {
-	;***      309 : 		if (isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) {
+	;***      309 : 		if ((isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) && !levelSkipErrorCheck()) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 309
 	call !!_isAcidTankEmpty
 	cmp0 a
@@ -1255,8 +1256,12 @@ _ElectrolyzeWaterGeneration_nostop:
 .BB@LABEL@13_2:	; bb18
 	call !!_isAlkalineTankEmpty_nonstop
 	cmp0 a
-	bz $.BB@LABEL@13_13
-.BB@LABEL@13_3:	; if_then_bb31
+	bz $.BB@LABEL@13_15
+.BB@LABEL@13_3:	; bb30
+	call !!_levelSkipErrorCheck
+	cmp0 a
+	bnz $.BB@LABEL@13_6
+.BB@LABEL@13_4:	; if_then_bb49
 	;***      310 : 			// Start Electrolyte
 	;***      311 : 			g_machine_state.mode = ELECTROLYTIC_GENERATION;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 311
@@ -1287,21 +1292,22 @@ _ElectrolyzeWaterGeneration_nostop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 317
 	clr1 0xFFF05.5
 	ret
-.BB@LABEL@13_4:	; if_else_bb
+.BB@LABEL@13_5:	; if_else_bb
 	;***      318 : 
 	;***      319 : 		}
 	;***      320 : 	} else if (g_machine_state.mode == ELECTROLYTIC_GENERATION) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 320
 	cmp a, #0x08
-	bnz $.BB@LABEL@13_13
-.BB@LABEL@13_5:	; if_then_bb49
+.BB@LABEL@13_6:	; if_else_bb
+	bnz $.BB@LABEL@13_15
+.BB@LABEL@13_7:	; if_then_bb66
 	;***      321 : 		// Start Loop Electrolyte
 	;***      322 : 		if (ElectrolyticOperation_nostop()) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 322
 	call $!_ElectrolyticOperation_nostop
 	cmp0 a
-	bz $.BB@LABEL@13_7
-.BB@LABEL@13_6:	; if_then_bb55
+	bz $.BB@LABEL@13_9
+.BB@LABEL@13_8:	; if_then_bb72
 	movw hl, #0xFF07
 	movw ax, hl
 	movw de, ax
@@ -1323,36 +1329,36 @@ _ElectrolyzeWaterGeneration_nostop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 326
 	clrb a
 	call !!_handSensorLED
-.BB@LABEL@13_7:	; if_break_bb63
+.BB@LABEL@13_9:	; if_break_bb80
 	;***      327 : 			// Start Electrolyte Operation Off time keeper
 	;***      328 : 		}
 	;***      329 : 		if (!isAcidTankFull() && !isAlkalineTankFull()) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 329
 	call !!_isAcidTankFull
 	cmp0 a
-	bnz $.BB@LABEL@13_9
-.BB@LABEL@13_8:	; bb74
+	bnz $.BB@LABEL@13_11
+.BB@LABEL@13_10:	; bb91
 	call !!_isAlkalineTankFull
 	cmp0 a
 	;***      330 : 			handSensorLEDBlink(WHITE, 100);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 330
 	mov a, #0x02
-	bz $.BB@LABEL@13_11
-.BB@LABEL@13_9:	; if_else_bb94
+	bz $.BB@LABEL@13_13
+.BB@LABEL@13_11:	; if_else_bb111
 	;***      331 : 		} else if (!isAcidTankFull()) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 331
 	call !!_isAcidTankFull
 	cmp0 a
-	bnz $.BB@LABEL@13_12
-.BB@LABEL@13_10:	; if_then_bb106
+	bnz $.BB@LABEL@13_14
+.BB@LABEL@13_12:	; if_then_bb123
 	;***      332 : 			handSensorLEDBlink(RED, 100);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 332
 	oneb a
-.BB@LABEL@13_11:	; if_then_bb106
+.BB@LABEL@13_13:	; if_then_bb123
 	movw de, #0x0000
 	movw bc, #0x0064
 	br !!_handSensorLEDBlink
-.BB@LABEL@13_12:	; if_else_bb107
+.BB@LABEL@13_14:	; if_else_bb124
 	;***      333 : 		} else if (!isAlkalineTankFull()) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 333
 	call !!_isAlkalineTankFull
@@ -1360,8 +1366,8 @@ _ElectrolyzeWaterGeneration_nostop:
 	;***      334 : 			handSensorLEDBlink(BLUE, 100);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 334
 	mov a, #0x03
-	bz $.BB@LABEL@13_11
-.BB@LABEL@13_13:	; return
+	bz $.BB@LABEL@13_13
+.BB@LABEL@13_15:	; return
 	;***      335 : 		}
 	;***      336 : 	}
 	;***      337 : }
@@ -2854,7 +2860,219 @@ _UpdateMachineStatus:
 	mov !LOWW(_g_io_status+0x00003), a
 	pop hl
 	ret
+_manufactureReset:
+	.STACK _manufactureReset = 4
 	;***      695 : }
+	;***      696 : 
+	;***      697 : void manufactureReset(void){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 697
+	clrw ax
+	;***      698 : 	g_timerSetting.t1_initialWaterDrainageOperation_s = 60;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 698
+	movw !LOWW(_g_timerSetting+0x00002), ax
+	;***      699 : 	g_timerSetting.t2_flowSensorStartTime_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 699
+	movw !LOWW(_g_timerSetting+0x00006), ax
+	;***      700 : 	g_timerSetting.t3_flowSensorMonitorTime_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 700
+	movw !LOWW(_g_timerSetting+0x0000A), ax
+	;***      701 : 	g_timerSetting.t4_electrolysisOperationStart_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 701
+	movw !LOWW(_g_timerSetting+0x0000E), ax
+	;***      702 : 	g_timerSetting.t5_electrolysisStopDelay_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 702
+	movw !LOWW(_g_timerSetting+0x00012), ax
+	;***      703 : 	g_timerSetting.t6_drainageOffTime_h = 168;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 703
+	movw !LOWW(_g_timerSetting+0x00016), ax
+	;***      704 : 	g_timerSetting.t7_powerOnPreparation_s = 600;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 704
+	movw !LOWW(_g_timerSetting+0x0001A), ax
+	;***      705 : 	g_timerSetting.t8_flowRateAdjustmentRelease_s = 600;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 705
+	movw !LOWW(_g_timerSetting+0x0001E), ax
+	;***      706 : 	g_timerSetting.t9_currentAdjustmentRelease_s = 600;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 706
+	movw !LOWW(_g_timerSetting+0x00022), ax
+	;***      707 : 
+	;***      708 : 	g_timerSetting.t10_electrolysisCurrentAlarmSpecified_s = 60;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 708
+	movw !LOWW(_g_timerSetting+0x00026), ax
+	;***      709 : 	g_timerSetting.t11_overVoltage1Time_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 709
+	movw !LOWW(_g_timerSetting+0x0002A), ax
+	;***      710 : 	g_timerSetting.t12_overVoltage2Time_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 710
+	movw !LOWW(_g_timerSetting+0x0002E), ax
+	;***      711 : 	g_timerSetting.t13_overVoltage3Time_s = 20;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 711
+	movw !LOWW(_g_timerSetting+0x00032), ax
+	;***      712 : 	g_timerSetting.t14_lowVoltageStartTime_s = 60;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 712
+	movw !LOWW(_g_timerSetting+0x00036), ax
+	;***      713 : 	g_timerSetting.t15_lowVoltageDelayTime_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 713
+	movw !LOWW(_g_timerSetting+0x0003A), ax
+	;***      714 : 	g_timerSetting.t16_currentMonitoringStart_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 714
+	movw !LOWW(_g_timerSetting+0x0003E), ax
+	;***      715 : 	g_timerSetting.t17_solenoidLeakageStartTime_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 715
+	movw !LOWW(_g_timerSetting+0x00042), ax
+	;***      716 : 	g_timerSetting.t18_fullSaltWaterMonitoringStart_h = 3;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 716
+	movw !LOWW(_g_timerSetting+0x00046), ax
+	;***      717 : 	g_timerSetting.t19_waterFilterAlarm_h = 4000;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 717
+	movw !LOWW(_g_timerSetting+0x0004A), ax
+	;***      718 : 
+	;***      719 : 	g_timerSetting.t20_waterFilterAlarmIgnore_h = 4800;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 719
+	movw !LOWW(_g_timerSetting+0x0004E), ax
+	;***      720 : 	g_timerSetting.t26_onDelayEmptyLevel_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 720
+	movw !LOWW(_g_timerSetting+0x00052), ax
+	;***      721 : 	g_timerSetting.t27_onDelayLowLevel_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 721
+	movw !LOWW(_g_timerSetting+0x00056), ax
+	;***      722 : 	g_timerSetting.t28_onDelayHighLevel_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 722
+	movw !LOWW(_g_timerSetting+0x0005A), ax
+	;***      723 : 
+	;***      724 : 	g_timerSetting.t30_offDelayEmptyLevel_s = 10;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 724
+	movw !LOWW(_g_timerSetting+0x0005E), ax
+	;***      725 : 	g_timerSetting.t31_saltLowLevelDelay_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 725
+	movw !LOWW(_g_timerSetting+0x00062), ax
+	;***      726 : 	g_timerSetting.t32_saltHighLevelDelay_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 726
+	movw !LOWW(_g_timerSetting+0x00066), ax
+	;***      727 : 	g_timerSetting.t33_t63_neutralizationStartTime_h = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 727
+	movw !LOWW(_g_timerSetting+0x0008E), ax
+	;***      728 : 	g_timerSetting.t34_t64_neutralizationOpenTime_s = 300;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 728
+	movw !LOWW(_g_timerSetting+0x00092), ax
+	;***      729 : 
+	;***      730 : 	g_timerSetting.t51_alkalineWaterSpoutingTime_s = 15;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 730
+	movw !LOWW(_g_timerSetting+0x0006A), ax
+	;***      731 : 	g_timerSetting.t52_acidWaterSpoutingTime_s = 15;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 731
+	movw !LOWW(_g_timerSetting+0x0006E), ax
+	;***      732 : 	g_timerSetting.t53_washingWaterSpoutingTime_s = 15;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 732
+	movw !LOWW(_g_timerSetting+0x00072), ax
+	;***      733 : 	g_timerSetting.t54_overLapTime_ms = 0.5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 733
+	movw !LOWW(_g_timerSetting+0x00076), ax
+	movw !LOWW(_g_timerSetting+0x00074), ax
+	;***      734 : 	g_timerSetting.t55_waterDischargeDelay_s = 5;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 734
+	movw !LOWW(_g_timerSetting+0x0007A), ax
+	;***      735 : 	g_timerSetting.t56_acidWaterDownTime_s = 300;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 735
+	movw !LOWW(_g_timerSetting+0x0007E), ax
+	;***      736 : 	g_timerSetting.t57_alkalineWaterDownTime_s = 300;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 736
+	movw !LOWW(_g_timerSetting+0x00082), ax
+	;***      737 : 
+	;***      738 : 	g_timerSetting.t61_curranCleaningIntervalTime_h = 8;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 738
+	movw !LOWW(_g_timerSetting+0x00086), ax
+	;***      739 : 	g_timerSetting.t62_callanWashSpoutingTime_s = 30;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 739
+	movw !LOWW(_g_timerSetting+0x0008A), ax
+	mov x, #0x3C
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 698
+	movw !LOWW(_g_timerSetting), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 708
+	movw !LOWW(_g_timerSetting+0x00024), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 712
+	movw !LOWW(_g_timerSetting+0x00034), ax
+	mov x, #0x0A
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 699
+	movw !LOWW(_g_timerSetting+0x00004), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 701
+	movw !LOWW(_g_timerSetting+0x0000C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 710
+	movw !LOWW(_g_timerSetting+0x0002C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 713
+	movw !LOWW(_g_timerSetting+0x00038), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 715
+	movw !LOWW(_g_timerSetting+0x00040), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 724
+	movw !LOWW(_g_timerSetting+0x0005C), ax
+	mov x, #0x05
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 700
+	movw !LOWW(_g_timerSetting+0x00008), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 702
+	movw !LOWW(_g_timerSetting+0x00010), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 709
+	movw !LOWW(_g_timerSetting+0x00028), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 714
+	movw !LOWW(_g_timerSetting+0x0003C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 720
+	movw !LOWW(_g_timerSetting+0x00050), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 721
+	movw !LOWW(_g_timerSetting+0x00054), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 722
+	movw !LOWW(_g_timerSetting+0x00058), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 725
+	movw !LOWW(_g_timerSetting+0x00060), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 726
+	movw !LOWW(_g_timerSetting+0x00064), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 734
+	movw !LOWW(_g_timerSetting+0x00078), ax
+	mov x, #0xA8
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 703
+	movw !LOWW(_g_timerSetting+0x00014), ax
+	movw ax, #0x0258
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 704
+	movw !LOWW(_g_timerSetting+0x00018), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 705
+	movw !LOWW(_g_timerSetting+0x0001C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 706
+	movw !LOWW(_g_timerSetting+0x00020), ax
+	movw ax, #0x0014
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 711
+	movw !LOWW(_g_timerSetting+0x00030), ax
+	mov x, #0x03
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 716
+	movw !LOWW(_g_timerSetting+0x00044), ax
+	movw ax, #0x0FA0
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 717
+	movw !LOWW(_g_timerSetting+0x00048), ax
+	movw ax, #0x12C0
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 719
+	movw !LOWW(_g_timerSetting+0x0004C), ax
+	onew ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 727
+	movw !LOWW(_g_timerSetting+0x0008C), ax
+	movw ax, #0x012C
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 728
+	movw !LOWW(_g_timerSetting+0x00090), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 735
+	movw !LOWW(_g_timerSetting+0x0007C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 736
+	movw !LOWW(_g_timerSetting+0x00080), ax
+	movw ax, #0x000F
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 730
+	movw !LOWW(_g_timerSetting+0x00068), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 731
+	movw !LOWW(_g_timerSetting+0x0006C), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 732
+	movw !LOWW(_g_timerSetting+0x00070), ax
+	mov x, #0x08
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 738
+	movw !LOWW(_g_timerSetting+0x00084), ax
+	mov x, #0x1E
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 739
+	movw !LOWW(_g_timerSetting+0x00088), ax
+	ret
+	;***      740 : 
+	;***      741 : }
 	.SECTION .bss,BSS
 	.ALIGN 2
 _g_TimeKeeper@1:
