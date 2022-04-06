@@ -30,7 +30,7 @@ void WaterWashingMode_nostop(void) {
 		}
 		break;
 	case 2:
-		if (DETECT_U() == I_ON) {
+		if (DETECT_D() == I_ON) {
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 			g_color = BLACK;
 			(*state) = 0;
@@ -191,7 +191,7 @@ void AcidWaterMode_nostop(void) {
 		}
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-				|| (DETECT_U() == I_ON)) {
+				|| (DETECT_D() == I_ON)) {
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			O_ACID_PUMP_PIN_P1 = OFF;
 			(*state)++;
@@ -200,7 +200,7 @@ void AcidWaterMode_nostop(void) {
 	case 3:
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-				|| (DETECT_U() == I_ON)) {
+				|| (DETECT_D() == I_ON)) {
 			O_ACID_PUMP_PIN_P1 = OFF;
 			(*state)++;
 		}
@@ -252,7 +252,7 @@ void AlkalineWaterMode_nostop(void) {
 		}
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-						|| (DETECT_U() == I_ON)) {
+						|| (DETECT_D() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
@@ -261,7 +261,7 @@ void AlkalineWaterMode_nostop(void) {
 	case 3:
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-				|| (DETECT_U() == I_ON)) {
+				|| (DETECT_D() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
 			(*state)++;
 		}

@@ -132,6 +132,7 @@ inline float measureFlowSensor(uint32_t *s) {
 			flow_pulse_state = I_FLOW_PLUSE_PIN;
 		}
 		R_WDT_Restart();
+		realTimeResponse();
 	}
 	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (*s); // L/minutes
 	return g_io_status.refined.FlowValue;

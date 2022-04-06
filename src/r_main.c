@@ -239,7 +239,7 @@ void main(void) {
 			g_Tick.tickWaterSoftenerPCB = g_systemTime;
 		}
 
-		//Valve PCB
+		//---------------------------------Valve PCB------------------------------------
 		if (g_commnunication_flag.rs485_send_to_valve_response_flag == 1) {
 			// 0xff, 12, {Mode, Valve 1, Valve 2, Valve 3, 1}
 			// 0 - Stand alone 1 - Control Valve
@@ -276,33 +276,10 @@ void main(void) {
 			}
 		}
 //--------------------------------- Testing code---------------------------------------------------------------
-//    	if(ns_delay_ms(&g_Tick.tickCustom[0], 200)){
-//    		P6_bit.no3 = ~P6_bit.no3;
-//    		O_SUPPLY_WATER_PIN_SV1 = ~O_SUPPLY_WATER_PIN_SV1;
-//    	}
-//    	if(g_machine_state.user == 1){
-//    		HandWashingMode_nostop();
-//    	}else{
-//    		g_Tick.tickCustom[1] = g_systemTime;
-//    	}
 
-		// Check
 		flow_p = I_FLOW_PLUSE_PIN == 1 ? 1 : 0;
 		if (ns_delay_ms(&g_Tick.tickCustom[1], 60000)) {
-//    		if(O_SUPPLY_WATER_PIN_SV1 == ON){
-//				g_TickKeeper.SV1_ON_minutes++;
-//				g_TickKeeper.SV1_OFF_minutes = 0;
-//			}else{
-//				g_TickKeeper.SV1_OFF_minutes++;
-//				g_TickKeeper.SV1_ON_minutes = 0;
-//			}
-//			if(O_SPOUT_WATER_PIN_SV2 == ON){
-//				g_TickKeeper.SV2_ON_minutes++;
-//				g_TickKeeper.SV2_OFF_minutes = 0;
-//			}else{
-//				g_TickKeeper.SV2_OFF_minutes++;
-//				g_TickKeeper.SV2_ON_minutes = 0;
-//			}
+
 		}
 
 		if (ns_delay_ms(&g_Tick.tick1s, 1000)) {
@@ -313,85 +290,19 @@ void main(void) {
 					sizeof(struct Timer_Setting_s) - 2);
 			g_crc[7] = crc8_1((uint8_t*) &g_timerSetting,
 					sizeof(struct Timer_Setting_s) - 2);
-//    	    switch (g_color) {
-//				case BLACK:
-//					g_color = RED;
-//					break;
-//				case RED:
-//					g_color = BLUE;
-//					break;
-//				case BLUE:
-//					g_color = WHITE;
-//					break;
-//				default:
-//					g_color = BLACK;
-//					break;
 //			}
 			if (led_st == 0x00) {
 
-//    			O_CVCC_ON_PIN = ON;
-//    			O_HS_ICL_PIN = 0;
-//    			O_HS_IDA_PIN = 1;
-//    			handSensorLED(RED);
-//    			O_CVCC_ALARM_RS = 1;
-//    			O_PUMP_SALT_PIN = ON;
-//    			electrolyticOperationON();
-//    			g_io_status.refined.Valve.SV4 = 1;
-//				g_io_status.refined.Pump2 = 1;
-//				g_io_status.refined.Valve.SV5 = 0;
-//				g_io_status.refined.Pump1 = 0;
-//				g_io_status.refined.SaltLowLevel = 1;
-//    			e_send[0]++;
-//    			g_numberSetting.upperVoltage1++;
-//    			g_numberSetting.crc--;
-//    			g_numberSetting.crc2++;
-//    			g_numberSetting.lowerFlow++;
-//    			g_numberSetting.hello++;
-//    			EE_SPI_Write((uint8_t *)&g_numberSetting, 0x000, sizeof(g_numberSetting));
-//    			EE_SPI_Write((uint8_t *)&g_numberSetting.crc, 0x800, 6);
-//    			EE_SPI_Write((uint8_t *)&g_timerSetting, 0x040, sizeof(g_timerSetting));
 			} else {
-//    			O_CVCC_ON_PIN = OFF;
-//    			O_HS_ICL_PIN = 1;
-//				O_HS_IDA_PIN = 0;
-//    			handSensorLED(WHITE);
-//    			O_CVCC_ALARM_RS = 0;
-//    			O_PUMP_SALT_PIN = OFF;
-//    			electrolyticOperationOFF();
-//    			g_io_status.refined.Valve.SV4 = 0;
-//				g_io_status.refined.Pump2 = 0;
-//				g_io_status.refined.Valve.SV5 = 1;
-//				g_io_status.refined.Pump1 = 1;
-//				g_io_status.refined.SaltLowLevel = 0;
-//    			EE_SPI_Read((uint8_t *)&ret_number_setting, 0x000, sizeof(g_numberSetting));
 
 			}
 		}
 
 //--------------------------------End testing code---------------------------------------------------------
-//    	if(g_machine_state.mode == BUSY){
-//    		g_machine_state.user = 0;
-//    		if(ns_delay_ms(&g_Tick.tickDebouceHandSensor, g_timerSetting.t55_waterDischargeDelay_s*1000)){
-//    			g_machine_state.mode = INDIE;
-//    		}
-//    	}else{
-//    		g_Tick.tickDebouceHandSensor = g_systemTime;
-//    	}
-
 		if ((g_machine_state.mode == WATER_WASHING)
-				| (g_machine_state.mode == INDIE)) {
-//			nostop_WaterWashingMode();
-		}
-//    	InitialOperationModeStart();
+				|| (g_machine_state.mode == INDIE)) {
 
-//    	if(g_color != g_pre_color){
-//			O_RS485_MODE_PIN = 1U;
-//			uint8_t _uart3 = g_uart3_sendend;
-//			send_buf[3]++;
-//			R_UART3_Send(send_buf, 7);
-//			while(_uart3 == g_uart3_sendend);
-//			O_RS485_MODE_PIN = 0U;
-//    	}
+		}
 		R_WDT_Restart();
 	}
 	/* End user code. Do not edit comment generated here */

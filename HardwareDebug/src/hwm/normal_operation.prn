@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/normal_operation.obj
 00000000                       17  #@   ../src/hwm/normal_operation.c
-00000000                       18  #@  compiled at Wed Mar 09 14:07:30 2022
+00000000                       18  #@  compiled at Wed Apr 06 08:39:10 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_Tick
@@ -81,7 +81,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000000C                       77  	;***       30 : 		}
 0000000C                       78  	;***       31 : 		break;
 0000000C                       79  	;***       32 : 	case 2:
-0000000C                       80  	;***       33 : 		if (DETECT_U() == I_ON) {
+0000000C                       80  	;***       33 : 		if (DETECT_D() == I_ON) {
 0000000C                       81  	;***       34 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
 0000000C                       82  	;***       35 : 			g_color = BLACK;
 0000000C                       83  	;***       36 : 			(*state) = 0;
@@ -134,7 +134,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000004D                      130  .BB@LABEL@1_7:	; switch_clause_bb19
 0000004D                      131  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 33
 0000004D 8D07                 132  	mov a, 0xFFF07
-0000004F 315300               133  	bt a.5, $.BB@LABEL@1_9
+0000004F 314300               133  	bt a.4, $.BB@LABEL@1_9
 00000052                      134  .BB@LABEL@1_8:	; if_then_bb33
 00000052                      135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 34
 00000052 715305               136  	clr1 0xFFF05.5
@@ -661,7 +661,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000274                      639  	;***      191 : 		}
 00000274                      640  	;***      192 : 		//TODO: Change turn OFF signal here
 00000274                      641  	;***      193 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-00000274                      642  	;***      194 : 				|| (DETECT_U() == I_ON)) {
+00000274                      642  	;***      194 : 				|| (DETECT_D() == I_ON)) {
 00000274                      643  	;***      195 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 00000274                      644  	;***      196 : 			O_ACID_PUMP_PIN_P1 = OFF;
 00000274                      645  	;***      197 : 			(*state)++;
@@ -670,7 +670,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000274                      648  	;***      200 : 	case 3:
 00000274                      649  	;***      201 : 		//TODO: Change turn OFF signal here
 00000274                      650  	;***      202 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-00000274                      651  	;***      203 : 				|| (DETECT_U() == I_ON)) {
+00000274                      651  	;***      203 : 				|| (DETECT_D() == I_ON)) {
 00000274                      652  	;***      204 : 			O_ACID_PUMP_PIN_P1 = OFF;
 00000274                      653  	;***      205 : 			(*state)++;
 00000274                      654  	;***      206 : 		}
@@ -777,7 +777,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000307 DF00                 753  	bnz $.BB@LABEL@3_13
 00000309                      754  .BB@LABEL@3_12:	; bb
 00000309 8D07                 755  	mov a, 0xFFF07
-0000030B 315300               756  	bt a.5, $.BB@LABEL@3_20
+0000030B 314300               756  	bt a.4, $.BB@LABEL@3_20
 0000030E                      757  .BB@LABEL@3_13:	; if_then_bb57
 0000030E                      758  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 195
 0000030E F6                   759  	clrw ax
@@ -807,7 +807,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000033B DF00                 783  	bnz $.BB@LABEL@3_16
 0000033D                      784  .BB@LABEL@3_15:	; bb69
 0000033D 8D07                 785  	mov a, 0xFFF07
-0000033F 315300               786  	bt a.5, $.BB@LABEL@3_20
+0000033F 314300               786  	bt a.4, $.BB@LABEL@3_20
 00000342                      787  .BB@LABEL@3_16:	; if_then_bb92
 00000342 712306               788  	clr1 0xFFF06.2
 00000345                      789  .BB@LABEL@3_17:	; if_then_bb92
@@ -893,7 +893,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000380                      865  	;***      252 : 		}
 00000380                      866  	;***      253 : 		//TODO: Change turn OFF signal here
 00000380                      867  	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-00000380                      868  	;***      255 : 						|| (DETECT_U() == I_ON)) {
+00000380                      868  	;***      255 : 						|| (DETECT_D() == I_ON)) {
 00000380                      869  	;***      256 : 			O_ALK_PUMP_PIN_P2 = OFF;
 00000380                      870  	;***      257 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 00000380                      871  	;***      258 : 			(*state)++;
@@ -902,7 +902,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000380                      874  	;***      261 : 	case 3:
 00000380                      875  	;***      262 : 		//TODO: Change turn OFF signal here
 00000380                      876  	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-00000380                      877  	;***      264 : 				|| (DETECT_U() == I_ON)) {
+00000380                      877  	;***      264 : 				|| (DETECT_D() == I_ON)) {
 00000380                      878  	;***      265 : 			O_ALK_PUMP_PIN_P2 = OFF;
 00000380                      879  	;***      266 : 			(*state)++;
 00000380                      880  	;***      267 : 		}
@@ -1007,7 +1007,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000413 DF00                 977  	bnz $.BB@LABEL@4_13
 00000415                      978  .BB@LABEL@4_12:	; bb
 00000415 8D07                 979  	mov a, 0xFFF07
-00000417 315300               980  	bt a.5, $.BB@LABEL@4_21
+00000417 314300               980  	bt a.4, $.BB@LABEL@4_21
 0000041A                      981  .BB@LABEL@4_13:	; if_then_bb57
 0000041A                      982  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 256
 0000041A 711306               983  	clr1 0xFFF06.1
@@ -1040,7 +1040,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000044A DF00                1010  	bnz $.BB@LABEL@4_17
 0000044C                     1011  .BB@LABEL@4_16:	; bb69
 0000044C 8D07                1012  	mov a, 0xFFF07
-0000044E 315300              1013  	bt a.5, $.BB@LABEL@4_21
+0000044E 314300              1013  	bt a.4, $.BB@LABEL@4_21
 00000451                     1014  .BB@LABEL@4_17:	; if_then_bb92
 00000451                     1015  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 265
 00000451 711306              1016  	clr1 0xFFF06.1
@@ -1082,7 +1082,7 @@ TEXTF              1140 (00000474) .textf
 BSS                   1 (00000001) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\normal_operation.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\normal_operation.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\normal_operation.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\normal_operation.asm 

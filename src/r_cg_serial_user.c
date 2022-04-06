@@ -363,7 +363,7 @@ static void __near r_uart2_interrupt_send(void) {
  ***********************************************************************************************************************/
 static void r_uart2_callback_receiveend(void) {
 	/* Start user code. Do not edit comment generated here */
-	uart2_handle();
+	Raspberry_uart2_handle();
 	/* End user code. Do not edit comment generated here */
 }
 

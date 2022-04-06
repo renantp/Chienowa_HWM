@@ -40,7 +40,7 @@ void adc_int_handle(void){
 /*!
  * Use in uart2 interrupt function
  */
-void uart2_handle(void){
+void Raspberry_uart2_handle(void){
 	R_UART2_Receive(g_rx_data, 6);
 	g_commnunication_flag.recived_time_setting_flag =
 			g_commnunication_flag.recived_time_setting_flag == 1 ?
@@ -105,6 +105,7 @@ void uart2_handle(void){
 
 					break;
 				case TESTING_MODE_START:
+					rx_count++;
 					g_commnunication_flag.test_flag = TESTING_MODE_START;
 					break;
 				case TESTING_MODE_STOP:

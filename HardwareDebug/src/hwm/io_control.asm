@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/io_control.obj
 #@   ../src/hwm/io_control.c
-#@  compiled at Wed Mar 09 14:07:30 2022
+#@  compiled at Wed Apr 06 08:39:10 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_io_status
@@ -36,6 +36,7 @@
 	.PUBLIC _isAlkalineTankEmpty_nonstop
 	.PUBLIC _measureFlowSensor
 	.EXTERN _R_WDT_Restart
+	.EXTERN _realTimeResponse
 	.PUBLIC _measureFlowSensor_nostop
 
 	.SECTION .textf,TEXTF
@@ -626,12 +627,15 @@ _measureFlowSensor:
 	;***      134 : 		R_WDT_Restart();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 134
 	call !!_R_WDT_Restart
+	;***      135 : 		realTimeResponse();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 135
+	call !!_realTimeResponse
 	br $.BB@LABEL@9_1
 .BB@LABEL@9_7:	; bb40
 	movw ax, #0x3F33
-	;***      135 : 	}
-	;***      136 : 	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (*s); // L/minutes
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 136
+	;***      136 : 	}
+	;***      137 : 	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (*s); // L/minutes
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 137
 	push ax
 	mov a, #0x33
 	push ax
@@ -676,25 +680,25 @@ _measureFlowSensor:
 	movw ax, bc
 	movw !LOWW(_g_io_status+0x00008), ax
 	addw sp, #0x04
-	;***      137 : 	return g_io_status.refined.FlowValue;
-	;***      138 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 138
+	;***      138 : 	return g_io_status.refined.FlowValue;
+	;***      139 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 139
 	movw bc, ax
 	movw ax, de
 	addw sp, #0x0E
 	ret
 _measureFlowSensor_nostop:
 	.STACK _measureFlowSensor_nostop = 12
-	;***      139 : 
-	;***      140 : uint8_t _pre_flow_state = I_OFF;
-	;***      141 : float _flow_pulse;
-	;***      142 : float measureFlowSensor_nostop(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 142
+	;***      140 : 
+	;***      141 : uint8_t _pre_flow_state = I_OFF;
+	;***      142 : float _flow_pulse;
+	;***      143 : float measureFlowSensor_nostop(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 143
 	subw sp, #0x04
-	;***      143 : 	uint8_t *state = &g_machine_state.flowSensor;
-	;***      144 : 	uint32_t *tick = &g_Tick.tickFlowMeasurment;
-	;***      145 : 	switch (*state) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 145
+	;***      144 : 	uint8_t *state = &g_machine_state.flowSensor;
+	;***      145 : 	uint32_t *tick = &g_Tick.tickFlowMeasurment;
+	;***      146 : 	switch (*state) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 146
 	mov a, !LOWW(_g_machine_state+0x00005)
 	cmp0 a
 	bz $.BB@LABEL@10_4
@@ -708,9 +712,9 @@ _measureFlowSensor_nostop:
 	clrb !LOWW(_g_machine_state+0x00005)
 	br $.BB@LABEL@10_11
 .BB@LABEL@10_4:	; switch_clause_bb
-	;***      146 : 	case 0:
-	;***      147 : 		if (ns_delay_ms(tick, g_timerSetting.t2_flowSensorStartTime_s * 1000)) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 147
+	;***      147 : 	case 0:
+	;***      148 : 		if (ns_delay_ms(tick, g_timerSetting.t2_flowSensorStartTime_s * 1000)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 148
 	movw ax, !LOWW(_g_timerSetting+0x00004)
 	movw bc, #0x03E8
 	mulhu
@@ -718,12 +722,12 @@ _measureFlowSensor_nostop:
 	movw ax, !LOWW(_g_timerSetting+0x00006)
 	br $.BB@LABEL@10_9
 .BB@LABEL@10_5:	; switch_clause_bb14
-	;***      148 : 			(*state)++;
-	;***      149 : 		}
-	;***      150 : 		break;
-	;***      151 : 	case 1:
-	;***      152 : 		if (_pre_flow_state != I_FLOW_PLUSE_PIN) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 152
+	;***      149 : 			(*state)++;
+	;***      150 : 		}
+	;***      151 : 		break;
+	;***      152 : 	case 1:
+	;***      153 : 		if (_pre_flow_state != I_FLOW_PLUSE_PIN) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 153
 	mov x, !LOWW(__pre_flow_state)
 	mov a, 0xFFF00
 	shr a, 0x01
@@ -731,20 +735,20 @@ _measureFlowSensor_nostop:
 	cmp a, x
 	bz $.BB@LABEL@10_8
 .BB@LABEL@10_6:	; if_then_bb24
-	;***      153 : 			_pre_flow_state = I_FLOW_PLUSE_PIN;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 153
+	;***      154 : 			_pre_flow_state = I_FLOW_PLUSE_PIN;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 154
 	mov a, 0xFFF00
 	shr a, 0x01
 	and a, #0x01
 	mov !LOWW(__pre_flow_state), a
-	;***      154 : 			if (I_FLOW_PLUSE_PIN == I_ON) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 154
+	;***      155 : 			if (I_FLOW_PLUSE_PIN == I_ON) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 155
 	mov a, 0xFFF00
 	bt a.1, $.BB@LABEL@10_8
 .BB@LABEL@10_7:	; if_then_bb35
 	movw ax, #0x3F80
-	;***      155 : 				_flow_pulse++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 155
+	;***      156 : 				_flow_pulse++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 156
 	push ax
 	clrw ax
 	push ax
@@ -756,10 +760,10 @@ _measureFlowSensor_nostop:
 	movw !LOWW(__flow_pulse+0x00002), ax
 	addw sp, #0x04
 .BB@LABEL@10_8:	; if_break_bb39
-	;***      156 : 			}
-	;***      157 : 		}
-	;***      158 : 		if (ns_delay_ms(tick,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 158
+	;***      157 : 			}
+	;***      158 : 		}
+	;***      159 : 		if (ns_delay_ms(tick,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 159
 	movw ax, !LOWW(_g_timerSetting+0x00008)
 	movw bc, #0x03E8
 	mulhu
@@ -782,30 +786,30 @@ _measureFlowSensor_nostop:
 .BB@LABEL@10_10:	; if_then_bb47
 	inc !LOWW(_g_machine_state+0x00005)
 .BB@LABEL@10_11:	; switch_break_bb
-	;***      159 : 				g_timerSetting.t3_flowSensorMonitorTime_s * 1000)) {
-	;***      160 : 			(*state)++;
-	;***      161 : 		}
-	;***      162 : 		break;
-	;***      163 : 	case 2:
-	;***      164 : 		g_io_status.refined.FlowValue = (_flow_pulse * 0.7 * 60 / 1000)
-	;***      165 : 				/ g_timerSetting.t3_flowSensorMonitorTime_s;
-	;***      166 : 		_flow_pulse = 0;
-	;***      167 : 		(*state) = 0;
-	;***      168 : 		break;
-	;***      169 : 	default:
-	;***      170 : 		(*state) = 0;
-	;***      171 : 		break;
-	;***      172 : 	}
-	;***      173 : 	return g_io_status.refined.FlowValue;
-	;***      174 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 174
+	;***      160 : 				g_timerSetting.t3_flowSensorMonitorTime_s * 1000)) {
+	;***      161 : 			(*state)++;
+	;***      162 : 		}
+	;***      163 : 		break;
+	;***      164 : 	case 2:
+	;***      165 : 		g_io_status.refined.FlowValue = (_flow_pulse * 0.7 * 60 / 1000)
+	;***      166 : 				/ g_timerSetting.t3_flowSensorMonitorTime_s;
+	;***      167 : 		_flow_pulse = 0;
+	;***      168 : 		(*state) = 0;
+	;***      169 : 		break;
+	;***      170 : 	default:
+	;***      171 : 		(*state) = 0;
+	;***      172 : 		break;
+	;***      173 : 	}
+	;***      174 : 	return g_io_status.refined.FlowValue;
+	;***      175 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 175
 	movw bc, !LOWW(_g_io_status+0x00008)
 	movw ax, !LOWW(_g_io_status+0x00006)
 	addw sp, #0x04
 	ret
 .BB@LABEL@10_12:	; switch_clause_bb52
 	movw ax, #0x3F33
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 164
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 165
 	push ax
 	mov a, #0x33
 	push ax
@@ -848,7 +852,7 @@ _measureFlowSensor_nostop:
 	movw ax, de
 	movw !LOWW(_g_io_status+0x00006), ax
 	clrw ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 166
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 167
 	movw !LOWW(__flow_pulse+0x00002), ax
 	movw !LOWW(__flow_pulse), ax
 	br $!.BB@LABEL@10_3

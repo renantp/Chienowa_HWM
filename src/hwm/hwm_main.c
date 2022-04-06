@@ -109,9 +109,10 @@ uint8_t isThisCommand(uint8_t *input_buf, enum UART_header_e header,
  * @return: 0 - Done; 1 - Not done
  */
 uint8_t DrainageAcidAndAlkalineTankStart_nostop(void) {
-	O_DRAIN_ACID_PIN_SV5 = isAcidTankEmpty() ? OFF : ON;
-	O_DRAIN_ALK_PIN_SV6 = isAlkalineTankEmpty_nonstop() ? OFF : ON;
-	return !(O_DRAIN_ACID_PIN_SV5 == OFF && O_DRAIN_ALK_PIN_SV6 == OFF);
+//	O_DRAIN_ACID_PIN_SV5 = isAcidTankEmpty() ? OFF : ON;
+//	O_DRAIN_ALK_PIN_SV6 = isAlkalineTankEmpty_nonstop() ? OFF : ON;
+//	return !(O_DRAIN_ACID_PIN_SV5 == OFF && O_DRAIN_ALK_PIN_SV6 == OFF);
+	return 0;
 }
 
 /*!
@@ -168,6 +169,7 @@ uint8_t WaterSupplyStart_nostop(void) {
 		(*state) = 0;
 		break;
 	}
+	realTimeResponse();
 	return (*state) == 0 ? 0 : 1;
 }
 
@@ -275,7 +277,7 @@ void main_init_20211111(void) {
 
 void userAuthHandler_nostop(void) {
 	if((g_test_control.raw.biomectric == OFF)){
-		if(DETECT_D() == I_ON && g_machine_state.user == 0){
+		if(DETECT_U() == I_ON && g_machine_state.user == 0){
 			sendToRasPi_u32(H_SET, START_WASHING, 0U);
 			g_machine_state.user = 1;
 			rx_count++;
@@ -447,7 +449,7 @@ void NormalMode_nostop(void) {
 		g_Tick.tickDebouceHandSensor = g_systemTime;
 	} else if (g_machine_state.mode == BUSY) {
 		if (ns_delay_ms(&g_Tick.tickDebouceHandSensor,
-				g_timerSetting.t55_waterDischargeDelay_s * 1000)) {
+				g_timerSetting.t60_waterDischargeDelay_s * 1000)) {
 			g_machine_state.mode = INDIE;
 			g_machine_state.user = 0;
 		}
@@ -731,7 +733,7 @@ void manufactureReset(void){
 	g_timerSetting.t52_acidWaterSpoutingTime_s = 15;
 	g_timerSetting.t53_washingWaterSpoutingTime_s = 15;
 	g_timerSetting.t54_overLapTime_ms = 0.5;
-	g_timerSetting.t55_waterDischargeDelay_s = 5;
+	g_timerSetting.t60_waterDischargeDelay_s = 5;
 	g_timerSetting.t56_acidWaterDownTime_s = 300;
 	g_timerSetting.t57_alkalineWaterDownTime_s = 300;
 

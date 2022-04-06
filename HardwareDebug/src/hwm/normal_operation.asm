@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/normal_operation.obj
 #@   ../src/hwm/normal_operation.c
-#@  compiled at Wed Mar 09 14:07:30 2022
+#@  compiled at Wed Apr 06 08:39:10 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick
@@ -77,7 +77,7 @@ _WaterWashingMode_nostop:
 	;***       30 : 		}
 	;***       31 : 		break;
 	;***       32 : 	case 2:
-	;***       33 : 		if (DETECT_U() == I_ON) {
+	;***       33 : 		if (DETECT_D() == I_ON) {
 	;***       34 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
 	;***       35 : 			g_color = BLACK;
 	;***       36 : 			(*state) = 0;
@@ -130,7 +130,7 @@ _WaterWashingMode_nostop:
 .BB@LABEL@1_7:	; switch_clause_bb19
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 33
 	mov a, 0xFFF07
-	bt a.5, $.BB@LABEL@1_9
+	bt a.4, $.BB@LABEL@1_9
 .BB@LABEL@1_8:	; if_then_bb33
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 34
 	clr1 0xFFF05.5
@@ -639,7 +639,7 @@ _AcidWaterMode_nostop:
 	;***      191 : 		}
 	;***      192 : 		//TODO: Change turn OFF signal here
 	;***      193 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-	;***      194 : 				|| (DETECT_U() == I_ON)) {
+	;***      194 : 				|| (DETECT_D() == I_ON)) {
 	;***      195 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 	;***      196 : 			O_ACID_PUMP_PIN_P1 = OFF;
 	;***      197 : 			(*state)++;
@@ -648,7 +648,7 @@ _AcidWaterMode_nostop:
 	;***      200 : 	case 3:
 	;***      201 : 		//TODO: Change turn OFF signal here
 	;***      202 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-	;***      203 : 				|| (DETECT_U() == I_ON)) {
+	;***      203 : 				|| (DETECT_D() == I_ON)) {
 	;***      204 : 			O_ACID_PUMP_PIN_P1 = OFF;
 	;***      205 : 			(*state)++;
 	;***      206 : 		}
@@ -753,7 +753,7 @@ _AcidWaterMode_nostop:
 	bnz $.BB@LABEL@3_13
 .BB@LABEL@3_12:	; bb
 	mov a, 0xFFF07
-	bt a.5, $.BB@LABEL@3_20
+	bt a.4, $.BB@LABEL@3_20
 .BB@LABEL@3_13:	; if_then_bb57
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 195
 	clrw ax
@@ -783,7 +783,7 @@ _AcidWaterMode_nostop:
 	bnz $.BB@LABEL@3_16
 .BB@LABEL@3_15:	; bb69
 	mov a, 0xFFF07
-	bt a.5, $.BB@LABEL@3_20
+	bt a.4, $.BB@LABEL@3_20
 .BB@LABEL@3_16:	; if_then_bb92
 	clr1 0xFFF06.2
 .BB@LABEL@3_17:	; if_then_bb92
@@ -865,7 +865,7 @@ _AlkalineWaterMode_nostop:
 	;***      252 : 		}
 	;***      253 : 		//TODO: Change turn OFF signal here
 	;***      254 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-	;***      255 : 						|| (DETECT_U() == I_ON)) {
+	;***      255 : 						|| (DETECT_D() == I_ON)) {
 	;***      256 : 			O_ALK_PUMP_PIN_P2 = OFF;
 	;***      257 : 			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 	;***      258 : 			(*state)++;
@@ -874,7 +874,7 @@ _AlkalineWaterMode_nostop:
 	;***      261 : 	case 3:
 	;***      262 : 		//TODO: Change turn OFF signal here
 	;***      263 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-	;***      264 : 				|| (DETECT_U() == I_ON)) {
+	;***      264 : 				|| (DETECT_D() == I_ON)) {
 	;***      265 : 			O_ALK_PUMP_PIN_P2 = OFF;
 	;***      266 : 			(*state)++;
 	;***      267 : 		}
@@ -977,7 +977,7 @@ _AlkalineWaterMode_nostop:
 	bnz $.BB@LABEL@4_13
 .BB@LABEL@4_12:	; bb
 	mov a, 0xFFF07
-	bt a.5, $.BB@LABEL@4_21
+	bt a.4, $.BB@LABEL@4_21
 .BB@LABEL@4_13:	; if_then_bb57
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 256
 	clr1 0xFFF06.1
@@ -1010,7 +1010,7 @@ _AlkalineWaterMode_nostop:
 	bnz $.BB@LABEL@4_17
 .BB@LABEL@4_16:	; bb69
 	mov a, 0xFFF07
-	bt a.5, $.BB@LABEL@4_21
+	bt a.4, $.BB@LABEL@4_21
 .BB@LABEL@4_17:	; if_then_bb92
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 265
 	clr1 0xFFF06.1

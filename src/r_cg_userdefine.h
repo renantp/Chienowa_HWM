@@ -135,13 +135,15 @@ extern struct Timer_Setting_s{
 	uint32_t t52_acidWaterSpoutingTime_s;
 	uint32_t t53_washingWaterSpoutingTime_s;
 	uint32_t t54_overLapTime_ms;
-	uint32_t t55_waterDischargeDelay_s;
+	uint32_t t60_waterDischargeDelay_s;
 	uint32_t t56_acidWaterDownTime_s;
 	uint32_t t57_alkalineWaterDownTime_s;
 	uint32_t t61_curranCleaningIntervalTime_h;
 	uint32_t t62_callanWashSpoutingTime_s;
 	uint32_t t33_t63_neutralizationStartTime_h;
 	uint32_t t34_t64_neutralizationOpenTime_s;
+//	uint32_t t55_waterOverlay_s;
+
 	char crc;
 }g_timerSetting;
 extern struct Number_Setting_s{
@@ -359,7 +361,7 @@ extern float g_flow_value;
 extern uint16_t g_adc_value[2];
 
 extern void adc_int_handle(void);
-extern void uart2_handle(void);
+extern void Raspberry_uart2_handle(void);
 
 extern void setting_default(void);
 extern void main_init_20211111(void);

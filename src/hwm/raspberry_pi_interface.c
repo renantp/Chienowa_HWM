@@ -13,7 +13,7 @@
 uint8_t *const time_setting_p = (uint8_t*) &_settingTime;
 uint8_t *const number_setting_p = (uint8_t*) &_settingNumber;
 struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
-struct IO_Struct g_io_response;
+struct IO_Struct g_io_response, io_off;
 union Control_u g_test_control;
 
 // ------------------ LOCAL FUNCTION -------------------------------
@@ -160,9 +160,8 @@ void RaspberryCommunication_nostop(void) {
 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
 		g_machine_state.test = g_commnunication_flag.test_flag;
 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
-		struct IO_Struct _newIO;
 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
-		IO_Output(&_newIO);
+		IO_Output(&io_off);
 	}
 }
 void sendToRasPi_f(enum UART_header_e head, enum Control_status type,

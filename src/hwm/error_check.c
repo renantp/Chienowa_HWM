@@ -160,11 +160,16 @@ uint8_t OverCurrentCheck_waitReset(void) {
 uint8_t FlowSensorCheck_nonstop(void) {
 	if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 			|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
-		sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-				g_io_status.refined.FlowValue);
-		g_alarm.refined.abnormal_flow = 1;
-		return 1;
+		if(O_SUPPLY_WATER_PIN_SV1 == ON){
+			sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+					g_io_status.refined.FlowValue);
+			g_alarm.refined.abnormal_flow = 1;
+			return 1;
+		}
+		g_alarm.refined.abnormal_flow = 0;
+		return 0;
 	}
+	g_alarm.refined.abnormal_flow = 0;
 	return 0;
 }
 
