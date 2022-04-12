@@ -1,4 +1,4 @@
 git_push_all.sh
 git_userdefine.sh
-/HardwareDebug/
+/HardwareDebug/*
 .vscode

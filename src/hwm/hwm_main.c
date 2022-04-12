@@ -615,8 +615,9 @@ void NeutralizationTreatment(uint32_t *tick) {
 
 }
 void main_loop_20211111(void) {
+
 	measureFlowSensor_nostop();
-//	if(g_machine_state.test == 0){
+
 	if(g_commnunication_flag.test_flag != TESTING_MODE_START){
 		DrainageMode_nostop();
 		// Check Acid and Alkaline tank to make Electrolytic Water
@@ -628,9 +629,10 @@ void main_loop_20211111(void) {
 
 		realTimeResponse();
 	}else{
-		//TODO: Test mode
+
 
 	}
+
 	levelSkipErrorCheck();
 }
 

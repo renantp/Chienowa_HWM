@@ -158,41 +158,13 @@ void main(void) {
 	g_machine_mode = HAND_WASHING;
 //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
 
-//TODO: Run Initialize Operation
+	//TODO: Run Initialize Operation
 	if(g_test_control.raw.power_on == ON){
 		main_init_20211111();
 	}
 	//TODO: Output CVCC and Salt pump voltage
 	CVCC_Current_Set((uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
 	Salt_Analog_Set((uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
-
-#ifdef TESTING_FIRMWARE
-	uint8_t state = OFF;
-	while (1) {
-		if (ns_delay_ms(&g_Tick.tickCustom[2], 500)) {
-			//    		if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
-			//					|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
-			//				sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-			//						g_io_status.refined.FlowValue);
-			//			}
-			dac_out[0] += 13;
-			CVCC_Current_Set(dac_out[0]);
-			dac_out[1] += 13;
-			Salt_Analog_Set(dac_out[1]);
-		}
-		if (ns_delay_ms(&g_Tick.tickCustom[3], 1000)) {
-			O_HS_IDA_PIN = O_HS_ICL_PIN = O_SUPPLY_WATER_PIN_SV1 =
-			O_CTRL_OUT_PIN = O_SPOUT_WATER_PIN_SV2 = O_PUMP_SALT_PIN_SP1 =
-			O_ALK_PUMP_PIN_P2 = O_ACID_PUMP_PIN_P1 = O_PUMP_PRESS_PIN =
-			O_ALARM_OUT_PIN = O_NEUTRALIZE_PIN_SV7 =
-			O_DRAIN_ALK_PIN_SV6 = O_DRAIN_ACID_PIN_SV5 = O_SPOUT_ACID_PIN_SV3 =
-			O_SPOUT_ALK_PIN_SV4 = O_CVCC_ON_PIN = O_CVCC_ALARM_RS =
-			O_OPTION_2_PIN_SV8 = O_OPTION_3_PIN_SV9 = O_OPTION_1_BUZZER = state;
-			state = ~state;
-		}
-		R_WDT_Restart();
-	}
-#endif
 	while (1U) {
 
 		realTimeResponse();
