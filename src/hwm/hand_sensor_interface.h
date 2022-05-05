@@ -20,5 +20,6 @@ extern enum HS_COLOR g_color, g_pre_color;
 
 void handSensorLED(enum HS_COLOR color);
 void handSensorLEDBlink(enum HS_COLOR color, uint32_t ms);
+void HandSensorLEDEndBlink(void);
 
 #endif /* HWM_HAND_SENSOR_INTERFACE_H_ */

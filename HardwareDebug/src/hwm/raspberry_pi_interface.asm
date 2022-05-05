@@ -15,20 +15,23 @@
 #@   -pass_source
 #@   -o src/hwm/raspberry_pi_interface.obj
 #@   ../src/hwm/raspberry_pi_interface.c
-#@  compiled at Wed Apr 06 08:39:11 2022
+#@  compiled at Thu May 05 16:34:09 2022
 
 	.EXTERN _rx_count
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
 	.EXTERN _g_io_status
+	.EXTERN _g_Tick
 	.EXTERN _g_machine_state
 	.EXTERN _g_control_buffer_f
 	.EXTERN _g_control_buffer_u32
+	.EXTERN _g_control_buffer_i32
 	.EXTERN _g_commnunication_flag
 	.EXTERN _g_machine_mode
 	.EXTERN _g_systemTime
 	.EXTERN _g_uart2_sendend
 	.EXTERN _g_rx_data
+	.EXTERN _g_animation_queue
 	.EXTERN __settingTime
 	.EXTERN __settingNumber
 	.PUBLIC _time_setting_p
@@ -37,30 +40,43 @@
 	.PUBLIC _g_io_response
 	.PUBLIC _io_off
 	.PUBLIC _g_test_control
-	.PUBLIC _IO_Output
+	.PUBLIC _save_spec_ok
+	.PUBLIC _AlarmResponse
+	.PUBLIC _SaveComfirmResponse
 	.PUBLIC _RaspberryCommunication_nostop
+	.EXTERN _ns_delay_ms
+	.EXTERN _R_UART2_Stop
+	.EXTERN _R_UART2_Start
+	.EXTERN _R_UART2_Receive
 	.PUBLIC _sendToRasPi_f
-	.EXTERN _crc8_1
 	.EXTERN _R_UART2_Send
-	.EXTERN _R_WDT_Restart
-	.EXTERN _EE_SPI_Write
-	.EXTERN _R_DAC0_Set_ConversionValue
-	.EXTERN _R_DAC1_Set_ConversionValue
 	.PUBLIC _sendToRasPi_u32
+	.PUBLIC _sendToRasPi_Revert_i32
 	.PUBLIC _waitAlarmConfirm_stop
 	.EXTERN _realTimeResponse
-	.EXTERN _ns_delay_ms
 	.PUBLIC _waitAlarmConfirm_nonstop
 	.PUBLIC _resetAlarm
 	.PUBLIC _ResponseHandler
 	.PUBLIC _ResponseWashingMode
+	.PUBLIC _ResponseNextAnimation
 	.PUBLIC _MonitoringStatus
 	.PUBLIC _TestIndividual
 	.PUBLIC _TestControl
+	.PUBLIC _TestMode
+	.PUBLIC _SendTimeSetting
+	.PUBLIC _SendNumberSetting
+	.PUBLIC _GetAndSaveTimeSetting
+	.PUBLIC _GetAndSaveNumberSetting
+	.EXTERN _R_WDT_Restart
+	.EXTERN _OutputIO
+	.EXTERN _EE_SPI_Write
+	.EXTERN _crc8_1
+	.EXTERN _R_DAC0_Set_ConversionValue
+	.EXTERN _R_DAC1_Set_ConversionValue
 
 	.SECTION .textf,TEXTF
-_IO_Output:
-	.STACK _IO_Output = 4
+_AlarmResponse:
+	.STACK _AlarmResponse = 4
 	;***        1 : /*
 	;***        2 :  * raspberry_pi_interface.c
 	;***        3 :  *
@@ -78,303 +94,984 @@ _IO_Output:
 	;***       15 : struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 	;***       16 : struct IO_Struct g_io_response, io_off;
 	;***       17 : union Control_u g_test_control;
-	;***       18 : 
-	;***       19 : // ------------------ LOCAL FUNCTION -------------------------------
-	;***       20 : inline void ResponseHandler(void);
-	;***       21 : inline void ResponseWashingMode(void);
-	;***       22 : inline void MonitoringStatus(void);
-	;***       23 : inline void TestIndividual(void);
-	;***       24 : inline void TestControl(void);
-	;***       25 : 
-	;***       26 : void IO_Output(struct IO_Struct *io) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 26
-	movw de, ax
-	movw hl, #0xFF06
-	;***       27 : 	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 27
-	mov a, [de+0x01]
-	mov1 CY, a.0
-	mov a, 0xFFF01
-	mov1 a.7, CY
-	mov 0xFFF01, a
-	;***       28 : 	O_SPOUT_WATER_PIN_SV2 = io->Valve.SV2;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 28
-	mov a, [de+0x01]
-	mov1 CY, a.1
-	mov a, 0xFFF05
-	mov1 a.5, CY
-	mov 0xFFF05, a
-	;***       29 : 	O_SPOUT_ACID_PIN_SV3 = io->Valve.SV3;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 29
-	mov a, [de+0x01]
-	mov1 CY, a.2
-	mov a, 0xFFF07
-	mov1 a.6, CY
-	mov 0xFFF07, a
-	;***       30 : 	O_SPOUT_ALK_PIN_SV4 = io->Valve.SV4;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 30
-	mov a, [de+0x01]
-	mov1 CY, a.3
-	mov a, 0xFFF07
-	mov1 a.7, CY
-	mov 0xFFF07, a
-	;***       31 : 	O_DRAIN_ACID_PIN_SV5 = io->Valve.SV5;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 31
-	mov a, [de+0x01]
-	mov1 CY, a.4
-	mov a, [hl]
-	mov1 a.7, CY
-	mov [hl], a
-	;***       32 : 	O_DRAIN_ALK_PIN_SV6 = io->Valve.SV6;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 32
-	mov a, [de+0x01]
-	mov1 CY, a.5
-	mov a, [hl]
-	mov1 a.6, CY
-	mov [hl], a
-	;***       33 : 	O_NEUTRALIZE_PIN_SV7 = io->Valve.SV7;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 33
-	mov a, [de+0x01]
-	mov1 CY, a.6
-	mov a, [hl]
-	mov1 a.5, CY
-	mov [hl], a
-	;***       34 : 	O_OPTION_2_PIN_SV8 = io->Valve.SV8;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 34
-	mov a, [de+0x01]
-	mov1 CY, a.7
-	mov a, 0xFFF0B
-	mov1 a.1, CY
-	mov 0xFFF0B, a
-	;***       35 : 	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 35
-	mov a, [de+0x02]
-	mov1 CY, a.0
-	mov a, 0xFFF0E
-	mov1 a.6, CY
-	mov 0xFFF0E, a
-	;***       36 : 
-	;***       37 : 	O_ACID_PUMP_PIN_P1 = io->Pump1;
+	;***       18 : int8_t save_spec_ok = 0;
+	;***       19 : 
+	;***       20 : // ------------------ LOCAL FUNCTION -------------------------------
+	;***       21 : uint8_t ResponseHandler(void);
+	;***       22 : void ResponseWashingMode(void);
+	;***       23 : uint8_t ResponseNextAnimation(void);
+	;***       24 : void MonitoringStatus(void);
+	;***       25 : uint8_t TestIndividual(void);
+	;***       26 : void TestControl(void);
+	;***       27 : uint8_t SendTimeSetting(void);
+	;***       28 : uint8_t SendNumberSetting(void);
+	;***       29 : uint8_t GetAndSaveTimeSetting(void);
+	;***       30 : uint8_t GetAndSaveNumberSetting(void);
+	;***       31 : uint8_t TestMode(void);
+	;***       32 : 
+	;***       33 : /**
+	;***       34 :  * After send
+	;***       35 :  */
+	;***       36 : void AlarmResponse(void){
+	;***       37 : 	if(g_commnunication_flag.alarm_response_flag){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 37
-	mov a, [de+0x03]
-	mov1 CY, a.0
-	mov a, [hl]
-	mov1 a.2, CY
-	mov [hl], a
-	;***       38 : 	O_ALK_PUMP_PIN_P2 = io->Pump2;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 38
-	mov a, [de+0x03]
-	mov1 CY, a.1
-	mov a, [hl]
-	mov1 a.1, CY
-	mov [hl], a
-	;***       39 : 	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 39
-	mov a, [de+0x03]
-	mov1 CY, a.2
-	mov a, [hl]
-	mov1 a.0, CY
-	mov [hl], a
-	;***       40 : 	O_CVCC_ON_PIN = io->CVCC_ON;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 40
-	mov a, [de+0x03]
-	mov1 CY, a.3
-	mov a, 0xFFF0E
-	mov1 a.2, CY
-	mov 0xFFF0E, a
+	mov a, !LOWW(_g_commnunication_flag+0x00008)
+	ret
+_SaveComfirmResponse:
+	.STACK _SaveComfirmResponse = 4
+	;***       38 : 		//TODO: Send alarm data
+	;***       39 : 	}
+	;***       40 : }
+	;***       41 : void SaveComfirmResponse(void){
+	;***       42 : 	if(g_commnunication_flag.save_confirm_flag && save_spec_ok != 0){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 42
+	cmp0 !LOWW(_g_commnunication_flag+0x0000C)
+	bz $.BB@LABEL@2_3
+.BB@LABEL@2_1:	; bb
+	mov a, !LOWW(_save_spec_ok)
+	cmp0 a
+	bz $.BB@LABEL@2_3
+.BB@LABEL@2_2:	; if_then_bb
+	;***       43 : 		sendToRasPi_Revert_i32(H_SET, OK_ALL, (int32_t)(save_spec_ok));
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 43
+	sarw ax, 8+0x00000
+	movw bc, ax
+	sarw ax, 0x0F
+	movw de, ax
+	movw ax, #0x5300
+	call $!_sendToRasPi_Revert_i32
+	;***       44 : 		save_spec_ok = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 44
+	clrb !LOWW(_save_spec_ok)
+	;***       45 : 		g_commnunication_flag.save_confirm_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 45
+	clrb !LOWW(_g_commnunication_flag+0x0000C)
+.BB@LABEL@2_3:	; return
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 47
 	ret
 _RaspberryCommunication_nostop:
-	.STACK _RaspberryCommunication_nostop = 14
-	;***       41 : }
-	;***       42 : 
-	;***       43 : //------------------- EXTERNAL FUNCTION ----------------------------------
-	;***       44 : void RaspberryCommunication_nostop(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 44
-	subw sp, #0x06
-	;***       45 : 
-	;***       46 : 	ResponseHandler();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 46
-	call $!_ResponseHandler
-	;***       47 : 	ResponseWashingMode();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 47
-	call $!_ResponseWashingMode
-	;***       48 : 	MonitoringStatus();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 48
-	call $!_MonitoringStatus
-	;***       49 : 	TestIndividual();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 49
-	call $!_TestIndividual
-	;***       50 : 	TestControl();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 50
-	call $!_TestControl
-	;***       51 : 	if (g_commnunication_flag.send_response_time_flag) {
+	.STACK _RaspberryCommunication_nostop = 4
+	;***       46 : 	}
+	;***       47 : }
+	;***       48 : 
+	;***       49 : //------------------- EXTERNAL FUNCTION ----------------------------------
+	;***       50 : void RaspberryCommunication_nostop(void) {
+	;***       51 : 	if(ResponseHandler()){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 51
-	cmp0 !LOWW(_g_commnunication_flag+0x00001)
-	bz $.BB@LABEL@2_5
-.BB@LABEL@2_1:	; if_then_bb
-	;***       52 : 		uint8_t state = g_uart2_sendend;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 52
+	call $!_ResponseHandler
+	;***       52 : 
+	;***       53 : 	}else{
+	;***       54 : 
+	;***       55 : 	}
+	;***       56 : 	SendTimeSetting();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 56
+	call $!_SendTimeSetting
+	;***       57 : 	SendNumberSetting();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 57
+	call $!_SendNumberSetting
+	;***       58 : 	ResponseWashingMode();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 58
+	call $!_ResponseWashingMode
+	;***       59 : 	ResponseNextAnimation();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 59
+	call $!_ResponseNextAnimation
+	;***       60 : 	TestControl();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 60
+	call $!_TestControl
+	;***       61 : 	GetAndSaveTimeSetting();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 61
+	call $!_GetAndSaveTimeSetting
+	;***       62 : 	GetAndSaveNumberSetting();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 62
+	call $!_GetAndSaveNumberSetting
+	;***       63 : 	SaveComfirmResponse();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 63
+	call $!_SaveComfirmResponse
+	;***       64 : 	TestIndividual();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 64
+	call $!_TestIndividual
+	;***       65 : 	MonitoringStatus();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 65
+	call $!_MonitoringStatus
+	;***       66 : 	TestMode();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 66
+	call $!_TestMode
+	;***       67 : 	//Auto reset UART after 5s not get data
+	;***       68 : 	if (ns_delay_ms(&g_Tick.tickUartTimeout, 5000)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 68
+	clrw ax
+	movw de, ax
+	movw bc, #0x1388
+	movw ax, #LOWW(_g_Tick+0x000B8)
+	call !!_ns_delay_ms
+	clrw bc
+	cmpw ax, bc
+	bnz $.BB@LABEL@3_5
+.BB@LABEL@3_1:	; if_else_bb16
+	;***       69 : 		R_UART2_Stop();
+	;***       70 : 		g_animation_queue = 0;
+	;***       71 : 	} else if (STMK2 == 1U && ns_delay_ms(&g_Tick.tickUartTimeout, 50)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 71
+	mov a, 0xFFFE5
+	bf a.0, $.BB@LABEL@3_4
+.BB@LABEL@3_2:	; bb
+	clrw ax
+	movw de, ax
+	mov c, #0x32
+	movw ax, #LOWW(_g_Tick+0x000B8)
+	call !!_ns_delay_ms
+	clrw bc
+	cmpw ax, bc
+	bz $.BB@LABEL@3_4
+.BB@LABEL@3_3:	; if_then_bb33
+	;***       72 : 		R_UART2_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 72
+	call !!_R_UART2_Start
+	;***       73 : 		R_UART2_Receive(g_rx_data, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 73
+	movw bc, #0x0006
+	movw ax, #LOWW(_g_rx_data)
+	br !!_R_UART2_Receive
+.BB@LABEL@3_4:	; return
+	;***       74 : 	}
+	;***       75 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 75
+	ret
+.BB@LABEL@3_5:	; if_then_bb15
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 69
+	call !!_R_UART2_Stop
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 70
+	clrb !LOWW(_g_animation_queue)
+	ret
+_sendToRasPi_f:
+	.STACK _sendToRasPi_f = 6
+	;***       76 : 
+	;***       77 : void sendToRasPi_f(enum UART_header_e head, enum Control_status type,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 77
+	push hl
+	;***       78 : 		float value) {
+	;***       79 : 	uint8_t state = g_uart2_sendend;
+	;***       80 : 	g_control_buffer_f.head = head;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 80
+	mov !LOWW(_g_control_buffer_f), a
+	mov a, x
+	;***       81 : 	g_control_buffer_f.set_number = type;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 81
+	mov !LOWW(_g_control_buffer_f+0x00001), a
+	movw ax, bc
+	;***       82 : 	g_control_buffer_f.set_value = value;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 82
+	movw !LOWW(_g_control_buffer_f+0x00002), ax
+	movw ax, de
+	movw !LOWW(_g_control_buffer_f+0x00004), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 79
 	mov a, !LOWW(_g_uart2_sendend)
 	mov [sp+0x00], a
-	;***       53 : 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 53
+	;***       83 : 	R_UART2_Send((uint8_t*) &g_control_buffer_f, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 83
+	movw bc, #0x0006
+	movw ax, #LOWW(_g_control_buffer_f)
+	call !!_R_UART2_Send
+.BB@LABEL@4_1:	; bb9
+	mov a, [sp+0x00]
+	;***       84 : 	while (state == g_uart2_sendend)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 84
+	cmp a, !LOWW(_g_uart2_sendend)
+	bz $.BB@LABEL@4_1
+.BB@LABEL@4_2:	; return
+	;***       85 : 		;
+	;***       86 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 86
+	pop hl
+	ret
+_sendToRasPi_u32:
+	.STACK _sendToRasPi_u32 = 6
+	;***       87 : void sendToRasPi_u32(enum UART_header_e head, enum Control_status type,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 87
+	push hl
+	;***       88 : 		uint32_t value) {
+	;***       89 : 	uint8_t state = g_uart2_sendend;
+	;***       90 : 	g_control_buffer_u32.head = head;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 90
+	mov !LOWW(_g_control_buffer_u32), a
+	mov a, x
+	;***       91 : 	g_control_buffer_u32.set_number = type;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 91
+	mov !LOWW(_g_control_buffer_u32+0x00001), a
+	movw ax, bc
+	;***       92 : 	g_control_buffer_u32.set_value = value;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 92
+	movw !LOWW(_g_control_buffer_u32+0x00002), ax
+	movw ax, de
+	movw !LOWW(_g_control_buffer_u32+0x00004), ax
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 89
+	mov a, !LOWW(_g_uart2_sendend)
+	mov [sp+0x00], a
+	;***       93 : 	R_UART2_Send((uint8_t*) &g_control_buffer_u32, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 93
+	movw bc, #0x0006
+	movw ax, #LOWW(_g_control_buffer_u32)
+	call !!_R_UART2_Send
+.BB@LABEL@5_1:	; bb9
+	mov a, [sp+0x00]
+	;***       94 : 	while (state == g_uart2_sendend)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 94
+	cmp a, !LOWW(_g_uart2_sendend)
+	bz $.BB@LABEL@5_1
+.BB@LABEL@5_2:	; return
+	;***       95 : 		;
+	;***       96 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 96
+	pop hl
+	ret
+_sendToRasPi_Revert_i32:
+	.STACK _sendToRasPi_Revert_i32 = 10
+	;***       97 : union Revert_Byte {
+	;***       98 : 	struct {
+	;***       99 : 		int8_t byte[4];
+	;***      100 : 	}refined;
+	;***      101 : 	int32_t raw;
+	;***      102 : };
+	;***      103 : void sendToRasPi_Revert_i32(enum UART_header_e head, enum Control_status type, int32_t value){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 103
+	subw sp, #0x06
+	;***      104 : 	union Revert_Byte data;
+	;***      105 : 	uint8_t state = g_uart2_sendend;
+	;***      106 : 	data.refined.byte[3] = value;
+	;***      107 : 	data.refined.byte[2] = value >> 8;
+	;***      108 : 	data.refined.byte[1] = value >> 16;
+	;***      109 : 	data.refined.byte[0] = value >> 24;
+	;***      110 : 	g_control_buffer_i32.head = head;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 110
+	mov !LOWW(_g_control_buffer_i32), a
+	mov a, x
+	;***      111 : 	g_control_buffer_i32.set_number = type;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 111
+	mov !LOWW(_g_control_buffer_i32+0x00001), a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 105
+	mov a, !LOWW(_g_uart2_sendend)
+	mov [sp+0x00], a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 106
+	mov a, c
+	mov [sp+0x05], a
+	movw ax, bc
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 107
+	mov [sp+0x04], a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 108
+	mov a, e
+	mov [sp+0x03], a
+	movw ax, de
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 109
+	mov [sp+0x02], a
+	;***      112 : 	g_control_buffer_i32.set_value = data.raw;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 112
+	movw ax, [sp+0x04]
+	movw !LOWW(_g_control_buffer_i32+0x00004), ax
+	movw ax, [sp+0x02]
+	movw !LOWW(_g_control_buffer_i32+0x00002), ax
+	;***      113 : 	R_UART2_Send((uint8_t*) &g_control_buffer_i32, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 113
+	movw bc, #0x0006
+	movw ax, #LOWW(_g_control_buffer_i32)
+	call !!_R_UART2_Send
+.BB@LABEL@6_1:	; bb42
+	mov a, [sp+0x00]
+	;***      114 : 	while (state == g_uart2_sendend)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 114
+	cmp a, !LOWW(_g_uart2_sendend)
+	bz $.BB@LABEL@6_1
+.BB@LABEL@6_2:	; return
+	;***      115 : 		;
+	;***      116 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 116
+	addw sp, #0x06
+	ret
+_waitAlarmConfirm_stop:
+	.STACK _waitAlarmConfirm_stop = 12
+	;***      117 : /**
+	;***      118 :  * Wait for Raspberry Pi send {H_CLEAR, alarm, x}
+	;***      119 :  * @param alarm
+	;***      120 :  * @param timeout_s Timeout if timeout_s != 0
+	;***      121 :  */
+	;***      122 : void waitAlarmConfirm_stop(enum Control_status alarm, uint8_t timeout_s) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 122
+	subw sp, #0x04
+	push ax
+	;***      123 : 	uint32_t _tick = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 123
+	movw ax, !LOWW(_g_systemTime+0x00002)
+	movw [sp+0x04], ax
+	movw ax, !LOWW(_g_systemTime)
+	movw [sp+0x02], ax
+.BB@LABEL@7_1:	; bb22
+	mov a, [sp+0x01]
+	;***      124 : 	while (g_commnunication_flag.alarm_clear_flag != alarm) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 124
+	cmp a, !LOWW(_g_commnunication_flag+0x00007)
+	bz $.BB@LABEL@7_4
+.BB@LABEL@7_2:	; bb
+	;***      125 : 		realTimeResponse();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 125
+	call !!_realTimeResponse
+	mov a, [sp+0x00]
+	;***      126 : 		if ((ns_delay_ms(&_tick, (uint32_t) timeout_s * 1000))
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 126
+	shrw ax, 8+0x00000
+	movw bc, #0x03E8
+	mulhu
+	push bc
+	pop de
+	movw bc, ax
+	movw ax, sp
+	incw ax
+	incw ax
+	call !!_ns_delay_ms
+	clrw bc
+	cmpw ax, bc
+	bz $.BB@LABEL@7_1
+.BB@LABEL@7_3:	; bb
+	mov a, [sp+0x00]
+	cmp0 a
+	bz $.BB@LABEL@7_1
+.BB@LABEL@7_4:	; bb31
+	;***      127 : 				&& (timeout_s != 0)) {
+	;***      128 : 			break;
+	;***      129 : 		}
+	;***      130 : 	}
+	;***      131 : 	g_commnunication_flag.alarm_clear_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 131
+	clrb !LOWW(_g_commnunication_flag+0x00007)
+	addw sp, #0x06
+	ret
+_waitAlarmConfirm_nonstop:
+	.STACK _waitAlarmConfirm_nonstop = 4
+	;***      132 : }
+	;***      133 : /**
+	;***      134 :  *
+	;***      135 :  * @param alarm
+	;***      136 :  * @return 0 - Done; 1 - Still wait
+	;***      137 :  */
+	;***      138 : uint8_t waitAlarmConfirm_nonstop(enum Control_status alarm) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 138
+	cmp a, !LOWW(_g_commnunication_flag+0x00007)
+	;***      139 : 	if (g_commnunication_flag.alarm_clear_flag != alarm) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 139
+	bnz $.BB@LABEL@8_2
+.BB@LABEL@8_1:	; if_break_bb
+	;***      140 : 		return 1;
+	;***      141 : 	}
+	;***      142 : 	g_commnunication_flag.alarm_clear_flag = OK_ALL;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 142
+	clrb !LOWW(_g_commnunication_flag+0x00007)
+	;***      143 : 	return 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 143
+	clrb a
+	ret
+.BB@LABEL@8_2:	; bb9
+	;***      144 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 144
+	oneb a
+	ret
+_resetAlarm:
+	.STACK _resetAlarm = 4
+	;***      145 : void resetAlarm(void) {
+	;***      146 : 	g_commnunication_flag.alarm_clear_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 146
+	oneb !LOWW(_g_commnunication_flag+0x00007)
+	ret
+_ResponseHandler:
+	.STACK _ResponseHandler = 6
+	;***      147 : }
+	;***      148 : //------------------End of EXTERNAL FUNCTION -----------------------------
+	;***      149 : //------------------ Internal Function------------------------------------
+	;***      150 : /**
+	;***      151 :  * Send response Command to Raspberry Pi
+	;***      152 :  * @return 1 - Have a response, 0 - Not response
+	;***      153 :  */
+	;***      154 : uint8_t ResponseHandler(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 154
+	push hl
+	;***      155 : 	if (g_commnunication_flag.send_response_flag) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 155
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@10_2
+.BB@LABEL@10_1:	; bb26
+	;***      156 : 		uint8_t state = g_uart2_sendend;
+	;***      157 : 		if (g_machine_state.user == 2) {
+	;***      158 : 			g_machine_state.user = 1;
+	;***      159 : 		}
+	;***      160 : 		R_UART2_Send(g_rx_data, 6);
+	;***      161 : 		while (state == g_uart2_sendend) {
+	;***      162 : 		}
+	;***      163 : 		g_commnunication_flag.send_response_flag = 0;
+	;***      164 : 		return 1U;
+	;***      165 : 	}
+	;***      166 : 	return 0U;
+	;***      167 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 167
+	clrb a
+	pop hl
+	ret
+.BB@LABEL@10_2:	; if_then_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 156
+	mov a, !LOWW(_g_uart2_sendend)
+	mov [sp+0x00], a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 157
+	cmp !LOWW(_g_machine_state+0x0000D), #0x02
+	sknz
+.BB@LABEL@10_3:	; if_then_bb12
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 158
+	oneb !LOWW(_g_machine_state+0x0000D)
+.BB@LABEL@10_4:	; if_break_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 160
+	movw bc, #0x0006
+	movw ax, #LOWW(_g_rx_data)
+	call !!_R_UART2_Send
+.BB@LABEL@10_5:	; bb14
+	mov a, [sp+0x00]
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 161
+	cmp a, !LOWW(_g_uart2_sendend)
+	bz $.BB@LABEL@10_5
+.BB@LABEL@10_6:	; bb22
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 163
+	clrb !LOWW(_g_commnunication_flag)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 164
+	oneb a
+	pop hl
+	ret
+_ResponseWashingMode:
+	.STACK _ResponseWashingMode = 4
+	;***      168 : void ResponseWashingMode(void) {
+	;***      169 : 	if (g_commnunication_flag.send_response_mode_flag == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 169
+	cmp !LOWW(_g_commnunication_flag+0x00006), #0x01
+	bnz $.BB@LABEL@11_2
+.BB@LABEL@11_1:	; if_then_bb
+	;***      170 : 		sendToRasPi_u32(H_READ, WASHING_MODE,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 170
+	mov a, !LOWW(_g_machine_mode)
+	clrb x
+	movw de, ax
+	clrw bc
+	movw ax, #0x5218
+	call $!_sendToRasPi_u32
+	;***      171 : 				(uint32_t) g_machine_mode << (8 * 3));
+	;***      172 : //		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
+	;***      173 : 		g_commnunication_flag.send_response_mode_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 173
+	clrb !LOWW(_g_commnunication_flag+0x00006)
+.BB@LABEL@11_2:	; return
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 175
+	ret
+_ResponseNextAnimation:
+	.STACK _ResponseNextAnimation = 4
+	;***      174 : 	}
+	;***      175 : }
+	;***      176 : uint8_t ResponseNextAnimation(void) {
+	;***      177 : 	if (g_commnunication_flag.send_response_flag == 0
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 177
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@12_3
+.BB@LABEL@12_1:	; bb
+	cmp !LOWW(_g_commnunication_flag+0x0000B), #0x01
+	bnz $.BB@LABEL@12_3
+.BB@LABEL@12_2:	; if_then_bb
+	;***      178 : 			&& g_commnunication_flag.next_animation_flag == 1) {
+	;***      179 : 		sendToRasPi_u32(H_READ, NEXT_ANIMATION, (uint32_t) g_animation_queue << (8 * 3));
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 179
+	mov a, !LOWW(_g_animation_queue)
+	clrb x
+	movw de, ax
+	clrw bc
+	movw ax, #0x5213
+	call $!_sendToRasPi_u32
+	;***      180 : 		g_animation_queue -= 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 180
+	dec !LOWW(_g_animation_queue)
+	;***      181 : 		g_commnunication_flag.next_animation_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 181
+	clrb !LOWW(_g_commnunication_flag+0x0000B)
+	;***      182 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 182
+	oneb a
+	ret
+.BB@LABEL@12_3:	; bb24
+	;***      183 : 	}
+	;***      184 : 	return 0U;
+	;***      185 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 185
+	clrb a
+	ret
+_MonitoringStatus:
+	.STACK _MonitoringStatus = 6
+	;***      186 : void MonitoringStatus(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 186
+	push hl
+	;***      187 : 	if (g_commnunication_flag.send_response_status_flag == 1
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 187
+	cmp !LOWW(_g_commnunication_flag+0x00005), #0x01
+	bnz $.BB@LABEL@13_6
+.BB@LABEL@13_1:	; bb
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@13_6
+.BB@LABEL@13_2:	; if_then_bb
+	;***      188 : 			&& g_commnunication_flag.send_response_flag == 0) {
+	;***      189 : 		uint8_t state = g_uart2_sendend;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 189
+	mov a, !LOWW(_g_uart2_sendend)
+	mov [sp+0x00], a
+	;***      190 : 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 190
+	movw bc, #0x0012
+	movw ax, #LOWW(_g_io_status)
+	call !!_R_UART2_Send
+.BB@LABEL@13_3:	; bb20
+	mov a, [sp+0x00]
+	;***      191 : 		while (state == g_uart2_sendend) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 191
+	cmp a, !LOWW(_g_uart2_sendend)
+	bnz $.BB@LABEL@13_5
+.BB@LABEL@13_4:	; bb19
+	;***      192 : 			R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 192
+	call !!_R_WDT_Restart
+	br $.BB@LABEL@13_3
+.BB@LABEL@13_5:	; bb28
+	;***      193 : 		}
+	;***      194 : 		g_commnunication_flag.send_response_status_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 194
+	clrb !LOWW(_g_commnunication_flag+0x00005)
+.BB@LABEL@13_6:	; return
+	pop hl
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 196
+	ret
+_TestIndividual:
+	.STACK _TestIndividual = 4
+	;***      195 : 	}
+	;***      196 : }
+	;***      197 : uint8_t TestIndividual(void) {
+	;***      198 : 	if (g_commnunication_flag.recieve_status_flag == 2
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 198
+	cmp !LOWW(_g_commnunication_flag+0x00009), #0x02
+	bnz $.BB@LABEL@14_5
+.BB@LABEL@14_1:	; bb
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@14_5
+.BB@LABEL@14_2:	; bb.bb17_crit_edge
+	clrb a
+.BB@LABEL@14_3:	; bb17
+	mov b, a
+	;***      199 : 			&& g_commnunication_flag.send_response_flag == 0) {
+	;***      200 : 		uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
+	;***      201 : 		for (uint8_t i = 0; i < 4; i++) {
+	;***      202 : 			_io_p[i] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 202
+	mov a, LOWW(_g_rx_data)[b]
+	mov LOWW(_g_io_response+0x00001)[b], a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 201
+	inc b
+	mov a, b
+	cmp a, #0x04
+	bnz $.BB@LABEL@14_3
+.BB@LABEL@14_4:	; bb34
+	;***      203 : 		}
+	;***      204 : 		OutputIO(&g_io_response);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 204
+	movw ax, #LOWW(_g_io_response)
+	call !!_OutputIO
+	;***      205 : 		g_commnunication_flag.recieve_status_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 205
+	clrb !LOWW(_g_commnunication_flag+0x00009)
+	;***      206 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 206
+	oneb a
+	ret
+.BB@LABEL@14_5:	; bb37
+	;***      207 : 	}
+	;***      208 : 	return 0U;
+	;***      209 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 209
+	clrb a
+	ret
+_TestControl:
+	.STACK _TestControl = 8
+	;***      210 : 
+	;***      211 : void TestControl(void) {
+	;***      212 : 	if (g_commnunication_flag.control_test_flag != 0) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 212
+	cmp0 !LOWW(_g_commnunication_flag+0x00012)
+	bz $.BB@LABEL@15_13
+.BB@LABEL@15_1:	; if_then_bb
+	;***      213 : 		switch (g_commnunication_flag.control_test_flag) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 213
+	mov a, !LOWW(_g_commnunication_flag+0x00012)
+	add a, #0xD9
+	bz $.BB@LABEL@15_7
+.BB@LABEL@15_2:	; if_then_bb
+	dec a
+	bz $.BB@LABEL@15_10
+.BB@LABEL@15_3:	; if_then_bb
+	dec a
+	bz $.BB@LABEL@15_8
+.BB@LABEL@15_4:	; if_then_bb
+	dec a
+	bz $.BB@LABEL@15_9
+.BB@LABEL@15_5:	; if_then_bb
+	cmp a, #0x02
+	bnz $.BB@LABEL@15_12
+.BB@LABEL@15_6:	; switch_clause_bb29
+	;***      214 : 		case DRAINAGE_MODE_SET:
+	;***      215 : 			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
+	;***      216 : 					(uint32_t) g_test_control.raw.drain << (8 * 3));
+	;***      217 : 			break;
+	;***      218 : 		case POWER_ON_TEST_SET:
+	;***      219 : 			sendToRasPi_u32(H_READ, POWER_ON_TEST_SET,
+	;***      220 : 					(uint32_t) g_test_control.raw.power_on << (8 * 3));
+	;***      221 : 			break;
+	;***      222 : 		case WATER_FILTER_SET:
+	;***      223 : 			sendToRasPi_u32(H_READ, WATER_FILTER_SET,
+	;***      224 : 					(uint32_t) g_test_control.raw.filter << (8 * 3));
+	;***      225 : 			break;
+	;***      226 : 		case BIOMECTRIC_SET:
+	;***      227 : 			sendToRasPi_u32(H_READ, BIOMECTRIC_SET,
+	;***      228 : 					(uint32_t) g_test_control.raw.biomectric << (8 * 3));
+	;***      229 : 			break;
+	;***      230 : 		case CONTROL_SETTING:
+	;***      231 : 			sendToRasPi_u32(H_READ, CONTROL_SETTING,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 231
+	mov a, !LOWW(_g_test_control)
+	clrb x
+	movw de, ax
+	mov x, #0x2C
+	br $.BB@LABEL@15_11
+.BB@LABEL@15_7:	; switch_clause_bb
+	oneb a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 215
+	and a, !LOWW(_g_test_control)
+	clrb x
+	movw de, ax
+	mov x, #0x27
+	br $.BB@LABEL@15_11
+.BB@LABEL@15_8:	; switch_clause_bb11
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 219
+	mov a, !LOWW(_g_test_control)
+	shr a, 0x01
+	and a, #0x01
+	clrb x
+	movw de, ax
+	mov x, #0x29
+	br $.BB@LABEL@15_11
+.BB@LABEL@15_9:	; switch_clause_bb17
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 223
+	mov a, !LOWW(_g_test_control)
+	shr a, 0x02
+	and a, #0x01
+	clrb x
+	movw de, ax
+	mov x, #0x2A
+	br $.BB@LABEL@15_11
+.BB@LABEL@15_10:	; switch_clause_bb23
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 227
+	mov a, !LOWW(_g_test_control)
+	shr a, 0x03
+	and a, #0x01
+	clrb x
+	movw de, ax
+	mov x, #0x28
+.BB@LABEL@15_11:	; switch_clause_bb23
+	clrw bc
+	mov a, #0x52
+	call $!_sendToRasPi_u32
+.BB@LABEL@15_12:	; switch_break_bb
+	;***      232 : 					(uint32_t) g_test_control.data << (8 * 3));
+	;***      233 : 			break;
+	;***      234 : 		default:
+	;***      235 : 			break;
+	;***      236 : 		}
+	;***      237 : 		g_commnunication_flag.control_test_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 237
+	clrb !LOWW(_g_commnunication_flag+0x00012)
+.BB@LABEL@15_13:	; if_break_bb
+	;***      238 : 	}
+	;***      239 : 
+	;***      240 : 	if (g_commnunication_flag.control_test_save_flag == 1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 240
+	cmp !LOWW(_g_commnunication_flag+0x00013), #0x01
+	bnz $.BB@LABEL@15_15
+.BB@LABEL@15_14:	; if_then_bb39
+	clrw ax
+	;***      241 : 		EE_SPI_Write((uint8_t*) &g_test_control.data,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 241
+	push ax
+	incw ax
+	push ax
+	movw bc, #0x0029
+	movw ax, #LOWW(_g_test_control)
+	call !!_EE_SPI_Write
+	addw sp, #0x04
+	;***      242 : 		NUMBER_SETTING_ADDRESS + numberSettingSize,
+	;***      243 : 				sizeof(g_test_control.data));
+	;***      244 : 		g_commnunication_flag.control_test_save_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 244
+	clrb !LOWW(_g_commnunication_flag+0x00013)
+.BB@LABEL@15_15:	; return
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 248
+	ret
+_TestMode:
+	.STACK _TestMode = 4
+	;***      245 : 	}
+	;***      246 : 
+	;***      247 : 
+	;***      248 : }
+	;***      249 : uint8_t TestMode(void){
+	;***      250 : 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 250
+	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1A
+	bnz $.BB@LABEL@16_2
+.BB@LABEL@16_1:	; if_then_bb
+	;***      251 : 		g_machine_state.test = g_commnunication_flag.test_flag;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 251
+	mov a, !LOWW(_g_commnunication_flag+0x0000A)
+	mov !LOWW(_g_machine_state+0x0000B), a
+	;***      252 : 		g_commnunication_flag.test_flag = 0U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 252
+	clrb !LOWW(_g_commnunication_flag+0x0000A)
+	;***      253 : 		sendToRasPi_u32(H_SET, TESTING_MODE_START, 0x0000);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 253
+	clrw ax
+	movw de, ax
+	clrw bc
+	movw ax, #0x531A
+	call $!_sendToRasPi_u32
+	;***      254 : 		rx_count++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 254
+	inc !LOWW(_rx_count)
+	;***      255 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 255
+	oneb a
+	ret
+.BB@LABEL@16_2:	; if_else_bb
+	;***      256 : 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 256
+	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1C
+	bnz $.BB@LABEL@16_4
+.BB@LABEL@16_3:	; if_then_bb13
+	;***      257 : 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 257
+	clrb !LOWW(_g_commnunication_flag+0x0000A)
+	mov a, !LOWW(_g_commnunication_flag+0x0000A)
+	mov !LOWW(_g_machine_state+0x0000B), a
+	;***      258 : 		OutputIO(&io_off);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 258
+	movw ax, #LOWW(_io_off)
+	call !!_OutputIO
+.BB@LABEL@16_4:	; bb17
+	clrb a
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 261
+	ret
+_SendTimeSetting:
+	.STACK _SendTimeSetting = 6
+	;***      259 : 	}
+	;***      260 : 	return 0;
+	;***      261 : }
+	;***      262 : 
+	;***      263 : uint8_t SendTimeSetting(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 263
+	push hl
+	;***      264 : 	if (g_commnunication_flag.send_response_time_flag
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 264
+	cmp0 !LOWW(_g_commnunication_flag+0x00001)
+	bz $.BB@LABEL@17_6
+.BB@LABEL@17_1:	; bb
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@17_6
+.BB@LABEL@17_2:	; if_then_bb
+	;***      265 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
+	;***      266 : 		uint8_t state = g_uart2_sendend;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 266
+	mov a, !LOWW(_g_uart2_sendend)
+	mov [sp+0x00], a
+	;***      267 : 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 267
 	mov c, #0x94
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_crc8_1
 	mov !LOWW(_g_timerSetting+0x00094), a
-	;***       54 : 				timeSettingSize - 1);
-	;***       55 : 		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 55
+	;***      268 : 				timeSettingSize - 1);
+	;***      269 : 		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 269
 	movw bc, #0x0095
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_R_UART2_Send
-.BB@LABEL@2_2:	; bb19
+.BB@LABEL@17_3:	; bb26
 	mov a, [sp+0x00]
-	;***       56 : 		while (state == g_uart2_sendend) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 56
+	;***      270 : 		while (state == g_uart2_sendend) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 270
 	cmp a, !LOWW(_g_uart2_sendend)
-	bnz $.BB@LABEL@2_4
-.BB@LABEL@2_3:	; bb
-	;***       57 : 			R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 57
+	bnz $.BB@LABEL@17_5
+.BB@LABEL@17_4:	; bb25
+	;***      271 : 			R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 271
 	call !!_R_WDT_Restart
-	br $.BB@LABEL@2_2
-.BB@LABEL@2_4:	; bb27
-	;***       58 : 		}
-	;***       59 : 		g_commnunication_flag.send_response_time_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 59
+	br $.BB@LABEL@17_3
+.BB@LABEL@17_5:	; bb34
+	;***      272 : 		}
+	;***      273 : 		g_commnunication_flag.send_response_time_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 273
 	clrb !LOWW(_g_commnunication_flag+0x00001)
-.BB@LABEL@2_5:	; if_break_bb
-	;***       60 : 	}
-	;***       61 : 	if (g_commnunication_flag.send_response_number_flag) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 61
+	;***      274 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 274
+	oneb a
+	pop hl
+	ret
+.BB@LABEL@17_6:	; bb37
+	;***      275 : 	}
+	;***      276 : 	return 0U;
+	;***      277 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 277
+	clrb a
+	pop hl
+	ret
+_SendNumberSetting:
+	.STACK _SendNumberSetting = 6
+	;***      278 : uint8_t SendNumberSetting(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 278
+	push hl
+	;***      279 : 	if (g_commnunication_flag.send_response_number_flag
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 279
 	cmp0 !LOWW(_g_commnunication_flag+0x00002)
-	bz $.BB@LABEL@2_10
-.BB@LABEL@2_6:	; if_then_bb33
-	;***       62 : 		uint8_t state = g_uart2_sendend;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 62
+	bz $.BB@LABEL@18_6
+.BB@LABEL@18_1:	; bb
+	cmp0 !LOWW(_g_commnunication_flag)
+	bnz $.BB@LABEL@18_6
+.BB@LABEL@18_2:	; if_then_bb
+	;***      280 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
+	;***      281 : 		uint8_t state = g_uart2_sendend;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 281
 	mov a, !LOWW(_g_uart2_sendend)
 	mov [sp+0x00], a
-	;***       63 : 		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 63
+	;***      282 : 		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 282
 	mov c, #0x28
 	movw ax, #LOWW(_g_numberSetting)
 	call !!_crc8_1
 	mov !LOWW(_g_numberSetting+0x00028), a
-	;***       64 : 				numberSettingSize - 1);
-	;***       65 : 		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 65
+	;***      283 : 				numberSettingSize - 1);
+	;***      284 : 		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 284
 	movw bc, #0x0029
 	movw ax, #LOWW(_g_numberSetting)
 	call !!_R_UART2_Send
-.BB@LABEL@2_7:	; bb44
+.BB@LABEL@18_3:	; bb26
 	mov a, [sp+0x00]
-	;***       66 : 		while (state == g_uart2_sendend) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 66
+	;***      285 : 		while (state == g_uart2_sendend) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 285
 	cmp a, !LOWW(_g_uart2_sendend)
-	bnz $.BB@LABEL@2_9
-.BB@LABEL@2_8:	; bb43
-	;***       67 : 			R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 67
+	bnz $.BB@LABEL@18_5
+.BB@LABEL@18_4:	; bb25
+	;***      286 : 			R_WDT_Restart();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 286
 	call !!_R_WDT_Restart
-	br $.BB@LABEL@2_7
-.BB@LABEL@2_9:	; bb52
-	;***       68 : 		}
-	;***       69 : 		g_commnunication_flag.send_response_number_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 69
+	br $.BB@LABEL@18_3
+.BB@LABEL@18_5:	; bb34
+	;***      287 : 		}
+	;***      288 : 		g_commnunication_flag.send_response_number_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 288
 	clrb !LOWW(_g_commnunication_flag+0x00002)
-.BB@LABEL@2_10:	; if_break_bb53
-	;***       70 : 	}
-	;***       71 : 	if (g_commnunication_flag.recived_time_setting_flag == 2) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 71
-	cmp !LOWW(_g_commnunication_flag+0x00004), #0x02
-	bnz $.BB@LABEL@2_26
-.BB@LABEL@2_11:	; if_break_bb53.bb110_crit_edge
+	;***      289 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 289
+	oneb a
+	pop hl
+	ret
+.BB@LABEL@18_6:	; bb37
+	;***      290 : 	}
+	;***      291 : 	return 0U;
+	;***      292 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 292
 	clrb a
+	pop hl
+	ret
+_GetAndSaveTimeSetting:
+	.STACK _GetAndSaveTimeSetting = 10
+	;***      293 : uint8_t GetAndSaveTimeSetting(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 293
+	push hl
+	clrb a
+	;***      294 : 	if (g_commnunication_flag.recived_time_setting_flag == 2) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 294
+	cmp !LOWW(_g_commnunication_flag+0x00004), #0x02
+	bnz $.BB@LABEL@19_16
+.BB@LABEL@19_1:	; entry.bb56_crit_edge
 	mov b, a
-.BB@LABEL@2_12:	; bb110
-	;***       72 : //		//Do not Edit this, must keep!!!!
-	;***       73 : 		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 73
+.BB@LABEL@19_2:	; bb56
+	;***      295 : 		//		//Do not Edit this, must keep!!!!
+	;***      296 : 		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 296
 	cmp a, #0x94
-	bnc $.BB@LABEL@2_22
-.BB@LABEL@2_13:	; bb60
-	;***       74 : 			switch (i % 4) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 74
+	bnc $.BB@LABEL@19_12
+.BB@LABEL@19_3:	; bb
+	;***      297 : 			switch (i % 4) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 297
 	and a, #0x03
-	bz $.BB@LABEL@2_20
-.BB@LABEL@2_14:	; bb60
+	bz $.BB@LABEL@19_10
+.BB@LABEL@19_4:	; bb
 	dec a
-	bz $.BB@LABEL@2_19
-.BB@LABEL@2_15:	; bb60
+	bz $.BB@LABEL@19_9
+.BB@LABEL@19_5:	; bb
 	dec a
 	mov a, b
-	bz $.BB@LABEL@2_18
-.BB@LABEL@2_16:	; switch_clause_bb
-	;***       75 : //			case 3:
-	;***       76 : //				pointer0[timeSettingSize - 3 + 3 - i] = g_rx_data[i - 3];
-	;***       77 : //				break;
-	;***       78 : //			case 2:
-	;***       79 : //				pointer0[timeSettingSize - 3 + 1 - i] = g_rx_data[i - 1];
-	;***       80 : //				break;
-	;***       81 : //			case 1:
-	;***       82 : //				pointer0[timeSettingSize - 3 - 1 - i] = g_rx_data[1 + i];
-	;***       83 : //				break;
-	;***       84 : //			case 0:
-	;***       85 : //				pointer0[timeSettingSize - 3 - 3 - i] = g_rx_data[3 + i];
-	;***       86 : //				break;
-	;***       87 : //			default:
-	;***       88 : //				break;
-	;***       89 : 			case 3:
-	;***       90 : 				time_setting_p[i - 3] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 90
+	bz $.BB@LABEL@19_8
+.BB@LABEL@19_6:	; switch_clause_bb
+	;***      298 : 			case 3:
+	;***      299 : 				time_setting_p[i - 3] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 299
 	shrw ax, 8+0x00000
 	addw ax, #LOWW(__settingTime+0x0FFFD)
-.BB@LABEL@2_17:	; switch_clause_bb
+.BB@LABEL@19_7:	; switch_clause_bb
 	movw de, ax
 	mov a, LOWW(_g_rx_data)[b]
 	mov [de], a
-	br $.BB@LABEL@2_21
-.BB@LABEL@2_18:	; switch_clause_bb74
-	;***       91 : 				break;
-	;***       92 : 			case 2:
-	;***       93 : 				time_setting_p[i - 1] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 93
+	br $.BB@LABEL@19_11
+.BB@LABEL@19_8:	; switch_clause_bb19
+	;***      300 : 				break;
+	;***      301 : 			case 2:
+	;***      302 : 				time_setting_p[i - 1] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 302
 	shrw ax, 8+0x00000
 	addw ax, #LOWW(__settingTime+0x0FFFF)
-	br $.BB@LABEL@2_17
-.BB@LABEL@2_19:	; switch_clause_bb85
-	;***       94 : 				break;
-	;***       95 : 			case 1:
-	;***       96 : 				time_setting_p[1 + i] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 96
+	br $.BB@LABEL@19_7
+.BB@LABEL@19_9:	; switch_clause_bb31
+	;***      303 : 				break;
+	;***      304 : 			case 1:
+	;***      305 : 				time_setting_p[1 + i] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 305
 	mov a, LOWW(_g_rx_data)[b]
 	mov LOWW(__settingTime+0x00001)[b], a
-	br $.BB@LABEL@2_21
-.BB@LABEL@2_20:	; switch_clause_bb96
-	;***       97 : 				break;
-	;***       98 : 			case 0:
-	;***       99 : 				time_setting_p[3 + i] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 99
+	br $.BB@LABEL@19_11
+.BB@LABEL@19_10:	; switch_clause_bb42
+	;***      306 : 				break;
+	;***      307 : 			case 0:
+	;***      308 : 				time_setting_p[3 + i] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 308
 	mov a, LOWW(_g_rx_data)[b]
 	mov LOWW(__settingTime+0x00003)[b], a
-.BB@LABEL@2_21:	; switch_break_bb
+.BB@LABEL@19_11:	; switch_break_bb
 	inc b
 	mov a, b
-	br $.BB@LABEL@2_12
-.BB@LABEL@2_22:	; bb119
-	;***      100 : 				break;
-	;***      101 : 			default:
-	;***      102 : 				break;
-	;***      103 : 			}
-	;***      104 : 		}
-	;***      105 : 		_settingTime.crc = g_rx_data[timeSettingSize - 1];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 105
+	br $.BB@LABEL@19_2
+.BB@LABEL@19_12:	; bb65
+	;***      309 : 				break;
+	;***      310 : 			default:
+	;***      311 : 				break;
+	;***      312 : 			}
+	;***      313 : 		}
+	;***      314 : 		_settingTime.crc = g_rx_data[timeSettingSize - 1];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 314
 	mov a, !LOWW(_g_rx_data+0x00094)
 	mov [sp+0x00], a
 	mov !LOWW(__settingTime+0x00094), a
-	;***      106 : 		if (g_rx_data[timeSettingSize - 1]
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 106
+	;***      315 : 		if (g_rx_data[timeSettingSize - 1]
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 315
 	mov c, #0x94
 	movw ax, #LOWW(_g_rx_data)
 	call !!_crc8_1
@@ -382,18 +1079,21 @@ _RaspberryCommunication_nostop:
 	mov a, [sp+0x00]
 	xch a, x
 	cmp x, a
-	bnz $.BB@LABEL@2_24
-.BB@LABEL@2_23:	; if_then_bb142
-	;***      107 : 				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
-	;***      108 : 			g_timerSetting = _settingTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 108
+	bnz $.BB@LABEL@19_14
+.BB@LABEL@19_13:	; if_then_bb88
+	;***      316 : 				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
+	;***      317 : 			save_spec_ok = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 317
+	oneb !LOWW(_save_spec_ok)
+	;***      318 : 			g_timerSetting = _settingTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 318
 	movw de, #0x0096
 	movw bc, #LOWW(__settingTime)
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_memcpy
 	clrw ax
-	;***      109 : 			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 109
+	;***      319 : 			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 319
 	push ax
 	mov x, #0x95
 	push ax
@@ -401,107 +1101,112 @@ _RaspberryCommunication_nostop:
 	movw ax, #LOWW(_g_timerSetting)
 	call !!_EE_SPI_Write
 	addw sp, #0x04
-	;***      110 : 					timeSettingSize);
-	;***      111 : 			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 111
-	clrb x
-	br $.BB@LABEL@2_25
-.BB@LABEL@2_24:	; if_else_bb
-	;***      112 : 		} else {
-	;***      113 : 			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 113
-	mov x, #0x16
-.BB@LABEL@2_25:	; if_else_bb
-	movw de, #0x0000
-	clrw bc
-	mov a, #0x53
-	call $!_sendToRasPi_f
-	;***      114 : 		}
-	;***      115 : //		sendToRasPi(H_SET, OK_ALL, 0x0);
-	;***      116 : 		g_commnunication_flag.recived_time_setting_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 116
+	br $.BB@LABEL@19_15
+.BB@LABEL@19_14:	; if_else_bb
+	;***      320 : 					timeSettingSize);
+	;***      321 : 		} else {
+	;***      322 : 			save_spec_ok = -1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 322
+	mov !LOWW(_save_spec_ok), #0xFF
+.BB@LABEL@19_15:	; if_break_bb
+	;***      323 : 		}
+	;***      324 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+	;***      325 : 		g_commnunication_flag.recived_time_setting_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 325
 	clrb !LOWW(_g_commnunication_flag+0x00004)
-.BB@LABEL@2_26:	; if_break_bb146
-	;***      117 : 	}
-	;***      118 : 
-	;***      119 : 	if (g_commnunication_flag.recived_number_setting_flag == 2) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 119
-	cmp !LOWW(_g_commnunication_flag+0x00003), #0x02
-	.bnz $!.BB@LABEL@2_50
-.BB@LABEL@2_27:	; if_break_bb146.bb205_crit_edge
+	;***      326 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 326
+	oneb a
+.BB@LABEL@19_16:	; bb94
+	pop hl
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 329
+	ret
+_GetAndSaveNumberSetting:
+	.STACK _GetAndSaveNumberSetting = 14
+	;***      327 : 	}
+	;***      328 : 	return 0U;
+	;***      329 : }
+	;***      330 : uint8_t GetAndSaveNumberSetting(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 330
+	subw sp, #0x06
 	clrb a
+	;***      331 : 	if (g_commnunication_flag.recived_number_setting_flag == 2) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 331
+	cmp !LOWW(_g_commnunication_flag+0x00003), #0x02
+	.bnz $!.BB@LABEL@20_24
+.BB@LABEL@20_1:	; entry.bb56_crit_edge
 	mov b, a
-.BB@LABEL@2_28:	; bb205
-	;***      120 : //		//Do not Edit this, must keep!!!!
-	;***      121 : 		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 121
+.BB@LABEL@20_2:	; bb56
+	;***      332 : 		//		//Do not Edit this, must keep!!!!
+	;***      333 : 		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 333
 	cmp a, #0x28
-	bnc $.BB@LABEL@2_38
-.BB@LABEL@2_29:	; bb153
-	;***      122 : 			switch (i % 4) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 122
+	bnc $.BB@LABEL@20_12
+.BB@LABEL@20_3:	; bb
+	;***      334 : 			switch (i % 4) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 334
 	and a, #0x03
-	bz $.BB@LABEL@2_36
-.BB@LABEL@2_30:	; bb153
+	bz $.BB@LABEL@20_10
+.BB@LABEL@20_4:	; bb
 	dec a
-	bz $.BB@LABEL@2_35
-.BB@LABEL@2_31:	; bb153
+	bz $.BB@LABEL@20_9
+.BB@LABEL@20_5:	; bb
 	dec a
 	mov a, b
-	bz $.BB@LABEL@2_34
-.BB@LABEL@2_32:	; switch_clause_bb157
-	;***      123 : 			case 3:
-	;***      124 : 				number_setting_p[i - 3] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 124
+	bz $.BB@LABEL@20_8
+.BB@LABEL@20_6:	; switch_clause_bb
+	;***      335 : 			case 3:
+	;***      336 : 				number_setting_p[i - 3] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 336
 	shrw ax, 8+0x00000
 	addw ax, #LOWW(__settingNumber+0x0FFFD)
-.BB@LABEL@2_33:	; switch_clause_bb157
+.BB@LABEL@20_7:	; switch_clause_bb
 	movw de, ax
 	mov a, LOWW(_g_rx_data)[b]
 	mov [de], a
-	br $.BB@LABEL@2_37
-.BB@LABEL@2_34:	; switch_clause_bb168
-	;***      125 : 				break;
-	;***      126 : 			case 2:
-	;***      127 : 				number_setting_p[i - 1] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 127
+	br $.BB@LABEL@20_11
+.BB@LABEL@20_8:	; switch_clause_bb19
+	;***      337 : 				break;
+	;***      338 : 			case 2:
+	;***      339 : 				number_setting_p[i - 1] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 339
 	shrw ax, 8+0x00000
 	addw ax, #LOWW(__settingNumber+0x0FFFF)
-	br $.BB@LABEL@2_33
-.BB@LABEL@2_35:	; switch_clause_bb179
-	;***      128 : 				break;
-	;***      129 : 			case 1:
-	;***      130 : 				number_setting_p[1 + i] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 130
+	br $.BB@LABEL@20_7
+.BB@LABEL@20_9:	; switch_clause_bb31
+	;***      340 : 				break;
+	;***      341 : 			case 1:
+	;***      342 : 				number_setting_p[1 + i] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 342
 	mov a, LOWW(_g_rx_data)[b]
 	mov LOWW(__settingNumber+0x00001)[b], a
-	br $.BB@LABEL@2_37
-.BB@LABEL@2_36:	; switch_clause_bb190
-	;***      131 : 				break;
-	;***      132 : 			case 0:
-	;***      133 : 				number_setting_p[3 + i] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 133
+	br $.BB@LABEL@20_11
+.BB@LABEL@20_10:	; switch_clause_bb42
+	;***      343 : 				break;
+	;***      344 : 			case 0:
+	;***      345 : 				number_setting_p[3 + i] = g_rx_data[i];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 345
 	mov a, LOWW(_g_rx_data)[b]
 	mov LOWW(__settingNumber+0x00003)[b], a
-.BB@LABEL@2_37:	; switch_break_bb202
+.BB@LABEL@20_11:	; switch_break_bb
 	inc b
 	mov a, b
-	br $.BB@LABEL@2_28
-.BB@LABEL@2_38:	; bb214
-	;***      134 : 				break;
-	;***      135 : 			default:
-	;***      136 : 				break;
-	;***      137 : 			}
-	;***      138 : 		}
-	;***      139 : 		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 139
+	br $.BB@LABEL@20_2
+.BB@LABEL@20_12:	; bb65
+	;***      346 : 				break;
+	;***      347 : 			default:
+	;***      348 : 				break;
+	;***      349 : 			}
+	;***      350 : 		}
+	;***      351 : 		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 351
 	mov c, #0x28
 	movw ax, #LOWW(_g_rx_data)
 	call !!_crc8_1
 	mov !LOWW(__settingNumber+0x00028), a
-	;***      140 : 				numberSettingSize - 1);
-	;***      141 : 		if (g_rx_data[numberSettingSize - 1]
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 141
+	;***      352 : 				numberSettingSize - 1);
+	;***      353 : 		if (g_rx_data[numberSettingSize - 1]
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 353
 	mov a, !LOWW(_g_rx_data+0x00028)
 	mov [sp+0x00], a
 	mov c, #0x28
@@ -510,26 +1215,22 @@ _RaspberryCommunication_nostop:
 	mov x, a
 	mov a, [sp+0x00]
 	xch a, x
-	movw de, #0x0000
-	clrw bc
 	cmp a, x
-	mov a, #0x53
-	.bnz $!.BB@LABEL@2_48
-.BB@LABEL@2_39:	; if_then_bb236
-	;***      142 : 				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
-	;***      143 : 			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 143
-	clrb x
-	call $!_sendToRasPi_f
-	;***      144 : 			g_numberSetting = _settingNumber;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 144
+	.bnz $!.BB@LABEL@20_22
+.BB@LABEL@20_13:	; if_then_bb87
+	;***      354 : 				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
+	;***      355 : 			save_spec_ok = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 355
+	oneb !LOWW(_save_spec_ok)
+	;***      356 : 			g_numberSetting = _settingNumber;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 356
 	movw de, #0x002A
 	movw bc, #LOWW(__settingNumber)
 	movw ax, #LOWW(_g_numberSetting)
 	call !!_memcpy
 	clrw ax
-	;***      145 : 			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 145
+	;***      357 : 			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 357
 	push ax
 	mov x, #0x29
 	push ax
@@ -537,17 +1238,10 @@ _RaspberryCommunication_nostop:
 	movw ax, #LOWW(_g_numberSetting)
 	call !!_EE_SPI_Write
 	addw sp, #0x04
-	;***      146 : 					numberSettingSize);
-	;***      147 : 			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 147
-	clrw ax
-	movw de, ax
-	clrw bc
-	movw ax, #0x5300
-	call $!_sendToRasPi_f
 	movw ax, #0x409B
-	;***      148 : 			if(g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 148
+	;***      358 : 					numberSettingSize);
+	;***      359 : 			if (g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 359
 	push ax
 	movw ax, #0x020C
 	push ax
@@ -573,28 +1267,28 @@ _RaspberryCommunication_nostop:
 	cmp0 a
 	oneb a
 	sknz
-.BB@LABEL@2_40:	; if_then_bb236
+.BB@LABEL@20_14:	; if_then_bb87
 	clrb a
-.BB@LABEL@2_41:	; if_then_bb236
+.BB@LABEL@20_15:	; if_then_bb87
 	cmp0 x
 	oneb x
 	sknz
-.BB@LABEL@2_42:	; if_then_bb236
+.BB@LABEL@20_16:	; if_then_bb87
 	clrb x
-.BB@LABEL@2_43:	; if_then_bb236
+.BB@LABEL@20_17:	; if_then_bb87
 	or x, a
-	bnz $.BB@LABEL@2_45
-.BB@LABEL@2_44:	; if_then_bb243
+	bnz $.BB@LABEL@20_19
+.BB@LABEL@20_18:	; if_then_bb94
 	movw ax, #0x409B
-	;***      149 : 				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 149
+	;***      360 : 				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 360
 	movw !LOWW(_g_numberSetting+0x00026), ax
 	movw ax, #0x020C
 	movw !LOWW(_g_numberSetting+0x00024), ax
-.BB@LABEL@2_45:	; if_break_bb244
+.BB@LABEL@20_19:	; if_break_bb
 	movw ax, #0x40A0
-	;***      150 : 			if(g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 150
+	;***      361 : 			if (g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 361
 	push ax
 	clrw ax
 	push ax
@@ -606,21 +1300,21 @@ _RaspberryCommunication_nostop:
 	call !!__COM_fgt
 	addw sp, #0x04
 	cmp0 a
-	bz $.BB@LABEL@2_47
-.BB@LABEL@2_46:	; if_then_bb249
+	bz $.BB@LABEL@20_21
+.BB@LABEL@20_20:	; if_then_bb99
 	movw ax, #0x40A0
-	;***      151 : 				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 151
+	;***      362 : 				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 362
 	movw !LOWW(_g_numberSetting+0x00022), ax
 	clrw ax
 	movw !LOWW(_g_numberSetting+0x00020), ax
 	movw [sp+0x02], ax
 	movw ax, #0x40A0
 	movw [sp+0x00], ax
-.BB@LABEL@2_47:	; if_break_bb250
+.BB@LABEL@20_21:	; if_break_bb100
 	movw ax, #0x40A0
-	;***      152 : 			R_DAC0_Set_ConversionValue((uint8_t)(g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 152
+	;***      363 : 			R_DAC0_Set_ConversionValue(
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 363
 	push ax
 	clrw ax
 	push ax
@@ -641,8 +1335,10 @@ _RaspberryCommunication_nostop:
 	mov a, x
 	call !!_R_DAC0_Set_ConversionValue
 	movw ax, #0x409B
-	;***      153 : 			R_DAC1_Set_ConversionValue((uint8_t)(g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 153
+	;***      364 : 					(uint8_t) (g_numberSetting.cvccCurrent / CVCC_MAX_VOLTAGE
+	;***      365 : 							* 255));
+	;***      366 : 			R_DAC1_Set_ConversionValue(
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 366
 	push ax
 	movw ax, #0x020C
 	push ax
@@ -661,506 +1357,30 @@ _RaspberryCommunication_nostop:
 	call !!__COM_ftoul
 	mov a, x
 	call !!_R_DAC1_Set_ConversionValue
-	br $.BB@LABEL@2_49
-.BB@LABEL@2_48:	; if_else_bb259
-	;***      154 : 		} else {
-	;***      155 : 			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 155
-	mov x, #0x16
-	call $!_sendToRasPi_f
-.BB@LABEL@2_49:	; if_break_bb260
-	;***      156 : 		}
-	;***      157 : //		sendToRasPi(H_SET, OK_ALL, 0x0);
-	;***      158 : 		g_commnunication_flag.recived_number_setting_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 158
+	br $.BB@LABEL@20_23
+.BB@LABEL@20_22:	; if_else_bb
+	;***      367 : 					(uint8_t) (g_numberSetting.saltPumpVoltage
+	;***      368 : 							/ SALT_PUMP_MAX_VOLTAGE * 255));
+	;***      369 : 		} else {
+	;***      370 : 			save_spec_ok = -1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 370
+	mov !LOWW(_save_spec_ok), #0xFF
+.BB@LABEL@20_23:	; if_break_bb109
+	;***      371 : 		}
+	;***      372 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+	;***      373 : 		g_commnunication_flag.recived_number_setting_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 373
 	clrb !LOWW(_g_commnunication_flag+0x00003)
-.BB@LABEL@2_50:	; if_break_bb261
-	;***      159 : 	}
-	;***      160 : 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 160
-	cmp !LOWW(_g_commnunication_flag+0x00009), #0x1A
-	bnz $.BB@LABEL@2_53
-.BB@LABEL@2_51:	; if_then_bb267
-	;***      161 : 		g_machine_state.test = g_commnunication_flag.test_flag;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 161
-	mov a, !LOWW(_g_commnunication_flag+0x00009)
-	mov !LOWW(_g_machine_state+0x0000B), a
-.BB@LABEL@2_52:	; return
-	addw sp, #0x06
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 166
-	ret
-.BB@LABEL@2_53:	; if_else_bb269
-	;***      162 : 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 162
-	cmp !LOWW(_g_commnunication_flag+0x00009), #0x1C
-	bnz $.BB@LABEL@2_52
-.BB@LABEL@2_54:	; if_then_bb275
-	;***      163 : 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 163
-	clrb !LOWW(_g_commnunication_flag+0x00009)
-	mov a, !LOWW(_g_commnunication_flag+0x00009)
-	mov !LOWW(_g_machine_state+0x0000B), a
-	;***      164 : 		IO_Output(&io_off);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 164
-	movw ax, #LOWW(_io_off)
-	addw sp, #0x06
-	br $!_IO_Output
-_sendToRasPi_f:
-	.STACK _sendToRasPi_f = 6
-	;***      165 : 	}
-	;***      166 : }
-	;***      167 : void sendToRasPi_f(enum UART_header_e head, enum Control_status type,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 167
-	push hl
-	;***      168 : 		float value) {
-	;***      169 : 	uint8_t state = g_uart2_sendend;
-	;***      170 : 	g_control_buffer_f.head = head;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 170
-	mov !LOWW(_g_control_buffer_f), a
-	mov a, x
-	;***      171 : 	g_control_buffer_f.set_number = type;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 171
-	mov !LOWW(_g_control_buffer_f+0x00001), a
-	movw ax, bc
-	;***      172 : 	g_control_buffer_f.set_value = value;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 172
-	movw !LOWW(_g_control_buffer_f+0x00002), ax
-	movw ax, de
-	movw !LOWW(_g_control_buffer_f+0x00004), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 169
-	mov a, !LOWW(_g_uart2_sendend)
-	mov [sp+0x00], a
-	;***      173 : 	R_UART2_Send((uint8_t*) &g_control_buffer_f, 6);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 173
-	movw bc, #0x0006
-	movw ax, #LOWW(_g_control_buffer_f)
-	call !!_R_UART2_Send
-.BB@LABEL@3_1:	; bb9
-	mov a, [sp+0x00]
-	;***      174 : 	while (state == g_uart2_sendend)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 174
-	cmp a, !LOWW(_g_uart2_sendend)
-	bz $.BB@LABEL@3_1
-.BB@LABEL@3_2:	; return
-	;***      175 : 		;
-	;***      176 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 176
-	pop hl
-	ret
-_sendToRasPi_u32:
-	.STACK _sendToRasPi_u32 = 6
-	;***      177 : void sendToRasPi_u32(enum UART_header_e head, enum Control_status type,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 177
-	push hl
-	;***      178 : 		uint32_t value) {
-	;***      179 : 	uint8_t state = g_uart2_sendend;
-	;***      180 : 	g_control_buffer_u32.head = head;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 180
-	mov !LOWW(_g_control_buffer_u32), a
-	mov a, x
-	;***      181 : 	g_control_buffer_u32.set_number = type;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 181
-	mov !LOWW(_g_control_buffer_u32+0x00001), a
-	movw ax, bc
-	;***      182 : 	g_control_buffer_u32.set_value = value;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 182
-	movw !LOWW(_g_control_buffer_u32+0x00002), ax
-	movw ax, de
-	movw !LOWW(_g_control_buffer_u32+0x00004), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 179
-	mov a, !LOWW(_g_uart2_sendend)
-	mov [sp+0x00], a
-	;***      183 : 	R_UART2_Send((uint8_t*) &g_control_buffer_u32, 6);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 183
-	movw bc, #0x0006
-	movw ax, #LOWW(_g_control_buffer_u32)
-	call !!_R_UART2_Send
-.BB@LABEL@4_1:	; bb9
-	mov a, [sp+0x00]
-	;***      184 : 	while (state == g_uart2_sendend)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 184
-	cmp a, !LOWW(_g_uart2_sendend)
-	bz $.BB@LABEL@4_1
-.BB@LABEL@4_2:	; return
-	;***      185 : 		;
-	;***      186 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 186
-	pop hl
-	ret
-_waitAlarmConfirm_stop:
-	.STACK _waitAlarmConfirm_stop = 12
-	;***      187 : /**
-	;***      188 :  * Wait for Raspberry Pi send {H_CLEAR, alarm, x}
-	;***      189 :  * @param alarm
-	;***      190 :  * @param timeout_s Timeout if timeout_s != 0
-	;***      191 :  */
-	;***      192 : void waitAlarmConfirm_stop(enum Control_status alarm, uint8_t timeout_s) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 192
-	subw sp, #0x04
-	push ax
-	;***      193 : 	uint32_t _tick = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 193
-	movw ax, !LOWW(_g_systemTime+0x00002)
-	movw [sp+0x04], ax
-	movw ax, !LOWW(_g_systemTime)
-	movw [sp+0x02], ax
-.BB@LABEL@5_1:	; bb22
-	mov a, [sp+0x01]
-	;***      194 : 	while (g_commnunication_flag.alarm_clear_flag != alarm) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 194
-	cmp a, !LOWW(_g_commnunication_flag+0x00007)
-	bz $.BB@LABEL@5_4
-.BB@LABEL@5_2:	; bb
-	;***      195 : 		realTimeResponse();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 195
-	call !!_realTimeResponse
-	mov a, [sp+0x00]
-	;***      196 : 		if ((ns_delay_ms(&_tick, (uint32_t) timeout_s * 1000))
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 196
-	shrw ax, 8+0x00000
-	movw bc, #0x03E8
-	mulhu
-	push bc
-	pop de
-	movw bc, ax
-	movw ax, sp
-	incw ax
-	incw ax
-	call !!_ns_delay_ms
-	clrw bc
-	cmpw ax, bc
-	bz $.BB@LABEL@5_1
-.BB@LABEL@5_3:	; bb
-	mov a, [sp+0x00]
-	cmp0 a
-	bz $.BB@LABEL@5_1
-.BB@LABEL@5_4:	; bb31
-	;***      197 : 				&& (timeout_s != 0)) {
-	;***      198 : 			break;
-	;***      199 : 		}
-	;***      200 : 	}
-	;***      201 : 	g_commnunication_flag.alarm_clear_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 201
-	clrb !LOWW(_g_commnunication_flag+0x00007)
-	addw sp, #0x06
-	ret
-_waitAlarmConfirm_nonstop:
-	.STACK _waitAlarmConfirm_nonstop = 4
-	;***      202 : }
-	;***      203 : /**
-	;***      204 :  *
-	;***      205 :  * @param alarm
-	;***      206 :  * @return 0 - Done; 1 - Still wait
-	;***      207 :  */
-	;***      208 : uint8_t waitAlarmConfirm_nonstop(enum Control_status alarm) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 208
-	cmp a, !LOWW(_g_commnunication_flag+0x00007)
-	;***      209 : 	if (g_commnunication_flag.alarm_clear_flag != alarm) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 209
-	bnz $.BB@LABEL@6_2
-.BB@LABEL@6_1:	; if_break_bb
-	;***      210 : 		return 1;
-	;***      211 : 	}
-	;***      212 : 	g_commnunication_flag.alarm_clear_flag = OK_ALL;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 212
-	clrb !LOWW(_g_commnunication_flag+0x00007)
-	;***      213 : 	return 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 213
-	clrb a
-	ret
-.BB@LABEL@6_2:	; bb9
-	;***      214 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 214
+	;***      374 : 		return 1U;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 374
 	oneb a
+.BB@LABEL@20_24:	; bb113
+	addw sp, #0x06
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 377
 	ret
-_resetAlarm:
-	.STACK _resetAlarm = 4
-	;***      215 : void resetAlarm(void) {
-	;***      216 : 	g_commnunication_flag.alarm_clear_flag = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 216
-	oneb !LOWW(_g_commnunication_flag+0x00007)
-	ret
-_ResponseHandler:
-	.STACK _ResponseHandler = 6
-	;***      217 : }
-	;***      218 : void ResponseHandler(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 218
-	push hl
-	;***      219 : 	if (g_commnunication_flag.send_response_flag) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 219
-	cmp0 !LOWW(_g_commnunication_flag)
-	bnz $.BB@LABEL@8_2
-.BB@LABEL@8_1:	; return
-	pop hl
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 230
-	ret
-.BB@LABEL@8_2:	; if_then_bb
-	;***      220 : 		uint8_t state = g_uart2_sendend;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 220
-	mov a, !LOWW(_g_uart2_sendend)
-	mov [sp+0x00], a
-	;***      221 : 		if (g_machine_state.user == 2) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 221
-	cmp !LOWW(_g_machine_state+0x0000D), #0x02
-	sknz
-.BB@LABEL@8_3:	; if_then_bb11
-	;***      222 : 			g_machine_state.user = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 222
-	oneb !LOWW(_g_machine_state+0x0000D)
-.BB@LABEL@8_4:	; if_break_bb
-	;***      223 : 		}
-	;***      224 : 		R_UART2_Send(g_rx_data, 6);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 224
-	movw bc, #0x0006
-	movw ax, #LOWW(_g_rx_data)
-	call !!_R_UART2_Send
-.BB@LABEL@8_5:	; bb13
-	mov a, [sp+0x00]
-	;***      225 : 		while (state == g_uart2_sendend) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 225
-	cmp a, !LOWW(_g_uart2_sendend)
-	bnz $.BB@LABEL@8_7
-.BB@LABEL@8_6:	; bb
-	;***      226 : 			R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 226
-	call !!_R_WDT_Restart
-	br $.BB@LABEL@8_5
-.BB@LABEL@8_7:	; bb21
-	;***      227 : 		}
-	;***      228 : 		g_commnunication_flag.send_response_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 228
-	clrb !LOWW(_g_commnunication_flag)
-	br $.BB@LABEL@8_1
-_ResponseWashingMode:
-	.STACK _ResponseWashingMode = 4
-	;***      229 : 	}
-	;***      230 : }
-	;***      231 : void ResponseWashingMode(void) {
-	;***      232 : 	if (g_commnunication_flag.send_response_mode_flag == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 232
-	cmp !LOWW(_g_commnunication_flag+0x00006), #0x01
-	bnz $.BB@LABEL@9_2
-.BB@LABEL@9_1:	; if_then_bb
-	;***      233 : 		sendToRasPi_u32(H_READ, WASHING_MODE,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 233
-	mov a, !LOWW(_g_machine_mode)
-	clrb x
-	movw de, ax
-	clrw bc
-	movw ax, #0x5218
-	call $!_sendToRasPi_u32
-	;***      234 : 				(uint32_t) g_machine_mode << (8 * 3));
-	;***      235 : //		sendToRasPi_u32(H_READ, WASHING_MODE, (uint32_t) g_machine_mode);
-	;***      236 : 		g_commnunication_flag.send_response_mode_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 236
-	clrb !LOWW(_g_commnunication_flag+0x00006)
-.BB@LABEL@9_2:	; return
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 238
-	ret
-_MonitoringStatus:
-	.STACK _MonitoringStatus = 6
-	;***      237 : 	}
-	;***      238 : }
-	;***      239 : void MonitoringStatus(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 239
-	push hl
-	;***      240 : 	if (g_commnunication_flag.send_response_status_flag == 1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 240
-	cmp !LOWW(_g_commnunication_flag+0x00005), #0x01
-	bnz $.BB@LABEL@10_5
-.BB@LABEL@10_1:	; if_then_bb
-	;***      241 : 		uint8_t state = g_uart2_sendend;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 241
-	mov a, !LOWW(_g_uart2_sendend)
-	mov [sp+0x00], a
-	;***      242 : 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 242
-	movw bc, #0x0012
-	movw ax, #LOWW(_g_io_status)
-	call !!_R_UART2_Send
-.BB@LABEL@10_2:	; bb9
-	mov a, [sp+0x00]
-	;***      243 : 		while (state == g_uart2_sendend) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 243
-	cmp a, !LOWW(_g_uart2_sendend)
-	bnz $.BB@LABEL@10_4
-.BB@LABEL@10_3:	; bb
-	;***      244 : 			R_WDT_Restart();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 244
-	call !!_R_WDT_Restart
-	br $.BB@LABEL@10_2
-.BB@LABEL@10_4:	; bb17
-	;***      245 : 		}
-	;***      246 : 		g_commnunication_flag.send_response_status_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 246
-	clrb !LOWW(_g_commnunication_flag+0x00005)
-.BB@LABEL@10_5:	; return
-	pop hl
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 248
-	ret
-_TestIndividual:
-	.STACK _TestIndividual = 4
-	;***      247 : 	}
-	;***      248 : }
-	;***      249 : void TestIndividual(void) {
-	;***      250 : 	if (g_commnunication_flag.recieve_status_flag == 2) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 250
-	cmp !LOWW(_g_commnunication_flag+0x00008), #0x02
-	bnz $.BB@LABEL@11_4
-.BB@LABEL@11_1:	; entry.bb_crit_edge
-	clrb a
-.BB@LABEL@11_2:	; bb
-	mov b, a
-	;***      251 : 		uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
-	;***      252 : 		for (uint8_t i = 0; i < 4; i++) {
-	;***      253 : 			_io_p[i] = g_rx_data[i];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 253
-	mov a, LOWW(_g_rx_data)[b]
-	mov LOWW(_g_io_response+0x00001)[b], a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 252
-	inc b
-	mov a, b
-	cmp a, #0x04
-	bnz $.BB@LABEL@11_2
-.BB@LABEL@11_3:	; bb22
-	;***      254 : 		}
-	;***      255 : 		IO_Output(&g_io_response);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 255
-	movw ax, #LOWW(_g_io_response)
-	call $!_IO_Output
-	;***      256 : 		g_commnunication_flag.recieve_status_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 256
-	clrb !LOWW(_g_commnunication_flag+0x00008)
-.BB@LABEL@11_4:	; return
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 258
-	ret
-_TestControl:
-	.STACK _TestControl = 8
-	;***      257 : 	}
-	;***      258 : }
-	;***      259 : 
-	;***      260 : void TestControl(void) {
-	;***      261 : 	if (g_commnunication_flag.control_test_flag != 0) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 261
-	cmp0 !LOWW(_g_commnunication_flag+0x0000F)
-	bz $.BB@LABEL@12_13
-.BB@LABEL@12_1:	; if_then_bb
-	;***      262 : 		switch (g_commnunication_flag.control_test_flag) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 262
-	mov a, !LOWW(_g_commnunication_flag+0x0000F)
-	add a, #0xD9
-	bz $.BB@LABEL@12_7
-.BB@LABEL@12_2:	; if_then_bb
-	dec a
-	bz $.BB@LABEL@12_10
-.BB@LABEL@12_3:	; if_then_bb
-	dec a
-	bz $.BB@LABEL@12_8
-.BB@LABEL@12_4:	; if_then_bb
-	dec a
-	bz $.BB@LABEL@12_9
-.BB@LABEL@12_5:	; if_then_bb
-	cmp a, #0x02
-	bnz $.BB@LABEL@12_12
-.BB@LABEL@12_6:	; switch_clause_bb29
-	;***      263 : 		case DRAINAGE_MODE_SET:
-	;***      264 : 			sendToRasPi_u32(H_READ, DRAINAGE_MODE_SET,
-	;***      265 : 					(uint32_t) g_test_control.raw.drain << (8 * 3));
-	;***      266 : 			break;
-	;***      267 : 		case POWER_ON_TEST_SET:
-	;***      268 : 			sendToRasPi_u32(H_READ, POWER_ON_TEST_SET,
-	;***      269 : 					(uint32_t) g_test_control.raw.power_on << (8 * 3));
-	;***      270 : 			break;
-	;***      271 : 		case WATER_FILTER_SET:
-	;***      272 : 			sendToRasPi_u32(H_READ, WATER_FILTER_SET,
-	;***      273 : 					(uint32_t) g_test_control.raw.filter << (8 * 3));
-	;***      274 : 			break;
-	;***      275 : 		case BIOMECTRIC_SET:
-	;***      276 : 			sendToRasPi_u32(H_READ, BIOMECTRIC_SET,
-	;***      277 : 					(uint32_t) g_test_control.raw.biomectric << (8 * 3));
-	;***      278 : 			break;
-	;***      279 : 		case CONTROL_SETTING:
-	;***      280 : 			rx_count++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 280
-	inc !LOWW(_rx_count)
-	;***      281 : 			sendToRasPi_u32(H_READ, CONTROL_SETTING, (uint32_t) g_test_control.data << (8 * 3));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 281
-	mov a, !LOWW(_g_test_control)
-	clrb x
-	movw de, ax
-	mov x, #0x2C
-	br $.BB@LABEL@12_11
-.BB@LABEL@12_7:	; switch_clause_bb
-	oneb a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 264
-	and a, !LOWW(_g_test_control)
-	clrb x
-	movw de, ax
-	mov x, #0x27
-	br $.BB@LABEL@12_11
-.BB@LABEL@12_8:	; switch_clause_bb11
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 268
-	mov a, !LOWW(_g_test_control)
-	shr a, 0x01
-	and a, #0x01
-	clrb x
-	movw de, ax
-	mov x, #0x29
-	br $.BB@LABEL@12_11
-.BB@LABEL@12_9:	; switch_clause_bb17
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 272
-	mov a, !LOWW(_g_test_control)
-	shr a, 0x02
-	and a, #0x01
-	clrb x
-	movw de, ax
-	mov x, #0x2A
-	br $.BB@LABEL@12_11
-.BB@LABEL@12_10:	; switch_clause_bb23
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 276
-	mov a, !LOWW(_g_test_control)
-	shr a, 0x03
-	and a, #0x01
-	clrb x
-	movw de, ax
-	mov x, #0x28
-.BB@LABEL@12_11:	; switch_clause_bb23
-	clrw bc
-	mov a, #0x52
-	call $!_sendToRasPi_u32
-.BB@LABEL@12_12:	; switch_break_bb
-	;***      282 : 			break;
-	;***      283 : 		default:
-	;***      284 : 			break;
-	;***      285 : 		}
-	;***      286 : 		g_commnunication_flag.control_test_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 286
-	clrb !LOWW(_g_commnunication_flag+0x0000F)
-.BB@LABEL@12_13:	; if_break_bb
-	;***      287 : 	}
-	;***      288 : 	if(g_commnunication_flag.control_test_save_flag == 1){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 288
-	cmp !LOWW(_g_commnunication_flag+0x00010), #0x01
-	bnz $.BB@LABEL@12_15
-.BB@LABEL@12_14:	; if_then_bb41
-	clrw ax
-	;***      289 : 		EE_SPI_Write((uint8_t *)&g_test_control.data, NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 289
-	push ax
-	incw ax
-	push ax
-	movw bc, #0x0029
-	movw ax, #LOWW(_g_test_control)
-	call !!_EE_SPI_Write
-	addw sp, #0x04
-	;***      290 : 		g_commnunication_flag.control_test_save_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 290
-	clrb !LOWW(_g_commnunication_flag+0x00010)
-.BB@LABEL@12_15:	; return
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 292
-	ret
-	;***      291 : 	}
-	;***      292 : }
+	;***      375 : 	}
+	;***      376 : 	return 0U;
+	;***      377 : }
 	.SECTION .const,CONST
 	.ALIGN 2
 _time_setting_p:
@@ -1174,6 +1394,8 @@ _test_control_buf:
 	.DB 0x52
 	.DB 0x02
 	.DB4 0x437F0000	; float value: 255
+_save_spec_ok:
+	.DS (1)
 	.SECTION .bss,BSS
 _g_io_response:
 	.DS (5)

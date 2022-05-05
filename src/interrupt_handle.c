@@ -35,12 +35,14 @@ void adc_int_handle(void){
 		default:
 			break;
 	}
+
 	R_ADC_Start();
 }
 /*!
  * Use in uart2 interrupt function
  */
 void Raspberry_uart2_handle(void){
+	g_Tick.tickUartTimeout = g_systemTime;
 	R_UART2_Receive(g_rx_data, 6);
 	g_commnunication_flag.recived_time_setting_flag =
 			g_commnunication_flag.recived_time_setting_flag == 1 ?
@@ -55,9 +57,12 @@ void Raspberry_uart2_handle(void){
 			&& g_commnunication_flag.recived_time_setting_flag == 0
 			&& g_commnunication_flag.recived_number_setting_flag == 0
 			&& g_commnunication_flag.recieve_status_flag == 0) {
-
 		if(g_rx_data[0] == H_READ){
 			switch (g_rx_data[1]) {
+				case NEXT_ANIMATION:
+					g_commnunication_flag.send_response_flag = 0;
+					g_commnunication_flag.next_animation_flag = 1;
+					break;
 				case READ_TIME:
 					g_commnunication_flag.send_response_time_flag = 1;
 					break;
@@ -69,6 +74,7 @@ void Raspberry_uart2_handle(void){
 					break;
 				case WASHING_MODE:
 					g_commnunication_flag.send_response_mode_flag = 1;
+					g_commnunication_flag.send_response_flag = 0;
 					break;
 				case MID_NIGHT:
 					g_machine_state.isMidNight = g_rx_data[5];
@@ -91,8 +97,15 @@ void Raspberry_uart2_handle(void){
 				default:
 					break;
 			}
+			if(g_commnunication_flag.control_test_flag != 0){
+				g_commnunication_flag.send_response_flag = 0;
+			}
 		}else if(g_rx_data[0] == H_SET){
 			switch (g_rx_data[1]) {
+				case OK_ALL:
+					g_commnunication_flag.send_response_flag = 0;
+					g_commnunication_flag.save_confirm_flag = 1;
+					break;
 				case SAVE_TIME:
 					R_UART2_Receive(g_rx_data, timeSettingSize);
 					g_commnunication_flag.recived_time_setting_flag = 1;
@@ -102,11 +115,12 @@ void Raspberry_uart2_handle(void){
 					g_commnunication_flag.recived_number_setting_flag = 1;
 					break;
 				case NEXT_ANIMATION:
-
+					g_commnunication_flag.send_response_flag = 0;
+					g_commnunication_flag.next_animation_flag = 1;
 					break;
 				case TESTING_MODE_START:
-					rx_count++;
 					g_commnunication_flag.test_flag = TESTING_MODE_START;
+					g_commnunication_flag.send_response_flag = 0;
 					break;
 				case TESTING_MODE_STOP:
 					g_commnunication_flag.test_flag = TESTING_MODE_STOP;
@@ -166,6 +180,7 @@ void Raspberry_uart2_handle(void){
 		g_uart2_fault = 1;
 	}
 	g_uart2_receive++;
+
 }
 uint8_t isCommandNeedResponse(uint8_t *data) {
 	if ((data[0] == H_SET) && (data[1] == NEXT_ANIMATION)) {

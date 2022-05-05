@@ -7,6 +7,30 @@
 
 #include "io_control.h"
 
+void OutputIO(struct IO_Struct *io) {
+	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
+	O_SPOUT_WATER_PIN_SV2 = io->Valve.SV2;
+	O_SPOUT_ACID_PIN_SV3 = io->Valve.SV3;
+	O_SPOUT_ALK_PIN_SV4 = io->Valve.SV4;
+	O_DRAIN_ACID_PIN_SV5 = io->Valve.SV5;
+	O_DRAIN_ALK_PIN_SV6 = io->Valve.SV6;
+	O_NEUTRALIZE_PIN_SV7 = io->Valve.SV7;
+	O_OPTION_2_PIN_SV8 = io->Valve.SV8;
+	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
+
+	if(O_SPOUT_ACID_PIN_SV3 == OFF && O_DRAIN_ACID_PIN_SV5 == OFF){
+		O_ACID_PUMP_PIN_P1 = OFF;
+	}else{
+		O_ACID_PUMP_PIN_P1 = io->Pump1;
+	}
+	if(O_DRAIN_ALK_PIN_SV6 == OFF && O_SPOUT_ALK_PIN_SV4 == OFF){
+		O_ALK_PUMP_PIN_P2 = OFF;
+	}else{
+		O_ALK_PUMP_PIN_P2 = io->Pump2;
+	}
+	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
+	O_CVCC_ON_PIN = io->CVCC_ON;
+}
 /********************** Check Input *******************/
 uint8_t isAcidTankFull(void) {
 	if (I_ACID_H_PIN_FL3 == I_ON) {

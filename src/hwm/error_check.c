@@ -158,6 +158,8 @@ uint8_t OverCurrentCheck_waitReset(void) {
  * @return 1 - Invalid, 0 - OK
  */
 uint8_t FlowSensorCheck_nonstop(void) {
+	if(g_alarm.refined.abnormal_flow == 1)
+		return 0;
 	if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 			|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
 		if(O_SUPPLY_WATER_PIN_SV1 == ON){

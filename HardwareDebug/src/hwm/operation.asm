@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/operation.obj
 #@   ../src/hwm/operation.c
-#@  compiled at Wed Apr 06 08:39:10 2022
+#@  compiled at Thu May 05 10:01:49 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick
@@ -236,7 +236,7 @@ _TestModeOperation:
 	;***       64 : void TestModeOperation(void){
 	;***       65 : 	if(g_commnunication_flag.test_flag){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 65
-	mov a, !LOWW(_g_commnunication_flag+0x00009)
+	mov a, !LOWW(_g_commnunication_flag+0x0000A)
 	;***       66 : 
 	;***       67 : 	}
 	;***       68 : 	if(g_machine_state.test == TEST_INDIVIDUAL){

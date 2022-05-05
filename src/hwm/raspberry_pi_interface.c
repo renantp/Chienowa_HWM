@@ -15,149 +15,65 @@ uint8_t *const number_setting_p = (uint8_t*) &_settingNumber;
 struct UART_Buffer_float_s test_control_buf = { H_READ, READ_TIME, 0x000000ff };
 struct IO_Struct g_io_response, io_off;
 union Control_u g_test_control;
+int8_t save_spec_ok = 0;
 
 // ------------------ LOCAL FUNCTION -------------------------------
-inline void ResponseHandler(void);
-inline void ResponseWashingMode(void);
-inline void MonitoringStatus(void);
-inline void TestIndividual(void);
-inline void TestControl(void);
+uint8_t ResponseHandler(void);
+void ResponseWashingMode(void);
+uint8_t ResponseNextAnimation(void);
+void MonitoringStatus(void);
+uint8_t TestIndividual(void);
+void TestControl(void);
+uint8_t SendTimeSetting(void);
+uint8_t SendNumberSetting(void);
+uint8_t GetAndSaveTimeSetting(void);
+uint8_t GetAndSaveNumberSetting(void);
+uint8_t TestMode(void);
 
-void IO_Output(struct IO_Struct *io) {
-	O_SUPPLY_WATER_PIN_SV1 = io->Valve.SV1;
-	O_SPOUT_WATER_PIN_SV2 = io->Valve.SV2;
-	O_SPOUT_ACID_PIN_SV3 = io->Valve.SV3;
-	O_SPOUT_ALK_PIN_SV4 = io->Valve.SV4;
-	O_DRAIN_ACID_PIN_SV5 = io->Valve.SV5;
-	O_DRAIN_ALK_PIN_SV6 = io->Valve.SV6;
-	O_NEUTRALIZE_PIN_SV7 = io->Valve.SV7;
-	O_OPTION_2_PIN_SV8 = io->Valve.SV8;
-	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
-
-	O_ACID_PUMP_PIN_P1 = io->Pump1;
-	O_ALK_PUMP_PIN_P2 = io->Pump2;
-	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
-	O_CVCC_ON_PIN = io->CVCC_ON;
+/**
+ * After send
+ */
+void AlarmResponse(void){
+	if(g_commnunication_flag.alarm_response_flag){
+		//TODO: Send alarm data
+	}
+}
+void SaveComfirmResponse(void){
+	if(g_commnunication_flag.save_confirm_flag && save_spec_ok != 0){
+		sendToRasPi_Revert_i32(H_SET, OK_ALL, (int32_t)(save_spec_ok));
+		save_spec_ok = 0;
+		g_commnunication_flag.save_confirm_flag = 0;
+	}
 }
 
 //------------------- EXTERNAL FUNCTION ----------------------------------
 void RaspberryCommunication_nostop(void) {
+	if(ResponseHandler()){
 
-	ResponseHandler();
+	}else{
+
+	}
+	SendTimeSetting();
+	SendNumberSetting();
 	ResponseWashingMode();
-	MonitoringStatus();
-	TestIndividual();
+	ResponseNextAnimation();
 	TestControl();
-	if (g_commnunication_flag.send_response_time_flag) {
-		uint8_t state = g_uart2_sendend;
-		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
-				timeSettingSize - 1);
-		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		g_commnunication_flag.send_response_time_flag = 0;
-	}
-	if (g_commnunication_flag.send_response_number_flag) {
-		uint8_t state = g_uart2_sendend;
-		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
-				numberSettingSize - 1);
-		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
-		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
-		}
-		g_commnunication_flag.send_response_number_flag = 0;
-	}
-	if (g_commnunication_flag.recived_time_setting_flag == 2) {
-//		//Do not Edit this, must keep!!!!
-		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
-			switch (i % 4) {
-//			case 3:
-//				pointer0[timeSettingSize - 3 + 3 - i] = g_rx_data[i - 3];
-//				break;
-//			case 2:
-//				pointer0[timeSettingSize - 3 + 1 - i] = g_rx_data[i - 1];
-//				break;
-//			case 1:
-//				pointer0[timeSettingSize - 3 - 1 - i] = g_rx_data[1 + i];
-//				break;
-//			case 0:
-//				pointer0[timeSettingSize - 3 - 3 - i] = g_rx_data[3 + i];
-//				break;
-//			default:
-//				break;
-			case 3:
-				time_setting_p[i - 3] = g_rx_data[i];
-				break;
-			case 2:
-				time_setting_p[i - 1] = g_rx_data[i];
-				break;
-			case 1:
-				time_setting_p[1 + i] = g_rx_data[i];
-				break;
-			case 0:
-				time_setting_p[3 + i] = g_rx_data[i];
-				break;
-			default:
-				break;
-			}
-		}
-		_settingTime.crc = g_rx_data[timeSettingSize - 1];
-		if (g_rx_data[timeSettingSize - 1]
-				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
-			g_timerSetting = _settingTime;
-			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
-					timeSettingSize);
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-		} else {
-			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-		}
-//		sendToRasPi(H_SET, OK_ALL, 0x0);
-		g_commnunication_flag.recived_time_setting_flag = 0;
-	}
-
-	if (g_commnunication_flag.recived_number_setting_flag == 2) {
-//		//Do not Edit this, must keep!!!!
-		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
-			switch (i % 4) {
-			case 3:
-				number_setting_p[i - 3] = g_rx_data[i];
-				break;
-			case 2:
-				number_setting_p[i - 1] = g_rx_data[i];
-				break;
-			case 1:
-				number_setting_p[1 + i] = g_rx_data[i];
-				break;
-			case 0:
-				number_setting_p[3 + i] = g_rx_data[i];
-				break;
-			default:
-				break;
-			}
-		}
-		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
-				numberSettingSize - 1);
-		if (g_rx_data[numberSettingSize - 1]
-				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-			g_numberSetting = _settingNumber;
-			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
-					numberSettingSize);
-			sendToRasPi_f(H_SET, OK_ALL, 0x0);
-			if(g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
-				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
-			if(g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
-				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
-			R_DAC0_Set_ConversionValue((uint8_t)(g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
-			R_DAC1_Set_ConversionValue((uint8_t)(g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
-		} else {
-			sendToRasPi_f(H_SET, SAVE_ERROR, 0x0);
-		}
-//		sendToRasPi(H_SET, OK_ALL, 0x0);
-		g_commnunication_flag.recived_number_setting_flag = 0;
+	GetAndSaveTimeSetting();
+	GetAndSaveNumberSetting();
+	SaveComfirmResponse();
+	TestIndividual();
+	MonitoringStatus();
+	TestMode();
+	//Auto reset UART after 5s not get data
+	if (ns_delay_ms(&g_Tick.tickUartTimeout, 5000)) {
+		R_UART2_Stop();
+		g_animation_queue = 0;
+	} else if (STMK2 == 1U && ns_delay_ms(&g_Tick.tickUartTimeout, 50)) {
+		R_UART2_Start();
+		R_UART2_Receive(g_rx_data, 6);
 	}
 }
+
 void sendToRasPi_f(enum UART_header_e head, enum Control_status type,
 		float value) {
 	uint8_t state = g_uart2_sendend;
@@ -175,6 +91,26 @@ void sendToRasPi_u32(enum UART_header_e head, enum Control_status type,
 	g_control_buffer_u32.set_number = type;
 	g_control_buffer_u32.set_value = value;
 	R_UART2_Send((uint8_t*) &g_control_buffer_u32, 6);
+	while (state == g_uart2_sendend)
+		;
+}
+union Revert_Byte {
+	struct {
+		int8_t byte[4];
+	}refined;
+	int32_t raw;
+};
+void sendToRasPi_Revert_i32(enum UART_header_e head, enum Control_status type, int32_t value){
+	union Revert_Byte data;
+	uint8_t state = g_uart2_sendend;
+	data.refined.byte[3] = value;
+	data.refined.byte[2] = value >> 8;
+	data.refined.byte[1] = value >> 16;
+	data.refined.byte[0] = value >> 24;
+	g_control_buffer_i32.head = head;
+	g_control_buffer_i32.set_number = type;
+	g_control_buffer_i32.set_value = data.raw;
+	R_UART2_Send((uint8_t*) &g_control_buffer_i32, 6);
 	while (state == g_uart2_sendend)
 		;
 }
@@ -209,7 +145,13 @@ uint8_t waitAlarmConfirm_nonstop(enum Control_status alarm) {
 void resetAlarm(void) {
 	g_commnunication_flag.alarm_clear_flag = 1;
 }
-void ResponseHandler(void) {
+//------------------End of EXTERNAL FUNCTION -----------------------------
+//------------------ Internal Function------------------------------------
+/**
+ * Send response Command to Raspberry Pi
+ * @return 1 - Have a response, 0 - Not response
+ */
+uint8_t ResponseHandler(void) {
 	if (g_commnunication_flag.send_response_flag) {
 		uint8_t state = g_uart2_sendend;
 		if (g_machine_state.user == 2) {
@@ -217,10 +159,11 @@ void ResponseHandler(void) {
 		}
 		R_UART2_Send(g_rx_data, 6);
 		while (state == g_uart2_sendend) {
-			R_WDT_Restart();
 		}
 		g_commnunication_flag.send_response_flag = 0;
+		return 1U;
 	}
+	return 0U;
 }
 void ResponseWashingMode(void) {
 	if (g_commnunication_flag.send_response_mode_flag == 1) {
@@ -230,8 +173,19 @@ void ResponseWashingMode(void) {
 		g_commnunication_flag.send_response_mode_flag = 0;
 	}
 }
+uint8_t ResponseNextAnimation(void) {
+	if (g_commnunication_flag.send_response_flag == 0
+			&& g_commnunication_flag.next_animation_flag == 1) {
+		sendToRasPi_u32(H_READ, NEXT_ANIMATION, (uint32_t) g_animation_queue << (8 * 3));
+		g_animation_queue -= 1;
+		g_commnunication_flag.next_animation_flag = 0;
+		return 1U;
+	}
+	return 0U;
+}
 void MonitoringStatus(void) {
-	if (g_commnunication_flag.send_response_status_flag == 1) {
+	if (g_commnunication_flag.send_response_status_flag == 1
+			&& g_commnunication_flag.send_response_flag == 0) {
 		uint8_t state = g_uart2_sendend;
 		R_UART2_Send((uint8_t*) &g_io_status.refined, io_statusSize);
 		while (state == g_uart2_sendend) {
@@ -240,15 +194,18 @@ void MonitoringStatus(void) {
 		g_commnunication_flag.send_response_status_flag = 0;
 	}
 }
-void TestIndividual(void) {
-	if (g_commnunication_flag.recieve_status_flag == 2) {
+uint8_t TestIndividual(void) {
+	if (g_commnunication_flag.recieve_status_flag == 2
+			&& g_commnunication_flag.send_response_flag == 0) {
 		uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
 		for (uint8_t i = 0; i < 4; i++) {
 			_io_p[i] = g_rx_data[i];
 		}
-		IO_Output(&g_io_response);
+		OutputIO(&g_io_response);
 		g_commnunication_flag.recieve_status_flag = 0;
+		return 1U;
 	}
+	return 0U;
 }
 
 void TestControl(void) {
@@ -271,8 +228,8 @@ void TestControl(void) {
 					(uint32_t) g_test_control.raw.biomectric << (8 * 3));
 			break;
 		case CONTROL_SETTING:
-			rx_count++;
-			sendToRasPi_u32(H_READ, CONTROL_SETTING, (uint32_t) g_test_control.data << (8 * 3));
+			sendToRasPi_u32(H_READ, CONTROL_SETTING,
+					(uint32_t) g_test_control.data << (8 * 3));
 			break;
 		default:
 			break;
@@ -280,15 +237,141 @@ void TestControl(void) {
 		g_commnunication_flag.control_test_flag = 0;
 	}
 
-	if(g_commnunication_flag.control_test_save_flag == 1){
-		EE_SPI_Write((uint8_t *)&g_test_control.data, NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
+	if (g_commnunication_flag.control_test_save_flag == 1) {
+		EE_SPI_Write((uint8_t*) &g_test_control.data,
+		NUMBER_SETTING_ADDRESS + numberSettingSize,
+				sizeof(g_test_control.data));
 		g_commnunication_flag.control_test_save_flag = 0;
 	}
 
+
+}
+uint8_t TestMode(void){
 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
 		g_machine_state.test = g_commnunication_flag.test_flag;
+		g_commnunication_flag.test_flag = 0U;
+		sendToRasPi_u32(H_SET, TESTING_MODE_START, 0x0000);
+		rx_count++;
+		return 1U;
 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
-		IO_Output(&io_off);
+		OutputIO(&io_off);
 	}
+	return 0;
+}
+
+uint8_t SendTimeSetting(void) {
+	if (g_commnunication_flag.send_response_time_flag
+			&& (g_commnunication_flag.send_response_flag == 0)) {
+		uint8_t state = g_uart2_sendend;
+		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
+				timeSettingSize - 1);
+		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
+		while (state == g_uart2_sendend) {
+			R_WDT_Restart();
+		}
+		g_commnunication_flag.send_response_time_flag = 0;
+		return 1U;
+	}
+	return 0U;
+}
+uint8_t SendNumberSetting(void) {
+	if (g_commnunication_flag.send_response_number_flag
+			&& (g_commnunication_flag.send_response_flag == 0)) {
+		uint8_t state = g_uart2_sendend;
+		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
+				numberSettingSize - 1);
+		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
+		while (state == g_uart2_sendend) {
+			R_WDT_Restart();
+		}
+		g_commnunication_flag.send_response_number_flag = 0;
+		return 1U;
+	}
+	return 0U;
+}
+uint8_t GetAndSaveTimeSetting(void) {
+	if (g_commnunication_flag.recived_time_setting_flag == 2) {
+		//		//Do not Edit this, must keep!!!!
+		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
+			switch (i % 4) {
+			case 3:
+				time_setting_p[i - 3] = g_rx_data[i];
+				break;
+			case 2:
+				time_setting_p[i - 1] = g_rx_data[i];
+				break;
+			case 1:
+				time_setting_p[1 + i] = g_rx_data[i];
+				break;
+			case 0:
+				time_setting_p[3 + i] = g_rx_data[i];
+				break;
+			default:
+				break;
+			}
+		}
+		_settingTime.crc = g_rx_data[timeSettingSize - 1];
+		if (g_rx_data[timeSettingSize - 1]
+				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
+			save_spec_ok = 1;
+			g_timerSetting = _settingTime;
+			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
+					timeSettingSize);
+		} else {
+			save_spec_ok = -1;
+		}
+		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+		g_commnunication_flag.recived_time_setting_flag = 0;
+		return 1U;
+	}
+	return 0U;
+}
+uint8_t GetAndSaveNumberSetting(void) {
+	if (g_commnunication_flag.recived_number_setting_flag == 2) {
+		//		//Do not Edit this, must keep!!!!
+		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
+			switch (i % 4) {
+			case 3:
+				number_setting_p[i - 3] = g_rx_data[i];
+				break;
+			case 2:
+				number_setting_p[i - 1] = g_rx_data[i];
+				break;
+			case 1:
+				number_setting_p[1 + i] = g_rx_data[i];
+				break;
+			case 0:
+				number_setting_p[3 + i] = g_rx_data[i];
+				break;
+			default:
+				break;
+			}
+		}
+		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
+				numberSettingSize - 1);
+		if (g_rx_data[numberSettingSize - 1]
+				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
+			save_spec_ok = 1;
+			g_numberSetting = _settingNumber;
+			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
+					numberSettingSize);
+			if (g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
+				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
+			if (g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
+				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
+			R_DAC0_Set_ConversionValue(
+					(uint8_t) (g_numberSetting.cvccCurrent / CVCC_MAX_VOLTAGE
+							* 255));
+			R_DAC1_Set_ConversionValue(
+					(uint8_t) (g_numberSetting.saltPumpVoltage
+							/ SALT_PUMP_MAX_VOLTAGE * 255));
+		} else {
+			save_spec_ok = -1;
+		}
+		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+		g_commnunication_flag.recived_number_setting_flag = 0;
+		return 1U;
+	}
+	return 0U;
 }

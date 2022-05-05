@@ -280,10 +280,9 @@ void userAuthHandler_nostop(void) {
 		if(DETECT_U() == I_ON && g_machine_state.user == 0){
 			sendToRasPi_u32(H_SET, START_WASHING, 0U);
 			g_machine_state.user = 1;
-			rx_count++;
 		}
 	}
-	if (g_machine_state.user == 1) {
+	if (g_machine_state.user == 1 && g_commnunication_flag.send_response_flag == 0) {
 		switch (g_machine_mode) {
 		case HAND_WASHING:
 			HandWashingMode_nostop();
@@ -328,14 +327,8 @@ void ElectrolyzeWaterGeneration_nostop(void) {
 			handSensorLED(BLACK);
 			// Start Electrolyte Operation Off time keeper
 		}
-		if (!isAcidTankFull() && !isAlkalineTankFull()) {
-			handSensorLEDBlink(WHITE, 100);
-		} else if (!isAcidTankFull()) {
-			handSensorLEDBlink(RED, 100);
-		} else if (!isAlkalineTankFull()) {
-			handSensorLEDBlink(BLUE, 100);
-		}
 	}
+	realTimeResponse();
 }
 /*!
  * Tested!
@@ -615,7 +608,7 @@ void NeutralizationTreatment(uint32_t *tick) {
 
 }
 void main_loop_20211111(void) {
-
+	realTimeResponse();
 	measureFlowSensor_nostop();
 
 	if(g_commnunication_flag.test_flag != TESTING_MODE_START){
@@ -632,8 +625,16 @@ void main_loop_20211111(void) {
 
 
 	}
-
 	levelSkipErrorCheck();
+	if (isAcidTankEmpty() && isAlkalineTankEmpty_nonstop()) {
+		handSensorLEDBlink(WHITE, 100);
+	} else if (isAcidTankEmpty()) {
+		handSensorLEDBlink(RED, 100);
+	} else if (isAlkalineTankEmpty_nonstop()) {
+		handSensorLEDBlink(BLUE, 100);
+	} else{
+		HandSensorLEDEndBlink();
+	}
 }
 
 
@@ -675,10 +676,10 @@ void UpdateMachineStatus(void) {
 	g_io_status.refined.io.AlkalineEmptyLevel = I_ALKALI_L_PIN_FL4 == I_ON ? 1 : 0;
 	g_io_status.refined.io.AlkalineLowLevel = I_ALKALI_M_PIN_FL5 == I_ON ? 1 : 0;
 	g_io_status.refined.io.AlkalineHighLevel = I_ALKALI_H_PIN_FL6 == I_ON ? 1 : 0;
-	g_mean_io_status.refined.io.AlkalineLowLevel =
-	I_ALKALI_M_PIN_FL5 == I_ON ? g_mean_io_status.refined.io.AlkalineLowLevel : 0;
-	g_mean_io_status.refined.io.AlkalineHighLevel =
-	I_ALKALI_H_PIN_FL6 == I_ON ? g_mean_io_status.refined.io.AlkalineHighLevel : 0;
+//	g_mean_io_status.refined.io.AlkalineLowLevel =
+//	I_ALKALI_M_PIN_FL5 == I_ON ? g_mean_io_status.refined.io.AlkalineLowLevel : 0;
+//	g_mean_io_status.refined.io.AlkalineHighLevel =
+//	I_ALKALI_H_PIN_FL6 == I_ON ? g_mean_io_status.refined.io.AlkalineHighLevel : 0;
 
 	g_io_status.refined.io.SaltLowLevel = I_SALT_L_PIN == I_ON ? 1 : 0;
 	g_io_status.refined.io.SaltHighLevel = I_SALT_H_PIN == I_ON ? 1 : 0;
@@ -741,5 +742,20 @@ void manufactureReset(void){
 
 	g_timerSetting.t61_curranCleaningIntervalTime_h = 8;
 	g_timerSetting.t62_callanWashSpoutingTime_s = 30;
+
+	g_numberSetting.upperVoltage1 = 0.0f;
+	g_numberSetting.upperVoltage2 = 0.0f;
+	g_numberSetting.upperVoltage3 = 0.0f;
+	g_numberSetting.upperFlow = 0.0f;
+	g_numberSetting.upperCurrent = 0.0f;
+	g_numberSetting.saltPumpVoltage = 1.0f;
+	g_numberSetting.lowerVoltage = 0.0f;
+	g_numberSetting.lowerFlow = 0.0f;
+	g_numberSetting.lowerCurrent = 0.0f;
+	g_numberSetting.cvccCurrent = 1.0;
+	EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
+			timeSettingSize);
+	EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
+			numberSettingSize);
 
 }

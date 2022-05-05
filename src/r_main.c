@@ -1,34 +1,34 @@
 /***********************************************************************************************************************
- * DISCLAIMER
- * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
- * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
- * applicable laws, including copyright laws.
- * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
- * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
- * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
- * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
- * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- * Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability
- * of this software. By using this software, you agree to the additional terms and conditions found by accessing the
- * following link:
- * http://www.renesas.com/disclaimer
- *
- * Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
- ***********************************************************************************************************************/
+* DISCLAIMER
+* This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
+* No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
+* applicable laws, including copyright laws. 
+* THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
+* OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
+* LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
+* INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
+* ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
+* of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+* following link:
+* http://www.renesas.com/disclaimer
+*
+* Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * File Name    : r_main.c
- * Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
- * Device(s)    : R5F104ML
- * Tool-Chain   : CCRL
- * Description  : This file implements main function.
- * Creation Date: 30/11/2021
- ***********************************************************************************************************************/
+* File Name    : r_main.c
+* Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+* Device(s)    : R5F104ML
+* Tool-Chain   : CCRL
+* Description  : This file implements main function.
+* Creation Date: 19/04/2022
+***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- Includes
- ***********************************************************************************************************************/
+Includes
+***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
 #include "r_cg_cgc.h"
 #include "r_cg_port.h"
@@ -45,6 +45,7 @@
 #include "crc8.h"
 #include "hwm/hwm_main.h"
 #include "r_cg_userdefine.h"
+#include <math.h>
 
 /***********************************************************************************************************************
  Pragma directive
@@ -53,10 +54,19 @@
 
 //#define TESTING_FIRMWARE
 /* End user code. Do not edit comment generated here */
+#include "r_cg_userdefine.h"
 
 /***********************************************************************************************************************
- Global variables and functions
- ***********************************************************************************************************************/
+Pragma directive
+***********************************************************************************************************************/
+/* Start user code for pragma. Do not edit comment generated here */
+
+//#define TESTING_FIRMWARE
+/* End user code. Do not edit comment generated here */
+
+/***********************************************************************************************************************
+Global variables and functions
+***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
 
 volatile int g_adc_ch = 0;
@@ -74,6 +84,7 @@ float data_f;
 union byte_to_float data_f_test;
 struct UART_Buffer_float_s g_control_buffer_f;
 struct UART_Buffer_u32_s g_control_buffer_u32;
+struct UART_Buffer_i32_s g_control_buffer_i32;
 
 union {
 	struct {
@@ -104,6 +115,7 @@ uint8_t readHS(void) {
 	} else
 		return 0;
 }
+
 uint8_t this_size = sizeof(g_io_status);
 uint8_t this_size_2 = sizeof(union IO_Status_u);
 uint8_t send_buf[7] = { 8, 1, 2, 3, 4, 5, 6 };
@@ -113,18 +125,18 @@ uint32_t data_crc[2] = { 30500, 60200 };
 uint8_t rx_count;
 uint8_t dac_out[2] = { 0xff, 0xff };
 /* End user code. Do not edit comment generated here */
-
 void R_MAIN_UserInit(void);
 
 /***********************************************************************************************************************
- * Function Name: main
- * Description  : This function implements main function.
- * Arguments    : None
- * Return Value : None
- ***********************************************************************************************************************/
-void main(void) {
-	R_MAIN_UserInit();
-	/* Start user code. Do not edit comment generated here */
+* Function Name: main
+* Description  : This function implements main function.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void main(void)
+{
+    R_MAIN_UserInit();
+    /* Start user code. Do not edit comment generated here */
 
 	//TODO: EEPROM Initialize and read Setting
 	EEPROM_Init(&g_csi_rev_end, NONE_BLOCK);
@@ -133,9 +145,10 @@ void main(void) {
 	EE_SPI_Read((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
 			timeSettingSize);
 	EE_SPI_Read((uint8_t*) &g_test_control.data,
-			NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
+	NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
 	// Set to default valve
-	if(g_timerSetting.t1_initialWaterDrainageOperation_s > 180 && g_numberSetting.upperVoltage1 > 100.0){
+//	g_timerSetting.t1_initialWaterDrainageOperation_s > 180
+	if (isnan(g_numberSetting.upperVoltage1)) {
 		manufactureReset();
 	}
 	_settingNumber = g_numberSetting;
@@ -145,7 +158,7 @@ void main(void) {
 	R_UART2_Receive(g_rx_data, 6);
 
 	//TODO: Start receive data from RS485
-	O_RS485_MODE_PIN = 0U;
+	O_RS485_MODE_PIN = 1U;
 	R_UART3_Receive(g_uart3_rx_data, 7);
 	uint8_t wts, vpcb, vpcb_v = 1;
 	sendRS485(0xff, 82, 2, 12);
@@ -158,13 +171,16 @@ void main(void) {
 	g_machine_mode = HAND_WASHING;
 //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
 
-	//TODO: Run Initialize Operation
-	if(g_test_control.raw.power_on == ON){
+//TODO: Run Initialize Operation
+	if (g_test_control.raw.power_on == ON) {
 		main_init_20211111();
 	}
 	//TODO: Output CVCC and Salt pump voltage
-	CVCC_Current_Set((uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
-	Salt_Analog_Set((uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
+	CVCC_Current_Set(
+			(uint8_t) (g_numberSetting.cvccCurrent/CVCC_MAX_VOLTAGE*255));
+	Salt_Analog_Set(
+			(uint8_t) (g_numberSetting.saltPumpVoltage/SALT_PUMP_MAX_VOLTAGE*255));
+
 	while (1U) {
 
 		realTimeResponse();
@@ -172,12 +188,12 @@ void main(void) {
 
 		handSensorLED(g_color);
 		UpdateMachineStatus();
-		if (g_uart2_fault == 1) {
-			R_UART2_Stop();
-			delay_ms(10);
-			R_UART2_Start();
-			g_uart2_fault = 0;
-		}
+//		if (g_uart2_fault == 1) {
+//			R_UART2_Stop();
+//			delay_ms(10);
+//			R_UART2_Start();
+//			g_uart2_fault = 0;
+//		}
 
 		// Communication with WaterSoftener
 		if (g_commnunication_flag.rs485_send_to_watersolfner_response_flag) {
@@ -255,7 +271,8 @@ void main(void) {
 		}
 
 		if (ns_delay_ms(&g_Tick.tick1s, 1000)) {
-
+//			rx_count++;
+//			O_PUMP_PRESS_PIN = ~O_PUMP_PRESS_PIN;
 			led_st = led_st == 0 ? 0xff : 0x00;
 			uint8_t state = g_uart2_sendend;
 			g_crc[6] = crc8_4((uint8_t*) &g_timerSetting,
@@ -266,6 +283,7 @@ void main(void) {
 			if (led_st == 0x00) {
 
 			} else {
+
 
 			}
 		}
@@ -281,13 +299,14 @@ void main(void) {
 }
 
 /***********************************************************************************************************************
- * Function Name: R_MAIN_UserInit
- * Description  : This function adds user code before implementing main function.
- * Arguments    : None
- * Return Value : None
- ***********************************************************************************************************************/
-void R_MAIN_UserInit(void) {
-	/* Start user code. Do not edit comment generated here */
+* Function Name: R_MAIN_UserInit
+* Description  : This function adds user code before implementing main function.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_MAIN_UserInit(void)
+{
+    /* Start user code. Do not edit comment generated here */
 	EI();
 	R_TAU0_Create();
 	R_SAU0_Create();

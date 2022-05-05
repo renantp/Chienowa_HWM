@@ -7,7 +7,7 @@
 
 #include "normal_operation.h"
 
-uint8_t g_animation_queue;
+uint8_t g_animation_queue = 0;
 /**
  * Tested: 10/12/2021 by Mr.An
  */
@@ -25,7 +25,8 @@ void WaterWashingMode_nostop(void) {
 		break;
 	case 1:
 		if (ns_delay_ms(tick, 100)) {
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
 			(*state)++;
 		}
 		break;
@@ -36,7 +37,8 @@ void WaterWashingMode_nostop(void) {
 			(*state) = 0;
 			g_machine_state.mode = BUSY;
 			handSensorLED(g_color);
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
 		}
 		break;
 	default:
@@ -77,17 +79,15 @@ void HandWashingMode_nostop(void) {
 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
 			(*state)++;
 			g_animation_queue++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			break;
 		}
 		if (ns_delay_ms(tick, delayPump_ms)) {
 			O_ALK_PUMP_PIN_P2 = ON;
 			handSensorLED(BLUE);
 			g_animation_queue++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
-//			g_Tick.tickAnimation = g_systemTime;
-//			g_machine_state.waitAnimationRes = 1;
 		}
 		break;
 	case 2:
@@ -95,8 +95,6 @@ void HandWashingMode_nostop(void) {
 			O_ALK_PUMP_PIN_P2 = ON;
 			handSensorLED(BLUE);
 			(*state)++;
-//			g_Tick.tickAnimation = g_systemTime;
-//			g_machine_state.waitAnimationRes = 1;
 		}
 		break;
 	case 3:
@@ -113,7 +111,7 @@ void HandWashingMode_nostop(void) {
 			O_ACID_PUMP_PIN_P1 = ON;
 			handSensorLED(RED);
 			g_animation_queue++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
@@ -132,7 +130,7 @@ void HandWashingMode_nostop(void) {
 			handSensorLED(WHITE);
 			O_SPOUT_WATER_PIN_SV2 = ON;
 			g_animation_queue++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
@@ -150,7 +148,7 @@ void HandWashingMode_nostop(void) {
 			(*state) = 0;
 			g_machine_state.mode = BUSY;
 			g_animation_queue++;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		}
 		break;
 	default:
@@ -186,13 +184,15 @@ void AcidWaterMode_nostop(void) {
 	case 2:
 		//RDVS
 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
 				|| (DETECT_D() == I_ON)) {
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			O_ACID_PUMP_PIN_P1 = OFF;
 			(*state)++;
 		}
@@ -215,7 +215,8 @@ void AcidWaterMode_nostop(void) {
 		break;
 	default:
 		g_machine_state.mode = BUSY;
-		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+		g_animation_queue++;
+//		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		*state = 0;
 		break;
 	}
@@ -247,14 +248,16 @@ void AlkalineWaterMode_nostop(void) {
 	case 2:
 		//RDVS
 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)){
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		//TODO: Change turn OFF signal here
 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 						|| (DETECT_D() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
-			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+			g_animation_queue++;
+//			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			(*state)++;
 		}
 		break;
@@ -276,7 +279,8 @@ void AlkalineWaterMode_nostop(void) {
 		break;
 	default:
 		g_machine_state.mode = BUSY;
-		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+		g_animation_queue++;
+//		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 		*state = 0;
 		break;
 	}

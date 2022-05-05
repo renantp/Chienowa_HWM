@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/crc32.obj
 #@   ../src/crc32.c
-#@  compiled at Fri Feb 25 09:28:32 2022
+#@  compiled at Wed Apr 20 11:24:59 2022
 
 	.PUBLIC _crc32_table
 	.PUBLIC _xcrc32

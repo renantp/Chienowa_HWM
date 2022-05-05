@@ -15,14 +15,15 @@
 #@   -pass_source
 #@   -o src/interrupt_handle.obj
 #@   ../src/interrupt_handle.c
-#@  compiled at Wed Apr 06 08:38:59 2022
+#@  compiled at Thu May 05 15:52:55 2022
 
 	.EXTERN _g_test_control
-	.EXTERN _rx_count
 	.EXTERN _g_io_status
+	.EXTERN _g_Tick
 	.EXTERN _g_machine_state
 	.EXTERN _g_commnunication_flag
 	.EXTERN _g_machine_mode
+	.EXTERN _g_systemTime
 	.EXTERN _g_uart2_fault
 	.EXTERN _g_uart2_receive
 	.EXTERN _g_rx_data
@@ -145,460 +146,510 @@ _adc_int_handle:
 	;***       35 : 		default:
 	;***       36 : 			break;
 	;***       37 : 	}
-	;***       38 : 	R_ADC_Start();
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 38
+	;***       38 : 
+	;***       39 : 	R_ADC_Start();
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 39
 	br !!_R_ADC_Start
 _Raspberry_uart2_handle:
 	.STACK _Raspberry_uart2_handle = 4
-	;***       39 : }
-	;***       40 : /*!
-	;***       41 :  * Use in uart2 interrupt function
-	;***       42 :  */
-	;***       43 : void Raspberry_uart2_handle(void){
-	;***       44 : 	R_UART2_Receive(g_rx_data, 6);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 44
+	;***       40 : }
+	;***       41 : /*!
+	;***       42 :  * Use in uart2 interrupt function
+	;***       43 :  */
+	;***       44 : void Raspberry_uart2_handle(void){
+	;***       45 : 	g_Tick.tickUartTimeout = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 45
+	movw ax, !LOWW(_g_systemTime+0x00002)
+	movw !LOWW(_g_Tick+0x000BA), ax
+	movw ax, !LOWW(_g_systemTime)
+	movw !LOWW(_g_Tick+0x000B8), ax
+	;***       46 : 	R_UART2_Receive(g_rx_data, 6);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 46
 	movw bc, #0x0006
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
-	;***       45 : 	g_commnunication_flag.recived_time_setting_flag =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 45
+	;***       47 : 	g_commnunication_flag.recived_time_setting_flag =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 47
 	cmp !LOWW(_g_commnunication_flag+0x00004), #0x01
 	mov a, #0x02
 	skz
-.BB@LABEL@2_1:	; bb5
+.BB@LABEL@2_1:	; bb6
 	mov a, !LOWW(_g_commnunication_flag+0x00004)
-.BB@LABEL@2_2:	; bb8
+.BB@LABEL@2_2:	; bb9
 	mov !LOWW(_g_commnunication_flag+0x00004), a
-	;***       46 : 			g_commnunication_flag.recived_time_setting_flag == 1 ?
-	;***       47 : 					2 : g_commnunication_flag.recived_time_setting_flag;
-	;***       48 : 	g_commnunication_flag.recived_number_setting_flag =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 48
+	;***       48 : 			g_commnunication_flag.recived_time_setting_flag == 1 ?
+	;***       49 : 					2 : g_commnunication_flag.recived_time_setting_flag;
+	;***       50 : 	g_commnunication_flag.recived_number_setting_flag =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 50
 	cmp !LOWW(_g_commnunication_flag+0x00003), #0x01
 	mov a, #0x02
 	skz
-.BB@LABEL@2_3:	; bb16
+.BB@LABEL@2_3:	; bb17
 	mov a, !LOWW(_g_commnunication_flag+0x00003)
-.BB@LABEL@2_4:	; bb20
+.BB@LABEL@2_4:	; bb21
 	mov !LOWW(_g_commnunication_flag+0x00003), a
-	;***       49 : 			g_commnunication_flag.recived_number_setting_flag == 1 ?
-	;***       50 : 					2 : g_commnunication_flag.recived_number_setting_flag;
-	;***       51 : 	g_commnunication_flag.recieve_status_flag =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 51
-	cmp !LOWW(_g_commnunication_flag+0x00008), #0x01
+	;***       51 : 			g_commnunication_flag.recived_number_setting_flag == 1 ?
+	;***       52 : 					2 : g_commnunication_flag.recived_number_setting_flag;
+	;***       53 : 	g_commnunication_flag.recieve_status_flag =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 53
+	cmp !LOWW(_g_commnunication_flag+0x00009), #0x01
 	mov a, #0x02
 	skz
-.BB@LABEL@2_5:	; bb29
-	mov a, !LOWW(_g_commnunication_flag+0x00008)
-.BB@LABEL@2_6:	; bb33
-	mov !LOWW(_g_commnunication_flag+0x00008), a
-	;***       52 : 			g_commnunication_flag.recieve_status_flag == 1 ?
-	;***       53 : 					2 : g_commnunication_flag.recieve_status_flag;
-	;***       54 : 	if (isCommandNeedResponse(g_rx_data)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 54
+.BB@LABEL@2_5:	; bb31
+	mov a, !LOWW(_g_commnunication_flag+0x00009)
+.BB@LABEL@2_6:	; bb35
+	mov !LOWW(_g_commnunication_flag+0x00009), a
+	;***       54 : 			g_commnunication_flag.recieve_status_flag == 1 ?
+	;***       55 : 					2 : g_commnunication_flag.recieve_status_flag;
+	;***       56 : 	if (isCommandNeedResponse(g_rx_data)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 56
 	movw ax, #LOWW(_g_rx_data)
 	call $!_isCommandNeedResponse
 	cmp0 a
-	.bz $!.BB@LABEL@2_75
-.BB@LABEL@2_7:	; bb41
+	.bz $!.BB@LABEL@2_82
+.BB@LABEL@2_7:	; bb43
 	cmp0 !LOWW(_g_commnunication_flag+0x00004)
 	bnz $.BB@LABEL@2_10
-.BB@LABEL@2_8:	; bb53
+.BB@LABEL@2_8:	; bb55
 	cmp0 !LOWW(_g_commnunication_flag+0x00003)
 	sknz
-.BB@LABEL@2_9:	; bb65
-	cmp0 !LOWW(_g_commnunication_flag+0x00008)
-.BB@LABEL@2_10:	; bb65
-	.bnz $!.BB@LABEL@2_75
+.BB@LABEL@2_9:	; bb67
+	cmp0 !LOWW(_g_commnunication_flag+0x00009)
+.BB@LABEL@2_10:	; bb67
+	.bnz $!.BB@LABEL@2_82
 .BB@LABEL@2_11:	; if_then_bb
-	;***       55 : 			&& g_commnunication_flag.recived_time_setting_flag == 0
-	;***       56 : 			&& g_commnunication_flag.recived_number_setting_flag == 0
-	;***       57 : 			&& g_commnunication_flag.recieve_status_flag == 0) {
-	;***       58 : 
-	;***       59 : 		if(g_rx_data[0] == H_READ){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 59
+	;***       57 : 			&& g_commnunication_flag.recived_time_setting_flag == 0
+	;***       58 : 			&& g_commnunication_flag.recived_number_setting_flag == 0
+	;***       59 : 			&& g_commnunication_flag.recieve_status_flag == 0) {
+	;***       60 : 		if(g_rx_data[0] == H_READ){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 60
 	mov a, !LOWW(_g_rx_data)
 	cmp a, #0x52
-	bnz $.BB@LABEL@2_33
-.BB@LABEL@2_12:	; if_then_bb83
-	;***       60 : 			switch (g_rx_data[1]) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 60
+	bnz $.BB@LABEL@2_35
+.BB@LABEL@2_12:	; if_then_bb86
+	;***       61 : 			switch (g_rx_data[1]) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 61
 	mov a, !LOWW(_g_rx_data+0x00001)
 	add a, #0xFE
-	bz $.BB@LABEL@2_23
-.BB@LABEL@2_13:	; if_then_bb83
-	dec a
 	bz $.BB@LABEL@2_25
-.BB@LABEL@2_14:	; if_then_bb83
-	add a, #0xEC
-	bz $.BB@LABEL@2_24
-.BB@LABEL@2_15:	; if_then_bb83
+.BB@LABEL@2_13:	; if_then_bb86
 	dec a
-	bz $.BB@LABEL@2_26
-.BB@LABEL@2_16:	; if_then_bb83
-	add a, #0xFB
 	bz $.BB@LABEL@2_27
-.BB@LABEL@2_17:	; if_then_bb83
-	add a, #0xF6
+.BB@LABEL@2_14:	; if_then_bb86
+	add a, #0xF0
+	bz $.BB@LABEL@2_24
+.BB@LABEL@2_15:	; if_then_bb86
+	add a, #0xFC
+	bz $.BB@LABEL@2_26
+.BB@LABEL@2_16:	; if_then_bb86
+	dec a
 	bz $.BB@LABEL@2_28
-.BB@LABEL@2_18:	; if_then_bb83
+.BB@LABEL@2_17:	; if_then_bb86
+	add a, #0xFB
+	bz $.BB@LABEL@2_29
+.BB@LABEL@2_18:	; if_then_bb86
+	add a, #0xF6
+	bz $.BB@LABEL@2_30
+.BB@LABEL@2_19:	; if_then_bb86
+	dec a
+	bz $.BB@LABEL@2_33
+.BB@LABEL@2_20:	; if_then_bb86
 	dec a
 	bz $.BB@LABEL@2_31
-.BB@LABEL@2_19:	; if_then_bb83
+.BB@LABEL@2_21:	; if_then_bb86
 	dec a
-	bz $.BB@LABEL@2_29
-.BB@LABEL@2_20:	; if_then_bb83
-	dec a
-	bz $.BB@LABEL@2_30
-.BB@LABEL@2_21:	; if_then_bb83
+	bz $.BB@LABEL@2_32
+.BB@LABEL@2_22:	; if_then_bb86
 	cmp a, #0x02
-	bnz $.BB@LABEL@2_32
-.BB@LABEL@2_22:	; switch_clause_bb95
-	;***       61 : 				case READ_TIME:
-	;***       62 : 					g_commnunication_flag.send_response_time_flag = 1;
-	;***       63 : 					break;
-	;***       64 : 				case MACHINE_IO_DATA:
-	;***       65 : 					g_commnunication_flag.send_response_status_flag = 1;
-	;***       66 : 					break;
-	;***       67 : 				case READ_NUMBER:
-	;***       68 : 					g_commnunication_flag.send_response_number_flag = 1;
-	;***       69 : 					break;
-	;***       70 : 				case WASHING_MODE:
-	;***       71 : 					g_commnunication_flag.send_response_mode_flag = 1;
-	;***       72 : 					break;
-	;***       73 : 				case MID_NIGHT:
-	;***       74 : 					g_machine_state.isMidNight = g_rx_data[5];
-	;***       75 : 					break;
-	;***       76 : 				case DRAINAGE_MODE_SET:
-	;***       77 : 					g_commnunication_flag.control_test_flag = DRAINAGE_MODE_SET;
+	bnz $.BB@LABEL@2_34
+.BB@LABEL@2_23:	; switch_clause_bb99
+	;***       62 : 				case NEXT_ANIMATION:
+	;***       63 : 					g_commnunication_flag.send_response_flag = 0;
+	;***       64 : 					g_commnunication_flag.next_animation_flag = 1;
+	;***       65 : 					break;
+	;***       66 : 				case READ_TIME:
+	;***       67 : 					g_commnunication_flag.send_response_time_flag = 1;
+	;***       68 : 					break;
+	;***       69 : 				case MACHINE_IO_DATA:
+	;***       70 : 					g_commnunication_flag.send_response_status_flag = 1;
+	;***       71 : 					break;
+	;***       72 : 				case READ_NUMBER:
+	;***       73 : 					g_commnunication_flag.send_response_number_flag = 1;
+	;***       74 : 					break;
+	;***       75 : 				case WASHING_MODE:
+	;***       76 : 					g_commnunication_flag.send_response_mode_flag = 1;
+	;***       77 : 					g_commnunication_flag.send_response_flag = 0;
 	;***       78 : 					break;
-	;***       79 : 				case POWER_ON_TEST_SET:
-	;***       80 : 					g_commnunication_flag.control_test_flag = POWER_ON_TEST_SET;
+	;***       79 : 				case MID_NIGHT:
+	;***       80 : 					g_machine_state.isMidNight = g_rx_data[5];
 	;***       81 : 					break;
-	;***       82 : 				case WATER_FILTER_SET:
-	;***       83 : 					g_commnunication_flag.control_test_flag = WATER_FILTER_SET;
+	;***       82 : 				case DRAINAGE_MODE_SET:
+	;***       83 : 					g_commnunication_flag.control_test_flag = DRAINAGE_MODE_SET;
 	;***       84 : 					break;
-	;***       85 : 				case BIOMECTRIC_SET:
-	;***       86 : 					g_commnunication_flag.control_test_flag = BIOMECTRIC_SET;
+	;***       85 : 				case POWER_ON_TEST_SET:
+	;***       86 : 					g_commnunication_flag.control_test_flag = POWER_ON_TEST_SET;
 	;***       87 : 					break;
-	;***       88 : 				case CONTROL_SETTING:
-	;***       89 : 					g_commnunication_flag.control_test_flag = CONTROL_SETTING;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 89
-	mov !LOWW(_g_commnunication_flag+0x0000F), #0x2C
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_23:	; switch_clause_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 62
+	;***       88 : 				case WATER_FILTER_SET:
+	;***       89 : 					g_commnunication_flag.control_test_flag = WATER_FILTER_SET;
+	;***       90 : 					break;
+	;***       91 : 				case BIOMECTRIC_SET:
+	;***       92 : 					g_commnunication_flag.control_test_flag = BIOMECTRIC_SET;
+	;***       93 : 					break;
+	;***       94 : 				case CONTROL_SETTING:
+	;***       95 : 					g_commnunication_flag.control_test_flag = CONTROL_SETTING;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 95
+	mov !LOWW(_g_commnunication_flag+0x00012), #0x2C
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_24:	; switch_clause_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 63
+	clrb !LOWW(_g_commnunication_flag)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 64
+	oneb !LOWW(_g_commnunication_flag+0x0000B)
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_25:	; switch_clause_bb89
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 67
 	oneb !LOWW(_g_commnunication_flag+0x00001)
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_24:	; switch_clause_bb86
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 65
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_26:	; switch_clause_bb90
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 70
 	oneb !LOWW(_g_commnunication_flag+0x00005)
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_25:	; switch_clause_bb87
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 68
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_27:	; switch_clause_bb91
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 73
 	oneb !LOWW(_g_commnunication_flag+0x00002)
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_26:	; switch_clause_bb88
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 71
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_28:	; switch_clause_bb92
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 76
 	oneb !LOWW(_g_commnunication_flag+0x00006)
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_27:	; switch_clause_bb89
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 74
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 77
+	clrb !LOWW(_g_commnunication_flag)
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_29:	; switch_clause_bb93
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 80
 	mov a, !LOWW(_g_rx_data+0x00005)
 	mov !LOWW(_g_machine_state+0x0000A), a
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_28:	; switch_clause_bb91
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 77
-	mov !LOWW(_g_commnunication_flag+0x0000F), #0x27
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_29:	; switch_clause_bb92
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 80
-	mov !LOWW(_g_commnunication_flag+0x0000F), #0x29
-	br $.BB@LABEL@2_32
-.BB@LABEL@2_30:	; switch_clause_bb93
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_30:	; switch_clause_bb95
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 83
-	mov !LOWW(_g_commnunication_flag+0x0000F), #0x2A
-	br $.BB@LABEL@2_51
-.BB@LABEL@2_31:	; switch_clause_bb94
+	mov !LOWW(_g_commnunication_flag+0x00012), #0x27
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_31:	; switch_clause_bb96
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 86
-	mov !LOWW(_g_commnunication_flag+0x0000F), #0x28
-.BB@LABEL@2_32:	; switch_clause_bb94
-	br $.BB@LABEL@2_51
-.BB@LABEL@2_33:	; if_else_bb
-	;***       90 : 					break;
-	;***       91 : 				default:
-	;***       92 : 					break;
-	;***       93 : 			}
-	;***       94 : 		}else if(g_rx_data[0] == H_SET){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 94
-	cmp a, #0x53
-	.bnz $!.BB@LABEL@2_72
-.BB@LABEL@2_34:	; if_then_bb102
-	;***       95 : 			switch (g_rx_data[1]) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 95
-	mov a, !LOWW(_g_rx_data+0x00001)
-	dec a
-	.bz $!.BB@LABEL@2_62
-.BB@LABEL@2_35:	; if_then_bb102
-	add a, #0xED
-	bz $.BB@LABEL@2_52
-.BB@LABEL@2_36:	; if_then_bb102
-	dec a
-	bz $.BB@LABEL@2_53
-.BB@LABEL@2_37:	; if_then_bb102
-	add a, #0xFD
-	.bz $!.BB@LABEL@2_61
-.BB@LABEL@2_38:	; if_then_bb102
-	add a, #0xFE
+	mov !LOWW(_g_commnunication_flag+0x00012), #0x29
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_32:	; switch_clause_bb97
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 89
+	mov !LOWW(_g_commnunication_flag+0x00012), #0x2A
+	br $.BB@LABEL@2_34
+.BB@LABEL@2_33:	; switch_clause_bb98
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 92
+	mov !LOWW(_g_commnunication_flag+0x00012), #0x28
+.BB@LABEL@2_34:	; switch_break_bb
+	;***       96 : 					break;
+	;***       97 : 				default:
+	;***       98 : 					break;
+	;***       99 : 			}
+	;***      100 : 			if(g_commnunication_flag.control_test_flag != 0){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 100
+	cmp0 !LOWW(_g_commnunication_flag+0x00012)
 	bz $.BB@LABEL@2_54
-.BB@LABEL@2_39:	; if_then_bb102
-	add a, #0xFE
+	br $!.BB@LABEL@2_77
+.BB@LABEL@2_35:	; if_else_bb
+	;***      101 : 				g_commnunication_flag.send_response_flag = 0;
+	;***      102 : 			}
+	;***      103 : 		}else if(g_rx_data[0] == H_SET){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 103
+	cmp a, #0x53
+	.bnz $!.BB@LABEL@2_79
+.BB@LABEL@2_36:	; if_then_bb112
+	;***      104 : 			switch (g_rx_data[1]) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 104
+	mov a, !LOWW(_g_rx_data+0x00001)
+	cmp0 a
 	bz $.BB@LABEL@2_55
-.BB@LABEL@2_40:	; if_then_bb102
-	add a, #0xFE
-	bz $.BB@LABEL@2_56
-.BB@LABEL@2_41:	; if_then_bb102
-	dec a
-	bz $.BB@LABEL@2_57
-.BB@LABEL@2_42:	; if_then_bb102
-	dec a
-	bz $.BB@LABEL@2_58
-.BB@LABEL@2_43:	; if_then_bb102
-	dec a
-	bz $.BB@LABEL@2_59
-.BB@LABEL@2_44:	; if_then_bb102
-	dec a
-	bz $.BB@LABEL@2_60
-.BB@LABEL@2_45:	; if_then_bb102
-	add a, #0xFB
-	.bz $!.BB@LABEL@2_64
-.BB@LABEL@2_46:	; if_then_bb102
-	dec a
-	.bz $!.BB@LABEL@2_70
-.BB@LABEL@2_47:	; if_then_bb102
+.BB@LABEL@2_37:	; if_then_bb112
 	dec a
 	.bz $!.BB@LABEL@2_66
-.BB@LABEL@2_48:	; if_then_bb102
+.BB@LABEL@2_38:	; if_then_bb112
+	add a, #0xEE
+	bz $.BB@LABEL@2_58
+.BB@LABEL@2_39:	; if_then_bb112
 	dec a
+	bz $.BB@LABEL@2_56
+.BB@LABEL@2_40:	; if_then_bb112
+	dec a
+	bz $.BB@LABEL@2_57
+.BB@LABEL@2_41:	; if_then_bb112
+	add a, #0xFD
+	.bz $!.BB@LABEL@2_65
+.BB@LABEL@2_42:	; if_then_bb112
+	add a, #0xFE
+	.bz $!.BB@LABEL@2_76
+.BB@LABEL@2_43:	; if_then_bb112
+	add a, #0xFE
+	bz $.BB@LABEL@2_59
+.BB@LABEL@2_44:	; if_then_bb112
+	add a, #0xFE
+	bz $.BB@LABEL@2_60
+.BB@LABEL@2_45:	; if_then_bb112
+	dec a
+	bz $.BB@LABEL@2_61
+.BB@LABEL@2_46:	; if_then_bb112
+	dec a
+	bz $.BB@LABEL@2_62
+.BB@LABEL@2_47:	; if_then_bb112
+	dec a
+	bz $.BB@LABEL@2_63
+.BB@LABEL@2_48:	; if_then_bb112
+	dec a
+	bz $.BB@LABEL@2_64
+.BB@LABEL@2_49:	; if_then_bb112
+	add a, #0xFB
 	.bz $!.BB@LABEL@2_68
-.BB@LABEL@2_49:	; if_then_bb102
+.BB@LABEL@2_50:	; if_then_bb112
 	dec a
-	bnz $.BB@LABEL@2_63
-.BB@LABEL@2_50:	; switch_clause_bb154
-	;***       96 : 				case SAVE_TIME:
-	;***       97 : 					R_UART2_Receive(g_rx_data, timeSettingSize);
-	;***       98 : 					g_commnunication_flag.recived_time_setting_flag = 1;
-	;***       99 : 					break;
-	;***      100 : 				case SAVE_NUMBER:
-	;***      101 : 					R_UART2_Receive(g_rx_data, numberSettingSize);
-	;***      102 : 					g_commnunication_flag.recived_number_setting_flag = 1;
-	;***      103 : 					break;
-	;***      104 : 				case NEXT_ANIMATION:
-	;***      105 : 
-	;***      106 : 					break;
-	;***      107 : 				case TESTING_MODE_START:
-	;***      108 : 					rx_count++;
-	;***      109 : 					g_commnunication_flag.test_flag = TESTING_MODE_START;
-	;***      110 : 					break;
-	;***      111 : 				case TESTING_MODE_STOP:
-	;***      112 : 					g_commnunication_flag.test_flag = TESTING_MODE_STOP;
-	;***      113 : 					break;
-	;***      114 : 				case TEST_POWER_ON:
-	;***      115 : 					g_commnunication_flag.test_flag = TEST_POWER_ON;
-	;***      116 : 					break;
-	;***      117 : 				case TEST_FLOW_RATE:
-	;***      118 : 					g_commnunication_flag.test_flag = TEST_FLOW_RATE;
-	;***      119 : 					break;
-	;***      120 : 				case TEST_CURRENT:
-	;***      121 : 					g_commnunication_flag.test_flag = TEST_CURRENT;
-	;***      122 : 					break;
-	;***      123 : 				case TEST_INDIVIDUAL:
-	;***      124 : 					g_commnunication_flag.test_flag = TEST_INDIVIDUAL;
-	;***      125 : 					g_commnunication_flag.recieve_status_flag = 1;
-	;***      126 : 					R_UART2_Receive(g_rx_data, 4);
-	;***      127 : 					break;
-	;***      128 : 				case TEST_ELECTROLYTIC:
-	;***      129 : 					g_commnunication_flag.test_flag = TEST_ELECTROLYTIC;
-	;***      130 : 					break;
-	;***      131 : 				case WASHING_MODE:
-	;***      132 : 					g_machine_mode = g_rx_data[5];
-	;***      133 : 					break;
-	;***      134 : 				case OK_USER:
-	;***      135 : 					g_machine_state.user = 2;
-	;***      136 : 					break;
-	;***      137 : 				case DRAINAGE_MODE_SET:
-	;***      138 : 					g_commnunication_flag.control_test_save_flag = 1;
-	;***      139 : 					g_test_control.raw.drain = g_rx_data[5];
-	;***      140 : 					break;
-	;***      141 : 				case POWER_ON_TEST_SET:
-	;***      142 : 					g_commnunication_flag.control_test_save_flag = 1;
-	;***      143 : 					g_test_control.raw.power_on = g_rx_data[5];
-	;***      144 : 					break;
-	;***      145 : 				case WATER_FILTER_SET:
-	;***      146 : 					g_commnunication_flag.control_test_save_flag = 1;
-	;***      147 : 					g_test_control.raw.filter = g_rx_data[5];
-	;***      148 : 					break;
-	;***      149 : 				case BIOMECTRIC_SET:
-	;***      150 : 					g_commnunication_flag.control_test_save_flag = 1;
-	;***      151 : 					g_test_control.raw.biomectric = g_rx_data[5];
-	;***      152 : 					break;
-	;***      153 : 				case START_WASHING:
-	;***      154 : 					g_commnunication_flag.send_response_flag = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 154
+	.bz $!.BB@LABEL@2_74
+.BB@LABEL@2_51:	; if_then_bb112
+	dec a
+	.bz $!.BB@LABEL@2_70
+.BB@LABEL@2_52:	; if_then_bb112
+	dec a
+	.bz $!.BB@LABEL@2_72
+.BB@LABEL@2_53:	; if_then_bb112
+	dec a
+	.bz $!.BB@LABEL@2_77
+.BB@LABEL@2_54:	; if_then_bb112
+	br $.BB@LABEL@2_67
+.BB@LABEL@2_55:	; switch_clause_bb115
+	;***      105 : 				case OK_ALL:
+	;***      106 : 					g_commnunication_flag.send_response_flag = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 106
 	clrb !LOWW(_g_commnunication_flag)
-.BB@LABEL@2_51:	; switch_clause_bb154
-	br $.BB@LABEL@2_65
-.BB@LABEL@2_52:	; switch_clause_bb105
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 97
+	;***      107 : 					g_commnunication_flag.save_confirm_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 107
+	oneb !LOWW(_g_commnunication_flag+0x0000C)
+	br $.BB@LABEL@2_69
+.BB@LABEL@2_56:	; switch_clause_bb116
+	;***      108 : 					break;
+	;***      109 : 				case SAVE_TIME:
+	;***      110 : 					R_UART2_Receive(g_rx_data, timeSettingSize);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 110
 	movw bc, #0x0095
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 98
+	;***      111 : 					g_commnunication_flag.recived_time_setting_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 111
 	oneb !LOWW(_g_commnunication_flag+0x00004)
-	br $.BB@LABEL@2_67
-.BB@LABEL@2_53:	; switch_clause_bb109
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 101
+	br $.BB@LABEL@2_71
+.BB@LABEL@2_57:	; switch_clause_bb120
+	;***      112 : 					break;
+	;***      113 : 				case SAVE_NUMBER:
+	;***      114 : 					R_UART2_Receive(g_rx_data, numberSettingSize);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 114
 	movw bc, #0x0029
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 102
-	oneb !LOWW(_g_commnunication_flag+0x00003)
-	br $.BB@LABEL@2_69
-.BB@LABEL@2_54:	; switch_clause_bb114
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 108
-	inc !LOWW(_rx_count)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 109
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x1A
-	br $.BB@LABEL@2_69
-.BB@LABEL@2_55:	; switch_clause_bb117
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 112
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x1C
-	br $.BB@LABEL@2_71
-.BB@LABEL@2_56:	; switch_clause_bb118
+	;***      115 : 					g_commnunication_flag.recived_number_setting_flag = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 115
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x1E
-	br $.BB@LABEL@2_71
-.BB@LABEL@2_57:	; switch_clause_bb119
+	oneb !LOWW(_g_commnunication_flag+0x00003)
+	br $.BB@LABEL@2_73
+.BB@LABEL@2_58:	; switch_clause_bb124
+	;***      116 : 					break;
+	;***      117 : 				case NEXT_ANIMATION:
+	;***      118 : 					g_commnunication_flag.send_response_flag = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 118
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x1F
-	br $.BB@LABEL@2_74
-.BB@LABEL@2_58:	; switch_clause_bb120
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 121
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x20
-	br $.BB@LABEL@2_74
-.BB@LABEL@2_59:	; switch_clause_bb121
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 124
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x21
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 125
-	oneb !LOWW(_g_commnunication_flag+0x00008)
+	clrb !LOWW(_g_commnunication_flag)
+	;***      119 : 					g_commnunication_flag.next_animation_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 119
+	oneb !LOWW(_g_commnunication_flag+0x0000B)
+	br $.BB@LABEL@2_73
+.BB@LABEL@2_59:	; switch_clause_bb126
+	;***      120 : 					break;
+	;***      121 : 				case TESTING_MODE_START:
+	;***      122 : 					g_commnunication_flag.test_flag = TESTING_MODE_START;
+	;***      123 : 					g_commnunication_flag.send_response_flag = 0;
+	;***      124 : 					break;
+	;***      125 : 				case TESTING_MODE_STOP:
+	;***      126 : 					g_commnunication_flag.test_flag = TESTING_MODE_STOP;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 126
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x1C
+	br $.BB@LABEL@2_75
+.BB@LABEL@2_60:	; switch_clause_bb127
+	;***      127 : 					break;
+	;***      128 : 				case TEST_POWER_ON:
+	;***      129 : 					g_commnunication_flag.test_flag = TEST_POWER_ON;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 129
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x1E
+	br $.BB@LABEL@2_75
+.BB@LABEL@2_61:	; switch_clause_bb128
+	;***      130 : 					break;
+	;***      131 : 				case TEST_FLOW_RATE:
+	;***      132 : 					g_commnunication_flag.test_flag = TEST_FLOW_RATE;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 132
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x1F
+	br $.BB@LABEL@2_78
+.BB@LABEL@2_62:	; switch_clause_bb129
+	;***      133 : 					break;
+	;***      134 : 				case TEST_CURRENT:
+	;***      135 : 					g_commnunication_flag.test_flag = TEST_CURRENT;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 135
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x20
+	br $.BB@LABEL@2_78
+.BB@LABEL@2_63:	; switch_clause_bb130
+	;***      136 : 					break;
+	;***      137 : 				case TEST_INDIVIDUAL:
+	;***      138 : 					g_commnunication_flag.test_flag = TEST_INDIVIDUAL;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 138
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x21
+	;***      139 : 					g_commnunication_flag.recieve_status_flag = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 139
+	oneb !LOWW(_g_commnunication_flag+0x00009)
+	;***      140 : 					R_UART2_Receive(g_rx_data, 4);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 140
 	movw bc, #0x0004
 	movw ax, #LOWW(_g_rx_data)
 	call !!_R_UART2_Receive
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_60:	; switch_clause_bb123
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 129
-	mov !LOWW(_g_commnunication_flag+0x00009), #0x22
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_61:	; switch_clause_bb124
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 132
+	br $.BB@LABEL@2_81
+.BB@LABEL@2_64:	; switch_clause_bb132
+	;***      141 : 					break;
+	;***      142 : 				case TEST_ELECTROLYTIC:
+	;***      143 : 					g_commnunication_flag.test_flag = TEST_ELECTROLYTIC;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 143
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x22
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_65:	; switch_clause_bb133
+	;***      144 : 					break;
+	;***      145 : 				case WASHING_MODE:
+	;***      146 : 					g_machine_mode = g_rx_data[5];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 146
 	mov a, !LOWW(_g_rx_data+0x00005)
 	mov !LOWW(_g_machine_mode), a
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_62:	; switch_clause_bb126
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 135
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_66:	; switch_clause_bb135
+	;***      147 : 					break;
+	;***      148 : 				case OK_USER:
+	;***      149 : 					g_machine_state.user = 2;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 149
 	mov !LOWW(_g_machine_state+0x0000D), #0x02
-.BB@LABEL@2_63:	; switch_clause_bb126
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_64:	; switch_clause_bb127
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 139
+.BB@LABEL@2_67:	; switch_clause_bb135
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_68:	; switch_clause_bb136
+	;***      150 : 					break;
+	;***      151 : 				case DRAINAGE_MODE_SET:
+	;***      152 : 					g_commnunication_flag.control_test_save_flag = 1;
+	;***      153 : 					g_test_control.raw.drain = g_rx_data[5];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 153
 	movw hl, #LOWW(_g_rx_data+0x00005)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 138
-	oneb !LOWW(_g_commnunication_flag+0x00010)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 139
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 152
+	oneb !LOWW(_g_commnunication_flag+0x00013)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 153
 	mov1 CY, [hl].0
 	movw hl, #LOWW(_g_test_control)
 	mov1 [hl].0, CY
-.BB@LABEL@2_65:	; switch_clause_bb127
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_66:	; switch_clause_bb133
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 143
+.BB@LABEL@2_69:	; switch_clause_bb136
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_70:	; switch_clause_bb142
+	;***      154 : 					break;
+	;***      155 : 				case POWER_ON_TEST_SET:
+	;***      156 : 					g_commnunication_flag.control_test_save_flag = 1;
+	;***      157 : 					g_test_control.raw.power_on = g_rx_data[5];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 157
 	movw hl, #LOWW(_g_rx_data+0x00005)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 142
-	oneb !LOWW(_g_commnunication_flag+0x00010)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 143
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 156
+	oneb !LOWW(_g_commnunication_flag+0x00013)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 157
 	mov1 CY, [hl].0
 	movw hl, #LOWW(_g_test_control)
 	mov1 [hl].1, CY
-.BB@LABEL@2_67:	; switch_clause_bb133
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_68:	; switch_clause_bb140
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 147
+.BB@LABEL@2_71:	; switch_clause_bb142
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_72:	; switch_clause_bb149
+	;***      158 : 					break;
+	;***      159 : 				case WATER_FILTER_SET:
+	;***      160 : 					g_commnunication_flag.control_test_save_flag = 1;
+	;***      161 : 					g_test_control.raw.filter = g_rx_data[5];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 161
 	movw hl, #LOWW(_g_rx_data+0x00005)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 146
-	oneb !LOWW(_g_commnunication_flag+0x00010)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 147
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 160
+	oneb !LOWW(_g_commnunication_flag+0x00013)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 161
 	mov1 CY, [hl].0
 	movw hl, #LOWW(_g_test_control)
 	mov1 [hl].2, CY
-.BB@LABEL@2_69:	; switch_clause_bb140
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_70:	; switch_clause_bb147
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 151
+.BB@LABEL@2_73:	; switch_clause_bb149
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_74:	; switch_clause_bb156
+	;***      162 : 					break;
+	;***      163 : 				case BIOMECTRIC_SET:
+	;***      164 : 					g_commnunication_flag.control_test_save_flag = 1;
+	;***      165 : 					g_test_control.raw.biomectric = g_rx_data[5];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 165
 	movw hl, #LOWW(_g_rx_data+0x00005)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 150
-	oneb !LOWW(_g_commnunication_flag+0x00010)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 151
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 164
+	oneb !LOWW(_g_commnunication_flag+0x00013)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 165
 	mov1 CY, [hl].0
 	movw hl, #LOWW(_g_test_control)
 	mov1 [hl].3, CY
-.BB@LABEL@2_71:	; switch_clause_bb147
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_72:	; if_else_bb157
-	;***      155 : 					break;
-	;***      156 : 				default:
-	;***      157 : 					break;
-	;***      158 : 			}
-	;***      159 : 		}else if ((g_rx_data[0] == H_CLEAR)){
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 159
+.BB@LABEL@2_75:	; switch_clause_bb156
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_76:	; switch_clause_bb125
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 122
+	mov !LOWW(_g_commnunication_flag+0x0000A), #0x1A
+.BB@LABEL@2_77:	; switch_clause_bb163
+	clrb !LOWW(_g_commnunication_flag)
+.BB@LABEL@2_78:	; switch_clause_bb163
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_79:	; if_else_bb166
+	;***      166 : 					break;
+	;***      167 : 				case START_WASHING:
+	;***      168 : 					g_commnunication_flag.send_response_flag = 0;
+	;***      169 : 					break;
+	;***      170 : 				default:
+	;***      171 : 					break;
+	;***      172 : 			}
+	;***      173 : 		}else if ((g_rx_data[0] == H_CLEAR)){
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 173
 	cmp a, #0x43
-	bnz $.BB@LABEL@2_78
-.BB@LABEL@2_73:	; if_then_bb163
-	;***      160 : 			g_commnunication_flag.alarm_clear_flag = g_rx_data[1];
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 160
+	bnz $.BB@LABEL@2_85
+.BB@LABEL@2_80:	; if_then_bb172
+	;***      174 : 			g_commnunication_flag.alarm_clear_flag = g_rx_data[1];
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 174
 	mov a, !LOWW(_g_rx_data+0x00001)
 	mov !LOWW(_g_commnunication_flag+0x00007), a
-.BB@LABEL@2_74:	; if_then_bb163
-	br $.BB@LABEL@2_78
-.BB@LABEL@2_75:	; if_else_bb167
-	;***      161 : 		}
-	;***      162 : 	} else if (g_commnunication_flag.recived_time_setting_flag != 0
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 162
+.BB@LABEL@2_81:	; if_then_bb172
+	br $.BB@LABEL@2_85
+.BB@LABEL@2_82:	; if_else_bb177
+	;***      175 : 		}
+	;***      176 : 	} else if (g_commnunication_flag.recived_time_setting_flag != 0
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 176
 	cmp0 !LOWW(_g_commnunication_flag+0x00004)
-	bnz $.BB@LABEL@2_78
-.BB@LABEL@2_76:	; bb172
+	bnz $.BB@LABEL@2_85
+.BB@LABEL@2_83:	; bb182
 	cmp0 !LOWW(_g_commnunication_flag+0x00003)
 	sknz
-.BB@LABEL@2_77:	; if_else_bb186
-	;***      163 : 			|| g_commnunication_flag.recived_number_setting_flag != 0) {
-	;***      164 : //		R_UART2_Receive(g_rx_data, 6);
-	;***      165 : 	} else {
-	;***      166 : 		g_uart2_fault = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 166
+.BB@LABEL@2_84:	; if_else_bb196
+	;***      177 : 			|| g_commnunication_flag.recived_number_setting_flag != 0) {
+	;***      178 : //		R_UART2_Receive(g_rx_data, 6);
+	;***      179 : 	} else {
+	;***      180 : 		g_uart2_fault = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 180
 	oneb !LOWW(_g_uart2_fault)
-.BB@LABEL@2_78:	; if_break_bb188
-	;***      167 : 	}
-	;***      168 : 	g_uart2_receive++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 168
+.BB@LABEL@2_85:	; if_break_bb198
+	;***      181 : 	}
+	;***      182 : 	g_uart2_receive++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 182
 	inc !LOWW(_g_uart2_receive)
 	ret
 _isCommandNeedResponse:
 	.STACK _isCommandNeedResponse = 4
-	;***      169 : }
-	;***      170 : uint8_t isCommandNeedResponse(uint8_t *data) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 170
+	;***      183 : 
+	;***      184 : }
+	;***      185 : uint8_t isCommandNeedResponse(uint8_t *data) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 185
 	movw de, ax
-	;***      171 : 	if ((data[0] == H_SET) && (data[1] == NEXT_ANIMATION)) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 171
+	;***      186 : 	if ((data[0] == H_SET) && (data[1] == NEXT_ANIMATION)) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 186
 	mov a, [de]
 	mov x, a
 	cmp a, #0x53
@@ -609,10 +660,10 @@ _isCommandNeedResponse:
 	bz $.BB@LABEL@3_7
 .BB@LABEL@3_2:	; if_break_bb
 	mov a, x
-	;***      172 : 		return 0;
-	;***      173 : 	}
-	;***      174 : 	switch ((enum UART_header_e) *data) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 174
+	;***      187 : 		return 0;
+	;***      188 : 	}
+	;***      189 : 	switch ((enum UART_header_e) *data) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 189
 	add a, #0xBD
 	bz $.BB@LABEL@3_6
 .BB@LABEL@3_3:	; if_break_bb
@@ -627,29 +678,29 @@ _isCommandNeedResponse:
 .BB@LABEL@3_6:	; switch_clause_bb26
 	oneb !LOWW(_g_commnunication_flag)
 	oneb a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 194
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/interrupt_handle.c", 209
 	ret
 .BB@LABEL@3_7:	; bb30
-	;***      175 : //		case H_ALARM:
-	;***      176 : //			commnunication_flag.send_response_flag = 1;
-	;***      177 : //			break;
-	;***      178 : 	case H_CLEAR:
-	;***      179 : 		g_commnunication_flag.send_response_flag = 1;
-	;***      180 : 		break;
-	;***      181 : 	case H_ERROR:
-	;***      182 : 		g_commnunication_flag.send_response_flag = 1;
-	;***      183 : 		break;
-	;***      184 : 	case H_READ:
-	;***      185 : 		g_commnunication_flag.send_response_flag = 1;
-	;***      186 : 		break;
-	;***      187 : 	case H_SET:
-	;***      188 : 		g_commnunication_flag.send_response_flag = 1;
-	;***      189 : 		break;
-	;***      190 : 	default:
-	;***      191 : 		return 0;
-	;***      192 : 	}
-	;***      193 : 	return 1;
-	;***      194 : }
+	;***      190 : //		case H_ALARM:
+	;***      191 : //			commnunication_flag.send_response_flag = 1;
+	;***      192 : //			break;
+	;***      193 : 	case H_CLEAR:
+	;***      194 : 		g_commnunication_flag.send_response_flag = 1;
+	;***      195 : 		break;
+	;***      196 : 	case H_ERROR:
+	;***      197 : 		g_commnunication_flag.send_response_flag = 1;
+	;***      198 : 		break;
+	;***      199 : 	case H_READ:
+	;***      200 : 		g_commnunication_flag.send_response_flag = 1;
+	;***      201 : 		break;
+	;***      202 : 	case H_SET:
+	;***      203 : 		g_commnunication_flag.send_response_flag = 1;
+	;***      204 : 		break;
+	;***      205 : 	default:
+	;***      206 : 		return 0;
+	;***      207 : 	}
+	;***      208 : 	return 1;
+	;***      209 : }
 	clrb a
 	ret
 	.SECTION .bss,BSS

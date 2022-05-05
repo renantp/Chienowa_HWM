@@ -29,6 +29,7 @@ extern union Alarm_Flag_u{
 		uint8_t filter: 1;
 		uint8_t cvcc : 1;
 
+		uint8_t rsvd : 8;
 	}refined;
 }g_alarm;
 

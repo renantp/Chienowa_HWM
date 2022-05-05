@@ -23,7 +23,7 @@
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file includes user definition.
-* Creation Date: 30/11/2021
+* Creation Date: 19/04/2022
 ***********************************************************************************************************************/
 
 #ifndef _USER_DEF_H
@@ -103,6 +103,7 @@ extern uint8_t rx_count;
 #define I_OPTION_6_PIN	(P15_bit.no3)
 
 #define I_FLOW_PULSE_PIN	(P0_bit.no1)
+
 
 extern struct Timer_Setting_s{
 	uint32_t t1_initialWaterDrainageOperation_s;
@@ -248,6 +249,7 @@ extern struct Tick_s{
 	uint32_t tickAlkalineLevel[4];
 	uint32_t tickHandSensor[2];
 	uint32_t tickCustom[8]; //Use: 6,7 in Callan
+	uint32_t tickUartTimeout;
 }g_Tick;
 static struct Tick_Keeper_s{
 //	uint32_t SV1_ON_minutes;
@@ -265,10 +267,14 @@ enum Control_status{
 	CURRENT_ABNORMAL, OVER_CURRENT, SOLENOID_VALVE_ERROR,
 	SALT_WATER_FULL_ERROR, SALT_WATER_EMPTY_ERROR,
 	ACID_SKIP_ERROR, ALKALINE_SKIP_ERROR, WATER_FULL_ERROR, WATER_EMPTY_ERROR,
-	CVCC_ALARM, NEXT_ANIMATION,
+	CVCC_ALARM,
+	NEXT_ANIMATION = 0x13,
 	SAVE_TIME, SAVE_NUMBER, SAVE_ERROR,
-	MACHINE_IO_DATA, WASHING_MODE, GET_MODE,
-	TESTING_MODE_START, TESTING_DATA, TESTING_MODE_STOP, MID_NIGHT,
+	MACHINE_IO_DATA = 0x17,
+	WASHING_MODE = 0x18,
+	GET_MODE,
+	TESTING_MODE_START = 0x1a,
+	TESTING_DATA, TESTING_MODE_STOP, MID_NIGHT,
 	TEST_POWER_ON, TEST_FLOW_RATE, TEST_CURRENT, TEST_INDIVIDUAL, TEST_ELECTROLYTIC,
 	TEST_RUN_ADJUSTMENT,
 	FILTER_REPLACEMENT_E1, FILTER_REPLACEMENT_E2,
@@ -328,23 +334,38 @@ extern struct UART_Buffer_u32_s{
 	uint8_t set_number; // 1 byte
 	uint32_t set_value; // 4 byte
 }g_control_buffer_u32;
+extern struct UART_Buffer_i32_s{
+	uint8_t head; // 1 byte
+	uint8_t set_number; // 1 byte
+	int32_t set_value; // 4 byte
+}g_control_buffer_i32;
 enum UART_header_e{
 	 H_READ =	82, //0x52
-	 H_SET = 	83,
+	 H_SET = 	83, //0x53
 	 H_ALARM = 	65,
 	 H_ERROR = 	69,
 	 H_CLEAR = 	67
 };
 
 extern volatile struct Communicaition_flag_s{
-	volatile uint8_t send_response_flag, send_response_time_flag,
-	send_response_number_flag, recived_number_setting_flag,
-	recived_time_setting_flag, send_response_status_flag, send_response_mode_flag,
-	alarm_clear_flag, recieve_status_flag, test_flag;
+	volatile uint8_t send_response_flag,
+	send_response_time_flag,
+	send_response_number_flag,
+	recived_number_setting_flag,
+	recived_time_setting_flag,
+	send_response_status_flag,
+	send_response_mode_flag,
+	alarm_clear_flag,
+	alarm_response_flag,
+	recieve_status_flag,
+	test_flag,
+	next_animation_flag,
+	save_confirm_flag;
 	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
 	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
 	rs485_fault;
 	volatile uint8_t control_test_flag, control_test_save_flag;
+	uint8_t uart2_timeout_flag;
 }g_commnunication_flag;
 //static struct Timer_Setting_s _settingTime;
 //static struct Number_Setting_s _settingNumber;

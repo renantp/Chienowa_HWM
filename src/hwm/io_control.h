@@ -10,6 +10,8 @@
 
 #include "hwm_main.h"
 
+struct IO_Struct;
+
 float measureFlowSensor(uint32_t *t);
 float measureFlowSensor_nostop(void);
 
@@ -22,5 +24,7 @@ uint8_t isAlkalineTankFull(void);
 uint8_t isAlkalineTankAlmostFull(void);
 uint8_t isAlkalineTankHasSomething_nonstop(void);
 uint8_t isAlkalineTankEmpty_nonstop(void);
+
+void OutputIO(struct IO_Struct *io);
 
 #endif /* HWM_IO_CONTROL_H_ */

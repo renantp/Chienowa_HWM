@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial.obj
 #@   ../src/r_cg_serial.c
-#@  compiled at Wed Apr 06 08:39:05 2022
+#@  compiled at Thu May 05 10:01:40 2022
 
 	.PUBLIC _gp_uart1_tx_address
 	.PUBLIC _g_uart1_tx_count
@@ -100,7 +100,7 @@ _R_CSI01_Receive:
 	;***       23 : * Device(s)    : R5F104ML
 	;***       24 : * Tool-Chain   : CCRL
 	;***       25 : * Description  : This file implements device driver for Serial module.
-	;***       26 : * Creation Date: 30/11/2021
+	;***       26 : * Creation Date: 19/04/2022
 	;***       27 : ***********************************************************************************************************************/
 	;***       28 : 
 	;***       29 : /***********************************************************************************************************************

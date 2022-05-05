@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/crc8.obj
 00000000                       17  #@   ../src/crc8.c
-00000000                       18  #@  compiled at Fri Feb 25 09:28:33 2022
+00000000                       18  #@  compiled at Wed Apr 20 11:24:59 2022
 00000000                       19  
 00000000                       20  	.PUBLIC _crc8_4
 00000000                       21  	.PUBLIC _crc8_1

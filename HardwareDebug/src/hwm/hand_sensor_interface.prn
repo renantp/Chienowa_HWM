@@ -19,138 +19,170 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/hand_sensor_interface.obj
 00000000                       17  #@   ../src/hwm/hand_sensor_interface.c
-00000000                       18  #@  compiled at Wed Apr 06 08:39:08 2022
+00000000                       18  #@  compiled at Thu May 05 10:01:46 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_Tick
 00000000                       21  	.EXTERN _g_color
 00000000                       22  	.EXTERN _g_pre_color
-00000000                       23  	.PUBLIC _handSensorLED
-00000000                       24  	.PUBLIC _handSensorLEDBlink
-00000000                       25  	.EXTERN _ns_delay_ms
-00000000                       26  
-00000000                       27  	.SECTION .textf,TEXTF
-00000000                       28  _handSensorLED:
-00000000                       29  	.STACK _handSensorLED = 4
-00000000                       30  	;***        1 : /*
-00000000                       31  	;***        2 :  * hand_sensor_interface.c
-00000000                       32  	;***        3 :  *
-00000000                       33  	;***        4 :  *  Created on: 6 Jan 2022
-00000000                       34  	;***        5 :  *      Author: Hung
-00000000                       35  	;***        6 :  */
-00000000                       36  	;***        7 : 
-00000000                       37  	;***        8 : #include "hand_sensor_interface.h"
-00000000                       38  	;***        9 : 
-00000000                       39  	;***       10 : void handSensorLED(enum HS_COLOR color) {
-00000000                       40  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 10
-00000000 9F0000                41  	mov !LOWW(_g_color), a
-00000003                       42  	;***       11 : 	g_color = color;
-00000003                       43  	;***       12 : 	if (g_color != g_pre_color) {
-00000003                       44  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 12
-00000003 4F0000                45  	cmp a, !LOWW(_g_pre_color)
-00000006 61F8                  46  	sknz
-00000008                       47  .BB@LABEL@1_1:	; return
-00000008                       48  	;***       13 : 		switch (color) {
-00000008                       49  	;***       14 : 		case RED:
-00000008                       50  	;***       15 : 			O_HS_ICL_PIN = 1;
-00000008                       51  	;***       16 : 			O_HS_IDA_PIN = 0;
-00000008                       52  	;***       17 : 			break;
-00000008                       53  	;***       18 : 		case BLUE:
-00000008                       54  	;***       19 : 			O_HS_ICL_PIN = 0;
-00000008                       55  	;***       20 : 			O_HS_IDA_PIN = 0;
-00000008                       56  	;***       21 : 			break;
-00000008                       57  	;***       22 : 		case WHITE:
-00000008                       58  	;***       23 : 			O_HS_ICL_PIN = 0;
-00000008                       59  	;***       24 : 			O_HS_IDA_PIN = 1;
-00000008                       60  	;***       25 : 			break;
-00000008                       61  	;***       26 : 		default:
-00000008                       62  	;***       27 : 			O_HS_ICL_PIN = 1;
-00000008                       63  	;***       28 : 			O_HS_IDA_PIN = 1;
-00000008                       64  	;***       29 : 			break;
-00000008                       65  	;***       30 : 		}
-00000008                       66  	;***       31 : 		g_pre_color = g_color;
-00000008                       67  	;***       32 : 	}
-00000008                       68  	;***       33 : }
-00000008                       69  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 33
-00000008 D7                    70  	ret
-00000009                       71  .BB@LABEL@1_2:	; if_then_bb
-00000009 3601FF                72  	movw hl, #0xFF01
-0000000C                       73  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 13
-0000000C 91                    74  	dec a
-0000000D DD00                  75  	bz $.BB@LABEL@1_6
-0000000F                       76  .BB@LABEL@1_3:	; if_then_bb
-0000000F 91                    77  	dec a
-00000010 DD00                  78  	bz $.BB@LABEL@1_8
-00000012                       79  .BB@LABEL@1_4:	; if_then_bb
-00000012 91                    80  	dec a
-00000013 DD00                  81  	bz $.BB@LABEL@1_7
-00000015                       82  .BB@LABEL@1_5:	; switch_clause_bb12
-00000015                       83  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 27
-00000015 71E2                  84  	set1 [hl].6
-00000017 EF00                  85  	br $.BB@LABEL@1_9
-00000019                       86  .BB@LABEL@1_6:	; switch_clause_bb
-00000019                       87  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 15
-00000019 71E2                  88  	set1 [hl].6
-0000001B                       89  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 16
-0000001B 71D3                  90  	clr1 [hl].5
-0000001D EF00                  91  	br $.BB@LABEL@1_10
-0000001F                       92  .BB@LABEL@1_7:	; switch_clause_bb10
-0000001F                       93  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 19
-0000001F 71E3                  94  	clr1 [hl].6
-00000021                       95  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 20
-00000021 71D3                  96  	clr1 [hl].5
-00000023 EF00                  97  	br $.BB@LABEL@1_10
-00000025                       98  .BB@LABEL@1_8:	; switch_clause_bb11
-00000025                       99  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 23
-00000025 71E3                 100  	clr1 [hl].6
-00000027                      101  .BB@LABEL@1_9:	; switch_clause_bb11
-00000027 71D2                 102  	set1 [hl].5
-00000029                      103  .BB@LABEL@1_10:	; switch_break_bb
-00000029                      104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 31
-00000029 8F0000               105  	mov a, !LOWW(_g_color)
-0000002C 9F0000               106  	mov !LOWW(_g_pre_color), a
-0000002F D7                   107  	ret
-00000030                      108  _handSensorLEDBlink:
-00000030                      109  	.STACK _handSensorLEDBlink = 6
-00000030                      110  	;***       34 : 
-00000030                      111  	;***       35 : void handSensorLEDBlink(enum HS_COLOR color, uint32_t ms) {
-00000030                      112  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 35
-00000030 C7                   113  	push hl
-00000031 9800                 114  	mov [sp+0x00], a
-00000033                      115  	;***       36 : 	if (ns_delay_ms(&g_Tick.tickBlink, ms)) {
-00000033                      116  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 36
-00000033 300000               117  	movw ax, #LOWW(_g_Tick+0x0000C)
-00000036 FC000000             118  	call !!_ns_delay_ms
-0000003A F7                   119  	clrw bc
-0000003B 43                   120  	cmpw ax, bc
-0000003C DF00                 121  	bnz $.BB@LABEL@2_2
-0000003E                      122  .BB@LABEL@2_1:	; return
-0000003E                      123  	;***       37 : 		g_color = g_color == color ? BLACK : color;
-0000003E                      124  	;***       38 : 		handSensorLED(g_color);
-0000003E                      125  	;***       39 : 	}
-0000003E                      126  	;***       40 : }
-0000003E                      127  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 40
-0000003E C6                   128  	pop hl
-0000003F D7                   129  	ret
-00000040                      130  .BB@LABEL@2_2:	; if_then_bb
-00000040 8800                 131  	mov a, [sp+0x00]
-00000042                      132  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 37
-00000042 4F0000               133  	cmp a, !LOWW(_g_color)
-00000045 61F8                 134  	sknz
-00000047                      135  .BB@LABEL@2_3:	; if_then_bb.bb15_crit_edge
-00000047 F1                   136  	clrb a
-00000048                      137  .BB@LABEL@2_4:	; bb15
-00000048 9F0000               138  	mov !LOWW(_g_color), a
-0000004B                      139  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 38
-0000004B C6                   140  	pop hl
-0000004C EF00                 141  	br $_handSensorLED
+00000000                       23  	.PUBLIC _bink_reset_flag
+00000000                       24  	.PUBLIC _handSensorLED
+00000000                       25  	.PUBLIC _handSensorLEDBlink
+00000000                       26  	.EXTERN _ns_delay_ms
+00000000                       27  	.PUBLIC _HandSensorLEDEndBlink
+00000000                       28  
+00000000                       29  	.SECTION .textf,TEXTF
+00000000                       30  _handSensorLED:
+00000000                       31  	.STACK _handSensorLED = 4
+00000000                       32  	;***        1 : /*
+00000000                       33  	;***        2 :  * hand_sensor_interface.c
+00000000                       34  	;***        3 :  *
+00000000                       35  	;***        4 :  *  Created on: 6 Jan 2022
+00000000                       36  	;***        5 :  *      Author: Hung
+00000000                       37  	;***        6 :  */
+00000000                       38  	;***        7 : 
+00000000                       39  	;***        8 : #include "hand_sensor_interface.h"
+00000000                       40  	;***        9 : uint8_t bink_reset_flag = 0;
+00000000                       41  	;***       10 : 
+00000000                       42  	;***       11 : void handSensorLED(enum HS_COLOR color) {
+00000000                       43  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 11
+00000000 9F0000                44  	mov !LOWW(_g_color), a
+00000003                       45  	;***       12 : 	g_color = color;
+00000003                       46  	;***       13 : 	if (g_color != g_pre_color) {
+00000003                       47  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 13
+00000003 4F0000                48  	cmp a, !LOWW(_g_pre_color)
+00000006 61F8                  49  	sknz
+00000008                       50  .BB@LABEL@1_1:	; return
+00000008                       51  	;***       14 : 		switch (color) {
+00000008                       52  	;***       15 : 		case RED:
+00000008                       53  	;***       16 : 			O_HS_ICL_PIN = 1;
+00000008                       54  	;***       17 : 			O_HS_IDA_PIN = 0;
+00000008                       55  	;***       18 : 			break;
+00000008                       56  	;***       19 : 		case BLUE:
+00000008                       57  	;***       20 : 			O_HS_ICL_PIN = 0;
+00000008                       58  	;***       21 : 			O_HS_IDA_PIN = 0;
+00000008                       59  	;***       22 : 			break;
+00000008                       60  	;***       23 : 		case WHITE:
+00000008                       61  	;***       24 : 			O_HS_ICL_PIN = 0;
+00000008                       62  	;***       25 : 			O_HS_IDA_PIN = 1;
+00000008                       63  	;***       26 : 			break;
+00000008                       64  	;***       27 : 		default:
+00000008                       65  	;***       28 : 			O_HS_ICL_PIN = 1;
+00000008                       66  	;***       29 : 			O_HS_IDA_PIN = 1;
+00000008                       67  	;***       30 : 			break;
+00000008                       68  	;***       31 : 		}
+00000008                       69  	;***       32 : 		g_pre_color = g_color;
+00000008                       70  	;***       33 : 	}
+00000008                       71  	;***       34 : }
+00000008                       72  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 34
+00000008 D7                    73  	ret
+00000009                       74  .BB@LABEL@1_2:	; if_then_bb
+00000009 3601FF                75  	movw hl, #0xFF01
+0000000C                       76  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 14
+0000000C 91                    77  	dec a
+0000000D DD00                  78  	bz $.BB@LABEL@1_6
+0000000F                       79  .BB@LABEL@1_3:	; if_then_bb
+0000000F 91                    80  	dec a
+00000010 DD00                  81  	bz $.BB@LABEL@1_8
+00000012                       82  .BB@LABEL@1_4:	; if_then_bb
+00000012 91                    83  	dec a
+00000013 DD00                  84  	bz $.BB@LABEL@1_7
+00000015                       85  .BB@LABEL@1_5:	; switch_clause_bb12
+00000015                       86  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 28
+00000015 71E2                  87  	set1 [hl].6
+00000017 EF00                  88  	br $.BB@LABEL@1_9
+00000019                       89  .BB@LABEL@1_6:	; switch_clause_bb
+00000019                       90  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 16
+00000019 71E2                  91  	set1 [hl].6
+0000001B                       92  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 17
+0000001B 71D3                  93  	clr1 [hl].5
+0000001D EF00                  94  	br $.BB@LABEL@1_10
+0000001F                       95  .BB@LABEL@1_7:	; switch_clause_bb10
+0000001F                       96  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 20
+0000001F 71E3                  97  	clr1 [hl].6
+00000021                       98  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 21
+00000021 71D3                  99  	clr1 [hl].5
+00000023 EF00                 100  	br $.BB@LABEL@1_10
+00000025                      101  .BB@LABEL@1_8:	; switch_clause_bb11
+00000025                      102  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 24
+00000025 71E3                 103  	clr1 [hl].6
+00000027                      104  .BB@LABEL@1_9:	; switch_clause_bb11
+00000027 71D2                 105  	set1 [hl].5
+00000029                      106  .BB@LABEL@1_10:	; switch_break_bb
+00000029                      107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 32
+00000029 8F0000               108  	mov a, !LOWW(_g_color)
+0000002C 9F0000               109  	mov !LOWW(_g_pre_color), a
+0000002F D7                   110  	ret
+00000030                      111  _handSensorLEDBlink:
+00000030                      112  	.STACK _handSensorLEDBlink = 6
+00000030                      113  	;***       35 : 
+00000030                      114  	;***       36 : void handSensorLEDBlink(enum HS_COLOR color, uint32_t ms) {
+00000030                      115  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 36
+00000030 C7                   116  	push hl
+00000031 9800                 117  	mov [sp+0x00], a
+00000033                      118  	;***       37 : 	bink_reset_flag = 1U;
+00000033                      119  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 37
+00000033 E50000               120  	oneb !LOWW(_bink_reset_flag)
+00000036                      121  	;***       38 : 	if (ns_delay_ms(&g_Tick.tickBlink, ms)) {
+00000036                      122  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 38
+00000036 300000               123  	movw ax, #LOWW(_g_Tick+0x0000C)
+00000039 FC000000             124  	call !!_ns_delay_ms
+0000003D F7                   125  	clrw bc
+0000003E 43                   126  	cmpw ax, bc
+0000003F DF00                 127  	bnz $.BB@LABEL@2_2
+00000041                      128  .BB@LABEL@2_1:	; return
+00000041                      129  	;***       39 : 		g_color = g_color == color ? BLACK : color;
+00000041                      130  	;***       40 : 		handSensorLED(g_color);
+00000041                      131  	;***       41 : 	}
+00000041                      132  	;***       42 : }
+00000041                      133  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 42
+00000041 C6                   134  	pop hl
+00000042 D7                   135  	ret
+00000043                      136  .BB@LABEL@2_2:	; if_then_bb
+00000043 8800                 137  	mov a, [sp+0x00]
+00000045                      138  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 39
+00000045 4F0000               139  	cmp a, !LOWW(_g_color)
+00000048 61F8                 140  	sknz
+0000004A                      141  .BB@LABEL@2_3:	; if_then_bb.bb15_crit_edge
+0000004A F1                   142  	clrb a
+0000004B                      143  .BB@LABEL@2_4:	; bb15
+0000004B 9F0000               144  	mov !LOWW(_g_color), a
+0000004E                      145  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 40
+0000004E C6                   146  	pop hl
+0000004F EF00                 147  	br $_handSensorLED
+00000051                      148  _HandSensorLEDEndBlink:
+00000051                      149  	.STACK _HandSensorLEDEndBlink = 4
+00000051                      150  	;***       43 : 
+00000051                      151  	;***       44 : void HandSensorLEDEndBlink(void){
+00000051                      152  	;***       45 : 	if(bink_reset_flag){
+00000051                      153  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 45
+00000051 D50000               154  	cmp0 !LOWW(_bink_reset_flag)
+00000054 61F8                 155  	sknz
+00000056                      156  .BB@LABEL@3_1:	; return
+00000056                      157  	;***       46 : 		handSensorLED(BLACK);
+00000056                      158  	;***       47 : 		bink_reset_flag = 0;
+00000056                      159  	;***       48 : 	}
+00000056                      160  	;***       49 : }
+00000056                      161  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 49
+00000056 D7                   162  	ret
+00000057                      163  .BB@LABEL@3_2:	; if_then_bb
+00000057                      164  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 46
+00000057 F1                   165  	clrb a
+00000058 FE0000               166  	call $!_handSensorLED
+0000005B                      167  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 47
+0000005B F50000               168  	clrb !LOWW(_bink_reset_flag)
+0000005E D7                   169  	ret
+00000000                      170  	.SECTION .data,DATA
+00000000                      171  _bink_reset_flag:
+00000000 00                   172  	.DS (1)
 
 Section List
 Attr     Size                Name
 
-TEXTF                78 (0000004E) .textf
+TEXTF                95 (0000005F) .textf
+DATA                  1 (00000001) .data
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\hand_sensor_interface.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\hand_sensor_interface.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hand_sensor_interface.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hand_sensor_interface.asm 

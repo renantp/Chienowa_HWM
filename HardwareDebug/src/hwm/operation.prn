@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/operation.obj
 00000000                       17  #@   ../src/hwm/operation.c
-00000000                       18  #@  compiled at Wed Apr 06 08:39:10 2022
+00000000                       18  #@  compiled at Thu May 05 10:01:49 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_Tick
@@ -242,7 +242,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000000CF                      236  	;***       64 : void TestModeOperation(void){
 000000CF                      237  	;***       65 : 	if(g_commnunication_flag.test_flag){
 000000CF                      238  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 65
-000000CF 8F0000               239  	mov a, !LOWW(_g_commnunication_flag+0x00009)
+000000CF 8F0000               239  	mov a, !LOWW(_g_commnunication_flag+0x0000A)
 000000D2                      240  	;***       66 : 
 000000D2                      241  	;***       67 : 	}
 000000D2                      242  	;***       68 : 	if(g_machine_state.test == TEST_INDIVIDUAL){
