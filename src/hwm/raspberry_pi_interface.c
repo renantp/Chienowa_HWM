@@ -251,7 +251,6 @@ uint8_t TestMode(void){
 		g_machine_state.test = g_commnunication_flag.test_flag;
 		g_commnunication_flag.test_flag = 0U;
 		sendToRasPi_u32(H_SET, TESTING_MODE_START, 0x0000);
-		rx_count++;
 		return 1U;
 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
 		g_machine_state.test = g_commnunication_flag.test_flag = INDIE;
