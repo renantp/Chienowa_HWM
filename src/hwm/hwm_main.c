@@ -286,7 +286,8 @@ void userAuthHandler_nostop(void) {
 		if (DETECT_U() == I_ON && g_machine_state.user == 0) {
 			if (g_commnunication_flag.send_response_flag != 1
 					&& g_rasp_state.isMonitorScreen == 0) {
-				sendToRasPi_u32(H_SET, START_WASHING, 0U);
+//				sendToRasPi_u32(H_SET, START_WASHING, 0U);
+				g_io_status.refined.io.HandSensorON = 1U;
 			}
 			g_machine_state.user = 1;
 		}

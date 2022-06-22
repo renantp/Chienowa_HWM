@@ -238,6 +238,8 @@ void MonitoringStatus(void) {
 		while (state == g_uart2_sendend) {
 			R_WDT_Restart();
 		}
+		g_io_status.refined.io.HandSensorON = 0U;
+		g_io_status.refined.io.HandSensorOFF = 0U;
 		g_commnunication_flag.send_response_status_flag = 0;
 	}
 }

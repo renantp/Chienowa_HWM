@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_main.obj
 #@   ../src/r_main.c
-#@  compiled at Wed Jun 22 12:09:13 2022
+#@  compiled at Wed Jun 22 15:37:22 2022
 
 	.EXTERN _g_color
 	.EXTERN _g_pre_color
@@ -683,7 +683,7 @@ _main:
 	;***      243 : 			uint8_t _b[5] = { 0, 1, 0, 0, 1 };
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_main.c", 243
 	movw de, #0x0005
-	movw bc, #SMRLW(.STR@1724)
+	movw bc, #SMRLW(.STR@1728)
 	call !!_memcpy
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -1035,7 +1035,7 @@ _io_testsize:
 .STR@1:
 	.DS (4)
 	.DB 0x01
-.STR@1724:
+.STR@1728:
 	.DS (1)
 	.DB 0x01
 	.DS (2)

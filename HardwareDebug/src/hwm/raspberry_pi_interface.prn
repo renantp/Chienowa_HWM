@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/raspberry_pi_interface.obj
 00000000                       17  #@   ../src/hwm/raspberry_pi_interface.c
-00000000                       18  #@  compiled at Wed Jun 22 12:09:20 2022
+00000000                       18  #@  compiled at Wed Jun 22 15:37:29 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_numberSetting
@@ -765,806 +765,812 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000023D FC000000             761  	call !!_R_WDT_Restart
 00000241 EF00                 762  	br $.BB@LABEL@15_3
 00000243                      763  .BB@LABEL@15_5:	; bb28
-00000243                      764  	;***      240 : 		}
-00000243                      765  	;***      241 : 		g_commnunication_flag.send_response_status_flag = 0;
-00000243                      766  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 241
-00000243 F50000               767  	clrb !LOWW(_g_commnunication_flag+0x00005)
-00000246                      768  .BB@LABEL@15_6:	; return
-00000246 C6                   769  	pop hl
-00000247                      770  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 243
-00000247 D7                   771  	ret
-00000248                      772  _TestIndividual:
-00000248                      773  	.STACK _TestIndividual = 4
-00000248                      774  	;***      242 : 	}
-00000248                      775  	;***      243 : }
-00000248                      776  	;***      244 : uint8_t TestIndividual(void) {
-00000248                      777  	;***      245 : 	if (g_commnunication_flag.recieve_status_flag == 2
-00000248                      778  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 245
-00000248 40000002             779  	cmp !LOWW(_g_commnunication_flag+0x00009), #0x02
-0000024C DF00                 780  	bnz $.BB@LABEL@16_7
-0000024E                      781  .BB@LABEL@16_1:	; bb
-0000024E D50000               782  	cmp0 !LOWW(_g_commnunication_flag)
-00000251 DF00                 783  	bnz $.BB@LABEL@16_7
-00000253                      784  .BB@LABEL@16_2:	; if_then_bb
-00000253                      785  	;***      246 : 			&& g_commnunication_flag.send_response_flag == 0) {
-00000253                      786  	;***      247 : 		if (g_commnunication_flag.test_enable_flag == 1) {
-00000253                      787  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 247
-00000253 40000001             788  	cmp !LOWW(_g_commnunication_flag+0x0000D), #0x01
-00000257 DF00                 789  	bnz $.BB@LABEL@16_6
-00000259                      790  .BB@LABEL@16_3:	; if_then_bb.bb23_crit_edge
-00000259 F1                   791  	clrb a
-0000025A                      792  .BB@LABEL@16_4:	; bb23
-0000025A 73                   793  	mov b, a
-0000025B                      794  	;***      248 : 			uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
-0000025B                      795  	;***      249 : 			for (uint8_t i = 0; i < 3; i++) {
-0000025B                      796  	;***      250 : 				_io_p[i] = g_rx_data[i];
-0000025B                      797  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 250
-0000025B 090000               798  	mov a, LOWW(_g_rx_data)[b]
-0000025E 180000               799  	mov LOWW(_g_io_response+0x00001)[b], a
-00000261                      800  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 249
-00000261 83                   801  	inc b
-00000262 63                   802  	mov a, b
-00000263 4C03                 803  	cmp a, #0x03
-00000265 DF00                 804  	bnz $.BB@LABEL@16_4
-00000267                      805  .BB@LABEL@16_5:	; bb40
-00000267                      806  	;***      251 : 			}
-00000267                      807  	;***      252 : 			OutputIO(&g_io_response);
-00000267                      808  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 252
-00000267 300000               809  	movw ax, #LOWW(_g_io_response)
-0000026A FC000000             810  	call !!_OutputIO
-0000026E                      811  .BB@LABEL@16_6:	; if_break_bb
-0000026E                      812  	;***      253 : 		}
-0000026E                      813  	;***      254 : 		g_commnunication_flag.recieve_status_flag = 0;
-0000026E                      814  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 254
-0000026E F50000               815  	clrb !LOWW(_g_commnunication_flag+0x00009)
-00000271                      816  	;***      255 : 		return 1U;
-00000271                      817  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 255
-00000271 E1                   818  	oneb a
-00000272 D7                   819  	ret
-00000273                      820  .BB@LABEL@16_7:	; bb44
-00000273                      821  	;***      256 : 	}
-00000273                      822  	;***      257 : 	return 0U;
-00000273                      823  	;***      258 : }
-00000273                      824  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 258
-00000273 F1                   825  	clrb a
-00000274 D7                   826  	ret
-00000275                      827  _ControlSetttingReponse:
-00000275                      828  	.STACK _ControlSetttingReponse = 8
-00000275                      829  	;***      259 : 
-00000275                      830  	;***      260 : void ControlSetttingReponse(void) {
-00000275                      831  	;***      261 : 	const enum UART_header_e header =
-00000275                      832  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 261
-00000275 40000001             833  	cmp !LOWW(_g_commnunication_flag+0x00017), #0x01
-00000279 5353                 834  	mov b, #0x53
-0000027B 61E8                 835  	skz
-0000027D                      836  .BB@LABEL@17_1:	; bb5
-0000027D 5352                 837  	mov b, #0x52
-0000027F                      838  .BB@LABEL@17_2:	; bb6
-0000027F                      839  	;***      262 : 			g_commnunication_flag.control_setting_save_flag == 1 ?
-0000027F                      840  	;***      263 : 					H_SET : H_READ;
-0000027F                      841  	;***      264 : 	if (g_commnunication_flag.control_setting_flag != 0) {
-0000027F                      842  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 264
-0000027F D50000               843  	cmp0 !LOWW(_g_commnunication_flag+0x00016)
-00000282 DD00                 844  	bz $.BB@LABEL@17_10
-00000284                      845  .BB@LABEL@17_3:	; if_then_bb
-00000284                      846  	;***      265 : 		switch (g_commnunication_flag.control_setting_flag) {
-00000284                      847  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 265
-00000284 8F0000               848  	mov a, !LOWW(_g_commnunication_flag+0x00016)
-00000287 0CD9                 849  	add a, #0xD9
-00000289 DD00                 850  	bz $.BB@LABEL@17_13
-0000028B                      851  .BB@LABEL@17_4:	; if_then_bb
-0000028B 91                   852  	dec a
-0000028C DD00                 853  	bz $.BB@LABEL@17_17
-0000028E                      854  .BB@LABEL@17_5:	; if_then_bb
-0000028E 91                   855  	dec a
-0000028F DD00                 856  	bz $.BB@LABEL@17_14
-00000291                      857  .BB@LABEL@17_6:	; if_then_bb
-00000291 91                   858  	dec a
-00000292 DD00                 859  	bz $.BB@LABEL@17_15
-00000294                      860  .BB@LABEL@17_7:	; if_then_bb
-00000294 4C02                 861  	cmp a, #0x02
-00000296 DF00                 862  	bnz $.BB@LABEL@17_9
-00000298                      863  .BB@LABEL@17_8:	; switch_clause_bb43
-00000298                      864  	;***      266 : 		case DRAINAGE_MODE_SET:
-00000298                      865  	;***      267 : 			sendToRasPi_u32(header, DRAINAGE_MODE_SET,
-00000298                      866  	;***      268 : 					(uint32_t) g_control_setting.raw.drain << (8 * 3));
-00000298                      867  	;***      269 : 			break;
-00000298                      868  	;***      270 : 		case POWER_ON_TEST_SET:
-00000298                      869  	;***      271 : 			sendToRasPi_u32(header, POWER_ON_TEST_SET,
-00000298                      870  	;***      272 : 					(uint32_t) g_control_setting.raw.power_on << (8 * 3));
-00000298                      871  	;***      273 : 			break;
-00000298                      872  	;***      274 : 		case WATER_FILTER_SET:
-00000298                      873  	;***      275 : 			sendToRasPi_u32(header, WATER_FILTER_SET,
-00000298                      874  	;***      276 : 					(uint32_t) g_control_setting.raw.filter << (8 * 3));
-00000298                      875  	;***      277 : 			break;
-00000298                      876  	;***      278 : 		case BIOMETRIC_SET:
-00000298                      877  	;***      279 : 			sendToRasPi_u32(header, BIOMETRIC_SET,
-00000298                      878  	;***      280 : 					(uint32_t) g_control_setting.raw.biomectric << (8 * 3));
-00000298                      879  	;***      281 : 			break;
-00000298                      880  	;***      282 : 		case CONTROL_SETTING:
-00000298                      881  	;***      283 : 			sendToRasPi_Revert_i32(H_READ, CONTROL_SETTING,
-00000298                      882  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 283
-00000298 8F0000               883  	mov a, !LOWW(_g_control_setting)
-0000029B 318E                 884  	shrw ax, 8+0x00000
-0000029D 12                   885  	movw bc, ax
-0000029E F6                   886  	clrw ax
-0000029F 14                   887  	movw de, ax
-000002A0 302C52               888  	movw ax, #0x522C
-000002A3 FE0000               889  	call $!_sendToRasPi_Revert_i32
-000002A6                      890  .BB@LABEL@17_9:	; switch_break_bb
-000002A6                      891  	;***      284 : 					(int32_t) g_control_setting.data);
-000002A6                      892  	;***      285 : 			break;
-000002A6                      893  	;***      286 : 		default:
-000002A6                      894  	;***      287 : 			break;
-000002A6                      895  	;***      288 : 		}
-000002A6                      896  	;***      289 : 		g_commnunication_flag.control_setting_flag = 0;
-000002A6                      897  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 289
-000002A6 F50000               898  	clrb !LOWW(_g_commnunication_flag+0x00016)
-000002A9                      899  .BB@LABEL@17_10:	; if_break_bb
-000002A9                      900  	;***      290 : 	}
-000002A9                      901  	;***      291 : 
-000002A9                      902  	;***      292 : 	if (g_commnunication_flag.control_setting_save_flag == 1) {
-000002A9                      903  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 292
-000002A9 40000001             904  	cmp !LOWW(_g_commnunication_flag+0x00017), #0x01
-000002AD DF00                 905  	bnz $.BB@LABEL@17_12
-000002AF                      906  .BB@LABEL@17_11:	; if_then_bb52
-000002AF F6                   907  	clrw ax
-000002B0                      908  	;***      293 : 		EE_SPI_Write((uint8_t*) &g_control_setting.data,
-000002B0                      909  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 293
-000002B0 C1                   910  	push ax
-000002B1 A1                   911  	incw ax
-000002B2 C1                   912  	push ax
-000002B3 322900               913  	movw bc, #0x0029
-000002B6 300000               914  	movw ax, #LOWW(_g_control_setting)
-000002B9 FC000000             915  	call !!_EE_SPI_Write
-000002BD 1004                 916  	addw sp, #0x04
-000002BF                      917  	;***      294 : 		NUMBER_SETTING_ADDRESS + numberSettingSize,
-000002BF                      918  	;***      295 : 				sizeof(g_control_setting.data));
-000002BF                      919  	;***      296 : 		g_commnunication_flag.control_setting_save_flag = 0;
-000002BF                      920  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 296
-000002BF F50000               921  	clrb !LOWW(_g_commnunication_flag+0x00017)
-000002C2                      922  .BB@LABEL@17_12:	; return
-000002C2                      923  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 299
-000002C2 D7                   924  	ret
-000002C3                      925  .BB@LABEL@17_13:	; switch_clause_bb
-000002C3 E1                   926  	oneb a
-000002C4                      927  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 267
-000002C4 5F0000               928  	and a, !LOWW(_g_control_setting)
-000002C7 F0                   929  	clrb x
-000002C8 14                   930  	movw de, ax
-000002C9 5027                 931  	mov x, #0x27
-000002CB EF00                 932  	br $.BB@LABEL@17_16
-000002CD                      933  .BB@LABEL@17_14:	; switch_clause_bb22
-000002CD                      934  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 271
-000002CD 8F0000               935  	mov a, !LOWW(_g_control_setting)
-000002D0 311A                 936  	shr a, 0x01
-000002D2 5C01                 937  	and a, #0x01
-000002D4 F0                   938  	clrb x
-000002D5 14                   939  	movw de, ax
-000002D6 5029                 940  	mov x, #0x29
-000002D8 EF00                 941  	br $.BB@LABEL@17_16
-000002DA                      942  .BB@LABEL@17_15:	; switch_clause_bb29
-000002DA                      943  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 275
-000002DA 8F0000               944  	mov a, !LOWW(_g_control_setting)
-000002DD 312A                 945  	shr a, 0x02
-000002DF 5C01                 946  	and a, #0x01
-000002E1 F0                   947  	clrb x
-000002E2 14                   948  	movw de, ax
-000002E3 502A                 949  	mov x, #0x2A
-000002E5                      950  .BB@LABEL@17_16:	; switch_clause_bb29
-000002E5 63                   951  	mov a, b
-000002E6 F7                   952  	clrw bc
-000002E7 FE0000               953  	call $!_sendToRasPi_u32
-000002EA EF00                 954  	br $.BB@LABEL@17_9
-000002EC                      955  .BB@LABEL@17_17:	; switch_clause_bb36
-000002EC                      956  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 279
-000002EC 8F0000               957  	mov a, !LOWW(_g_control_setting)
-000002EF 313A                 958  	shr a, 0x03
-000002F1 5C01                 959  	and a, #0x01
-000002F3 F0                   960  	clrb x
-000002F4 14                   961  	movw de, ax
-000002F5 5028                 962  	mov x, #0x28
-000002F7 EF00                 963  	br $.BB@LABEL@17_16
-000002F9                      964  _TestMode:
-000002F9                      965  	.STACK _TestMode = 4
-000002F9                      966  	;***      297 : 	}
-000002F9                      967  	;***      298 : 
-000002F9                      968  	;***      299 : }
-000002F9                      969  	;***      300 : uint8_t TestMode(void) {
-000002F9                      970  	;***      301 : 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
-000002F9                      971  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 301
-000002F9 4000001A             972  	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1A
-000002FD DF00                 973  	bnz $.BB@LABEL@18_2
-000002FF                      974  .BB@LABEL@18_1:	; if_then_bb
-000002FF                      975  	;***      302 : 		g_commnunication_flag.test_flag = 0U;
-000002FF                      976  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 302
-000002FF F50000               977  	clrb !LOWW(_g_commnunication_flag+0x0000A)
-00000302                      978  	;***      303 : 		sendToRasPi_u32(H_SET, TESTING_MODE_START, 0x0000);
-00000302                      979  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 303
-00000302 F6                   980  	clrw ax
-00000303 14                   981  	movw de, ax
-00000304 F7                   982  	clrw bc
-00000305 301A53               983  	movw ax, #0x531A
-00000308 FE0000               984  	call $!_sendToRasPi_u32
-0000030B                      985  	;***      304 : 		return 1U;
-0000030B                      986  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 304
-0000030B E1                   987  	oneb a
-0000030C D7                   988  	ret
-0000030D                      989  .BB@LABEL@18_2:	; if_else_bb
-0000030D                      990  	;***      305 : 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
-0000030D                      991  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 305
-0000030D 4000001C             992  	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1C
-00000311 DF00                 993  	bnz $.BB@LABEL@18_4
-00000313                      994  .BB@LABEL@18_3:	; if_then_bb10
-00000313                      995  	;***      306 : 		g_commnunication_flag.test_flag = 0U;
-00000313                      996  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 306
-00000313 F50000               997  	clrb !LOWW(_g_commnunication_flag+0x0000A)
-00000316                      998  	;***      307 : 		sendToRasPi_u32(H_SET, TESTING_MODE_STOP, 0x0000);
-00000316                      999  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 307
-00000316 F6                  1000  	clrw ax
-00000317 14                  1001  	movw de, ax
-00000318 F7                  1002  	clrw bc
-00000319 301C53              1003  	movw ax, #0x531C
-0000031C FE0000              1004  	call $!_sendToRasPi_u32
-0000031F                     1005  	;***      308 : 		OutputIO(&io_off);
-0000031F                     1006  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 308
-0000031F 300000              1007  	movw ax, #LOWW(_io_off)
-00000322 FC000000            1008  	call !!_OutputIO
-00000326                     1009  .BB@LABEL@18_4:	; bb13
-00000326 F1                  1010  	clrb a
-00000327                     1011  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 311
-00000327 D7                  1012  	ret
-00000328                     1013  _SendTimeSetting:
-00000328                     1014  	.STACK _SendTimeSetting = 6
-00000328                     1015  	;***      309 : 	}
-00000328                     1016  	;***      310 : 	return 0;
-00000328                     1017  	;***      311 : }
-00000328                     1018  	;***      312 : 
-00000328                     1019  	;***      313 : uint8_t SendTimeSetting(void) {
-00000328                     1020  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 313
-00000328 C7                  1021  	push hl
-00000329                     1022  	;***      314 : 	if (g_commnunication_flag.send_response_time_flag
-00000329                     1023  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 314
-00000329 D50000              1024  	cmp0 !LOWW(_g_commnunication_flag+0x00001)
-0000032C DD00                1025  	bz $.BB@LABEL@19_6
-0000032E                     1026  .BB@LABEL@19_1:	; bb
-0000032E D50000              1027  	cmp0 !LOWW(_g_commnunication_flag)
-00000331 DF00                1028  	bnz $.BB@LABEL@19_6
-00000333                     1029  .BB@LABEL@19_2:	; if_then_bb
-00000333                     1030  	;***      315 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
-00000333                     1031  	;***      316 : 		uint8_t state = g_uart2_sendend;
-00000333                     1032  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 316
-00000333 8F0000              1033  	mov a, !LOWW(_g_uart2_sendend)
-00000336 9800                1034  	mov [sp+0x00], a
-00000338                     1035  	;***      317 : 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
-00000338                     1036  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 317
-00000338 52A0                1037  	mov c, #0xA0
-0000033A 300000              1038  	movw ax, #LOWW(_g_timerSetting)
-0000033D FC000000            1039  	call !!_crc8_1
-00000341 9F0000              1040  	mov !LOWW(_g_timerSetting+0x000A0), a
-00000344                     1041  	;***      318 : 				timeSettingSize - 1);
-00000344                     1042  	;***      319 : 		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
-00000344                     1043  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 319
-00000344 32A100              1044  	movw bc, #0x00A1
-00000347 300000              1045  	movw ax, #LOWW(_g_timerSetting)
-0000034A FC000000            1046  	call !!_R_UART2_Send
-0000034E                     1047  	;***      320 : 		flag_response.time++;
-0000034E                     1048  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 320
-0000034E A00000              1049  	inc !LOWW(_flag_response)
-00000351                     1050  .BB@LABEL@19_3:	; bb28
-00000351 8800                1051  	mov a, [sp+0x00]
-00000353                     1052  	;***      321 : 		while (state == g_uart2_sendend) {
-00000353                     1053  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 321
-00000353 4F0000              1054  	cmp a, !LOWW(_g_uart2_sendend)
-00000356 DF00                1055  	bnz $.BB@LABEL@19_5
-00000358                     1056  .BB@LABEL@19_4:	; bb27
-00000358                     1057  	;***      322 : 			R_WDT_Restart();
-00000358                     1058  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 322
-00000358 FC000000            1059  	call !!_R_WDT_Restart
-0000035C EF00                1060  	br $.BB@LABEL@19_3
-0000035E                     1061  .BB@LABEL@19_5:	; bb36
-0000035E                     1062  	;***      323 : 		}
-0000035E                     1063  	;***      324 : 		g_commnunication_flag.send_response_time_flag = 0;
-0000035E                     1064  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 324
-0000035E F50000              1065  	clrb !LOWW(_g_commnunication_flag+0x00001)
-00000361                     1066  	;***      325 : 		return 1U;
-00000361                     1067  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 325
-00000361 E1                  1068  	oneb a
-00000362 C6                  1069  	pop hl
-00000363 D7                  1070  	ret
-00000364                     1071  .BB@LABEL@19_6:	; bb39
-00000364                     1072  	;***      326 : 	}
-00000364                     1073  	;***      327 : 	return 0U;
-00000364                     1074  	;***      328 : }
-00000364                     1075  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 328
-00000364 F1                  1076  	clrb a
-00000365 C6                  1077  	pop hl
-00000366 D7                  1078  	ret
-00000367                     1079  _SendNumberSetting:
-00000367                     1080  	.STACK _SendNumberSetting = 6
-00000367                     1081  	;***      329 : uint8_t SendNumberSetting(void) {
-00000367                     1082  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 329
-00000367 C7                  1083  	push hl
-00000368                     1084  	;***      330 : 	if (g_commnunication_flag.send_response_number_flag
-00000368                     1085  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 330
-00000368 D50000              1086  	cmp0 !LOWW(_g_commnunication_flag+0x00002)
-0000036B DD00                1087  	bz $.BB@LABEL@20_6
-0000036D                     1088  .BB@LABEL@20_1:	; bb
-0000036D D50000              1089  	cmp0 !LOWW(_g_commnunication_flag)
-00000370 DF00                1090  	bnz $.BB@LABEL@20_6
-00000372                     1091  .BB@LABEL@20_2:	; if_then_bb
-00000372                     1092  	;***      331 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
-00000372                     1093  	;***      332 : 		uint8_t state = g_uart2_sendend;
-00000372                     1094  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 332
-00000372 8F0000              1095  	mov a, !LOWW(_g_uart2_sendend)
-00000375 9800                1096  	mov [sp+0x00], a
-00000377                     1097  	;***      333 : 		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
-00000377                     1098  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 333
-00000377 5228                1099  	mov c, #0x28
-00000379 300000              1100  	movw ax, #LOWW(_g_numberSetting)
-0000037C FC000000            1101  	call !!_crc8_1
-00000380 9F0000              1102  	mov !LOWW(_g_numberSetting+0x00028), a
-00000383                     1103  	;***      334 : 				numberSettingSize - 1);
-00000383                     1104  	;***      335 : 		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
-00000383                     1105  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 335
-00000383 322900              1106  	movw bc, #0x0029
-00000386 300000              1107  	movw ax, #LOWW(_g_numberSetting)
-00000389 FC000000            1108  	call !!_R_UART2_Send
-0000038D                     1109  	;***      336 : 		flag_response.number++;
-0000038D                     1110  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 336
-0000038D A00000              1111  	inc !LOWW(_flag_response+0x00001)
-00000390                     1112  .BB@LABEL@20_3:	; bb28
-00000390 8800                1113  	mov a, [sp+0x00]
-00000392                     1114  	;***      337 : 		while (state == g_uart2_sendend) {
-00000392                     1115  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 337
-00000392 4F0000              1116  	cmp a, !LOWW(_g_uart2_sendend)
-00000395 DF00                1117  	bnz $.BB@LABEL@20_5
-00000397                     1118  .BB@LABEL@20_4:	; bb27
-00000397                     1119  	;***      338 : 			R_WDT_Restart();
-00000397                     1120  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 338
-00000397 FC000000            1121  	call !!_R_WDT_Restart
-0000039B EF00                1122  	br $.BB@LABEL@20_3
-0000039D                     1123  .BB@LABEL@20_5:	; bb36
-0000039D                     1124  	;***      339 : 		}
-0000039D                     1125  	;***      340 : 		g_commnunication_flag.send_response_number_flag = 0;
-0000039D                     1126  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 340
-0000039D F50000              1127  	clrb !LOWW(_g_commnunication_flag+0x00002)
-000003A0                     1128  	;***      341 : 		return 1U;
-000003A0                     1129  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 341
-000003A0 E1                  1130  	oneb a
-000003A1 C6                  1131  	pop hl
-000003A2 D7                  1132  	ret
-000003A3                     1133  .BB@LABEL@20_6:	; bb39
-000003A3                     1134  	;***      342 : 	}
-000003A3                     1135  	;***      343 : 	return 0U;
-000003A3                     1136  	;***      344 : }
-000003A3                     1137  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 344
-000003A3 F1                  1138  	clrb a
-000003A4 C6                  1139  	pop hl
-000003A5 D7                  1140  	ret
-000003A6                     1141  _GetAndSaveTimeSetting:
-000003A6                     1142  	.STACK _GetAndSaveTimeSetting = 10
-000003A6                     1143  	;***      345 : uint8_t GetAndSaveTimeSetting(void) {
-000003A6                     1144  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 345
-000003A6 C7                  1145  	push hl
-000003A7 F1                  1146  	clrb a
-000003A8                     1147  	;***      346 : 	if (g_commnunication_flag.recived_time_setting_flag == 2) {
-000003A8                     1148  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 346
-000003A8 40000002            1149  	cmp !LOWW(_g_commnunication_flag+0x00004), #0x02
-000003AC DF00                1150  	bnz $.BB@LABEL@21_16
-000003AE                     1151  .BB@LABEL@21_1:	; entry.bb56_crit_edge
-000003AE 73                  1152  	mov b, a
-000003AF                     1153  .BB@LABEL@21_2:	; bb56
-000003AF                     1154  	;***      347 : 		//		//Do not Edit this, must keep!!!!
-000003AF                     1155  	;***      348 : 		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
-000003AF                     1156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 348
-000003AF 4CA0                1157  	cmp a, #0xA0
-000003B1 DE00                1158  	bnc $.BB@LABEL@21_12
-000003B3                     1159  .BB@LABEL@21_3:	; bb
-000003B3                     1160  	;***      349 : 			switch (i % 4) {
-000003B3                     1161  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 349
-000003B3 5C03                1162  	and a, #0x03
-000003B5 DD00                1163  	bz $.BB@LABEL@21_10
-000003B7                     1164  .BB@LABEL@21_4:	; bb
-000003B7 91                  1165  	dec a
-000003B8 DD00                1166  	bz $.BB@LABEL@21_9
-000003BA                     1167  .BB@LABEL@21_5:	; bb
-000003BA 91                  1168  	dec a
-000003BB 63                  1169  	mov a, b
-000003BC DD00                1170  	bz $.BB@LABEL@21_8
-000003BE                     1171  .BB@LABEL@21_6:	; switch_clause_bb
-000003BE                     1172  	;***      350 : 			case 3:
-000003BE                     1173  	;***      351 : 				time_setting_p[i - 3] = g_rx_data[i];
-000003BE                     1174  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 351
-000003BE 318E                1175  	shrw ax, 8+0x00000
-000003C0 040000              1176  	addw ax, #LOWW(__settingTime+0x0FFFD)
-000003C3                     1177  .BB@LABEL@21_7:	; switch_clause_bb
-000003C3 14                  1178  	movw de, ax
-000003C4 090000              1179  	mov a, LOWW(_g_rx_data)[b]
-000003C7 99                  1180  	mov [de], a
-000003C8 EF00                1181  	br $.BB@LABEL@21_11
-000003CA                     1182  .BB@LABEL@21_8:	; switch_clause_bb19
-000003CA                     1183  	;***      352 : 				break;
-000003CA                     1184  	;***      353 : 			case 2:
-000003CA                     1185  	;***      354 : 				time_setting_p[i - 1] = g_rx_data[i];
-000003CA                     1186  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 354
-000003CA 318E                1187  	shrw ax, 8+0x00000
-000003CC 040000              1188  	addw ax, #LOWW(__settingTime+0x0FFFF)
-000003CF EF00                1189  	br $.BB@LABEL@21_7
-000003D1                     1190  .BB@LABEL@21_9:	; switch_clause_bb31
-000003D1                     1191  	;***      355 : 				break;
-000003D1                     1192  	;***      356 : 			case 1:
-000003D1                     1193  	;***      357 : 				time_setting_p[1 + i] = g_rx_data[i];
-000003D1                     1194  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 357
-000003D1 090000              1195  	mov a, LOWW(_g_rx_data)[b]
-000003D4 180000              1196  	mov LOWW(__settingTime+0x00001)[b], a
-000003D7 EF00                1197  	br $.BB@LABEL@21_11
-000003D9                     1198  .BB@LABEL@21_10:	; switch_clause_bb42
-000003D9                     1199  	;***      358 : 				break;
-000003D9                     1200  	;***      359 : 			case 0:
-000003D9                     1201  	;***      360 : 				time_setting_p[3 + i] = g_rx_data[i];
-000003D9                     1202  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 360
-000003D9 090000              1203  	mov a, LOWW(_g_rx_data)[b]
-000003DC 180000              1204  	mov LOWW(__settingTime+0x00003)[b], a
-000003DF                     1205  .BB@LABEL@21_11:	; switch_break_bb
-000003DF 83                  1206  	inc b
-000003E0 63                  1207  	mov a, b
-000003E1 EF00                1208  	br $.BB@LABEL@21_2
-000003E3                     1209  .BB@LABEL@21_12:	; bb65
-000003E3                     1210  	;***      361 : 				break;
-000003E3                     1211  	;***      362 : 			default:
-000003E3                     1212  	;***      363 : 				break;
-000003E3                     1213  	;***      364 : 			}
-000003E3                     1214  	;***      365 : 		}
-000003E3                     1215  	;***      366 : 		_settingTime.crc = g_rx_data[timeSettingSize - 1];
-000003E3                     1216  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 366
-000003E3 8F0000              1217  	mov a, !LOWW(_g_rx_data+0x000A0)
-000003E6 9800                1218  	mov [sp+0x00], a
-000003E8 9F0000              1219  	mov !LOWW(__settingTime+0x000A0), a
-000003EB                     1220  	;***      367 : 		if (g_rx_data[timeSettingSize - 1]
-000003EB                     1221  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 367
-000003EB 52A0                1222  	mov c, #0xA0
-000003ED 300000              1223  	movw ax, #LOWW(_g_rx_data)
-000003F0 FC000000            1224  	call !!_crc8_1
-000003F4 70                  1225  	mov x, a
-000003F5 8800                1226  	mov a, [sp+0x00]
-000003F7 08                  1227  	xch a, x
-000003F8 6140                1228  	cmp x, a
-000003FA DF00                1229  	bnz $.BB@LABEL@21_14
-000003FC                     1230  .BB@LABEL@21_13:	; if_then_bb88
-000003FC                     1231  	;***      368 : 				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
-000003FC                     1232  	;***      369 : 			save_spec_ok = 1;
-000003FC                     1233  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 369
-000003FC E50000              1234  	oneb !LOWW(_save_spec_ok)
-000003FF                     1235  	;***      370 : 			g_timerSetting = _settingTime;
-000003FF                     1236  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 370
-000003FF 34A200              1237  	movw de, #0x00A2
-00000402 320000              1238  	movw bc, #LOWW(__settingTime)
-00000405 300000              1239  	movw ax, #LOWW(_g_timerSetting)
-00000408 FC000000            1240  	call !!_memcpy
-0000040C F6                  1241  	clrw ax
-0000040D                     1242  	;***      371 : 			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
-0000040D                     1243  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 371
-0000040D C1                  1244  	push ax
-0000040E 50A1                1245  	mov x, #0xA1
-00000410 C1                  1246  	push ax
-00000411 320008              1247  	movw bc, #0x0800
-00000414 300000              1248  	movw ax, #LOWW(_g_timerSetting)
-00000417 FC000000            1249  	call !!_EE_SPI_Write
-0000041B 1004                1250  	addw sp, #0x04
-0000041D EF00                1251  	br $.BB@LABEL@21_15
-0000041F                     1252  .BB@LABEL@21_14:	; if_else_bb
-0000041F                     1253  	;***      372 : 					timeSettingSize);
-0000041F                     1254  	;***      373 : 		} else {
-0000041F                     1255  	;***      374 : 			save_spec_ok = -1;
-0000041F                     1256  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 374
-0000041F CF0000FF            1257  	mov !LOWW(_save_spec_ok), #0xFF
-00000423                     1258  .BB@LABEL@21_15:	; if_break_bb
-00000423                     1259  	;***      375 : 		}
-00000423                     1260  	;***      376 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
-00000423                     1261  	;***      377 : 		g_commnunication_flag.recived_time_setting_flag = 0;
-00000423                     1262  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 377
-00000423 F50000              1263  	clrb !LOWW(_g_commnunication_flag+0x00004)
-00000426                     1264  	;***      378 : 		return 1U;
-00000426                     1265  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 378
-00000426 E1                  1266  	oneb a
-00000427                     1267  .BB@LABEL@21_16:	; bb94
-00000427 C6                  1268  	pop hl
-00000428                     1269  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 381
-00000428 D7                  1270  	ret
-00000429                     1271  _GetAndSaveNumberSetting:
-00000429                     1272  	.STACK _GetAndSaveNumberSetting = 14
-00000429                     1273  	;***      379 : 	}
-00000429                     1274  	;***      380 : 	return 0U;
-00000429                     1275  	;***      381 : }
-00000429                     1276  	;***      382 : uint8_t GetAndSaveNumberSetting(void) {
-00000429                     1277  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 382
-00000429 2006                1278  	subw sp, #0x06
-0000042B F1                  1279  	clrb a
-0000042C                     1280  	;***      383 : 	if (g_commnunication_flag.recived_number_setting_flag == 2) {
-0000042C                     1281  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 383
-0000042C 40000002            1282  	cmp !LOWW(_g_commnunication_flag+0x00003), #0x02
-00000430                     1283  	.bnz $!.BB@LABEL@22_24
-00000430 61E8                    	 -- Skncond
-00000432 EE0000                  	 -- br	**.target1
-00000435                     1284  .BB@LABEL@22_1:	; entry.bb56_crit_edge
-00000435 73                  1285  	mov b, a
-00000436                     1286  .BB@LABEL@22_2:	; bb56
-00000436                     1287  	;***      384 : 		//		//Do not Edit this, must keep!!!!
-00000436                     1288  	;***      385 : 		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
-00000436                     1289  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 385
-00000436 4C28                1290  	cmp a, #0x28
-00000438 DE00                1291  	bnc $.BB@LABEL@22_12
-0000043A                     1292  .BB@LABEL@22_3:	; bb
-0000043A                     1293  	;***      386 : 			switch (i % 4) {
-0000043A                     1294  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 386
-0000043A 5C03                1295  	and a, #0x03
-0000043C DD00                1296  	bz $.BB@LABEL@22_10
-0000043E                     1297  .BB@LABEL@22_4:	; bb
-0000043E 91                  1298  	dec a
-0000043F DD00                1299  	bz $.BB@LABEL@22_9
-00000441                     1300  .BB@LABEL@22_5:	; bb
-00000441 91                  1301  	dec a
-00000442 63                  1302  	mov a, b
-00000443 DD00                1303  	bz $.BB@LABEL@22_8
-00000445                     1304  .BB@LABEL@22_6:	; switch_clause_bb
-00000445                     1305  	;***      387 : 			case 3:
-00000445                     1306  	;***      388 : 				number_setting_p[i - 3] = g_rx_data[i];
-00000445                     1307  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 388
-00000445 318E                1308  	shrw ax, 8+0x00000
-00000447 040000              1309  	addw ax, #LOWW(__settingNumber+0x0FFFD)
-0000044A                     1310  .BB@LABEL@22_7:	; switch_clause_bb
-0000044A 14                  1311  	movw de, ax
-0000044B 090000              1312  	mov a, LOWW(_g_rx_data)[b]
-0000044E 99                  1313  	mov [de], a
-0000044F EF00                1314  	br $.BB@LABEL@22_11
-00000451                     1315  .BB@LABEL@22_8:	; switch_clause_bb19
-00000451                     1316  	;***      389 : 				break;
-00000451                     1317  	;***      390 : 			case 2:
-00000451                     1318  	;***      391 : 				number_setting_p[i - 1] = g_rx_data[i];
-00000451                     1319  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 391
-00000451 318E                1320  	shrw ax, 8+0x00000
-00000453 040000              1321  	addw ax, #LOWW(__settingNumber+0x0FFFF)
-00000456 EF00                1322  	br $.BB@LABEL@22_7
-00000458                     1323  .BB@LABEL@22_9:	; switch_clause_bb31
-00000458                     1324  	;***      392 : 				break;
-00000458                     1325  	;***      393 : 			case 1:
-00000458                     1326  	;***      394 : 				number_setting_p[1 + i] = g_rx_data[i];
-00000458                     1327  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 394
-00000458 090000              1328  	mov a, LOWW(_g_rx_data)[b]
-0000045B 180000              1329  	mov LOWW(__settingNumber+0x00001)[b], a
-0000045E EF00                1330  	br $.BB@LABEL@22_11
-00000460                     1331  .BB@LABEL@22_10:	; switch_clause_bb42
-00000460                     1332  	;***      395 : 				break;
-00000460                     1333  	;***      396 : 			case 0:
-00000460                     1334  	;***      397 : 				number_setting_p[3 + i] = g_rx_data[i];
-00000460                     1335  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 397
-00000460 090000              1336  	mov a, LOWW(_g_rx_data)[b]
-00000463 180000              1337  	mov LOWW(__settingNumber+0x00003)[b], a
-00000466                     1338  .BB@LABEL@22_11:	; switch_break_bb
-00000466 83                  1339  	inc b
-00000467 63                  1340  	mov a, b
-00000468 EF00                1341  	br $.BB@LABEL@22_2
-0000046A                     1342  .BB@LABEL@22_12:	; bb65
-0000046A                     1343  	;***      398 : 				break;
-0000046A                     1344  	;***      399 : 			default:
-0000046A                     1345  	;***      400 : 				break;
-0000046A                     1346  	;***      401 : 			}
-0000046A                     1347  	;***      402 : 		}
-0000046A                     1348  	;***      403 : 		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
-0000046A                     1349  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 403
-0000046A 5228                1350  	mov c, #0x28
-0000046C 300000              1351  	movw ax, #LOWW(_g_rx_data)
-0000046F FC000000            1352  	call !!_crc8_1
-00000473 9F0000              1353  	mov !LOWW(__settingNumber+0x00028), a
-00000476                     1354  	;***      404 : 				numberSettingSize - 1);
-00000476                     1355  	;***      405 : 		if (g_rx_data[numberSettingSize - 1]
-00000476                     1356  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 405
-00000476 8F0000              1357  	mov a, !LOWW(_g_rx_data+0x00028)
-00000479 9800                1358  	mov [sp+0x00], a
-0000047B 5228                1359  	mov c, #0x28
-0000047D 300000              1360  	movw ax, #LOWW(_g_rx_data)
-00000480 FC000000            1361  	call !!_crc8_1
-00000484 70                  1362  	mov x, a
-00000485 8800                1363  	mov a, [sp+0x00]
-00000487 08                  1364  	xch a, x
-00000488 6148                1365  	cmp a, x
-0000048A                     1366  	.bnz $!.BB@LABEL@22_22
-0000048A 61E8                    	 -- Skncond
-0000048C EE0000                  	 -- br	**.target1
-0000048F                     1367  .BB@LABEL@22_13:	; if_then_bb87
-0000048F                     1368  	;***      406 : 				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
-0000048F                     1369  	;***      407 : 			save_spec_ok = 1;
-0000048F                     1370  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 407
-0000048F E50000              1371  	oneb !LOWW(_save_spec_ok)
-00000492                     1372  	;***      408 : 			g_numberSetting = _settingNumber;
-00000492                     1373  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 408
-00000492 342A00              1374  	movw de, #0x002A
-00000495 320000              1375  	movw bc, #LOWW(__settingNumber)
-00000498 300000              1376  	movw ax, #LOWW(_g_numberSetting)
-0000049B FC000000            1377  	call !!_memcpy
-0000049F F6                  1378  	clrw ax
-000004A0                     1379  	;***      409 : 			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
-000004A0                     1380  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 409
-000004A0 C1                  1381  	push ax
-000004A1 5029                1382  	mov x, #0x29
-000004A3 C1                  1383  	push ax
-000004A4 F7                  1384  	clrw bc
-000004A5 300000              1385  	movw ax, #LOWW(_g_numberSetting)
-000004A8 FC000000            1386  	call !!_EE_SPI_Write
-000004AC 1004                1387  	addw sp, #0x04
-000004AE 309B40              1388  	movw ax, #0x409B
-000004B1                     1389  	;***      410 : 					numberSettingSize);
-000004B1                     1390  	;***      411 : 			if (g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
-000004B1                     1391  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 411
-000004B1 C1                  1392  	push ax
-000004B2 300C02              1393  	movw ax, #0x020C
-000004B5 C1                  1394  	push ax
-000004B6 DB0000              1395  	movw bc, !LOWW(_g_numberSetting+0x00026)
-000004B9 13                  1396  	movw ax, bc
-000004BA B806                1397  	movw [sp+0x06], ax
-000004BC AF0000              1398  	movw ax, !LOWW(_g_numberSetting+0x00024)
-000004BF B808                1399  	movw [sp+0x08], ax
-000004C1 FC000000            1400  	call !!__COM_funordered
-000004C5 9804                1401  	mov [sp+0x04], a
-000004C7 1004                1402  	addw sp, #0x04
-000004C9 309B40              1403  	movw ax, #0x409B
-000004CC C1                  1404  	push ax
-000004CD 300C02              1405  	movw ax, #0x020C
-000004D0 C1                  1406  	push ax
-000004D1 A806                1407  	movw ax, [sp+0x06]
-000004D3 12                  1408  	movw bc, ax
-000004D4 A808                1409  	movw ax, [sp+0x08]
-000004D6 FC000000            1410  	call !!__COM_fle
-000004DA 1004                1411  	addw sp, #0x04
-000004DC 70                  1412  	mov x, a
-000004DD 8800                1413  	mov a, [sp+0x00]
-000004DF D1                  1414  	cmp0 a
-000004E0 E1                  1415  	oneb a
-000004E1 61F8                1416  	sknz
-000004E3                     1417  .BB@LABEL@22_14:	; if_then_bb87
-000004E3 F1                  1418  	clrb a
-000004E4                     1419  .BB@LABEL@22_15:	; if_then_bb87
-000004E4 D0                  1420  	cmp0 x
-000004E5 E0                  1421  	oneb x
-000004E6 61F8                1422  	sknz
-000004E8                     1423  .BB@LABEL@22_16:	; if_then_bb87
-000004E8 F0                  1424  	clrb x
-000004E9                     1425  .BB@LABEL@22_17:	; if_then_bb87
-000004E9 6160                1426  	or x, a
-000004EB DF00                1427  	bnz $.BB@LABEL@22_19
-000004ED                     1428  .BB@LABEL@22_18:	; if_then_bb94
-000004ED 309B40              1429  	movw ax, #0x409B
-000004F0                     1430  	;***      412 : 				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
-000004F0                     1431  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 412
-000004F0 BF0000              1432  	movw !LOWW(_g_numberSetting+0x00026), ax
-000004F3 300C02              1433  	movw ax, #0x020C
-000004F6 BF0000              1434  	movw !LOWW(_g_numberSetting+0x00024), ax
-000004F9                     1435  .BB@LABEL@22_19:	; if_break_bb
-000004F9 30A040              1436  	movw ax, #0x40A0
-000004FC                     1437  	;***      413 : 			if (g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
-000004FC                     1438  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 413
-000004FC C1                  1439  	push ax
-000004FD F6                  1440  	clrw ax
-000004FE C1                  1441  	push ax
-000004FF DB0000              1442  	movw bc, !LOWW(_g_numberSetting+0x00022)
-00000502 13                  1443  	movw ax, bc
-00000503 B804                1444  	movw [sp+0x04], ax
-00000505 AF0000              1445  	movw ax, !LOWW(_g_numberSetting+0x00020)
-00000508 B806                1446  	movw [sp+0x06], ax
-0000050A FC000000            1447  	call !!__COM_fgt
-0000050E 1004                1448  	addw sp, #0x04
-00000510 D1                  1449  	cmp0 a
-00000511 DD00                1450  	bz $.BB@LABEL@22_21
-00000513                     1451  .BB@LABEL@22_20:	; if_then_bb99
-00000513 30A040              1452  	movw ax, #0x40A0
-00000516                     1453  	;***      414 : 				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
-00000516                     1454  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 414
-00000516 BF0000              1455  	movw !LOWW(_g_numberSetting+0x00022), ax
-00000519 F6                  1456  	clrw ax
-0000051A BF0000              1457  	movw !LOWW(_g_numberSetting+0x00020), ax
-0000051D B802                1458  	movw [sp+0x02], ax
-0000051F 30A040              1459  	movw ax, #0x40A0
-00000522 B800                1460  	movw [sp+0x00], ax
-00000524                     1461  .BB@LABEL@22_21:	; if_break_bb100
-00000524 30A040              1462  	movw ax, #0x40A0
-00000527                     1463  	;***      415 : 			R_DAC0_Set_ConversionValue(
-00000527                     1464  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 415
-00000527 C1                  1465  	push ax
-00000528 F6                  1466  	clrw ax
-00000529 C1                  1467  	push ax
-0000052A A804                1468  	movw ax, [sp+0x04]
-0000052C 12                  1469  	movw bc, ax
-0000052D A806                1470  	movw ax, [sp+0x06]
-0000052F FC000000            1471  	call !!__COM_fdiv
-00000533 14                  1472  	movw de, ax
-00000534 1004                1473  	addw sp, #0x04
-00000536 307F43              1474  	movw ax, #0x437F
-00000539 C1                  1475  	push ax
-0000053A F6                  1476  	clrw ax
-0000053B C1                  1477  	push ax
-0000053C 15                  1478  	movw ax, de
-0000053D FC000000            1479  	call !!__COM_fmul
-00000541 1004                1480  	addw sp, #0x04
-00000543 FC000000            1481  	call !!__COM_ftoul
-00000547 60                  1482  	mov a, x
-00000548 FC000000            1483  	call !!_R_DAC0_Set_ConversionValue
-0000054C 309B40              1484  	movw ax, #0x409B
-0000054F                     1485  	;***      416 : 					(uint8_t) (g_numberSetting.cvccCurrent / CVCC_MAX_VOLTAGE
-0000054F                     1486  	;***      417 : 							* 255));
-0000054F                     1487  	;***      418 : 			R_DAC1_Set_ConversionValue(
-0000054F                     1488  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 418
-0000054F C1                  1489  	push ax
-00000550 300C02              1490  	movw ax, #0x020C
-00000553 C1                  1491  	push ax
-00000554 DB0000              1492  	movw bc, !LOWW(_g_numberSetting+0x00026)
-00000557 AF0000              1493  	movw ax, !LOWW(_g_numberSetting+0x00024)
-0000055A FC000000            1494  	call !!__COM_fdiv
-0000055E 14                  1495  	movw de, ax
-0000055F 1004                1496  	addw sp, #0x04
-00000561 307F43              1497  	movw ax, #0x437F
-00000564 C1                  1498  	push ax
-00000565 F6                  1499  	clrw ax
-00000566 C1                  1500  	push ax
-00000567 15                  1501  	movw ax, de
-00000568 FC000000            1502  	call !!__COM_fmul
-0000056C 1004                1503  	addw sp, #0x04
-0000056E FC000000            1504  	call !!__COM_ftoul
-00000572 60                  1505  	mov a, x
-00000573 FC000000            1506  	call !!_R_DAC1_Set_ConversionValue
-00000577 EF00                1507  	br $.BB@LABEL@22_23
-00000579                     1508  .BB@LABEL@22_22:	; if_else_bb
-00000579                     1509  	;***      419 : 					(uint8_t) (g_numberSetting.saltPumpVoltage
-00000579                     1510  	;***      420 : 							/ SALT_PUMP_MAX_VOLTAGE * 255));
-00000579                     1511  	;***      421 : 		} else {
-00000579                     1512  	;***      422 : 			save_spec_ok = -1;
-00000579                     1513  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 422
-00000579 CF0000FF            1514  	mov !LOWW(_save_spec_ok), #0xFF
-0000057D                     1515  .BB@LABEL@22_23:	; if_break_bb109
-0000057D                     1516  	;***      423 : 		}
-0000057D                     1517  	;***      424 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
-0000057D                     1518  	;***      425 : 		g_commnunication_flag.recived_number_setting_flag = 0;
-0000057D                     1519  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 425
-0000057D F50000              1520  	clrb !LOWW(_g_commnunication_flag+0x00003)
-00000580                     1521  	;***      426 : 		return 1U;
-00000580                     1522  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 426
-00000580 E1                  1523  	oneb a
-00000581                     1524  .BB@LABEL@22_24:	; bb113
-00000581 1006                1525  	addw sp, #0x06
-00000583                     1526  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 429
-00000583 D7                  1527  	ret
-00000584                     1528  	;***      427 : 	}
-00000584                     1529  	;***      428 : 	return 0U;
-00000584                     1530  	;***      429 : }
-00000000                     1531  	.SECTION .const,CONST
-00000000                     1532  	.ALIGN 2
-00000000                     1533  _time_setting_p:
-00000000 0000                1534  	.DB2 LOWW(__settingTime)
-00000002                     1535  	.ALIGN 2
-00000002                     1536  _number_setting_p:
-00000002 0000                1537  	.DB2 LOWW(__settingNumber)
-00000000                     1538  	.SECTION .data,DATA
-00000000                     1539  	.ALIGN 2
-00000000                     1540  _test_control_buf:
-00000000 52                  1541  	.DB 0x52
-00000001 02                  1542  	.DB 0x02
-00000002 00007F43            1543  	.DB4 0x437F0000	; float value: 255
-00000006                     1544  _save_spec_ok:
-00000006 00                  1545  	.DS (1)
-00000000                     1546  	.SECTION .bss,BSS
-00000000                     1547  _g_io_response:
-00000000                     1548  	.DS (4)
-00000004                     1549  _io_off:
-00000004                     1550  	.DS (4)
-00000008                     1551  _g_control_setting:
-00000008                     1552  	.DS (1)
-00000009                     1553  _flag_response:
-00000009                     1554  	.DS (4)
+00000243 51CF                 764  	mov a, #0xCF
+00000245                      765  	;***      240 : 		}
+00000245                      766  	;***      241 : 		g_io_status.refined.io.HandSensorON = 0U;
+00000245                      767  	;***      242 : 		g_io_status.refined.io.HandSensorOFF = 0U;
+00000245                      768  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 242
+00000245 5F0000               769  	and a, !LOWW(_g_io_status+0x00003)
+00000248 9F0000               770  	mov !LOWW(_g_io_status+0x00003), a
+0000024B                      771  	;***      243 : 		g_commnunication_flag.send_response_status_flag = 0;
+0000024B                      772  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 243
+0000024B F50000               773  	clrb !LOWW(_g_commnunication_flag+0x00005)
+0000024E                      774  .BB@LABEL@15_6:	; return
+0000024E C6                   775  	pop hl
+0000024F                      776  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 245
+0000024F D7                   777  	ret
+00000250                      778  _TestIndividual:
+00000250                      779  	.STACK _TestIndividual = 4
+00000250                      780  	;***      244 : 	}
+00000250                      781  	;***      245 : }
+00000250                      782  	;***      246 : uint8_t TestIndividual(void) {
+00000250                      783  	;***      247 : 	if (g_commnunication_flag.recieve_status_flag == 2
+00000250                      784  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 247
+00000250 40000002             785  	cmp !LOWW(_g_commnunication_flag+0x00009), #0x02
+00000254 DF00                 786  	bnz $.BB@LABEL@16_7
+00000256                      787  .BB@LABEL@16_1:	; bb
+00000256 D50000               788  	cmp0 !LOWW(_g_commnunication_flag)
+00000259 DF00                 789  	bnz $.BB@LABEL@16_7
+0000025B                      790  .BB@LABEL@16_2:	; if_then_bb
+0000025B                      791  	;***      248 : 			&& g_commnunication_flag.send_response_flag == 0) {
+0000025B                      792  	;***      249 : 		if (g_commnunication_flag.test_enable_flag == 1) {
+0000025B                      793  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 249
+0000025B 40000001             794  	cmp !LOWW(_g_commnunication_flag+0x0000D), #0x01
+0000025F DF00                 795  	bnz $.BB@LABEL@16_6
+00000261                      796  .BB@LABEL@16_3:	; if_then_bb.bb23_crit_edge
+00000261 F1                   797  	clrb a
+00000262                      798  .BB@LABEL@16_4:	; bb23
+00000262 73                   799  	mov b, a
+00000263                      800  	;***      250 : 			uint8_t *const _io_p = (uint8_t*) &g_io_response.Valve;
+00000263                      801  	;***      251 : 			for (uint8_t i = 0; i < 3; i++) {
+00000263                      802  	;***      252 : 				_io_p[i] = g_rx_data[i];
+00000263                      803  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 252
+00000263 090000               804  	mov a, LOWW(_g_rx_data)[b]
+00000266 180000               805  	mov LOWW(_g_io_response+0x00001)[b], a
+00000269                      806  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 251
+00000269 83                   807  	inc b
+0000026A 63                   808  	mov a, b
+0000026B 4C03                 809  	cmp a, #0x03
+0000026D DF00                 810  	bnz $.BB@LABEL@16_4
+0000026F                      811  .BB@LABEL@16_5:	; bb40
+0000026F                      812  	;***      253 : 			}
+0000026F                      813  	;***      254 : 			OutputIO(&g_io_response);
+0000026F                      814  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 254
+0000026F 300000               815  	movw ax, #LOWW(_g_io_response)
+00000272 FC000000             816  	call !!_OutputIO
+00000276                      817  .BB@LABEL@16_6:	; if_break_bb
+00000276                      818  	;***      255 : 		}
+00000276                      819  	;***      256 : 		g_commnunication_flag.recieve_status_flag = 0;
+00000276                      820  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 256
+00000276 F50000               821  	clrb !LOWW(_g_commnunication_flag+0x00009)
+00000279                      822  	;***      257 : 		return 1U;
+00000279                      823  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 257
+00000279 E1                   824  	oneb a
+0000027A D7                   825  	ret
+0000027B                      826  .BB@LABEL@16_7:	; bb44
+0000027B                      827  	;***      258 : 	}
+0000027B                      828  	;***      259 : 	return 0U;
+0000027B                      829  	;***      260 : }
+0000027B                      830  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 260
+0000027B F1                   831  	clrb a
+0000027C D7                   832  	ret
+0000027D                      833  _ControlSetttingReponse:
+0000027D                      834  	.STACK _ControlSetttingReponse = 8
+0000027D                      835  	;***      261 : 
+0000027D                      836  	;***      262 : void ControlSetttingReponse(void) {
+0000027D                      837  	;***      263 : 	const enum UART_header_e header =
+0000027D                      838  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 263
+0000027D 40000001             839  	cmp !LOWW(_g_commnunication_flag+0x00017), #0x01
+00000281 5353                 840  	mov b, #0x53
+00000283 61E8                 841  	skz
+00000285                      842  .BB@LABEL@17_1:	; bb5
+00000285 5352                 843  	mov b, #0x52
+00000287                      844  .BB@LABEL@17_2:	; bb6
+00000287                      845  	;***      264 : 			g_commnunication_flag.control_setting_save_flag == 1 ?
+00000287                      846  	;***      265 : 					H_SET : H_READ;
+00000287                      847  	;***      266 : 	if (g_commnunication_flag.control_setting_flag != 0) {
+00000287                      848  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 266
+00000287 D50000               849  	cmp0 !LOWW(_g_commnunication_flag+0x00016)
+0000028A DD00                 850  	bz $.BB@LABEL@17_10
+0000028C                      851  .BB@LABEL@17_3:	; if_then_bb
+0000028C                      852  	;***      267 : 		switch (g_commnunication_flag.control_setting_flag) {
+0000028C                      853  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 267
+0000028C 8F0000               854  	mov a, !LOWW(_g_commnunication_flag+0x00016)
+0000028F 0CD9                 855  	add a, #0xD9
+00000291 DD00                 856  	bz $.BB@LABEL@17_13
+00000293                      857  .BB@LABEL@17_4:	; if_then_bb
+00000293 91                   858  	dec a
+00000294 DD00                 859  	bz $.BB@LABEL@17_17
+00000296                      860  .BB@LABEL@17_5:	; if_then_bb
+00000296 91                   861  	dec a
+00000297 DD00                 862  	bz $.BB@LABEL@17_14
+00000299                      863  .BB@LABEL@17_6:	; if_then_bb
+00000299 91                   864  	dec a
+0000029A DD00                 865  	bz $.BB@LABEL@17_15
+0000029C                      866  .BB@LABEL@17_7:	; if_then_bb
+0000029C 4C02                 867  	cmp a, #0x02
+0000029E DF00                 868  	bnz $.BB@LABEL@17_9
+000002A0                      869  .BB@LABEL@17_8:	; switch_clause_bb43
+000002A0                      870  	;***      268 : 		case DRAINAGE_MODE_SET:
+000002A0                      871  	;***      269 : 			sendToRasPi_u32(header, DRAINAGE_MODE_SET,
+000002A0                      872  	;***      270 : 					(uint32_t) g_control_setting.raw.drain << (8 * 3));
+000002A0                      873  	;***      271 : 			break;
+000002A0                      874  	;***      272 : 		case POWER_ON_TEST_SET:
+000002A0                      875  	;***      273 : 			sendToRasPi_u32(header, POWER_ON_TEST_SET,
+000002A0                      876  	;***      274 : 					(uint32_t) g_control_setting.raw.power_on << (8 * 3));
+000002A0                      877  	;***      275 : 			break;
+000002A0                      878  	;***      276 : 		case WATER_FILTER_SET:
+000002A0                      879  	;***      277 : 			sendToRasPi_u32(header, WATER_FILTER_SET,
+000002A0                      880  	;***      278 : 					(uint32_t) g_control_setting.raw.filter << (8 * 3));
+000002A0                      881  	;***      279 : 			break;
+000002A0                      882  	;***      280 : 		case BIOMETRIC_SET:
+000002A0                      883  	;***      281 : 			sendToRasPi_u32(header, BIOMETRIC_SET,
+000002A0                      884  	;***      282 : 					(uint32_t) g_control_setting.raw.biomectric << (8 * 3));
+000002A0                      885  	;***      283 : 			break;
+000002A0                      886  	;***      284 : 		case CONTROL_SETTING:
+000002A0                      887  	;***      285 : 			sendToRasPi_Revert_i32(H_READ, CONTROL_SETTING,
+000002A0                      888  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 285
+000002A0 8F0000               889  	mov a, !LOWW(_g_control_setting)
+000002A3 318E                 890  	shrw ax, 8+0x00000
+000002A5 12                   891  	movw bc, ax
+000002A6 F6                   892  	clrw ax
+000002A7 14                   893  	movw de, ax
+000002A8 302C52               894  	movw ax, #0x522C
+000002AB FE0000               895  	call $!_sendToRasPi_Revert_i32
+000002AE                      896  .BB@LABEL@17_9:	; switch_break_bb
+000002AE                      897  	;***      286 : 					(int32_t) g_control_setting.data);
+000002AE                      898  	;***      287 : 			break;
+000002AE                      899  	;***      288 : 		default:
+000002AE                      900  	;***      289 : 			break;
+000002AE                      901  	;***      290 : 		}
+000002AE                      902  	;***      291 : 		g_commnunication_flag.control_setting_flag = 0;
+000002AE                      903  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 291
+000002AE F50000               904  	clrb !LOWW(_g_commnunication_flag+0x00016)
+000002B1                      905  .BB@LABEL@17_10:	; if_break_bb
+000002B1                      906  	;***      292 : 	}
+000002B1                      907  	;***      293 : 
+000002B1                      908  	;***      294 : 	if (g_commnunication_flag.control_setting_save_flag == 1) {
+000002B1                      909  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 294
+000002B1 40000001             910  	cmp !LOWW(_g_commnunication_flag+0x00017), #0x01
+000002B5 DF00                 911  	bnz $.BB@LABEL@17_12
+000002B7                      912  .BB@LABEL@17_11:	; if_then_bb52
+000002B7 F6                   913  	clrw ax
+000002B8                      914  	;***      295 : 		EE_SPI_Write((uint8_t*) &g_control_setting.data,
+000002B8                      915  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 295
+000002B8 C1                   916  	push ax
+000002B9 A1                   917  	incw ax
+000002BA C1                   918  	push ax
+000002BB 322900               919  	movw bc, #0x0029
+000002BE 300000               920  	movw ax, #LOWW(_g_control_setting)
+000002C1 FC000000             921  	call !!_EE_SPI_Write
+000002C5 1004                 922  	addw sp, #0x04
+000002C7                      923  	;***      296 : 		NUMBER_SETTING_ADDRESS + numberSettingSize,
+000002C7                      924  	;***      297 : 				sizeof(g_control_setting.data));
+000002C7                      925  	;***      298 : 		g_commnunication_flag.control_setting_save_flag = 0;
+000002C7                      926  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 298
+000002C7 F50000               927  	clrb !LOWW(_g_commnunication_flag+0x00017)
+000002CA                      928  .BB@LABEL@17_12:	; return
+000002CA                      929  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 301
+000002CA D7                   930  	ret
+000002CB                      931  .BB@LABEL@17_13:	; switch_clause_bb
+000002CB E1                   932  	oneb a
+000002CC                      933  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 269
+000002CC 5F0000               934  	and a, !LOWW(_g_control_setting)
+000002CF F0                   935  	clrb x
+000002D0 14                   936  	movw de, ax
+000002D1 5027                 937  	mov x, #0x27
+000002D3 EF00                 938  	br $.BB@LABEL@17_16
+000002D5                      939  .BB@LABEL@17_14:	; switch_clause_bb22
+000002D5                      940  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 273
+000002D5 8F0000               941  	mov a, !LOWW(_g_control_setting)
+000002D8 311A                 942  	shr a, 0x01
+000002DA 5C01                 943  	and a, #0x01
+000002DC F0                   944  	clrb x
+000002DD 14                   945  	movw de, ax
+000002DE 5029                 946  	mov x, #0x29
+000002E0 EF00                 947  	br $.BB@LABEL@17_16
+000002E2                      948  .BB@LABEL@17_15:	; switch_clause_bb29
+000002E2                      949  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 277
+000002E2 8F0000               950  	mov a, !LOWW(_g_control_setting)
+000002E5 312A                 951  	shr a, 0x02
+000002E7 5C01                 952  	and a, #0x01
+000002E9 F0                   953  	clrb x
+000002EA 14                   954  	movw de, ax
+000002EB 502A                 955  	mov x, #0x2A
+000002ED                      956  .BB@LABEL@17_16:	; switch_clause_bb29
+000002ED 63                   957  	mov a, b
+000002EE F7                   958  	clrw bc
+000002EF FE0000               959  	call $!_sendToRasPi_u32
+000002F2 EF00                 960  	br $.BB@LABEL@17_9
+000002F4                      961  .BB@LABEL@17_17:	; switch_clause_bb36
+000002F4                      962  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 281
+000002F4 8F0000               963  	mov a, !LOWW(_g_control_setting)
+000002F7 313A                 964  	shr a, 0x03
+000002F9 5C01                 965  	and a, #0x01
+000002FB F0                   966  	clrb x
+000002FC 14                   967  	movw de, ax
+000002FD 5028                 968  	mov x, #0x28
+000002FF EF00                 969  	br $.BB@LABEL@17_16
+00000301                      970  _TestMode:
+00000301                      971  	.STACK _TestMode = 4
+00000301                      972  	;***      299 : 	}
+00000301                      973  	;***      300 : 
+00000301                      974  	;***      301 : }
+00000301                      975  	;***      302 : uint8_t TestMode(void) {
+00000301                      976  	;***      303 : 	if (g_commnunication_flag.test_flag == TESTING_MODE_START) {
+00000301                      977  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 303
+00000301 4000001A             978  	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1A
+00000305 DF00                 979  	bnz $.BB@LABEL@18_2
+00000307                      980  .BB@LABEL@18_1:	; if_then_bb
+00000307                      981  	;***      304 : 		g_commnunication_flag.test_flag = 0U;
+00000307                      982  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 304
+00000307 F50000               983  	clrb !LOWW(_g_commnunication_flag+0x0000A)
+0000030A                      984  	;***      305 : 		sendToRasPi_u32(H_SET, TESTING_MODE_START, 0x0000);
+0000030A                      985  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 305
+0000030A F6                   986  	clrw ax
+0000030B 14                   987  	movw de, ax
+0000030C F7                   988  	clrw bc
+0000030D 301A53               989  	movw ax, #0x531A
+00000310 FE0000               990  	call $!_sendToRasPi_u32
+00000313                      991  	;***      306 : 		return 1U;
+00000313                      992  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 306
+00000313 E1                   993  	oneb a
+00000314 D7                   994  	ret
+00000315                      995  .BB@LABEL@18_2:	; if_else_bb
+00000315                      996  	;***      307 : 	} else if (g_commnunication_flag.test_flag == TESTING_MODE_STOP) {
+00000315                      997  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 307
+00000315 4000001C             998  	cmp !LOWW(_g_commnunication_flag+0x0000A), #0x1C
+00000319 DF00                 999  	bnz $.BB@LABEL@18_4
+0000031B                     1000  .BB@LABEL@18_3:	; if_then_bb10
+0000031B                     1001  	;***      308 : 		g_commnunication_flag.test_flag = 0U;
+0000031B                     1002  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 308
+0000031B F50000              1003  	clrb !LOWW(_g_commnunication_flag+0x0000A)
+0000031E                     1004  	;***      309 : 		sendToRasPi_u32(H_SET, TESTING_MODE_STOP, 0x0000);
+0000031E                     1005  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 309
+0000031E F6                  1006  	clrw ax
+0000031F 14                  1007  	movw de, ax
+00000320 F7                  1008  	clrw bc
+00000321 301C53              1009  	movw ax, #0x531C
+00000324 FE0000              1010  	call $!_sendToRasPi_u32
+00000327                     1011  	;***      310 : 		OutputIO(&io_off);
+00000327                     1012  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 310
+00000327 300000              1013  	movw ax, #LOWW(_io_off)
+0000032A FC000000            1014  	call !!_OutputIO
+0000032E                     1015  .BB@LABEL@18_4:	; bb13
+0000032E F1                  1016  	clrb a
+0000032F                     1017  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 313
+0000032F D7                  1018  	ret
+00000330                     1019  _SendTimeSetting:
+00000330                     1020  	.STACK _SendTimeSetting = 6
+00000330                     1021  	;***      311 : 	}
+00000330                     1022  	;***      312 : 	return 0;
+00000330                     1023  	;***      313 : }
+00000330                     1024  	;***      314 : 
+00000330                     1025  	;***      315 : uint8_t SendTimeSetting(void) {
+00000330                     1026  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 315
+00000330 C7                  1027  	push hl
+00000331                     1028  	;***      316 : 	if (g_commnunication_flag.send_response_time_flag
+00000331                     1029  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 316
+00000331 D50000              1030  	cmp0 !LOWW(_g_commnunication_flag+0x00001)
+00000334 DD00                1031  	bz $.BB@LABEL@19_6
+00000336                     1032  .BB@LABEL@19_1:	; bb
+00000336 D50000              1033  	cmp0 !LOWW(_g_commnunication_flag)
+00000339 DF00                1034  	bnz $.BB@LABEL@19_6
+0000033B                     1035  .BB@LABEL@19_2:	; if_then_bb
+0000033B                     1036  	;***      317 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
+0000033B                     1037  	;***      318 : 		uint8_t state = g_uart2_sendend;
+0000033B                     1038  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 318
+0000033B 8F0000              1039  	mov a, !LOWW(_g_uart2_sendend)
+0000033E 9800                1040  	mov [sp+0x00], a
+00000340                     1041  	;***      319 : 		g_timerSetting.crc = crc8_1((uint8_t*) &g_timerSetting,
+00000340                     1042  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 319
+00000340 52A0                1043  	mov c, #0xA0
+00000342 300000              1044  	movw ax, #LOWW(_g_timerSetting)
+00000345 FC000000            1045  	call !!_crc8_1
+00000349 9F0000              1046  	mov !LOWW(_g_timerSetting+0x000A0), a
+0000034C                     1047  	;***      320 : 				timeSettingSize - 1);
+0000034C                     1048  	;***      321 : 		R_UART2_Send((uint8_t*) &g_timerSetting, timeSettingSize);
+0000034C                     1049  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 321
+0000034C 32A100              1050  	movw bc, #0x00A1
+0000034F 300000              1051  	movw ax, #LOWW(_g_timerSetting)
+00000352 FC000000            1052  	call !!_R_UART2_Send
+00000356                     1053  	;***      322 : 		flag_response.time++;
+00000356                     1054  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 322
+00000356 A00000              1055  	inc !LOWW(_flag_response)
+00000359                     1056  .BB@LABEL@19_3:	; bb28
+00000359 8800                1057  	mov a, [sp+0x00]
+0000035B                     1058  	;***      323 : 		while (state == g_uart2_sendend) {
+0000035B                     1059  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 323
+0000035B 4F0000              1060  	cmp a, !LOWW(_g_uart2_sendend)
+0000035E DF00                1061  	bnz $.BB@LABEL@19_5
+00000360                     1062  .BB@LABEL@19_4:	; bb27
+00000360                     1063  	;***      324 : 			R_WDT_Restart();
+00000360                     1064  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 324
+00000360 FC000000            1065  	call !!_R_WDT_Restart
+00000364 EF00                1066  	br $.BB@LABEL@19_3
+00000366                     1067  .BB@LABEL@19_5:	; bb36
+00000366                     1068  	;***      325 : 		}
+00000366                     1069  	;***      326 : 		g_commnunication_flag.send_response_time_flag = 0;
+00000366                     1070  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 326
+00000366 F50000              1071  	clrb !LOWW(_g_commnunication_flag+0x00001)
+00000369                     1072  	;***      327 : 		return 1U;
+00000369                     1073  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 327
+00000369 E1                  1074  	oneb a
+0000036A C6                  1075  	pop hl
+0000036B D7                  1076  	ret
+0000036C                     1077  .BB@LABEL@19_6:	; bb39
+0000036C                     1078  	;***      328 : 	}
+0000036C                     1079  	;***      329 : 	return 0U;
+0000036C                     1080  	;***      330 : }
+0000036C                     1081  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 330
+0000036C F1                  1082  	clrb a
+0000036D C6                  1083  	pop hl
+0000036E D7                  1084  	ret
+0000036F                     1085  _SendNumberSetting:
+0000036F                     1086  	.STACK _SendNumberSetting = 6
+0000036F                     1087  	;***      331 : uint8_t SendNumberSetting(void) {
+0000036F                     1088  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 331
+0000036F C7                  1089  	push hl
+00000370                     1090  	;***      332 : 	if (g_commnunication_flag.send_response_number_flag
+00000370                     1091  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 332
+00000370 D50000              1092  	cmp0 !LOWW(_g_commnunication_flag+0x00002)
+00000373 DD00                1093  	bz $.BB@LABEL@20_6
+00000375                     1094  .BB@LABEL@20_1:	; bb
+00000375 D50000              1095  	cmp0 !LOWW(_g_commnunication_flag)
+00000378 DF00                1096  	bnz $.BB@LABEL@20_6
+0000037A                     1097  .BB@LABEL@20_2:	; if_then_bb
+0000037A                     1098  	;***      333 : 			&& (g_commnunication_flag.send_response_flag == 0)) {
+0000037A                     1099  	;***      334 : 		uint8_t state = g_uart2_sendend;
+0000037A                     1100  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 334
+0000037A 8F0000              1101  	mov a, !LOWW(_g_uart2_sendend)
+0000037D 9800                1102  	mov [sp+0x00], a
+0000037F                     1103  	;***      335 : 		g_numberSetting.crc = crc8_1((uint8_t*) &g_numberSetting,
+0000037F                     1104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 335
+0000037F 5228                1105  	mov c, #0x28
+00000381 300000              1106  	movw ax, #LOWW(_g_numberSetting)
+00000384 FC000000            1107  	call !!_crc8_1
+00000388 9F0000              1108  	mov !LOWW(_g_numberSetting+0x00028), a
+0000038B                     1109  	;***      336 : 				numberSettingSize - 1);
+0000038B                     1110  	;***      337 : 		R_UART2_Send((uint8_t*) &g_numberSetting, numberSettingSize);
+0000038B                     1111  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 337
+0000038B 322900              1112  	movw bc, #0x0029
+0000038E 300000              1113  	movw ax, #LOWW(_g_numberSetting)
+00000391 FC000000            1114  	call !!_R_UART2_Send
+00000395                     1115  	;***      338 : 		flag_response.number++;
+00000395                     1116  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 338
+00000395 A00000              1117  	inc !LOWW(_flag_response+0x00001)
+00000398                     1118  .BB@LABEL@20_3:	; bb28
+00000398 8800                1119  	mov a, [sp+0x00]
+0000039A                     1120  	;***      339 : 		while (state == g_uart2_sendend) {
+0000039A                     1121  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 339
+0000039A 4F0000              1122  	cmp a, !LOWW(_g_uart2_sendend)
+0000039D DF00                1123  	bnz $.BB@LABEL@20_5
+0000039F                     1124  .BB@LABEL@20_4:	; bb27
+0000039F                     1125  	;***      340 : 			R_WDT_Restart();
+0000039F                     1126  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 340
+0000039F FC000000            1127  	call !!_R_WDT_Restart
+000003A3 EF00                1128  	br $.BB@LABEL@20_3
+000003A5                     1129  .BB@LABEL@20_5:	; bb36
+000003A5                     1130  	;***      341 : 		}
+000003A5                     1131  	;***      342 : 		g_commnunication_flag.send_response_number_flag = 0;
+000003A5                     1132  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 342
+000003A5 F50000              1133  	clrb !LOWW(_g_commnunication_flag+0x00002)
+000003A8                     1134  	;***      343 : 		return 1U;
+000003A8                     1135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 343
+000003A8 E1                  1136  	oneb a
+000003A9 C6                  1137  	pop hl
+000003AA D7                  1138  	ret
+000003AB                     1139  .BB@LABEL@20_6:	; bb39
+000003AB                     1140  	;***      344 : 	}
+000003AB                     1141  	;***      345 : 	return 0U;
+000003AB                     1142  	;***      346 : }
+000003AB                     1143  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 346
+000003AB F1                  1144  	clrb a
+000003AC C6                  1145  	pop hl
+000003AD D7                  1146  	ret
+000003AE                     1147  _GetAndSaveTimeSetting:
+000003AE                     1148  	.STACK _GetAndSaveTimeSetting = 10
+000003AE                     1149  	;***      347 : uint8_t GetAndSaveTimeSetting(void) {
+000003AE                     1150  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 347
+000003AE C7                  1151  	push hl
+000003AF F1                  1152  	clrb a
+000003B0                     1153  	;***      348 : 	if (g_commnunication_flag.recived_time_setting_flag == 2) {
+000003B0                     1154  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 348
+000003B0 40000002            1155  	cmp !LOWW(_g_commnunication_flag+0x00004), #0x02
+000003B4 DF00                1156  	bnz $.BB@LABEL@21_16
+000003B6                     1157  .BB@LABEL@21_1:	; entry.bb56_crit_edge
+000003B6 73                  1158  	mov b, a
+000003B7                     1159  .BB@LABEL@21_2:	; bb56
+000003B7                     1160  	;***      349 : 		//		//Do not Edit this, must keep!!!!
+000003B7                     1161  	;***      350 : 		for (uint8_t i = 0; i < timeSettingSize - 1; i++) {
+000003B7                     1162  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 350
+000003B7 4CA0                1163  	cmp a, #0xA0
+000003B9 DE00                1164  	bnc $.BB@LABEL@21_12
+000003BB                     1165  .BB@LABEL@21_3:	; bb
+000003BB                     1166  	;***      351 : 			switch (i % 4) {
+000003BB                     1167  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 351
+000003BB 5C03                1168  	and a, #0x03
+000003BD DD00                1169  	bz $.BB@LABEL@21_10
+000003BF                     1170  .BB@LABEL@21_4:	; bb
+000003BF 91                  1171  	dec a
+000003C0 DD00                1172  	bz $.BB@LABEL@21_9
+000003C2                     1173  .BB@LABEL@21_5:	; bb
+000003C2 91                  1174  	dec a
+000003C3 63                  1175  	mov a, b
+000003C4 DD00                1176  	bz $.BB@LABEL@21_8
+000003C6                     1177  .BB@LABEL@21_6:	; switch_clause_bb
+000003C6                     1178  	;***      352 : 			case 3:
+000003C6                     1179  	;***      353 : 				time_setting_p[i - 3] = g_rx_data[i];
+000003C6                     1180  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 353
+000003C6 318E                1181  	shrw ax, 8+0x00000
+000003C8 040000              1182  	addw ax, #LOWW(__settingTime+0x0FFFD)
+000003CB                     1183  .BB@LABEL@21_7:	; switch_clause_bb
+000003CB 14                  1184  	movw de, ax
+000003CC 090000              1185  	mov a, LOWW(_g_rx_data)[b]
+000003CF 99                  1186  	mov [de], a
+000003D0 EF00                1187  	br $.BB@LABEL@21_11
+000003D2                     1188  .BB@LABEL@21_8:	; switch_clause_bb19
+000003D2                     1189  	;***      354 : 				break;
+000003D2                     1190  	;***      355 : 			case 2:
+000003D2                     1191  	;***      356 : 				time_setting_p[i - 1] = g_rx_data[i];
+000003D2                     1192  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 356
+000003D2 318E                1193  	shrw ax, 8+0x00000
+000003D4 040000              1194  	addw ax, #LOWW(__settingTime+0x0FFFF)
+000003D7 EF00                1195  	br $.BB@LABEL@21_7
+000003D9                     1196  .BB@LABEL@21_9:	; switch_clause_bb31
+000003D9                     1197  	;***      357 : 				break;
+000003D9                     1198  	;***      358 : 			case 1:
+000003D9                     1199  	;***      359 : 				time_setting_p[1 + i] = g_rx_data[i];
+000003D9                     1200  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 359
+000003D9 090000              1201  	mov a, LOWW(_g_rx_data)[b]
+000003DC 180000              1202  	mov LOWW(__settingTime+0x00001)[b], a
+000003DF EF00                1203  	br $.BB@LABEL@21_11
+000003E1                     1204  .BB@LABEL@21_10:	; switch_clause_bb42
+000003E1                     1205  	;***      360 : 				break;
+000003E1                     1206  	;***      361 : 			case 0:
+000003E1                     1207  	;***      362 : 				time_setting_p[3 + i] = g_rx_data[i];
+000003E1                     1208  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 362
+000003E1 090000              1209  	mov a, LOWW(_g_rx_data)[b]
+000003E4 180000              1210  	mov LOWW(__settingTime+0x00003)[b], a
+000003E7                     1211  .BB@LABEL@21_11:	; switch_break_bb
+000003E7 83                  1212  	inc b
+000003E8 63                  1213  	mov a, b
+000003E9 EF00                1214  	br $.BB@LABEL@21_2
+000003EB                     1215  .BB@LABEL@21_12:	; bb65
+000003EB                     1216  	;***      363 : 				break;
+000003EB                     1217  	;***      364 : 			default:
+000003EB                     1218  	;***      365 : 				break;
+000003EB                     1219  	;***      366 : 			}
+000003EB                     1220  	;***      367 : 		}
+000003EB                     1221  	;***      368 : 		_settingTime.crc = g_rx_data[timeSettingSize - 1];
+000003EB                     1222  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 368
+000003EB 8F0000              1223  	mov a, !LOWW(_g_rx_data+0x000A0)
+000003EE 9800                1224  	mov [sp+0x00], a
+000003F0 9F0000              1225  	mov !LOWW(__settingTime+0x000A0), a
+000003F3                     1226  	;***      369 : 		if (g_rx_data[timeSettingSize - 1]
+000003F3                     1227  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 369
+000003F3 52A0                1228  	mov c, #0xA0
+000003F5 300000              1229  	movw ax, #LOWW(_g_rx_data)
+000003F8 FC000000            1230  	call !!_crc8_1
+000003FC 70                  1231  	mov x, a
+000003FD 8800                1232  	mov a, [sp+0x00]
+000003FF 08                  1233  	xch a, x
+00000400 6140                1234  	cmp x, a
+00000402 DF00                1235  	bnz $.BB@LABEL@21_14
+00000404                     1236  .BB@LABEL@21_13:	; if_then_bb88
+00000404                     1237  	;***      370 : 				== crc8_1((uint8_t*) g_rx_data, timeSettingSize - 1)) {
+00000404                     1238  	;***      371 : 			save_spec_ok = 1;
+00000404                     1239  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 371
+00000404 E50000              1240  	oneb !LOWW(_save_spec_ok)
+00000407                     1241  	;***      372 : 			g_timerSetting = _settingTime;
+00000407                     1242  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 372
+00000407 34A200              1243  	movw de, #0x00A2
+0000040A 320000              1244  	movw bc, #LOWW(__settingTime)
+0000040D 300000              1245  	movw ax, #LOWW(_g_timerSetting)
+00000410 FC000000            1246  	call !!_memcpy
+00000414 F6                  1247  	clrw ax
+00000415                     1248  	;***      373 : 			EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
+00000415                     1249  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 373
+00000415 C1                  1250  	push ax
+00000416 50A1                1251  	mov x, #0xA1
+00000418 C1                  1252  	push ax
+00000419 320008              1253  	movw bc, #0x0800
+0000041C 300000              1254  	movw ax, #LOWW(_g_timerSetting)
+0000041F FC000000            1255  	call !!_EE_SPI_Write
+00000423 1004                1256  	addw sp, #0x04
+00000425 EF00                1257  	br $.BB@LABEL@21_15
+00000427                     1258  .BB@LABEL@21_14:	; if_else_bb
+00000427                     1259  	;***      374 : 					timeSettingSize);
+00000427                     1260  	;***      375 : 		} else {
+00000427                     1261  	;***      376 : 			save_spec_ok = -1;
+00000427                     1262  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 376
+00000427 CF0000FF            1263  	mov !LOWW(_save_spec_ok), #0xFF
+0000042B                     1264  .BB@LABEL@21_15:	; if_break_bb
+0000042B                     1265  	;***      377 : 		}
+0000042B                     1266  	;***      378 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+0000042B                     1267  	;***      379 : 		g_commnunication_flag.recived_time_setting_flag = 0;
+0000042B                     1268  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 379
+0000042B F50000              1269  	clrb !LOWW(_g_commnunication_flag+0x00004)
+0000042E                     1270  	;***      380 : 		return 1U;
+0000042E                     1271  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 380
+0000042E E1                  1272  	oneb a
+0000042F                     1273  .BB@LABEL@21_16:	; bb94
+0000042F C6                  1274  	pop hl
+00000430                     1275  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 383
+00000430 D7                  1276  	ret
+00000431                     1277  _GetAndSaveNumberSetting:
+00000431                     1278  	.STACK _GetAndSaveNumberSetting = 14
+00000431                     1279  	;***      381 : 	}
+00000431                     1280  	;***      382 : 	return 0U;
+00000431                     1281  	;***      383 : }
+00000431                     1282  	;***      384 : uint8_t GetAndSaveNumberSetting(void) {
+00000431                     1283  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 384
+00000431 2006                1284  	subw sp, #0x06
+00000433 F1                  1285  	clrb a
+00000434                     1286  	;***      385 : 	if (g_commnunication_flag.recived_number_setting_flag == 2) {
+00000434                     1287  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 385
+00000434 40000002            1288  	cmp !LOWW(_g_commnunication_flag+0x00003), #0x02
+00000438                     1289  	.bnz $!.BB@LABEL@22_24
+00000438 61E8                    	 -- Skncond
+0000043A EE0000                  	 -- br	**.target1
+0000043D                     1290  .BB@LABEL@22_1:	; entry.bb56_crit_edge
+0000043D 73                  1291  	mov b, a
+0000043E                     1292  .BB@LABEL@22_2:	; bb56
+0000043E                     1293  	;***      386 : 		//		//Do not Edit this, must keep!!!!
+0000043E                     1294  	;***      387 : 		for (uint8_t i = 0; i < numberSettingSize - 1; i++) {
+0000043E                     1295  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 387
+0000043E 4C28                1296  	cmp a, #0x28
+00000440 DE00                1297  	bnc $.BB@LABEL@22_12
+00000442                     1298  .BB@LABEL@22_3:	; bb
+00000442                     1299  	;***      388 : 			switch (i % 4) {
+00000442                     1300  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 388
+00000442 5C03                1301  	and a, #0x03
+00000444 DD00                1302  	bz $.BB@LABEL@22_10
+00000446                     1303  .BB@LABEL@22_4:	; bb
+00000446 91                  1304  	dec a
+00000447 DD00                1305  	bz $.BB@LABEL@22_9
+00000449                     1306  .BB@LABEL@22_5:	; bb
+00000449 91                  1307  	dec a
+0000044A 63                  1308  	mov a, b
+0000044B DD00                1309  	bz $.BB@LABEL@22_8
+0000044D                     1310  .BB@LABEL@22_6:	; switch_clause_bb
+0000044D                     1311  	;***      389 : 			case 3:
+0000044D                     1312  	;***      390 : 				number_setting_p[i - 3] = g_rx_data[i];
+0000044D                     1313  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 390
+0000044D 318E                1314  	shrw ax, 8+0x00000
+0000044F 040000              1315  	addw ax, #LOWW(__settingNumber+0x0FFFD)
+00000452                     1316  .BB@LABEL@22_7:	; switch_clause_bb
+00000452 14                  1317  	movw de, ax
+00000453 090000              1318  	mov a, LOWW(_g_rx_data)[b]
+00000456 99                  1319  	mov [de], a
+00000457 EF00                1320  	br $.BB@LABEL@22_11
+00000459                     1321  .BB@LABEL@22_8:	; switch_clause_bb19
+00000459                     1322  	;***      391 : 				break;
+00000459                     1323  	;***      392 : 			case 2:
+00000459                     1324  	;***      393 : 				number_setting_p[i - 1] = g_rx_data[i];
+00000459                     1325  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 393
+00000459 318E                1326  	shrw ax, 8+0x00000
+0000045B 040000              1327  	addw ax, #LOWW(__settingNumber+0x0FFFF)
+0000045E EF00                1328  	br $.BB@LABEL@22_7
+00000460                     1329  .BB@LABEL@22_9:	; switch_clause_bb31
+00000460                     1330  	;***      394 : 				break;
+00000460                     1331  	;***      395 : 			case 1:
+00000460                     1332  	;***      396 : 				number_setting_p[1 + i] = g_rx_data[i];
+00000460                     1333  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 396
+00000460 090000              1334  	mov a, LOWW(_g_rx_data)[b]
+00000463 180000              1335  	mov LOWW(__settingNumber+0x00001)[b], a
+00000466 EF00                1336  	br $.BB@LABEL@22_11
+00000468                     1337  .BB@LABEL@22_10:	; switch_clause_bb42
+00000468                     1338  	;***      397 : 				break;
+00000468                     1339  	;***      398 : 			case 0:
+00000468                     1340  	;***      399 : 				number_setting_p[3 + i] = g_rx_data[i];
+00000468                     1341  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 399
+00000468 090000              1342  	mov a, LOWW(_g_rx_data)[b]
+0000046B 180000              1343  	mov LOWW(__settingNumber+0x00003)[b], a
+0000046E                     1344  .BB@LABEL@22_11:	; switch_break_bb
+0000046E 83                  1345  	inc b
+0000046F 63                  1346  	mov a, b
+00000470 EF00                1347  	br $.BB@LABEL@22_2
+00000472                     1348  .BB@LABEL@22_12:	; bb65
+00000472                     1349  	;***      400 : 				break;
+00000472                     1350  	;***      401 : 			default:
+00000472                     1351  	;***      402 : 				break;
+00000472                     1352  	;***      403 : 			}
+00000472                     1353  	;***      404 : 		}
+00000472                     1354  	;***      405 : 		_settingNumber.crc = crc8_1((uint8_t*) g_rx_data,
+00000472                     1355  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 405
+00000472 5228                1356  	mov c, #0x28
+00000474 300000              1357  	movw ax, #LOWW(_g_rx_data)
+00000477 FC000000            1358  	call !!_crc8_1
+0000047B 9F0000              1359  	mov !LOWW(__settingNumber+0x00028), a
+0000047E                     1360  	;***      406 : 				numberSettingSize - 1);
+0000047E                     1361  	;***      407 : 		if (g_rx_data[numberSettingSize - 1]
+0000047E                     1362  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 407
+0000047E 8F0000              1363  	mov a, !LOWW(_g_rx_data+0x00028)
+00000481 9800                1364  	mov [sp+0x00], a
+00000483 5228                1365  	mov c, #0x28
+00000485 300000              1366  	movw ax, #LOWW(_g_rx_data)
+00000488 FC000000            1367  	call !!_crc8_1
+0000048C 70                  1368  	mov x, a
+0000048D 8800                1369  	mov a, [sp+0x00]
+0000048F 08                  1370  	xch a, x
+00000490 6148                1371  	cmp a, x
+00000492                     1372  	.bnz $!.BB@LABEL@22_22
+00000492 61E8                    	 -- Skncond
+00000494 EE0000                  	 -- br	**.target1
+00000497                     1373  .BB@LABEL@22_13:	; if_then_bb87
+00000497                     1374  	;***      408 : 				== crc8_1((uint8_t*) g_rx_data, numberSettingSize - 1)) {
+00000497                     1375  	;***      409 : 			save_spec_ok = 1;
+00000497                     1376  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 409
+00000497 E50000              1377  	oneb !LOWW(_save_spec_ok)
+0000049A                     1378  	;***      410 : 			g_numberSetting = _settingNumber;
+0000049A                     1379  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 410
+0000049A 342A00              1380  	movw de, #0x002A
+0000049D 320000              1381  	movw bc, #LOWW(__settingNumber)
+000004A0 300000              1382  	movw ax, #LOWW(_g_numberSetting)
+000004A3 FC000000            1383  	call !!_memcpy
+000004A7 F6                  1384  	clrw ax
+000004A8                     1385  	;***      411 : 			EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
+000004A8                     1386  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 411
+000004A8 C1                  1387  	push ax
+000004A9 5029                1388  	mov x, #0x29
+000004AB C1                  1389  	push ax
+000004AC F7                  1390  	clrw bc
+000004AD 300000              1391  	movw ax, #LOWW(_g_numberSetting)
+000004B0 FC000000            1392  	call !!_EE_SPI_Write
+000004B4 1004                1393  	addw sp, #0x04
+000004B6 309B40              1394  	movw ax, #0x409B
+000004B9                     1395  	;***      412 : 					numberSettingSize);
+000004B9                     1396  	;***      413 : 			if (g_numberSetting.saltPumpVoltage > SALT_PUMP_MAX_VOLTAGE)
+000004B9                     1397  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 413
+000004B9 C1                  1398  	push ax
+000004BA 300C02              1399  	movw ax, #0x020C
+000004BD C1                  1400  	push ax
+000004BE DB0000              1401  	movw bc, !LOWW(_g_numberSetting+0x00026)
+000004C1 13                  1402  	movw ax, bc
+000004C2 B806                1403  	movw [sp+0x06], ax
+000004C4 AF0000              1404  	movw ax, !LOWW(_g_numberSetting+0x00024)
+000004C7 B808                1405  	movw [sp+0x08], ax
+000004C9 FC000000            1406  	call !!__COM_funordered
+000004CD 9804                1407  	mov [sp+0x04], a
+000004CF 1004                1408  	addw sp, #0x04
+000004D1 309B40              1409  	movw ax, #0x409B
+000004D4 C1                  1410  	push ax
+000004D5 300C02              1411  	movw ax, #0x020C
+000004D8 C1                  1412  	push ax
+000004D9 A806                1413  	movw ax, [sp+0x06]
+000004DB 12                  1414  	movw bc, ax
+000004DC A808                1415  	movw ax, [sp+0x08]
+000004DE FC000000            1416  	call !!__COM_fle
+000004E2 1004                1417  	addw sp, #0x04
+000004E4 70                  1418  	mov x, a
+000004E5 8800                1419  	mov a, [sp+0x00]
+000004E7 D1                  1420  	cmp0 a
+000004E8 E1                  1421  	oneb a
+000004E9 61F8                1422  	sknz
+000004EB                     1423  .BB@LABEL@22_14:	; if_then_bb87
+000004EB F1                  1424  	clrb a
+000004EC                     1425  .BB@LABEL@22_15:	; if_then_bb87
+000004EC D0                  1426  	cmp0 x
+000004ED E0                  1427  	oneb x
+000004EE 61F8                1428  	sknz
+000004F0                     1429  .BB@LABEL@22_16:	; if_then_bb87
+000004F0 F0                  1430  	clrb x
+000004F1                     1431  .BB@LABEL@22_17:	; if_then_bb87
+000004F1 6160                1432  	or x, a
+000004F3 DF00                1433  	bnz $.BB@LABEL@22_19
+000004F5                     1434  .BB@LABEL@22_18:	; if_then_bb94
+000004F5 309B40              1435  	movw ax, #0x409B
+000004F8                     1436  	;***      414 : 				g_numberSetting.saltPumpVoltage = SALT_PUMP_MAX_VOLTAGE;
+000004F8                     1437  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 414
+000004F8 BF0000              1438  	movw !LOWW(_g_numberSetting+0x00026), ax
+000004FB 300C02              1439  	movw ax, #0x020C
+000004FE BF0000              1440  	movw !LOWW(_g_numberSetting+0x00024), ax
+00000501                     1441  .BB@LABEL@22_19:	; if_break_bb
+00000501 30A040              1442  	movw ax, #0x40A0
+00000504                     1443  	;***      415 : 			if (g_numberSetting.cvccCurrent > CVCC_MAX_VOLTAGE)
+00000504                     1444  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 415
+00000504 C1                  1445  	push ax
+00000505 F6                  1446  	clrw ax
+00000506 C1                  1447  	push ax
+00000507 DB0000              1448  	movw bc, !LOWW(_g_numberSetting+0x00022)
+0000050A 13                  1449  	movw ax, bc
+0000050B B804                1450  	movw [sp+0x04], ax
+0000050D AF0000              1451  	movw ax, !LOWW(_g_numberSetting+0x00020)
+00000510 B806                1452  	movw [sp+0x06], ax
+00000512 FC000000            1453  	call !!__COM_fgt
+00000516 1004                1454  	addw sp, #0x04
+00000518 D1                  1455  	cmp0 a
+00000519 DD00                1456  	bz $.BB@LABEL@22_21
+0000051B                     1457  .BB@LABEL@22_20:	; if_then_bb99
+0000051B 30A040              1458  	movw ax, #0x40A0
+0000051E                     1459  	;***      416 : 				g_numberSetting.cvccCurrent = CVCC_MAX_VOLTAGE;
+0000051E                     1460  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 416
+0000051E BF0000              1461  	movw !LOWW(_g_numberSetting+0x00022), ax
+00000521 F6                  1462  	clrw ax
+00000522 BF0000              1463  	movw !LOWW(_g_numberSetting+0x00020), ax
+00000525 B802                1464  	movw [sp+0x02], ax
+00000527 30A040              1465  	movw ax, #0x40A0
+0000052A B800                1466  	movw [sp+0x00], ax
+0000052C                     1467  .BB@LABEL@22_21:	; if_break_bb100
+0000052C 30A040              1468  	movw ax, #0x40A0
+0000052F                     1469  	;***      417 : 			R_DAC0_Set_ConversionValue(
+0000052F                     1470  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 417
+0000052F C1                  1471  	push ax
+00000530 F6                  1472  	clrw ax
+00000531 C1                  1473  	push ax
+00000532 A804                1474  	movw ax, [sp+0x04]
+00000534 12                  1475  	movw bc, ax
+00000535 A806                1476  	movw ax, [sp+0x06]
+00000537 FC000000            1477  	call !!__COM_fdiv
+0000053B 14                  1478  	movw de, ax
+0000053C 1004                1479  	addw sp, #0x04
+0000053E 307F43              1480  	movw ax, #0x437F
+00000541 C1                  1481  	push ax
+00000542 F6                  1482  	clrw ax
+00000543 C1                  1483  	push ax
+00000544 15                  1484  	movw ax, de
+00000545 FC000000            1485  	call !!__COM_fmul
+00000549 1004                1486  	addw sp, #0x04
+0000054B FC000000            1487  	call !!__COM_ftoul
+0000054F 60                  1488  	mov a, x
+00000550 FC000000            1489  	call !!_R_DAC0_Set_ConversionValue
+00000554 309B40              1490  	movw ax, #0x409B
+00000557                     1491  	;***      418 : 					(uint8_t) (g_numberSetting.cvccCurrent / CVCC_MAX_VOLTAGE
+00000557                     1492  	;***      419 : 							* 255));
+00000557                     1493  	;***      420 : 			R_DAC1_Set_ConversionValue(
+00000557                     1494  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 420
+00000557 C1                  1495  	push ax
+00000558 300C02              1496  	movw ax, #0x020C
+0000055B C1                  1497  	push ax
+0000055C DB0000              1498  	movw bc, !LOWW(_g_numberSetting+0x00026)
+0000055F AF0000              1499  	movw ax, !LOWW(_g_numberSetting+0x00024)
+00000562 FC000000            1500  	call !!__COM_fdiv
+00000566 14                  1501  	movw de, ax
+00000567 1004                1502  	addw sp, #0x04
+00000569 307F43              1503  	movw ax, #0x437F
+0000056C C1                  1504  	push ax
+0000056D F6                  1505  	clrw ax
+0000056E C1                  1506  	push ax
+0000056F 15                  1507  	movw ax, de
+00000570 FC000000            1508  	call !!__COM_fmul
+00000574 1004                1509  	addw sp, #0x04
+00000576 FC000000            1510  	call !!__COM_ftoul
+0000057A 60                  1511  	mov a, x
+0000057B FC000000            1512  	call !!_R_DAC1_Set_ConversionValue
+0000057F EF00                1513  	br $.BB@LABEL@22_23
+00000581                     1514  .BB@LABEL@22_22:	; if_else_bb
+00000581                     1515  	;***      421 : 					(uint8_t) (g_numberSetting.saltPumpVoltage
+00000581                     1516  	;***      422 : 							/ SALT_PUMP_MAX_VOLTAGE * 255));
+00000581                     1517  	;***      423 : 		} else {
+00000581                     1518  	;***      424 : 			save_spec_ok = -1;
+00000581                     1519  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 424
+00000581 CF0000FF            1520  	mov !LOWW(_save_spec_ok), #0xFF
+00000585                     1521  .BB@LABEL@22_23:	; if_break_bb109
+00000585                     1522  	;***      425 : 		}
+00000585                     1523  	;***      426 : 		//		sendToRasPi(H_SET, OK_ALL, 0x0);
+00000585                     1524  	;***      427 : 		g_commnunication_flag.recived_number_setting_flag = 0;
+00000585                     1525  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 427
+00000585 F50000              1526  	clrb !LOWW(_g_commnunication_flag+0x00003)
+00000588                     1527  	;***      428 : 		return 1U;
+00000588                     1528  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 428
+00000588 E1                  1529  	oneb a
+00000589                     1530  .BB@LABEL@22_24:	; bb113
+00000589 1006                1531  	addw sp, #0x06
+0000058B                     1532  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 431
+0000058B D7                  1533  	ret
+0000058C                     1534  	;***      429 : 	}
+0000058C                     1535  	;***      430 : 	return 0U;
+0000058C                     1536  	;***      431 : }
+00000000                     1537  	.SECTION .const,CONST
+00000000                     1538  	.ALIGN 2
+00000000                     1539  _time_setting_p:
+00000000 0000                1540  	.DB2 LOWW(__settingTime)
+00000002                     1541  	.ALIGN 2
+00000002                     1542  _number_setting_p:
+00000002 0000                1543  	.DB2 LOWW(__settingNumber)
+00000000                     1544  	.SECTION .data,DATA
+00000000                     1545  	.ALIGN 2
+00000000                     1546  _test_control_buf:
+00000000 52                  1547  	.DB 0x52
+00000001 02                  1548  	.DB 0x02
+00000002 00007F43            1549  	.DB4 0x437F0000	; float value: 255
+00000006                     1550  _save_spec_ok:
+00000006 00                  1551  	.DS (1)
+00000000                     1552  	.SECTION .bss,BSS
+00000000                     1553  _g_io_response:
+00000000                     1554  	.DS (4)
+00000004                     1555  _io_off:
+00000004                     1556  	.DS (4)
+00000008                     1557  _g_control_setting:
+00000008                     1558  	.DS (1)
+00000009                     1559  _flag_response:
+00000009                     1560  	.DS (4)
 
 Section List
 Attr     Size                Name
 
-TEXTF              1412 (00000584) .textf
+TEXTF              1420 (0000058C) .textf
 CONST                 4 (00000004) .const
 DATA                  7 (00000007) .data
 BSS                  13 (0000000D) .bss

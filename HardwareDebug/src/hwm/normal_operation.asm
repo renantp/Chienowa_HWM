@@ -15,9 +15,10 @@
 #@   -pass_source
 #@   -o src/hwm/normal_operation.obj
 #@   ../src/hwm/normal_operation.c
-#@  compiled at Wed Jun 22 12:09:18 2022
+#@  compiled at Wed Jun 22 17:23:23 2022
 
 	.EXTERN _g_timerSetting
+	.EXTERN _g_io_status
 	.EXTERN _g_Tick
 	.EXTERN _g_machine_state
 	.EXTERN _g_systemTime
@@ -32,7 +33,7 @@
 
 	.SECTION .textf,TEXTF
 _WaterWashingMode_nostop:
-	.STACK _WaterWashingMode_nostop = 4
+	.STACK _WaterWashingMode_nostop = 6
 	;***        1 : /*
 	;***        2 :  * normal_operation.c
 	;***        3 :  *
@@ -60,7 +61,7 @@ _WaterWashingMode_nostop:
 .BB@LABEL@1_2:	; entry
 	dec a
 	bz $.BB@LABEL@1_7
-.BB@LABEL@1_3:	; switch_clause_bb41
+.BB@LABEL@1_3:	; switch_clause_bb75
 	;***       18 : 	case 0:
 	;***       19 : 		g_machine_state.mode = WATER_WASHING;
 	;***       20 : 		O_SPOUT_WATER_PIN_SV2 = ON;
@@ -77,19 +78,22 @@ _WaterWashingMode_nostop:
 	;***       31 : 		}
 	;***       32 : 		break;
 	;***       33 : 	case 2:
-	;***       34 : 		if (DETECT_D() == I_ON) {
-	;***       35 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
-	;***       36 : 			g_color = BLACK;
-	;***       37 : 			(*state) = 0;
-	;***       38 : 			g_machine_state.mode = BUSY;
-	;***       39 : 			handSensorLED(g_color);
-	;***       40 : 			g_animation_queue++;
-	;***       41 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
-	;***       42 : 		}
-	;***       43 : 		break;
-	;***       44 : 	default:
-	;***       45 : 		(*state) = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 45
+	;***       34 : 		if (ns_delay_ms(tick, g_timerSetting.t55_waterDischargeDelay_s * 1000)
+	;***       35 : 				|| DETECT_D() == I_ON) {
+	;***       36 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
+	;***       37 : 			g_color = BLACK;
+	;***       38 : 			(*state) = 0;
+	;***       39 : 			g_machine_state.mode = BUSY;
+	;***       40 : 			handSensorLED(g_color);
+	;***       41 : 			g_animation_queue++;
+	;***       42 : 			if(DETECT_D() == I_ON)
+	;***       43 : 				g_io_status.refined.io.HandSensorOFF = 1;
+	;***       44 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
+	;***       45 : 		}
+	;***       46 : 		break;
+	;***       47 : 	default:
+	;***       48 : 		(*state) = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 48
 	clrb !LOWW(_g_machine_state+0x00002)
 	ret
 .BB@LABEL@1_4:	; switch_clause_bb
@@ -118,7 +122,7 @@ _WaterWashingMode_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@1_9
+	bz $.BB@LABEL@1_11
 .BB@LABEL@1_6:	; if_then_bb
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 28
 	inc !LOWW(_g_animation_queue)
@@ -127,47 +131,72 @@ _WaterWashingMode_nostop:
 	ret
 .BB@LABEL@1_7:	; switch_clause_bb21
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 34
+	movw ax, !LOWW(_g_timerSetting+0x00080)
+	movw bc, #0x03E8
+	mulhu
+	movw de, ax
+	push bc
+	pop hl
+	movw ax, !LOWW(_g_timerSetting+0x00082)
+	movw bc, #0x03E8
+	mulh
+	push de
+	pop bc
+	addw ax, hl
+	movw de, ax
+	movw ax, #LOWW(_g_Tick+0x00018)
+	call !!_ns_delay_ms
+	clrw bc
+	cmpw ax, bc
+	bnz $.BB@LABEL@1_9
+.BB@LABEL@1_8:	; bb
 	mov a, 0xFFF07
-	bt a.4, $.BB@LABEL@1_9
-.BB@LABEL@1_8:	; if_then_bb35
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 35
-	clr1 0xFFF05.5
+	bt a.4, $.BB@LABEL@1_11
+.BB@LABEL@1_9:	; if_then_bb49
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 36
-	clrb !LOWW(_g_color)
+	clr1 0xFFF05.5
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 37
-	clrb !LOWW(_g_machine_state+0x00002)
+	clrb !LOWW(_g_color)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 38
-	mov !LOWW(_g_machine_state+0x0000E), #0x07
+	clrb !LOWW(_g_machine_state+0x00002)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 39
+	mov !LOWW(_g_machine_state+0x0000E), #0x07
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 40
 	clrb a
 	call !!_handSensorLED
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 40
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 41
 	inc !LOWW(_g_animation_queue)
-.BB@LABEL@1_9:	; return
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 48
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 42
+	mov a, 0xFFF07
+	bt a.4, $.BB@LABEL@1_11
+.BB@LABEL@1_10:	; if_then_bb69
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 43
+	set1 !LOWW(_g_io_status+0x00003).5
+.BB@LABEL@1_11:	; return
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 51
 	ret
 _HandWashingMode_nostop:
 	.STACK _HandWashingMode_nostop = 6
-	;***       46 : 		break;
-	;***       47 : 	}
-	;***       48 : }
-	;***       49 : 
-	;***       50 : /**
-	;***       51 :  * Tested: 24/12/2021 by Mr.An
-	;***       52 :  */
-	;***       53 : void HandWashingMode_nostop(void) {
-	;***       54 : 	uint8_t *state = &g_machine_state.handwash;
-	;***       55 : 	uint32_t *tick = &g_Tick.tickHandWash;
-	;***       56 : 	const uint32_t delayPump_ms = 50;
-	;***       57 : 	if ((*state) == 0) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 57
+	;***       49 : 		break;
+	;***       50 : 	}
+	;***       51 : }
+	;***       52 : 
+	;***       53 : /**
+	;***       54 :  * Tested: 24/12/2021 by Mr.An
+	;***       55 :  */
+	;***       56 : void HandWashingMode_nostop(void) {
+	;***       57 : 	uint8_t *state = &g_machine_state.handwash;
+	;***       58 : 	uint32_t *tick = &g_Tick.tickHandWash;
+	;***       59 : 	const uint32_t delayPump_ms = 50;
+	;***       60 : 	if ((*state) == 0) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 60
 	mov a, !LOWW(_g_machine_state+0x00003)
 	mov d, a
 	cmp0 a
 	bnz $.BB@LABEL@2_10
 .BB@LABEL@2_1:	; if_then_bb
-	;***       58 : 		g_timerSetting.t54_overLapTime_ms =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 58
+	;***       61 : 		g_timerSetting.t54_overLapTime_ms =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 61
 	movw ax, !LOWW(_g_timerSetting+0x0007E)
 	movw bc, ax
 	cmpw ax, #0x0000
@@ -184,10 +213,10 @@ _HandWashingMode_nostop:
 	br $.BB@LABEL@2_9
 .BB@LABEL@2_5:	; bb15
 	movw ax, bc
-	;***       59 : 				g_timerSetting.t54_overLapTime_ms < delayPump_ms ?
-	;***       60 : 						delayPump_ms : g_timerSetting.t54_overLapTime_ms;
-	;***       61 : 		g_timerSetting.t54_overLapTime_ms =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 61
+	;***       62 : 				g_timerSetting.t54_overLapTime_ms < delayPump_ms ?
+	;***       63 : 						delayPump_ms : g_timerSetting.t54_overLapTime_ms;
+	;***       64 : 		g_timerSetting.t54_overLapTime_ms =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 64
 	cmpw ax, #0x0000
 	movw ax, hl
 	sknz
@@ -204,15 +233,15 @@ _HandWashingMode_nostop:
 	movw !LOWW(_g_timerSetting+0x0007E), ax
 .BB@LABEL@2_10:	; if_break_bb
 	mov a, d
-	;***       62 : 				g_timerSetting.t54_overLapTime_ms > 1000 ?
-	;***       63 : 						1000 : g_timerSetting.t54_overLapTime_ms;
-	;***       64 : 	} else {
-	;***       65 : //		if(ns_delay_ms(&g_Tick.tickAnimation, 500) && (g_machine_state.waitAnimationRes == 1)){
-	;***       66 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***       67 : //		}
-	;***       68 : 	}
-	;***       69 : 	switch (*state) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 69
+	;***       65 : 				g_timerSetting.t54_overLapTime_ms > 1000 ?
+	;***       66 : 						1000 : g_timerSetting.t54_overLapTime_ms;
+	;***       67 : 	} else {
+	;***       68 : //		if(ns_delay_ms(&g_Tick.tickAnimation, 500) && (g_machine_state.waitAnimationRes == 1)){
+	;***       69 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***       70 : //		}
+	;***       71 : 	}
+	;***       72 : 	switch (*state) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 72
 	cmp0 a
 	bz $.BB@LABEL@2_20
 .BB@LABEL@2_11:	; if_break_bb
@@ -240,116 +269,116 @@ _HandWashingMode_nostop:
 	dec a
 	.bz $!.BB@LABEL@2_50
 .BB@LABEL@2_19:	; switch_clause_bb151
-	;***       70 : 	case 0:
-	;***       71 : 		*state = 1;
-	;***       72 : 		*tick = g_systemTime;
-	;***       73 : 		g_machine_state.mode = HAND_WASHING;
-	;***       74 : 		O_SPOUT_ALK_PIN_SV4 = ON;
-	;***       75 : 		g_Tick.tickAnimation = g_systemTime;
-	;***       76 : 		break;
-	;***       77 : 	case 1:
-	;***       78 : 		//RDVS
-	;***       79 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
-	;***       80 : 			(*state)++;
-	;***       81 : 			g_animation_queue++;
-	;***       82 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***       83 : 			break;
-	;***       84 : 		}
-	;***       85 : 		if (ns_delay_ms(tick, delayPump_ms)) {
-	;***       86 : 			O_ALK_PUMP_PIN_P2 = ON;
-	;***       87 : 			handSensorLED(BLUE);
-	;***       88 : 			g_animation_queue++;
-	;***       89 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***       90 : 			(*state)++;
-	;***       91 : 		}
-	;***       92 : 		break;
-	;***       93 : 	case 2:
-	;***       94 : //		if (ns_delay_ms(tick, delayPump_ms)) {
-	;***       95 : //			O_ALK_PUMP_PIN_P2 = ON;
-	;***       96 : //			handSensorLED(BLUE);
-	;***       97 : //			(*state)++;
-	;***       98 : //		}
-	;***       99 : 		(*state)++;
-	;***      100 : 		break;
-	;***      101 : 	case 3:
-	;***      102 : 		if (ns_delay_ms(tick,
-	;***      103 : 				g_timerSetting.t51_alkalineWaterSpoutingTime_s * 1000
-	;***      104 : 						- g_timerSetting.t54_overLapTime_ms)) {
-	;***      105 : 			O_ALK_PUMP_PIN_P2 = OFF;
-	;***      106 : 			O_SPOUT_ACID_PIN_SV3 = ON;
-	;***      107 : 			(*state)++;
-	;***      108 : 		}
-	;***      109 : 		break;
-	;***      110 : 	case 4:
-	;***      111 : 		if (ns_delay_ms(tick, delayPump_ms)) {
-	;***      112 : 			O_ACID_PUMP_PIN_P1 = ON;
-	;***      113 : 			handSensorLED(RED);
-	;***      114 : 			g_animation_queue++;
-	;***      115 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      116 : 			(*state)++;
-	;***      117 : 		}
-	;***      118 : 		break;
-	;***      119 : 	case 5:
-	;***      120 : 		if (ns_delay_ms(tick,
-	;***      121 : 				g_timerSetting.t54_overLapTime_ms - delayPump_ms)) {
-	;***      122 : 			O_SPOUT_ALK_PIN_SV4 = OFF;
-	;***      123 : 			(*state)++;
-	;***      124 : 		}
-	;***      125 : 		break;
-	;***      126 : 	case 6:
-	;***      127 : 		if (ns_delay_ms(tick,
-	;***      128 : 				g_timerSetting.t52_acidWaterSpoutingTime_s * 1000
-	;***      129 : 						- g_timerSetting.t54_overLapTime_ms)) {
-	;***      130 : 			O_ACID_PUMP_PIN_P1 = OFF;
-	;***      131 : 			handSensorLED(WHITE);
-	;***      132 : 			O_SPOUT_WATER_PIN_SV2 = ON;
-	;***      133 : 			g_animation_queue++;
-	;***      134 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      135 : 			(*state)++;
-	;***      136 : 		}
-	;***      137 : 		break;
-	;***      138 : 	case 7:
-	;***      139 : 		if (ns_delay_ms(tick, g_timerSetting.t54_overLapTime_ms)) {
-	;***      140 : 			O_SPOUT_ACID_PIN_SV3 = OFF;
-	;***      141 : 			(*state)++;
-	;***      142 : 		}
-	;***      143 : 		break;
-	;***      144 : 	case 8:
-	;***      145 : 		if (ns_delay_ms(tick,
-	;***      146 : 				g_timerSetting.t53_washingWaterSpoutingTime_s * 1000)) {
-	;***      147 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
-	;***      148 : 			handSensorLED(BLACK);
-	;***      149 : 			(*state) = 0;
-	;***      150 : 			g_machine_state.mode = BUSY;
-	;***      151 : 			g_animation_queue++;
-	;***      152 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      153 : 		}
-	;***      154 : 		break;
-	;***      155 : 	default:
-	;***      156 : 		(*state) = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 156
+	;***       73 : 	case 0:
+	;***       74 : 		*state = 1;
+	;***       75 : 		*tick = g_systemTime;
+	;***       76 : 		g_machine_state.mode = HAND_WASHING;
+	;***       77 : 		O_SPOUT_ALK_PIN_SV4 = ON;
+	;***       78 : 		g_Tick.tickAnimation = g_systemTime;
+	;***       79 : 		break;
+	;***       80 : 	case 1:
+	;***       81 : 		//RDVS
+	;***       82 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
+	;***       83 : 			(*state)++;
+	;***       84 : 			g_animation_queue++;
+	;***       85 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***       86 : 			break;
+	;***       87 : 		}
+	;***       88 : 		if (ns_delay_ms(tick, delayPump_ms)) {
+	;***       89 : 			O_ALK_PUMP_PIN_P2 = ON;
+	;***       90 : 			handSensorLED(BLUE);
+	;***       91 : 			g_animation_queue++;
+	;***       92 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***       93 : 			(*state)++;
+	;***       94 : 		}
+	;***       95 : 		break;
+	;***       96 : 	case 2:
+	;***       97 : //		if (ns_delay_ms(tick, delayPump_ms)) {
+	;***       98 : //			O_ALK_PUMP_PIN_P2 = ON;
+	;***       99 : //			handSensorLED(BLUE);
+	;***      100 : //			(*state)++;
+	;***      101 : //		}
+	;***      102 : 		(*state)++;
+	;***      103 : 		break;
+	;***      104 : 	case 3:
+	;***      105 : 		if (ns_delay_ms(tick,
+	;***      106 : 				g_timerSetting.t51_alkalineWaterSpoutingTime_s * 1000
+	;***      107 : 						- g_timerSetting.t54_overLapTime_ms)) {
+	;***      108 : 			O_ALK_PUMP_PIN_P2 = OFF;
+	;***      109 : 			O_SPOUT_ACID_PIN_SV3 = ON;
+	;***      110 : 			(*state)++;
+	;***      111 : 		}
+	;***      112 : 		break;
+	;***      113 : 	case 4:
+	;***      114 : 		if (ns_delay_ms(tick, delayPump_ms)) {
+	;***      115 : 			O_ACID_PUMP_PIN_P1 = ON;
+	;***      116 : 			handSensorLED(RED);
+	;***      117 : 			g_animation_queue++;
+	;***      118 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      119 : 			(*state)++;
+	;***      120 : 		}
+	;***      121 : 		break;
+	;***      122 : 	case 5:
+	;***      123 : 		if (ns_delay_ms(tick,
+	;***      124 : 				g_timerSetting.t54_overLapTime_ms - delayPump_ms)) {
+	;***      125 : 			O_SPOUT_ALK_PIN_SV4 = OFF;
+	;***      126 : 			(*state)++;
+	;***      127 : 		}
+	;***      128 : 		break;
+	;***      129 : 	case 6:
+	;***      130 : 		if (ns_delay_ms(tick,
+	;***      131 : 				g_timerSetting.t52_acidWaterSpoutingTime_s * 1000
+	;***      132 : 						- g_timerSetting.t54_overLapTime_ms)) {
+	;***      133 : 			O_ACID_PUMP_PIN_P1 = OFF;
+	;***      134 : 			handSensorLED(WHITE);
+	;***      135 : 			O_SPOUT_WATER_PIN_SV2 = ON;
+	;***      136 : 			g_animation_queue++;
+	;***      137 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      138 : 			(*state)++;
+	;***      139 : 		}
+	;***      140 : 		break;
+	;***      141 : 	case 7:
+	;***      142 : 		if (ns_delay_ms(tick, g_timerSetting.t54_overLapTime_ms)) {
+	;***      143 : 			O_SPOUT_ACID_PIN_SV3 = OFF;
+	;***      144 : 			(*state)++;
+	;***      145 : 		}
+	;***      146 : 		break;
+	;***      147 : 	case 8:
+	;***      148 : 		if (ns_delay_ms(tick,
+	;***      149 : 				g_timerSetting.t53_washingWaterSpoutingTime_s * 1000)) {
+	;***      150 : 			O_SPOUT_WATER_PIN_SV2 = OFF;
+	;***      151 : 			handSensorLED(BLACK);
+	;***      152 : 			(*state) = 0;
+	;***      153 : 			g_machine_state.mode = BUSY;
+	;***      154 : 			g_animation_queue++;
+	;***      155 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      156 : 		}
+	;***      157 : 		break;
+	;***      158 : 	default:
+	;***      159 : 		(*state) = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 159
 	clrb !LOWW(_g_machine_state+0x00003)
 	ret
 .BB@LABEL@2_20:	; switch_clause_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 71
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 74
 	oneb !LOWW(_g_machine_state+0x00003)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 72
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 75
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0001E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0001C), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 73
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 76
 	oneb !LOWW(_g_machine_state+0x0000E)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 74
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 77
 	set1 0xFFF07.7
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 75
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 78
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0005E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0005C), ax
 	ret
 .BB@LABEL@2_21:	; switch_clause_bb35
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 79
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 82
 	clrw ax
 	movw de, ax
 	movw bc, #0x0064
@@ -359,7 +388,7 @@ _HandWashingMode_nostop:
 	cmpw ax, bc
 	bnz $.BB@LABEL@2_26
 .BB@LABEL@2_22:	; if_break_bb48
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 85
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 88
 	clrw ax
 	movw de, ax
 	mov c, #0x32
@@ -369,9 +398,9 @@ _HandWashingMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@2_35
 .BB@LABEL@2_23:	; if_then_bb55
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 86
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 89
 	set1 0xFFF06.1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 87
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 90
 	mov a, #0x03
 .BB@LABEL@2_24:	; if_then_bb55
 	call !!_handSensorLED
@@ -379,20 +408,20 @@ _HandWashingMode_nostop:
 	inc !LOWW(_g_animation_queue)
 	br $.BB@LABEL@2_33
 .BB@LABEL@2_26:	; if_then_bb40
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 80
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 83
 	inc !LOWW(_g_machine_state+0x00003)
 .BB@LABEL@2_27:	; if_then_bb40
 	inc !LOWW(_g_animation_queue)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 160
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 163
 	ret
 .BB@LABEL@2_28:	; switch_clause_bb62
 	mov a, d
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 99
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 102
 	inc a
 	mov !LOWW(_g_machine_state+0x00003), a
 	ret
 .BB@LABEL@2_29:	; switch_clause_bb66
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 102
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 105
 	movw ax, !LOWW(_g_timerSetting+0x00070)
 	movw bc, #0x03E8
 	mulhu
@@ -420,14 +449,14 @@ _HandWashingMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@2_45
 .BB@LABEL@2_32:	; if_then_bb76
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 105
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 108
 	clr1 0xFFF06.1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 106
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 109
 	set1 0xFFF07.6
 .BB@LABEL@2_33:	; if_then_bb76
 	br $.BB@LABEL@2_41
 .BB@LABEL@2_34:	; switch_clause_bb81
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 111
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 114
 	clrw ax
 	movw de, ax
 	movw bc, #0x0032
@@ -438,14 +467,14 @@ _HandWashingMode_nostop:
 .BB@LABEL@2_35:	; switch_clause_bb81
 	bz $.BB@LABEL@2_45
 .BB@LABEL@2_36:	; if_then_bb88
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 112
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 115
 	set1 0xFFF06.2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 113
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 116
 	oneb a
 	br $.BB@LABEL@2_24
 .BB@LABEL@2_37:	; switch_clause_bb95
 	movw ax, #0xFFCE
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 120
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 123
 	addw ax, !LOWW(_g_timerSetting+0x0007C)
 	movw bc, ax
 	clrw ax
@@ -462,14 +491,14 @@ _HandWashingMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@2_48
 .BB@LABEL@2_40:	; if_then_bb104
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 122
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 125
 	clr1 0xFFF07.7
 .BB@LABEL@2_41:	; if_then_bb104
 	inc !LOWW(_g_machine_state+0x00003)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 160
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 163
 	ret
 .BB@LABEL@2_42:	; switch_clause_bb109
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 127
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 130
 	movw ax, !LOWW(_g_timerSetting+0x00074)
 	movw bc, #0x03E8
 	mulhu
@@ -498,16 +527,16 @@ _HandWashingMode_nostop:
 .BB@LABEL@2_45:	; switch_clause_bb109
 	bz $.BB@LABEL@2_52
 .BB@LABEL@2_46:	; if_then_bb119
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 130
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 133
 	clr1 0xFFF06.2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 131
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 134
 	mov a, #0x02
 	call !!_handSensorLED
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 132
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 135
 	set1 0xFFF05.5
 	br $!.BB@LABEL@2_25
 .BB@LABEL@2_47:	; switch_clause_bb126
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 139
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 142
 	movw bc, !LOWW(_g_timerSetting+0x0007C)
 	movw de, !LOWW(_g_timerSetting+0x0007E)
 	movw ax, #LOWW(_g_Tick+0x0001C)
@@ -517,11 +546,11 @@ _HandWashingMode_nostop:
 .BB@LABEL@2_48:	; switch_clause_bb126
 	bz $.BB@LABEL@2_52
 .BB@LABEL@2_49:	; if_then_bb133
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 140
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 143
 	clr1 0xFFF07.6
 	br $.BB@LABEL@2_41
 .BB@LABEL@2_50:	; switch_clause_bb138
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 145
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 148
 	movw ax, !LOWW(_g_timerSetting+0x00078)
 	movw bc, #0x03E8
 	mulhu
@@ -541,34 +570,34 @@ _HandWashingMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@2_52
 .BB@LABEL@2_51:	; if_then_bb146
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 147
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 150
 	clr1 0xFFF05.5
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 148
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 151
 	clrb a
 	call !!_handSensorLED
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 149
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 152
 	clrb !LOWW(_g_machine_state+0x00003)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 150
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 153
 	mov !LOWW(_g_machine_state+0x0000E), #0x07
 	br $!.BB@LABEL@2_27
 .BB@LABEL@2_52:	; return
-	;***      157 : 		break;
-	;***      158 : 	}
-	;***      159 : 
-	;***      160 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 160
+	;***      160 : 		break;
+	;***      161 : 	}
+	;***      162 : 
+	;***      163 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 163
 	ret
 _AcidWaterMode_nostop:
 	.STACK _AcidWaterMode_nostop = 6
-	;***      161 : /**
-	;***      162 :  * Tested: 24/12/2021 by Mr.An
-	;***      163 :  */
-	;***      164 : void AcidWaterMode_nostop(void) {
-	;***      165 : 	uint8_t *state = &g_machine_state.acid;
-	;***      166 : 	uint32_t *tick = &g_Tick.tickAcid;
-	;***      167 : 	const uint32_t delayPump_ms = 50;
-	;***      168 : 	switch (*state) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 168
+	;***      164 : /**
+	;***      165 :  * Tested: 24/12/2021 by Mr.An
+	;***      166 :  */
+	;***      167 : void AcidWaterMode_nostop(void) {
+	;***      168 : 	uint8_t *state = &g_machine_state.acid;
+	;***      169 : 	uint32_t *tick = &g_Tick.tickAcid;
+	;***      170 : 	const uint32_t delayPump_ms = 50;
+	;***      171 : 	switch (*state) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 171
 	mov a, !LOWW(_g_machine_state+0x00001)
 	cmp0 a
 	bz $.BB@LABEL@3_6
@@ -583,88 +612,90 @@ _AcidWaterMode_nostop:
 	.bz $!.BB@LABEL@3_14
 .BB@LABEL@3_4:	; entry
 	dec a
-	.bz $!.BB@LABEL@3_18
-.BB@LABEL@3_5:	; switch_clause_bb113
-	;***      169 : 	case 0:
-	;***      170 : //		*state = DETECT_U == I_ON ? 1 : 0;
-	;***      171 : 		g_machine_state.mode = ACID_WASHING;
-	;***      172 : 		O_SPOUT_ACID_PIN_SV3 = ON;
-	;***      173 : 		g_color = RED;
-	;***      174 : 		handSensorLED(g_color);
-	;***      175 : 		*state = 1;
-	;***      176 : 		*tick = g_systemTime;
-	;***      177 : 		break;
-	;***      178 : 	case 1:
-	;***      179 : 		if (ns_delay_ms(tick, delayPump_ms)) {
-	;***      180 : 			O_ACID_PUMP_PIN_P1 = ON;
-	;***      181 : 			(*state)++;
-	;***      182 : 			g_Tick.tickAnimation = g_systemTime;
-	;***      183 : 		}
-	;***      184 : 		break;
-	;***      185 : 	case 2:
-	;***      186 : 		//RDVS
-	;***      187 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
-	;***      188 : 			g_animation_queue++;
-	;***      189 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      190 : 			(*state)++;
-	;***      191 : 		}
-	;***      192 : 		//TODO: Change turn OFF signal here
-	;***      193 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-	;***      194 : 				|| (DETECT_D() == I_ON)) {
-	;***      195 : 			g_animation_queue++;
-	;***      196 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      197 : 			O_ACID_PUMP_PIN_P1 = OFF;
-	;***      198 : 			(*state)++;
-	;***      199 : 		}
-	;***      200 : 		break;
-	;***      201 : 	case 3:
-	;***      202 : 		//TODO: Change turn OFF signal here
-	;***      203 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-	;***      204 : 				|| (DETECT_D() == I_ON)) {
-	;***      205 : 			O_ACID_PUMP_PIN_P1 = OFF;
-	;***      206 : 			(*state)++;
-	;***      207 : 		}
-	;***      208 : 		break;
-	;***      209 : 	case 4:
-	;***      210 : 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
-	;***      211 : 			O_SPOUT_ACID_PIN_SV3 = OFF;
-	;***      212 : 			g_color = BLACK;
-	;***      213 : 			handSensorLED(g_color);
-	;***      214 : 			(*state)++;
-	;***      215 : 		}
-	;***      216 : 		break;
-	;***      217 : 	default:
-	;***      218 : 		g_machine_state.mode = BUSY;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 218
+	.bz $!.BB@LABEL@3_19
+.BB@LABEL@3_5:	; switch_clause_bb133
+	;***      172 : 	case 0:
+	;***      173 : //		*state = DETECT_U == I_ON ? 1 : 0;
+	;***      174 : 		g_machine_state.mode = ACID_WASHING;
+	;***      175 : 		O_SPOUT_ACID_PIN_SV3 = ON;
+	;***      176 : 		g_color = RED;
+	;***      177 : 		handSensorLED(g_color);
+	;***      178 : 		*state = 1;
+	;***      179 : 		*tick = g_systemTime;
+	;***      180 : 		break;
+	;***      181 : 	case 1:
+	;***      182 : 		if (ns_delay_ms(tick, delayPump_ms)) {
+	;***      183 : 			O_ACID_PUMP_PIN_P1 = ON;
+	;***      184 : 			(*state)++;
+	;***      185 : 			g_Tick.tickAnimation = g_systemTime;
+	;***      186 : 		}
+	;***      187 : 		break;
+	;***      188 : 	case 2:
+	;***      189 : 		//RDVS
+	;***      190 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
+	;***      191 : 			g_animation_queue++;
+	;***      192 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      193 : 			(*state)++;
+	;***      194 : 		}
+	;***      195 : 		//TODO: Change turn OFF signal here
+	;***      196 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
+	;***      197 : 				|| (DETECT_D() == I_ON)) {
+	;***      198 : 			g_animation_queue++;
+	;***      199 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      200 : 			O_ACID_PUMP_PIN_P1 = OFF;
+	;***      201 : 			(*state)++;
+	;***      202 : 		}
+	;***      203 : 		break;
+	;***      204 : 	case 3:
+	;***      205 : 		//TODO: Change turn OFF signal here
+	;***      206 : 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
+	;***      207 : 				|| (DETECT_D() == I_ON)) {
+	;***      208 : 			O_ACID_PUMP_PIN_P1 = OFF;
+	;***      209 : 			if(DETECT_D() == I_ON)
+	;***      210 : 				g_io_status.refined.io.HandSensorOFF = 1;
+	;***      211 : 			(*state)++;
+	;***      212 : 		}
+	;***      213 : 		break;
+	;***      214 : 	case 4:
+	;***      215 : 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
+	;***      216 : 			O_SPOUT_ACID_PIN_SV3 = OFF;
+	;***      217 : 			g_color = BLACK;
+	;***      218 : 			handSensorLED(g_color);
+	;***      219 : 			(*state)++;
+	;***      220 : 		}
+	;***      221 : 		break;
+	;***      222 : 	default:
+	;***      223 : 		g_machine_state.mode = BUSY;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 223
 	mov !LOWW(_g_machine_state+0x0000E), #0x07
-	;***      219 : 		g_animation_queue++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 219
+	;***      224 : 		g_animation_queue++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 224
 	inc !LOWW(_g_animation_queue)
-	;***      220 : //		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      221 : 		*state = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 221
+	;***      225 : //		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      226 : 		*state = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 226
 	clrb !LOWW(_g_machine_state+0x00001)
 	ret
 .BB@LABEL@3_6:	; switch_clause_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 171
-	mov !LOWW(_g_machine_state+0x0000E), #0x03
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 172
-	set1 0xFFF07.6
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 173
-	oneb !LOWW(_g_color)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 174
+	mov !LOWW(_g_machine_state+0x0000E), #0x03
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 175
+	set1 0xFFF07.6
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 176
+	oneb !LOWW(_g_color)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 177
 	oneb a
 	call !!_handSensorLED
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 175
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 178
 	oneb !LOWW(_g_machine_state+0x00001)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 176
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 179
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00016), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00014), ax
 	ret
 .BB@LABEL@3_7:	; switch_clause_bb10
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 179
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 182
 	clrw ax
 	movw de, ax
 	movw bc, #0x0032
@@ -672,20 +703,20 @@ _AcidWaterMode_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	.bz $!.BB@LABEL@3_20
+	.bz $!.BB@LABEL@3_21
 .BB@LABEL@3_8:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 180
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 183
 	set1 0xFFF06.2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 181
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 184
 	inc !LOWW(_g_machine_state+0x00001)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 182
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 185
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0005E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0005C), ax
 	ret
 .BB@LABEL@3_9:	; switch_clause_bb20
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 187
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 190
 	clrw ax
 	movw de, ax
 	movw bc, #0x0064
@@ -695,12 +726,12 @@ _AcidWaterMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@3_11
 .BB@LABEL@3_10:	; if_then_bb25
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 188
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 191
 	inc !LOWW(_g_animation_queue)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 190
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 193
 	inc !LOWW(_g_machine_state+0x00001)
 .BB@LABEL@3_11:	; if_break_bb31
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 193
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 196
 	movw ax, !LOWW(_g_timerSetting+0x00084)
 	movw bc, #0x03E8
 	mulhu
@@ -721,13 +752,15 @@ _AcidWaterMode_nostop:
 	bnz $.BB@LABEL@3_13
 .BB@LABEL@3_12:	; bb
 	mov a, 0xFFF07
-	bt a.4, $.BB@LABEL@3_20
+	bt a.4, $.BB@LABEL@3_21
 .BB@LABEL@3_13:	; if_then_bb59
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 195
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 198
 	inc !LOWW(_g_animation_queue)
-	br $.BB@LABEL@3_16
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 200
+	clr1 0xFFF06.2
+	br $.BB@LABEL@3_18
 .BB@LABEL@3_14:	; switch_clause_bb66
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 203
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 206
 	movw ax, !LOWW(_g_timerSetting+0x00084)
 	movw bc, #0x03E8
 	mulhu
@@ -748,15 +781,22 @@ _AcidWaterMode_nostop:
 	bnz $.BB@LABEL@3_16
 .BB@LABEL@3_15:	; bb73
 	mov a, 0xFFF07
-	bt a.4, $.BB@LABEL@3_20
+	bt a.4, $.BB@LABEL@3_21
 .BB@LABEL@3_16:	; if_then_bb96
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 208
 	clr1 0xFFF06.2
-.BB@LABEL@3_17:	; if_then_bb96
-	inc !LOWW(_g_machine_state+0x00001)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 224
-	ret
-.BB@LABEL@3_18:	; switch_clause_bb101
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 209
+	mov a, 0xFFF07
+	bt a.4, $.BB@LABEL@3_18
+.BB@LABEL@3_17:	; if_then_bb112
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 210
+	set1 !LOWW(_g_io_status+0x00003).5
+.BB@LABEL@3_18:	; if_break_bb116
+	inc !LOWW(_g_machine_state+0x00001)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 229
+	ret
+.BB@LABEL@3_19:	; switch_clause_bb121
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 215
 	clrw ax
 	movw de, ax
 	movw bc, #0x000A
@@ -764,33 +804,33 @@ _AcidWaterMode_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@3_20
-.BB@LABEL@3_19:	; if_then_bb107
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 211
+	bz $.BB@LABEL@3_21
+.BB@LABEL@3_20:	; if_then_bb127
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 216
 	clr1 0xFFF07.6
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 212
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 217
 	clrb !LOWW(_g_color)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 213
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 218
 	clrb a
 	call !!_handSensorLED
-	br $.BB@LABEL@3_17
-.BB@LABEL@3_20:	; return
-	;***      222 : 		break;
-	;***      223 : 	}
-	;***      224 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 224
+	br $.BB@LABEL@3_18
+.BB@LABEL@3_21:	; return
+	;***      227 : 		break;
+	;***      228 : 	}
+	;***      229 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 229
 	ret
 _AlkalineWaterMode_nostop:
 	.STACK _AlkalineWaterMode_nostop = 6
-	;***      225 : /**
-	;***      226 :  * Tested: 24/12/2021 by Mr.An
-	;***      227 :  */
-	;***      228 : void AlkalineWaterMode_nostop(void) {
-	;***      229 : 	uint8_t *state = &g_machine_state.akaline;
-	;***      230 : 	uint32_t *tick = &g_Tick.tickAlkaline;
-	;***      231 : 	const uint32_t delayPump_ms = 50;
-	;***      232 : 	switch (*state) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 232
+	;***      230 : /**
+	;***      231 :  * Tested: 24/12/2021 by Mr.An
+	;***      232 :  */
+	;***      233 : void AlkalineWaterMode_nostop(void) {
+	;***      234 : 	uint8_t *state = &g_machine_state.akaline;
+	;***      235 : 	uint32_t *tick = &g_Tick.tickAlkaline;
+	;***      236 : 	const uint32_t delayPump_ms = 50;
+	;***      237 : 	switch (*state) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 237
 	mov a, !LOWW(_g_machine_state)
 	cmp0 a
 	bz $.BB@LABEL@4_6
@@ -805,88 +845,90 @@ _AlkalineWaterMode_nostop:
 	.bz $!.BB@LABEL@4_15
 .BB@LABEL@4_4:	; entry
 	dec a
-	.bz $!.BB@LABEL@4_19
-.BB@LABEL@4_5:	; switch_clause_bb113
-	;***      233 : 	case 0:
-	;***      234 : //		*state = DETECT_U == I_ON ? 1 : 0;
-	;***      235 : 		g_machine_state.mode = ALKALINE_WASHING;
-	;***      236 : 		*state = 1;
-	;***      237 : 		*tick = g_systemTime;
-	;***      238 : 		break;
-	;***      239 : 	case 1:
-	;***      240 : 		O_SPOUT_ALK_PIN_SV4 = ON;
-	;***      241 : 		g_color = BLUE;
-	;***      242 : 		handSensorLED(g_color);
-	;***      243 : 		if (ns_delay_ms(tick, delayPump_ms)) {
-	;***      244 : 			O_ALK_PUMP_PIN_P2 = ON;
-	;***      245 : 			g_Tick.tickAnimation = g_systemTime;
-	;***      246 : 			(*state)++;
-	;***      247 : 		}
-	;***      248 : 		break;
-	;***      249 : 	case 2:
-	;***      250 : 		//RDVS
-	;***      251 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
-	;***      252 : 			g_animation_queue++;
-	;***      253 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      254 : 			(*state)++;
-	;***      255 : 		}
-	;***      256 : 		//TODO: Change turn OFF signal here
-	;***      257 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-	;***      258 : 				|| (DETECT_D() == I_ON)) {
-	;***      259 : 			O_ALK_PUMP_PIN_P2 = OFF;
-	;***      260 : 			g_animation_queue++;
-	;***      261 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      262 : 			(*state)++;
-	;***      263 : 		}
-	;***      264 : 		break;
-	;***      265 : 	case 3:
-	;***      266 : 		//TODO: Change turn OFF signal here
-	;***      267 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-	;***      268 : 				|| (DETECT_D() == I_ON)) {
-	;***      269 : 			O_ALK_PUMP_PIN_P2 = OFF;
-	;***      270 : 			(*state)++;
-	;***      271 : 		}
-	;***      272 : 		break;
-	;***      273 : 	case 4:
-	;***      274 : 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
-	;***      275 : 			O_SPOUT_ALK_PIN_SV4 = OFF;
-	;***      276 : 			g_color = BLACK;
-	;***      277 : 			handSensorLED(g_color);
-	;***      278 : 			(*state)++;
-	;***      279 : 		}
-	;***      280 : 		break;
-	;***      281 : 	default:
-	;***      282 : 		g_machine_state.mode = BUSY;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 282
+	.bz $!.BB@LABEL@4_20
+.BB@LABEL@4_5:	; switch_clause_bb133
+	;***      238 : 	case 0:
+	;***      239 : //		*state = DETECT_U == I_ON ? 1 : 0;
+	;***      240 : 		g_machine_state.mode = ALKALINE_WASHING;
+	;***      241 : 		*state = 1;
+	;***      242 : 		*tick = g_systemTime;
+	;***      243 : 		break;
+	;***      244 : 	case 1:
+	;***      245 : 		O_SPOUT_ALK_PIN_SV4 = ON;
+	;***      246 : 		g_color = BLUE;
+	;***      247 : 		handSensorLED(g_color);
+	;***      248 : 		if (ns_delay_ms(tick, delayPump_ms)) {
+	;***      249 : 			O_ALK_PUMP_PIN_P2 = ON;
+	;***      250 : 			g_Tick.tickAnimation = g_systemTime;
+	;***      251 : 			(*state)++;
+	;***      252 : 		}
+	;***      253 : 		break;
+	;***      254 : 	case 2:
+	;***      255 : 		//RDVS
+	;***      256 : 		if (ns_delay_ms(&g_Tick.tickAnimation, 100)) {
+	;***      257 : 			g_animation_queue++;
+	;***      258 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      259 : 			(*state)++;
+	;***      260 : 		}
+	;***      261 : 		//TODO: Change turn OFF signal here
+	;***      262 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
+	;***      263 : 				|| (DETECT_D() == I_ON)) {
+	;***      264 : 			O_ALK_PUMP_PIN_P2 = OFF;
+	;***      265 : 			g_animation_queue++;
+	;***      266 : //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      267 : 			(*state)++;
+	;***      268 : 		}
+	;***      269 : 		break;
+	;***      270 : 	case 3:
+	;***      271 : 		//TODO: Change turn OFF signal here
+	;***      272 : 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
+	;***      273 : 				|| (DETECT_D() == I_ON)) {
+	;***      274 : 			O_ALK_PUMP_PIN_P2 = OFF;
+	;***      275 : 			if(DETECT_D() == I_ON)
+	;***      276 : 				g_io_status.refined.io.HandSensorOFF = 1;
+	;***      277 : 			(*state)++;
+	;***      278 : 		}
+	;***      279 : 		break;
+	;***      280 : 	case 4:
+	;***      281 : 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
+	;***      282 : 			O_SPOUT_ALK_PIN_SV4 = OFF;
+	;***      283 : 			g_color = BLACK;
+	;***      284 : 			handSensorLED(g_color);
+	;***      285 : 			(*state)++;
+	;***      286 : 		}
+	;***      287 : 		break;
+	;***      288 : 	default:
+	;***      289 : 		g_machine_state.mode = BUSY;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 289
 	mov !LOWW(_g_machine_state+0x0000E), #0x07
-	;***      283 : 		g_animation_queue++;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 283
+	;***      290 : 		g_animation_queue++;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 290
 	inc !LOWW(_g_animation_queue)
-	;***      284 : //		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
-	;***      285 : 		*state = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 285
+	;***      291 : //		sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
+	;***      292 : 		*state = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 292
 	clrb !LOWW(_g_machine_state)
 	ret
 .BB@LABEL@4_6:	; switch_clause_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 235
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 240
 	mov !LOWW(_g_machine_state+0x0000E), #0x04
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 236
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 241
 	oneb !LOWW(_g_machine_state)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 237
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 242
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00012), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00010), ax
 	ret
 .BB@LABEL@4_7:	; switch_clause_bb9
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 240
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 245
 	set1 0xFFF07.7
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 241
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 246
 	mov !LOWW(_g_color), #0x03
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 242
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 247
 	mov a, #0x03
 	call !!_handSensorLED
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 243
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 248
 	clrw ax
 	movw de, ax
 	movw bc, #0x0032
@@ -894,18 +936,18 @@ _AlkalineWaterMode_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	.bz $!.BB@LABEL@4_21
+	.bz $!.BB@LABEL@4_22
 .BB@LABEL@4_8:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 244
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 249
 	set1 0xFFF06.1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 245
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 250
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0005E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0005C), ax
 	br $.BB@LABEL@4_14
 .BB@LABEL@4_9:	; switch_clause_bb20
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 251
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 256
 	clrw ax
 	movw de, ax
 	movw bc, #0x0064
@@ -915,12 +957,12 @@ _AlkalineWaterMode_nostop:
 	cmpw ax, bc
 	bz $.BB@LABEL@4_11
 .BB@LABEL@4_10:	; if_then_bb25
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 252
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 257
 	inc !LOWW(_g_animation_queue)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 254
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 259
 	inc !LOWW(_g_machine_state)
 .BB@LABEL@4_11:	; if_break_bb31
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 257
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 262
 	movw ax, !LOWW(_g_timerSetting+0x00088)
 	movw bc, #0x03E8
 	mulhu
@@ -941,16 +983,16 @@ _AlkalineWaterMode_nostop:
 	bnz $.BB@LABEL@4_13
 .BB@LABEL@4_12:	; bb
 	mov a, 0xFFF07
-	bt a.4, $.BB@LABEL@4_21
+	bt a.4, $.BB@LABEL@4_22
 .BB@LABEL@4_13:	; if_then_bb59
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 259
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 264
 	clr1 0xFFF06.1
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 260
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 265
 	inc !LOWW(_g_animation_queue)
 .BB@LABEL@4_14:	; if_then_bb59
-	br $.BB@LABEL@4_18
+	br $.BB@LABEL@4_19
 .BB@LABEL@4_15:	; switch_clause_bb66
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 267
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 272
 	movw ax, !LOWW(_g_timerSetting+0x00088)
 	movw bc, #0x03E8
 	mulhu
@@ -971,16 +1013,22 @@ _AlkalineWaterMode_nostop:
 	bnz $.BB@LABEL@4_17
 .BB@LABEL@4_16:	; bb73
 	mov a, 0xFFF07
-	bt a.4, $.BB@LABEL@4_21
+	bt a.4, $.BB@LABEL@4_22
 .BB@LABEL@4_17:	; if_then_bb96
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 269
-	clr1 0xFFF06.1
-.BB@LABEL@4_18:	; if_then_bb96
-	inc !LOWW(_g_machine_state)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 288
-	ret
-.BB@LABEL@4_19:	; switch_clause_bb101
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 274
+	clr1 0xFFF06.1
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 275
+	mov a, 0xFFF07
+	bt a.4, $.BB@LABEL@4_19
+.BB@LABEL@4_18:	; if_then_bb112
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 276
+	set1 !LOWW(_g_io_status+0x00003).5
+.BB@LABEL@4_19:	; if_break_bb116
+	inc !LOWW(_g_machine_state)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 295
+	ret
+.BB@LABEL@4_20:	; switch_clause_bb121
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 281
 	clrw ax
 	movw de, ax
 	movw bc, #0x000A
@@ -988,21 +1036,21 @@ _AlkalineWaterMode_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@4_21
-.BB@LABEL@4_20:	; if_then_bb107
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 275
+	bz $.BB@LABEL@4_22
+.BB@LABEL@4_21:	; if_then_bb127
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 282
 	clr1 0xFFF07.7
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 276
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 283
 	clrb !LOWW(_g_color)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 277
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 284
 	clrb a
 	call !!_handSensorLED
-	br $.BB@LABEL@4_18
-.BB@LABEL@4_21:	; return
-	;***      286 : 		break;
-	;***      287 : 	}
-	;***      288 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 288
+	br $.BB@LABEL@4_19
+.BB@LABEL@4_22:	; return
+	;***      293 : 		break;
+	;***      294 : 	}
+	;***      295 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/normal_operation.c", 295
 	ret
 	.SECTION .data,DATA
 _g_animation_queue:

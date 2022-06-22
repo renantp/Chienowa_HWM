@@ -194,7 +194,9 @@ extern struct IO_Struct{
 	uint8_t Pump2: 1;
 	uint8_t SaltPump: 1;
 	uint8_t CVCC_ON: 1;
-	uint8_t RSVD1: 4; // Reserved
+	uint8_t HandSensorON: 1;
+	uint8_t HandSensorOFF: 1;
+	uint8_t RSVD1: 2; // Reserved
 }g_io_response;
 /**
  * IO_Status Union content:

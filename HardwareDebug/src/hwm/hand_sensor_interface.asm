@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/hand_sensor_interface.obj
 #@   ../src/hwm/hand_sensor_interface.c
-#@  compiled at Wed Jun 22 12:09:15 2022
+#@  compiled at Wed Jun 22 15:37:24 2022
 
 	.EXTERN _g_Tick
 	.EXTERN _g_color

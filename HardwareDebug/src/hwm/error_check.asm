@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/error_check.obj
 #@   ../src/hwm/error_check.c
-#@  compiled at Wed Jun 22 12:09:15 2022
+#@  compiled at Wed Jun 22 15:37:24 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting

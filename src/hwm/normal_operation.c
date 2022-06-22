@@ -31,13 +31,16 @@ void WaterWashingMode_nostop(void) {
 		}
 		break;
 	case 2:
-		if (DETECT_D() == I_ON) {
+		if (ns_delay_ms(tick, g_timerSetting.t55_waterDischargeDelay_s * 1000)
+				|| DETECT_D() == I_ON) {
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 			g_color = BLACK;
 			(*state) = 0;
 			g_machine_state.mode = BUSY;
 			handSensorLED(g_color);
 			g_animation_queue++;
+			if(DETECT_D() == I_ON)
+				g_io_status.refined.io.HandSensorOFF = 1;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
 		}
 		break;
@@ -203,6 +206,8 @@ void AcidWaterMode_nostop(void) {
 		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
 				|| (DETECT_D() == I_ON)) {
 			O_ACID_PUMP_PIN_P1 = OFF;
+			if(DETECT_D() == I_ON)
+				g_io_status.refined.io.HandSensorOFF = 1;
 			(*state)++;
 		}
 		break;
@@ -267,6 +272,8 @@ void AlkalineWaterMode_nostop(void) {
 		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
 				|| (DETECT_D() == I_ON)) {
 			O_ALK_PUMP_PIN_P2 = OFF;
+			if(DETECT_D() == I_ON)
+				g_io_status.refined.io.HandSensorOFF = 1;
 			(*state)++;
 		}
 		break;
