@@ -41,8 +41,8 @@ void handSensorLEDBlink(enum HS_COLOR color, uint32_t ms) {
 	}
 }
 
-void HandSensorLEDEndBlink(void){
-	if(bink_reset_flag){
+void HandSensorLEDEndBlink(void) {
+	if (bink_reset_flag) {
 		handSensorLED(BLACK);
 		bink_reset_flag = 0;
 	}

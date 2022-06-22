@@ -124,6 +124,7 @@ uint32_t g_crc_32[8];
 uint32_t data_crc[2] = { 30500, 60200 };
 uint8_t rx_count;
 uint8_t dac_out[2] = { 0xff, 0xff };
+uint8_t io_testsize;
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -144,13 +145,15 @@ void main(void)
 			numberSettingSize);
 	EE_SPI_Read((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
 			timeSettingSize);
-	EE_SPI_Read((uint8_t*) &g_test_control.data,
-	NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_test_control.data));
+	EE_SPI_Read((uint8_t*) &g_control_setting.data,
+	NUMBER_SETTING_ADDRESS + numberSettingSize, sizeof(g_control_setting.data));
 	// Set to default valve
 //	g_timerSetting.t1_initialWaterDrainageOperation_s > 180
-	if (isnan(g_numberSetting.upperVoltage1)) {
+	io_testsize = sizeof(g_io_status);
+	if (isnan(g_numberSetting.saltPumpVoltage)) {
 		manufactureReset();
 	}
+//	manufactureReset();
 	_settingNumber = g_numberSetting;
 	_settingTime = g_timerSetting;
 	EEPROM_PROTECT_EN();
@@ -172,7 +175,7 @@ void main(void)
 //    sendToRasPi_f(H_SET, OK_ALL, 0x0);
 
 //TODO: Run Initialize Operation
-	if (g_test_control.raw.power_on == ON) {
+	if (g_control_setting.raw.power_on == ON) {
 		main_init_20211111();
 	}
 	//TODO: Output CVCC and Salt pump voltage

@@ -13,7 +13,7 @@
 #define DETECT_U() (I_HS_ODA_PIN == ON ? 1:0)
 #define DETECT_D() (I_HS_OCL_PIN == ON ? 1:0)
 
-enum HS_COLOR{
+enum HS_COLOR {
 	BLACK, RED, WHITE, BLUE
 };
 extern enum HS_COLOR g_color, g_pre_color;

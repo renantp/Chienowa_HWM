@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_serial_user.obj
 00000000                       17  #@   ../src/r_cg_serial_user.c
-00000000                       18  #@  compiled at Thu May 05 10:01:40 2022
+00000000                       18  #@  compiled at Wed Jun 22 12:09:09 2022
 00000000                       19  
 00000000                       20  	.PUBLIC _g_uart3_rx_data
 00000000                       21  	.EXTERN _gp_uart1_tx_address
@@ -1191,7 +1191,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000038                     1187  .BB@LABEL@21_3:	; if_then_bb25
 00000038                     1188  	;***      532 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 1;
 00000038                     1189  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 532
-00000038 E50000              1190  	oneb !LOWW(_g_commnunication_flag+0x0000D)
+00000038 E50000              1190  	oneb !LOWW(_g_commnunication_flag+0x00011)
 0000003B D7                  1191  	ret
 0000003C                     1192  .BB@LABEL@21_4:	; bb32
 0000003C                     1193  	;***      533 : 		} else if ((rs485_rx_p[0] == 82) && (rs485_rx_p[1] == 24)) {
@@ -1201,7 +1201,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000042                     1197  .BB@LABEL@21_5:	; if_then_bb47
 00000042                     1198  	;***      534 : 			g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 1;
 00000042                     1199  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 534
-00000042 E50000              1200  	oneb !LOWW(_g_commnunication_flag+0x0000E)
+00000042 E50000              1200  	oneb !LOWW(_g_commnunication_flag+0x00012)
 00000045                     1201  .BB@LABEL@21_6:	; if_else_bb.if_else_bb48_crit_edge.critedge
 00000045                     1202  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 551
 00000045 D7                  1203  	ret
@@ -1225,7 +1225,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000051                     1221  .BB@LABEL@21_9:	; if_then_bb111
 00000051                     1222  	;***      543 : 			g_commnunication_flag.rs485_send_to_valve_response_flag = 1;
 00000051                     1223  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 543
-00000051 E50000              1224  	oneb !LOWW(_g_commnunication_flag+0x0000F)
+00000051 E50000              1224  	oneb !LOWW(_g_commnunication_flag+0x00013)
 00000054 D7                  1225  	ret
 00000055                     1226  .BB@LABEL@21_10:	; if_else_bb112
 00000055                     1227  	;***      544 : 		} else if ((rs485_rx_p[0] == 12)) {
@@ -1235,7 +1235,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000059                     1231  .BB@LABEL@21_11:	; if_then_bb120
 00000059                     1232  	;***      545 : 			g_commnunication_flag.rs485_get_valve_gesture_flag = 1;
 00000059                     1233  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 545
-00000059 E50000              1234  	oneb !LOWW(_g_commnunication_flag+0x00010)
+00000059 E50000              1234  	oneb !LOWW(_g_commnunication_flag+0x00014)
 0000005C D7                  1235  	ret
 0000005D                     1236  .BB@LABEL@21_12:	; if_else_bb123
 0000005D                     1237  	;***      546 : 		}
@@ -1246,7 +1246,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000060                     1242  .BB@LABEL@21_13:	; if_then_bb129
 00000060                     1243  	;***      548 : 		g_commnunication_flag.rs485_fault = 1;
 00000060                     1244  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 548
-00000060 E50000              1245  	oneb !LOWW(_g_commnunication_flag+0x00011)
+00000060 E50000              1245  	oneb !LOWW(_g_commnunication_flag+0x00015)
 00000063                     1246  .BB@LABEL@21_14:	; return
 00000063                     1247  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 551
 00000063 D7                  1248  	ret
@@ -1327,34 +1327,34 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 0000000D                     1323  _recived_number_setting_flag:
 0000000D                     1324  	.DS (1)
 0000000E                     1325  _g_commnunication_flag:
-0000000E                     1326  	.DS (21)
-00000023                     1327  _g_csi_count:
-00000023                     1328  	.DS (1)
-00000024                     1329  _g_csi_err:
-00000024                     1330  	.DS (1)
-00000025                     1331  _g_csi_send_end:
-00000025                     1332  	.DS (1)
-00000026                     1333  _g_csi_rev_end:
-00000026                     1334  	.DS (1)
-00000027                     1335  _g_uart1_send:
-00000027                     1336  	.DS (1)
-00000028                     1337  _g_uart2_sendend:
-00000028                     1338  	.DS (1)
-00000029                     1339  _g_uart2_receive:
-00000029                     1340  	.DS (1)
-0000002A                     1341  _g_rx_data:
-0000002A                     1342  	.DS (160)
-000000CA                     1343  _g_uart2_fault:
-000000CA                     1344  	.DS (1)
-000000CB                     1345  _g_uart3_sendend:
-000000CB                     1346  	.DS (1)
+0000000E                     1326  	.DS (25)
+00000027                     1327  _g_csi_count:
+00000027                     1328  	.DS (1)
+00000028                     1329  _g_csi_err:
+00000028                     1330  	.DS (1)
+00000029                     1331  _g_csi_send_end:
+00000029                     1332  	.DS (1)
+0000002A                     1333  _g_csi_rev_end:
+0000002A                     1334  	.DS (1)
+0000002B                     1335  _g_uart1_send:
+0000002B                     1336  	.DS (1)
+0000002C                     1337  _g_uart2_sendend:
+0000002C                     1338  	.DS (1)
+0000002D                     1339  _g_uart2_receive:
+0000002D                     1340  	.DS (1)
+0000002E                     1341  _g_rx_data:
+0000002E                     1342  	.DS (160)
+000000CE                     1343  _g_uart2_fault:
+000000CE                     1344  	.DS (1)
+000000CF                     1345  _g_uart3_sendend:
+000000CF                     1346  	.DS (1)
 
 Section List
 Attr     Size                Name
 
 TEXT                638 (0000027E) .text
 TEXTF               109 (0000006D) .textf
-BSS                 204 (000000CC) .bss
+BSS                 208 (000000D0) .bss
 
 Command Line Parameter
 Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\r_cg_serial_user.asm.cmd 

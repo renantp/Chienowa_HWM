@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/crc8.obj
 #@   ../src/crc8.c
-#@  compiled at Wed Apr 20 11:24:59 2022
+#@  compiled at Fri May 06 09:16:37 2022
 
 	.PUBLIC _crc8_4
 	.PUBLIC _crc8_1

@@ -122,40 +122,44 @@ uint8_t DrainageAcidAndAlkalineTankStart_nostop(void) {
 uint8_t WaterSupplyStart_nostop(void) {
 	uint8_t *state = &g_machine_state.waterSupply;
 	uint32_t *tick = &g_Tick.tickWaterSupply;
+	measureFlowSensor_nostop();
 	switch (*state) {
 	case 0:
 		*tick = g_systemTime;
+		g_machine_state.mode = WATER_WASHING;
 		(*state)++;
 		break;
 	case 1:
 		O_SPOUT_WATER_PIN_SV2 = ON;
-		if (ns_delay_ms(tick, 30000)) {
+		if (ns_delay_ms(tick, 30000)) { //30000
 			(*state)++;
 		}
 		break;
 	case 2:
 		O_SUPPLY_WATER_PIN_SV1 = ON;
-		if (ns_delay_ms(tick, 500)) {
+		if (ns_delay_ms(tick, 5000)) { //5000
 			(*state)++;
 			g_Tick.tickFlowMeasurment = g_systemTime;
 		}
 		break;
 	case 3:
 		O_SPOUT_WATER_PIN_SV2 = OFF;
-		if (ns_delay_ms(tick, 15000)) {
+		O_SUPPLY_WATER_PIN_SV1 = ON;
+		if (ns_delay_ms(tick, 1500)) { //1500
 			(*state)++;
 			g_machine_state.flowSensor = 0;
 		}
 		measureFlowSensor_nostop();
 		break;
 	case 4:
-		measureFlowSensor(&g_timerSetting.t3_flowSensorMonitorTime_s);
+		measureFlowSensor(g_timerSetting.t3_flowSensorMonitorTime_s);
 		(*state)++;
 		break;
 	case 5:
-		if (FlowSensorCheck_nonstop())
+		if (FlowSensorCheck_nonstop()) {
 			(*state) = 3;
-		else
+			O_SUPPLY_WATER_PIN_SV1 = OFF;
+		} else
 			(*state)++;
 		g_Tick.tickWaterSupply = g_systemTime;
 		break;
@@ -163,6 +167,7 @@ uint8_t WaterSupplyStart_nostop(void) {
 		if (ns_delay_ms(&g_Tick.tickWaterSupply,
 				g_timerSetting.t4_electrolysisOperationStart_s * 1000)) {
 			(*state) = 0;
+			g_machine_state.mode = INDIE;
 		}
 		break;
 	default:
@@ -191,43 +196,41 @@ uint8_t ElectrolyticOperation_nostop(void) {
 	case 2:
 		Voltage2Check_nostop();
 		if (Voltage1Check_waitReset()) {
-			(*state)--;
+			(*state) = 1;
 			break;
-
 		} else if (Voltage3Check_waitReset()) {
-			(*state)--;
+			(*state) = 1;
 			break;
 		} else if (LowVoltageCheck_waitReset()) {
-			(*state)--;
+			(*state) = 1;
 			break;
 		} else if (OverCurrentCheck_waitReset()) {
-			(*state)--;
+			(*state) = 1;
 			break;
 		} else if (I_CVCC_ALARM_IN == I_ON) {
 			g_alarm.refined.cvcc = 1;
 			g_Tick.tickElectrolyticOff = g_systemTime;
-			g_machine_state.electrolyteOFF =
-					g_machine_state.electrolyteOFF == 0 ?
-							1 : g_machine_state.electrolyteOFF;
-			sendToRasPi_f(H_ALARM, CVCC_ALARM, 1);
+			electrolyticOperationOFF();
+//			sendToRasPi_f(H_ALARM, CVCC_ALARM, 1);
 			waitAlarmConfirm_stop(CVCC_ALARM, 0);
 			g_alarm.refined.cvcc = 0;
-			(*state)--;
+			(*state) = 1;
 			break;
 		}
-		if (isAcidTankFull() && isAlkalineTankFull())
+		if (!levelSkipErrorCheck() && isAcidTankFull() && isAlkalineTankFull())
 			(*state)++;
 		break;
 	case 3:
-		g_machine_state.electrolyteOFF =
-				g_machine_state.electrolyteOFF == 0 ?
-						1 : g_machine_state.electrolyteOFF;
+		rx_count++;
+		electrolyticOperationOFF();
+		g_alarm.refined.abnormal_current = 0;
 		(*state) = 0;
 		break;
 	default:
 		(*state) = 0;
 		break;
 	}
+	isElectrolyticOperationOFF_nostop();
 	return (*state) == 0 ? 1 : 0;
 }
 
@@ -255,6 +258,7 @@ uint8_t FilterReplacementCheck(void) {
 // Newest
 void main_init_20211111(void) {
 	UpdateMachineStatus();
+	//Skip
 	while (DrainageAcidAndAlkalineTankStart_nostop()) {
 		RaspberryCommunication_nostop();
 		UpdateMachineStatus();
@@ -262,12 +266,14 @@ void main_init_20211111(void) {
 	}
 
 	UpdateMachineStatus();
-	while (WaterSupplyStart_nostop()) {
-		realTimeResponse();
+	if (g_control_setting.raw.power_on) {
+		while (WaterSupplyStart_nostop()) {
+			realTimeResponse();
+		}
 	}
 	if (g_io_status.refined.FlowValue < g_numberSetting.lowerFlow) {
-		sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-				g_io_status.refined.FlowValue);
+//		sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+//				g_io_status.refined.FlowValue);
 	}
 	while (!ElectrolyticOperation_nostop()) {
 		realTimeResponse();
@@ -276,13 +282,17 @@ void main_init_20211111(void) {
 }
 
 void userAuthHandler_nostop(void) {
-	if((g_test_control.raw.biomectric == OFF)){
-		if(DETECT_U() == I_ON && g_machine_state.user == 0){
-			sendToRasPi_u32(H_SET, START_WASHING, 0U);
+	if ((g_control_setting.raw.biomectric == OFF)) {
+		if (DETECT_U() == I_ON && g_machine_state.user == 0) {
+			if (g_commnunication_flag.send_response_flag != 1
+					&& g_rasp_state.isMonitorScreen == 0) {
+				sendToRasPi_u32(H_SET, START_WASHING, 0U);
+			}
 			g_machine_state.user = 1;
 		}
 	}
-	if (g_machine_state.user == 1 && g_commnunication_flag.send_response_flag == 0) {
+	if (g_machine_state.user == 1
+			&& g_commnunication_flag.send_response_flag == 0) {
 		switch (g_machine_mode) {
 		case HAND_WASHING:
 			HandWashingMode_nostop();
@@ -305,26 +315,53 @@ void userAuthHandler_nostop(void) {
  * Tested!
  */
 void ElectrolyzeWaterGeneration_nostop(void) {
-	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION)
-			&& (g_machine_state.mode == INDIE)) {
-		if ((isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) && !levelSkipErrorCheck()) {
+//	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION)
+//			&& (g_machine_state.mode == INDIE)) {
+//		if ((isAcidTankEmpty() || isAlkalineTankEmpty_nonstop()) && !levelSkipErrorCheck()) {
+//			// Start Electrolyte
+//			g_machine_state.mode = ELECTROLYTIC_GENERATION;
+//			//Stop what ever operation is happening
+//			g_machine_state.user = 0;
+//			g_machine_state.handwash = g_machine_state.water =
+//					g_machine_state.acid = g_machine_state.akaline = 0;
+//			O_ACID_PUMP_PIN_P1 = O_ALK_PUMP_PIN_P2 = OFF;
+//			O_SPOUT_WATER_PIN_SV2 = OFF;
+//
+//		}
+//	} else if (g_machine_state.mode == ELECTROLYTIC_GENERATION) {
+//		// Start Loop Electrolyte
+//		if (ElectrolyticOperation_nostop()) {
+//			O_SPOUT_ACID_PIN_SV3 = O_SPOUT_ALK_PIN_SV4 = OFF;
+//			g_machine_state.mode = INDIE;
+//			g_machine_state.user = 0;
+//			handSensorLED(BLACK);
+//			// Start Electrolyte Operation Off time keeper
+//		}
+//	}
+
+	//TODO: g_machine_state.mode == INDIE start electrolyte when hand washing done
+//	if ((g_machine_state.mode != ELECTROLYTIC_GENERATION)
+//			&& (g_machine_state.mode == INDIE)) {
+	if (g_machine_state.electrolyte != ELECTROLYTIC_GENERATION) {
+		if (!levelSkipErrorCheck()
+				&& (isAcidTankAlmostEmpty() || isAlkalineTankAlmostEmpty())) {
 			// Start Electrolyte
-			g_machine_state.mode = ELECTROLYTIC_GENERATION;
-			//Stop what ever operation is happening
-			g_machine_state.user = 0;
-			g_machine_state.handwash = g_machine_state.water =
-					g_machine_state.acid = g_machine_state.akaline = 0;
-			O_ACID_PUMP_PIN_P1 = O_ALK_PUMP_PIN_P2 = OFF;
-			O_SPOUT_WATER_PIN_SV2 = OFF;
+			g_machine_state.electrolyte = ELECTROLYTIC_GENERATION;
+			//TODO: Stop what ever operation is happening
+//			g_machine_state.user = 0;
+//			g_machine_state.handwash = g_machine_state.water =
+//					g_machine_state.acid = g_machine_state.akaline = 0;
+//			O_ACID_PUMP_PIN_P1 = O_ALK_PUMP_PIN_P2 = OFF;
+//			O_SPOUT_WATER_PIN_SV2 = OFF;
 
 		}
-	} else if (g_machine_state.mode == ELECTROLYTIC_GENERATION) {
+	} else if (g_machine_state.electrolyte == ELECTROLYTIC_GENERATION) {
 		// Start Loop Electrolyte
 		if (ElectrolyticOperation_nostop()) {
 			O_SPOUT_ACID_PIN_SV3 = O_SPOUT_ALK_PIN_SV4 = OFF;
-			g_machine_state.mode = INDIE;
-			g_machine_state.user = 0;
-			handSensorLED(BLACK);
+			g_machine_state.electrolyte = INDIE;
+//			g_machine_state.user = 0;
+//			handSensorLED(BLACK);
 			// Start Electrolyte Operation Off time keeper
 		}
 	}
@@ -336,8 +373,8 @@ void ElectrolyzeWaterGeneration_nostop(void) {
 uint8_t isSV1andSV2Off8h(void) {
 	if (O_SUPPLY_WATER_PIN_SV1 == OFF && O_SPOUT_WATER_PIN_SV2 == OFF) {
 		if (ns_delay_ms(&g_Tick.tickSV1SV2,
-				(uint32_t) g_timerSetting.t61_curranCleaningIntervalTime_h * 60
-						* 60 * 1000)) {
+				(uint32_t) g_timerSetting.t61_cleaningIntervalTime_h * 60 * 60
+						* 1000)) {
 			return 1;
 		}
 	} else {
@@ -362,7 +399,7 @@ void CallanCleaningMode_nostop(void) {
 		case 1:
 			handSensorLEDBlink(WHITE, 500);
 			if (ns_delay_ms(tick,
-					g_timerSetting.t62_callanWashSpoutingTime_s * 1000)) {
+					g_timerSetting.t62_washSpoutingTime_s * 1000)) {
 				(*state)++;
 				O_SPOUT_WATER_PIN_SV2 = OFF;
 				handSensorLED(BLACK);
@@ -412,12 +449,13 @@ void DrainageMode_nostop(void) {
 			}
 			break;
 		case 4:
-			if (isAcidTankFull() && isAlkalineTankFull()) {
-				electrolyticOperationOFF();
+			if (!levelSkipErrorCheck() && isAcidTankFull()
+					&& isAlkalineTankFull()) {
 				(*state)++;
 			}
 			break;
 		default:
+			electrolyticOperationOFF();
 			(*state) = 0;
 			g_machine_state.mode = INDIE;
 			break;
@@ -442,7 +480,7 @@ void NormalMode_nostop(void) {
 		g_Tick.tickDebouceHandSensor = g_systemTime;
 	} else if (g_machine_state.mode == BUSY) {
 		if (ns_delay_ms(&g_Tick.tickDebouceHandSensor,
-				g_timerSetting.t60_waterDischargeDelay_s * 1000)) {
+				g_timerSetting.t60_washDischargeDelay_s * 1000)) {
 			g_machine_state.mode = INDIE;
 			g_machine_state.user = 0;
 		}
@@ -558,7 +596,7 @@ uint8_t ElectrolyteAdjustmentOperation(uint8_t *state, uint32_t *tick) {
 	return (*state);
 }
 void TestOperation_nostop(void) {
-	uint8_t *state = &g_machine_state.test;
+	uint8_t *state = &g_machine_state.test_operation;
 	uint32_t *tick = &g_Tick.tickTestOperation;
 	switch (g_commnunication_flag.test_flag) {
 	case TEST_POWER_ON:
@@ -594,13 +632,12 @@ void TestOperation_nostop(void) {
 }
 void NeutralizationTreatment(uint32_t *tick) {
 	if (g_neutralization_time_s
-			>= g_timerSetting.t33_t63_neutralizationStartTime_h * 60 * 60) {
+			>= g_timerSetting.t33_neutralizationStartTime_h * 60 * 60) {
 		g_machine_state.neutrlization = 1;
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_neutralization_time_s = 0;
 	}
-	if (ns_delay_ms(tick,
-			g_timerSetting.t34_t64_neutralizationOpenTime_s * 1000)
+	if (ns_delay_ms(tick, g_timerSetting.t34_neutralizationOpenTime_s * 1000)
 			&& (g_machine_state.neutrlization != 0)) {
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_machine_state.neutrlization = 0;
@@ -611,8 +648,8 @@ void main_loop_20211111(void) {
 	realTimeResponse();
 	measureFlowSensor_nostop();
 
-	if(g_commnunication_flag.test_flag != TESTING_MODE_START){
-		DrainageMode_nostop();
+	if (g_machine_state.test_operation != TESTING_MODE_START) {
+//		DrainageMode_nostop();
 		// Check Acid and Alkaline tank to make Electrolytic Water
 		ElectrolyzeWaterGeneration_nostop();
 		// Cleaning handler
@@ -621,10 +658,10 @@ void main_loop_20211111(void) {
 		NormalMode_nostop();
 
 		realTimeResponse();
-	}else{
-
+	} else {
 
 	}
+
 	levelSkipErrorCheck();
 	if (isAcidTankEmpty() && isAlkalineTankEmpty_nonstop()) {
 		handSensorLEDBlink(WHITE, 100);
@@ -632,34 +669,34 @@ void main_loop_20211111(void) {
 		handSensorLEDBlink(RED, 100);
 	} else if (isAlkalineTankEmpty_nonstop()) {
 		handSensorLEDBlink(BLUE, 100);
-	} else{
+	} else {
 		HandSensorLEDEndBlink();
 	}
 }
-
 
 void realTimeResponse(void) {
 	UpdateMachineStatus();
 	RaspberryCommunication_nostop();
 	isElectrolyticOperationOFF_nostop();
+	measureFlowSensor_nostop();
 	R_WDT_Restart();
 //	if (ns_delay_ms(&g_Tick.tickCustom[0], 200)) {
 //		P6_bit.no3 = ~P6_bit.no3;
 //	}
 
-	//Error Checking
-	if (O_SUPPLY_WATER_PIN_SV1 == ON || O_SPOUT_WATER_PIN_SV2 == ON) {
-		if (ns_delay_ms(&g_Tick.tickSV1SV2, 1000)) {
-			g_TimeKeeper.SV1SV2OnTime_s++;
-			if (g_TimeKeeper.SV1SV2OnTime_s >= 60 * 60) {
-				g_TimeKeeper.SV1SV2OnTime_s -= 3600;
-				g_TimeKeeper.SV1SV2OnTime_h++;
-				//TODO: Save to EEPROM both s and h
-				filterReplacementErrorCheck();
-			}
-		}
-	} else
-		g_Tick.tickSV1SV2 = g_systemTime;
+	//TODO: Error Checking
+//	if (O_SUPPLY_WATER_PIN_SV1 == ON || O_SPOUT_WATER_PIN_SV2 == ON) {
+//		if (ns_delay_ms(&g_Tick.tickSV1SV2, 1000)) {
+//			g_TimeKeeper.SV1SV2OnTime_s++;
+//			if (g_TimeKeeper.SV1SV2OnTime_s >= 60 * 60) {
+//				g_TimeKeeper.SV1SV2OnTime_s -= 3600;
+//				g_TimeKeeper.SV1SV2OnTime_h++;
+//				//TODO: Save to EEPROM both s and h
+//				filterReplacementErrorCheck();
+//			}
+//		}
+//	} else
+//		g_Tick.tickSV1SV2 = g_systemTime;
 }
 
 void UpdateMachineStatus(void) {
@@ -673,9 +710,12 @@ void UpdateMachineStatus(void) {
 	g_mean_io_status.refined.io.AcidHighLevel =
 	I_ACID_H_PIN_FL3 == I_ON ? g_mean_io_status.refined.io.AcidHighLevel : 0;
 
-	g_io_status.refined.io.AlkalineEmptyLevel = I_ALKALI_L_PIN_FL4 == I_ON ? 1 : 0;
-	g_io_status.refined.io.AlkalineLowLevel = I_ALKALI_M_PIN_FL5 == I_ON ? 1 : 0;
-	g_io_status.refined.io.AlkalineHighLevel = I_ALKALI_H_PIN_FL6 == I_ON ? 1 : 0;
+	g_io_status.refined.io.AlkalineEmptyLevel =
+			I_ALKALI_L_PIN_FL4 == I_ON ? 1 : 0;
+	g_io_status.refined.io.AlkalineLowLevel =
+			I_ALKALI_M_PIN_FL5 == I_ON ? 1 : 0;
+	g_io_status.refined.io.AlkalineHighLevel =
+			I_ALKALI_H_PIN_FL6 == I_ON ? 1 : 0;
 //	g_mean_io_status.refined.io.AlkalineLowLevel =
 //	I_ALKALI_M_PIN_FL5 == I_ON ? g_mean_io_status.refined.io.AlkalineLowLevel : 0;
 //	g_mean_io_status.refined.io.AlkalineHighLevel =
@@ -699,7 +739,7 @@ void UpdateMachineStatus(void) {
 	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1;
 }
 
-void manufactureReset(void){
+void manufactureReset(void) {
 	g_timerSetting.t1_initialWaterDrainageOperation_s = 60;
 	g_timerSetting.t2_flowSensorStartTime_s = 10;
 	g_timerSetting.t3_flowSensorMonitorTime_s = 5;
@@ -729,19 +769,19 @@ void manufactureReset(void){
 	g_timerSetting.t30_offDelayEmptyLevel_s = 10;
 	g_timerSetting.t31_saltLowLevelDelay_s = 5;
 	g_timerSetting.t32_saltHighLevelDelay_s = 5;
-	g_timerSetting.t33_t63_neutralizationStartTime_h = 1;
-	g_timerSetting.t34_t64_neutralizationOpenTime_s = 300;
+	g_timerSetting.t33_neutralizationStartTime_h = 1;
+	g_timerSetting.t34_neutralizationOpenTime_s = 300;
 
 	g_timerSetting.t51_alkalineWaterSpoutingTime_s = 15;
 	g_timerSetting.t52_acidWaterSpoutingTime_s = 15;
 	g_timerSetting.t53_washingWaterSpoutingTime_s = 15;
 	g_timerSetting.t54_overLapTime_ms = 0.5;
-	g_timerSetting.t60_waterDischargeDelay_s = 5;
+	g_timerSetting.t60_washDischargeDelay_s = 5;
 	g_timerSetting.t56_acidWaterDownTime_s = 300;
 	g_timerSetting.t57_alkalineWaterDownTime_s = 300;
 
-	g_timerSetting.t61_curranCleaningIntervalTime_h = 8;
-	g_timerSetting.t62_callanWashSpoutingTime_s = 30;
+	g_timerSetting.t61_cleaningIntervalTime_h = 8;
+	g_timerSetting.t62_washSpoutingTime_s = 30;
 
 	g_numberSetting.upperVoltage1 = 0.0f;
 	g_numberSetting.upperVoltage2 = 0.0f;

@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/error_check.obj
 #@   ../src/hwm/error_check.c
-#@  compiled at Thu May 05 10:01:46 2022
+#@  compiled at Wed Jun 22 12:09:15 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -73,10 +73,10 @@ _Voltage1Check_waitReset:
 	movw ax, !LOWW(_g_numberSetting)
 	movw [sp+0x0A], ax
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x0000A)
 	movw ax, bc
 	movw [sp+0x08], ax
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	movw [sp+0x0A], ax
 	call !!__COM_funordered
 	mov [sp+0x04], a
@@ -140,8 +140,8 @@ _Voltage1Check_waitReset:
 	call !!_resetAlarm
 	;***       21 : 			sendToRasPi_f(H_ALARM, OVER_VOLTAGE_1,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 21
-	movw bc, !LOWW(_g_io_status+0x0000A)
-	movw de, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x00008)
+	movw de, !LOWW(_g_io_status+0x0000A)
 	movw ax, #0x4105
 	call !!_sendToRasPi_f
 	;***       22 : 					g_io_status.refined.CVCCVoltage);
@@ -198,10 +198,10 @@ _Voltage2Check_nostop:
 	movw ax, !LOWW(_g_numberSetting+0x00004)
 	movw [sp+0x0A], ax
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x0000A)
 	movw ax, bc
 	movw [sp+0x08], ax
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	movw [sp+0x0A], ax
 	call !!__COM_funordered
 	mov [sp+0x04], a
@@ -260,8 +260,8 @@ _Voltage2Check_nostop:
 	push ax
 	movw ax, !LOWW(_g_numberSetting)
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw bc, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	call !!__COM_fge
 	addw sp, #0x04
 	cmp0 a
@@ -276,8 +276,8 @@ _Voltage2Check_nostop:
 	set1 !LOWW(_g_alarm).1
 	;***       46 : 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 46
-	movw bc, !LOWW(_g_io_status+0x0000A)
-	movw de, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x00008)
+	movw de, !LOWW(_g_io_status+0x0000A)
 	movw ax, #0x4106
 	addw sp, #0x0A
 	br !!_sendToRasPi_f
@@ -319,10 +319,10 @@ _Voltage3Check_waitReset:
 	movw ax, !LOWW(_g_numberSetting+0x00008)
 	movw [sp+0x0A], ax
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x0000A)
 	movw ax, bc
 	movw [sp+0x08], ax
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	movw [sp+0x0A], ax
 	call !!__COM_funordered
 	mov [sp+0x04], a
@@ -381,8 +381,8 @@ _Voltage3Check_waitReset:
 	push ax
 	movw ax, !LOWW(_g_numberSetting+0x00004)
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw bc, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	call !!__COM_fge
 	addw sp, #0x04
 	cmp0 a
@@ -415,8 +415,8 @@ _Voltage3Check_waitReset:
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***       73 : 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 73
-	movw bc, !LOWW(_g_io_status+0x0000A)
-	movw de, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x00008)
+	movw de, !LOWW(_g_io_status+0x0000A)
 	movw ax, #0x4107
 	call !!_sendToRasPi_f
 	;***       74 : 						g_io_status.refined.CVCCVoltage);
@@ -500,10 +500,10 @@ _LowVoltageCheck_waitReset:
 	movw ax, !LOWW(_g_numberSetting+0x0000C)
 	movw [sp+0x08], ax
 	push ax
-	movw bc, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x0000A)
 	movw ax, bc
 	movw [sp+0x06], ax
-	movw ax, !LOWW(_g_io_status+0x0000A)
+	movw ax, !LOWW(_g_io_status+0x00008)
 	movw [sp+0x08], ax
 	call !!__COM_funordered
 	mov [sp+0x04], a
@@ -588,8 +588,8 @@ _LowVoltageCheck_waitReset:
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      102 : 				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 102
-	movw bc, !LOWW(_g_io_status+0x0000A)
-	movw de, !LOWW(_g_io_status+0x0000C)
+	movw bc, !LOWW(_g_io_status+0x00008)
+	movw de, !LOWW(_g_io_status+0x0000A)
 	movw ax, #0x4108
 	call !!_sendToRasPi_f
 	;***      103 : 						g_io_status.refined.CVCCVoltage);
@@ -611,7 +611,7 @@ _LowVoltageCheck_waitReset:
 	movw !LOWW(_g_Tick+0x00038), ax
 	br $.BB@LABEL@4_11
 _OverCurrentCheck_waitReset:
-	.STACK _OverCurrentCheck_waitReset = 22
+	.STACK _OverCurrentCheck_waitReset = 18
 	;***      107 : 			}
 	;***      108 : 		} else
 	;***      109 : 			g_Tick.tickVoltageLowCheck = g_systemTime;
@@ -621,7 +621,7 @@ _OverCurrentCheck_waitReset:
 	;***      113 : }
 	;***      114 : uint8_t OverCurrentCheck_waitReset(void) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 114
-	subw sp, #0x0E
+	subw sp, #0x0A
 	;***      115 : 	uint32_t _time_count = g_systemTime;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 115
 	movw ax, !LOWW(_g_systemTime+0x00002)
@@ -646,7 +646,7 @@ _OverCurrentCheck_waitReset:
 .BB@LABEL@5_3:	; entry
 	cmpw ax, #0x1388
 .BB@LABEL@5_4:	; entry
-	.bc $!.BB@LABEL@5_34
+	.bc $!.BB@LABEL@5_26
 .BB@LABEL@5_5:	; if_then_bb
 	;***      118 : 		if ((g_io_status.refined.CVCCCurrent <= g_numberSetting.lowerCurrent)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 118
@@ -656,21 +656,46 @@ _OverCurrentCheck_waitReset:
 	movw ax, !LOWW(_g_numberSetting+0x00014)
 	movw [sp+0x0A], ax
 	push ax
-	movw bc, !LOWW(_g_io_status+0x00010)
+	movw bc, !LOWW(_g_io_status+0x0000E)
 	movw ax, bc
 	movw [sp+0x04], ax
-	movw ax, !LOWW(_g_io_status+0x0000E)
+	movw ax, !LOWW(_g_io_status+0x0000C)
 	movw [sp+0x06], ax
-	call !!__COM_fle
+	call !!__COM_funordered
+	mov [sp+0x08], a
 	addw sp, #0x04
+	movw ax, [sp+0x06]
+	push ax
+	movw ax, [sp+0x0A]
+	push ax
+	movw ax, [sp+0x04]
+	movw bc, ax
+	movw ax, [sp+0x06]
+	call !!__COM_fgt
+	addw sp, #0x04
+	mov x, a
+	mov a, [sp+0x04]
 	cmp0 a
-	bnz $.BB@LABEL@5_11
-.BB@LABEL@5_6:	; bb
+	oneb a
+	sknz
+.BB@LABEL@5_6:	; if_then_bb
+	clrb a
+.BB@LABEL@5_7:	; if_then_bb
+	cmp0 x
+	oneb x
+	sknz
+.BB@LABEL@5_8:	; if_then_bb
+	clrb x
+.BB@LABEL@5_9:	; if_then_bb
+	or x, a
+	mov x, #0x20
+	bz $.BB@LABEL@5_16
+.BB@LABEL@5_10:	; bb
 	movw ax, !LOWW(_g_numberSetting+0x00012)
-	movw [sp+0x0C], ax
+	movw [sp+0x08], ax
 	push ax
 	movw ax, !LOWW(_g_numberSetting+0x00010)
-	movw [sp+0x0C], ax
+	movw [sp+0x08], ax
 	push ax
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -678,9 +703,9 @@ _OverCurrentCheck_waitReset:
 	call !!__COM_funordered
 	mov [sp+0x08], a
 	addw sp, #0x04
-	movw ax, [sp+0x0C]
+	movw ax, [sp+0x08]
 	push ax
-	movw ax, [sp+0x0C]
+	movw ax, [sp+0x08]
 	push ax
 	movw ax, [sp+0x04]
 	movw bc, ax
@@ -692,125 +717,34 @@ _OverCurrentCheck_waitReset:
 	cmp0 a
 	oneb a
 	sknz
-.BB@LABEL@5_7:	; bb
+.BB@LABEL@5_11:	; bb
 	clrb a
-.BB@LABEL@5_8:	; bb
+.BB@LABEL@5_12:	; bb
 	cmp0 x
 	oneb x
 	sknz
-.BB@LABEL@5_9:	; bb
+.BB@LABEL@5_13:	; bb
 	clrb x
-.BB@LABEL@5_10:	; bb
+.BB@LABEL@5_14:	; bb
 	or x, a
-	.bnz $!.BB@LABEL@5_34
-.BB@LABEL@5_11:	; if_then_bb24
-	mov a, #0x60
-	;***      119 : 				|| (g_io_status.refined.CVCCCurrent
-	;***      120 : 						>= g_numberSetting.upperCurrent)) {
-	;***      121 : 			if ((g_alarm.refined.abnormal_current == 0)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 121
-	and a, !LOWW(_g_alarm)
-	bnz $.BB@LABEL@5_18
-.BB@LABEL@5_12:	; if_then_bb24
-	movw ax, [sp+0x06]
-	push ax
-	movw ax, [sp+0x0A]
-	push ax
-	movw ax, [sp+0x04]
-	movw bc, ax
-	movw ax, [sp+0x06]
-	call !!__COM_funordered
-	mov [sp+0x08], a
-	addw sp, #0x04
-	movw ax, [sp+0x06]
-	push ax
-	movw ax, [sp+0x0A]
-	push ax
-	movw ax, [sp+0x04]
-	movw bc, ax
-	movw ax, [sp+0x06]
-	call !!__COM_fgt
-	addw sp, #0x04
-	mov x, a
-	mov a, [sp+0x04]
-	cmp0 a
-	oneb a
-	sknz
-.BB@LABEL@5_13:	; if_then_bb24
-	clrb a
-.BB@LABEL@5_14:	; if_then_bb24
-	cmp0 x
-	oneb x
-	sknz
-.BB@LABEL@5_15:	; if_then_bb24
+	.bnz $!.BB@LABEL@5_26
+.BB@LABEL@5_15:	; bb.bb66_crit_edge
 	clrb x
-.BB@LABEL@5_16:	; if_then_bb24
-	or x, a
-	bnz $.BB@LABEL@5_18
-.BB@LABEL@5_17:	; if_then_bb58
-	movw ax, [sp+0x02]
-	movw bc, ax
-	pop de
-	push de
-	;***      122 : 					&& (g_alarm.refined.over_curent == 0)
-	;***      123 : 					&& (g_io_status.refined.CVCCCurrent
-	;***      124 : 							<= g_numberSetting.lowerCurrent)) {
-	;***      125 : 				sendToRasPi_f(H_ALARM, CURRENT_ABNORMAL,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 125
-	movw ax, #0x4109
-	call !!_sendToRasPi_f
-.BB@LABEL@5_18:	; if_break_bb
-	;***      126 : 						g_io_status.refined.CVCCCurrent);
-	;***      127 : 			}
-	;***      128 : 			g_alarm.refined.abnormal_current =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 128
-	movw ax, !LOWW(_g_numberSetting+0x00016)
-	movw [sp+0x08], ax
-	push ax
-	movw ax, !LOWW(_g_numberSetting+0x00014)
-	movw [sp+0x08], ax
-	push ax
-	movw bc, !LOWW(_g_io_status+0x00010)
-	movw ax, bc
-	movw [sp+0x04], ax
-	movw ax, !LOWW(_g_io_status+0x0000E)
-	movw [sp+0x08], ax
-	call !!__COM_funordered
-	mov [sp+0x06], a
-	addw sp, #0x04
-	movw ax, [sp+0x08]
-	push ax
-	movw ax, [sp+0x08]
-	push ax
-	movw ax, [sp+0x04]
-	movw bc, ax
-	movw ax, [sp+0x08]
-	call !!__COM_fgt
-	addw sp, #0x04
-	mov x, a
-	mov a, [sp+0x02]
-	cmp0 a
-	oneb a
-	sknz
-.BB@LABEL@5_19:	; if_break_bb
-	clrb a
-.BB@LABEL@5_20:	; if_break_bb
-	cmp0 x
-	oneb x
-	sknz
-.BB@LABEL@5_21:	; if_break_bb
-	clrb x
-.BB@LABEL@5_22:	; if_break_bb
-	or x, a
-	mov x, #0x20
-	skz
-.BB@LABEL@5_23:	; bb65
-	clrb x
-.BB@LABEL@5_24:	; bb67
+.BB@LABEL@5_16:	; bb66
 	mov a, #0xDF
 	and a, !LOWW(_g_alarm)
 	or a, x
 	mov !LOWW(_g_alarm), a
+	;***      119 : 				|| (g_io_status.refined.CVCCCurrent
+	;***      120 : 						>= g_numberSetting.upperCurrent)) {
+	;***      121 : 			if ((g_alarm.refined.abnormal_current == 0)
+	;***      122 : 					&& (g_alarm.refined.over_curent == 0)
+	;***      123 : 					&& (g_io_status.refined.CVCCCurrent
+	;***      124 : 							< g_numberSetting.lowerCurrent)) {
+	;***      125 : //				sendToRasPi_f(H_ALARM, CURRENT_ABNORMAL,
+	;***      126 : //						g_io_status.refined.CVCCCurrent);
+	;***      127 : 			}
+	;***      128 : 			g_alarm.refined.abnormal_current =
 	;***      129 : 					g_io_status.refined.CVCCCurrent
 	;***      130 : 							<= g_numberSetting.lowerCurrent ? 1 : 0;
 	;***      131 : 
@@ -824,9 +758,9 @@ _OverCurrentCheck_waitReset:
 	push ax
 	movw ax, [sp+0x04]
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	call !!__COM_funordered
-	mov [sp+0x06], a
+	mov [sp+0x08], a
 	addw sp, #0x04
 	movw ax, [sp+0x08]
 	push ax
@@ -834,26 +768,26 @@ _OverCurrentCheck_waitReset:
 	push ax
 	movw ax, [sp+0x04]
 	movw bc, ax
-	movw ax, [sp+0x08]
+	movw ax, [sp+0x06]
 	call !!__COM_flt
 	addw sp, #0x04
 	mov x, a
-	mov a, [sp+0x02]
+	mov a, [sp+0x04]
 	cmp0 a
 	oneb a
 	sknz
-.BB@LABEL@5_25:	; bb67
+.BB@LABEL@5_17:	; bb66
 	clrb a
-.BB@LABEL@5_26:	; bb67
+.BB@LABEL@5_18:	; bb66
 	cmp0 x
 	oneb x
 	sknz
-.BB@LABEL@5_27:	; bb67
+.BB@LABEL@5_19:	; bb66
 	clrb x
-.BB@LABEL@5_28:	; bb67
+.BB@LABEL@5_20:	; bb66
 	or x, a
-	bnz $.BB@LABEL@5_33
-.BB@LABEL@5_29:	; if_then_bb81
+	bnz $.BB@LABEL@5_25
+.BB@LABEL@5_21:	; if_then_bb80
 	;***      133 : 					>= g_numberSetting.upperCurrent) {
 	;***      134 : 				if (ns_delay_ms(&g_Tick.tickCurrentCheck, _max_time)) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 134
@@ -864,8 +798,8 @@ _OverCurrentCheck_waitReset:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@5_34
-.BB@LABEL@5_30:	; if_then_bb88
+	bz $.BB@LABEL@5_26
+.BB@LABEL@5_22:	; if_then_bb87
 	;***      135 : 					resetAlarm();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 135
 	call !!_resetAlarm
@@ -886,14 +820,14 @@ _OverCurrentCheck_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@5_31:	; if_then_bb88.bb102_crit_edge
+.BB@LABEL@5_23:	; if_then_bb87.bb101_crit_edge
 	oneb a
-.BB@LABEL@5_32:	; bb102
+.BB@LABEL@5_24:	; bb101
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***      142 : 					sendToRasPi_f(H_ALARM, OVER_CURRENT,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 142
-	movw bc, !LOWW(_g_io_status+0x0000E)
-	movw de, !LOWW(_g_io_status+0x00010)
+	movw bc, !LOWW(_g_io_status+0x0000C)
+	movw de, !LOWW(_g_io_status+0x0000E)
 	movw ax, #0x410A
 	call !!_sendToRasPi_f
 	;***      143 : 							g_io_status.refined.CVCCCurrent);
@@ -907,8 +841,8 @@ _OverCurrentCheck_waitReset:
 	;***      146 : 					return 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 146
 	oneb a
-	br $.BB@LABEL@5_35
-.BB@LABEL@5_33:	; if_else_bb
+	br $.BB@LABEL@5_27
+.BB@LABEL@5_25:	; if_else_bb
 	;***      147 : 				}
 	;***      148 : 			} else {
 	;***      149 : 				g_Tick.tickCurrentCheck = g_systemTime;
@@ -917,10 +851,10 @@ _OverCurrentCheck_waitReset:
 	movw !LOWW(_g_Tick+0x0003E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0003C), ax
-.BB@LABEL@5_34:	; bb117
+.BB@LABEL@5_26:	; bb116
 	clrb a
-.BB@LABEL@5_35:	; bb117
-	addw sp, #0x0E
+.BB@LABEL@5_27:	; bb116
+	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 154
 	ret
 _FlowSensorCheck_nonstop:
@@ -936,29 +870,26 @@ _FlowSensorCheck_nonstop:
 	;***      158 :  * @return 1 - Invalid, 0 - OK
 	;***      159 :  */
 	;***      160 : uint8_t FlowSensorCheck_nonstop(void) {
-	;***      161 : 	if(g_alarm.refined.abnormal_flow == 1)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 161
-	movw hl, #LOWW(_g_alarm)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 160
 	subw sp, #0x04
-	bt [hl].4, $.BB@LABEL@6_5
-.BB@LABEL@6_1:	; if_break_bb
-	;***      162 : 		return 0;
+	;***      161 : //	if(g_alarm.refined.abnormal_flow == 1)
+	;***      162 : //		return 0;
 	;***      163 : 	if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 163
 	movw ax, !LOWW(_g_numberSetting+0x0001E)
 	push ax
 	movw ax, !LOWW(_g_numberSetting+0x0001C)
 	push ax
-	movw bc, !LOWW(_g_io_status+0x00008)
+	movw bc, !LOWW(_g_io_status+0x00006)
 	movw ax, bc
 	movw [sp+0x04], ax
-	movw ax, !LOWW(_g_io_status+0x00006)
+	movw ax, !LOWW(_g_io_status+0x00004)
 	movw [sp+0x06], ax
 	call !!__COM_flt
 	addw sp, #0x04
 	cmp0 a
-	bnz $.BB@LABEL@6_3
-.BB@LABEL@6_2:	; bb11
+	bnz $.BB@LABEL@6_2
+.BB@LABEL@6_1:	; bb
 	movw ax, !LOWW(_g_numberSetting+0x0001A)
 	push ax
 	movw ax, !LOWW(_g_numberSetting+0x00018)
@@ -969,53 +900,50 @@ _FlowSensorCheck_nonstop:
 	call !!__COM_fgt
 	addw sp, #0x04
 	cmp0 a
-	bz $.BB@LABEL@6_4
-.BB@LABEL@6_3:	; if_then_bb23
+	bz $.BB@LABEL@6_3
+.BB@LABEL@6_2:	; if_then_bb
 	;***      164 : 			|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
-	;***      165 : 		if(O_SUPPLY_WATER_PIN_SV1 == ON){
+	;***      165 : 		if (O_SUPPLY_WATER_PIN_SV1 == ON) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 165
 	mov a, 0xFFF01
-	bt a.7, $.BB@LABEL@6_6
-.BB@LABEL@6_4:	; if_break_bb37
-	clr1 !LOWW(_g_alarm).4
-.BB@LABEL@6_5:	; bb47
+	bt a.7, $.BB@LABEL@6_5
+.BB@LABEL@6_3:	; if_break_bb
 	clrb a
-	br $.BB@LABEL@6_7
-.BB@LABEL@6_6:	; if_then_bb30
-	movw ax, [sp+0x02]
-	movw bc, ax
-	pop de
-	push de
-	;***      166 : 			sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 166
-	movw ax, #0x4104
-	call !!_sendToRasPi_f
-	;***      167 : 					g_io_status.refined.FlowValue);
+.BB@LABEL@6_4:	; if_break_bb
+	clr1 !LOWW(_g_alarm).4
+	addw sp, #0x04
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 178
+	ret
+.BB@LABEL@6_5:	; if_then_bb21
+	;***      166 : //			sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+	;***      167 : //					g_io_status.refined.FlowValue);
 	;***      168 : 			g_alarm.refined.abnormal_flow = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 168
 	set1 !LOWW(_g_alarm).4
-	;***      169 : 			return 1;
+	;***      169 : 			waitAlarmConfirm_stop(FLOW_SENSOR_ERROR, 0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 169
+	movw ax, #0x0400
+	call !!_waitAlarmConfirm_stop
+	;***      170 : 			g_alarm.refined.abnormal_flow = 0;
+	;***      171 : 			return 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 171
 	oneb a
-.BB@LABEL@6_7:	; bb47
-	addw sp, #0x04
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 176
-	ret
+	br $.BB@LABEL@6_4
 _solenoidCheck_nonstop:
 	.STACK _solenoidCheck_nonstop = 14
-	;***      170 : 		}
-	;***      171 : 		g_alarm.refined.abnormal_flow = 0;
-	;***      172 : 		return 0;
-	;***      173 : 	}
-	;***      174 : 	g_alarm.refined.abnormal_flow = 0;
-	;***      175 : 	return 0;
-	;***      176 : }
-	;***      177 : 
-	;***      178 : uint8_t solenoidCheck_nonstop(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 178
+	;***      172 : 		}
+	;***      173 : 		g_alarm.refined.abnormal_flow = 0;
+	;***      174 : 		return 0;
+	;***      175 : 	}
+	;***      176 : 	g_alarm.refined.abnormal_flow = 0;
+	;***      177 : 	return 0;
+	;***      178 : }
+	;***      179 : 
+	;***      180 : uint8_t solenoidCheck_nonstop(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 180
 	subw sp, #0x06
-	;***      179 : 	if (O_SUPPLY_WATER_PIN_SV1 == OFF && O_SPOUT_WATER_PIN_SV2 == OFF) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 179
+	;***      181 : 	if (O_SUPPLY_WATER_PIN_SV1 == OFF && O_SPOUT_WATER_PIN_SV2 == OFF) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 181
 	mov a, 0xFFF01
 	mov1 CY, a.7
 	bc $.BB@LABEL@7_2
@@ -1026,15 +954,15 @@ _solenoidCheck_nonstop:
 	bc $.BB@LABEL@7_12
 .BB@LABEL@7_3:	; if_then_bb
 	movw ax, #0x3DCC
-	;***      180 : 		if (g_io_status.refined.FlowValue >= 0.1) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 180
+	;***      182 : 		if (g_io_status.refined.FlowValue >= 0.1) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 182
 	push ax
 	movw ax, #0xCCCD
 	push ax
-	movw bc, !LOWW(_g_io_status+0x00008)
+	movw bc, !LOWW(_g_io_status+0x00006)
 	movw ax, bc
 	movw [sp+0x08], ax
-	movw ax, !LOWW(_g_io_status+0x00006)
+	movw ax, !LOWW(_g_io_status+0x00004)
 	movw [sp+0x06], ax
 	call !!__COM_funordered
 	mov [sp+0x04], a
@@ -1065,8 +993,8 @@ _solenoidCheck_nonstop:
 	or x, a
 	bnz $.BB@LABEL@7_12
 .BB@LABEL@7_8:	; if_then_bb22
-	;***      181 : 			if (ns_delay_ms(&g_Tick.tickSolenoidCheck,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 181
+	;***      183 : 			if (ns_delay_ms(&g_Tick.tickSolenoidCheck,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 183
 	movw ax, !LOWW(_g_timerSetting+0x00040)
 	movw bc, #0x03E8
 	mulhu
@@ -1086,147 +1014,147 @@ _solenoidCheck_nonstop:
 	cmpw ax, bc
 	bz $.BB@LABEL@7_10
 .BB@LABEL@7_9:	; if_then_bb30
-	;***      182 : 					g_timerSetting.t17_solenoidLeakageStartTime_s * 1000))
-	;***      183 : 				sendToRasPi_f(H_ALARM, SOLENOID_VALVE_ERROR, 1);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 183
+	;***      184 : 					g_timerSetting.t17_solenoidLeakageStartTime_s * 1000))
+	;***      185 : 				sendToRasPi_f(H_ALARM, SOLENOID_VALVE_ERROR, 1);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 185
 	movw de, #0x3F80
 	movw ax, #0x410B
 	call !!_sendToRasPi_f
 .BB@LABEL@7_10:	; if_break_bb
-	;***      184 : 			g_alarm.refined.solenoid = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 184
+	;***      186 : 			g_alarm.refined.solenoid = 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 186
 	set1 !LOWW(_g_alarm).7
-	;***      185 : 			return 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 185
+	;***      187 : 			return 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 187
 	oneb a
 .BB@LABEL@7_11:	; if_break_bb
 	addw sp, #0x06
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 191
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 193
 	ret
 .BB@LABEL@7_12:	; if_break_bb39
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00042), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00040), ax
-	;***      186 : 		} else
-	;***      187 : 			g_Tick.tickSolenoidCheck = g_systemTime;
-	;***      188 : 	} else
-	;***      189 : 		g_Tick.tickSolenoidCheck = g_systemTime;
-	;***      190 : 	return 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 190
+	;***      188 : 		} else
+	;***      189 : 			g_Tick.tickSolenoidCheck = g_systemTime;
+	;***      190 : 	} else
+	;***      191 : 		g_Tick.tickSolenoidCheck = g_systemTime;
+	;***      192 : 	return 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 192
 	clrb a
 	br $.BB@LABEL@7_11
 _saltWaterTankFullCheck_nonstop:
 	.STACK _saltWaterTankFullCheck_nonstop = 8
-	;***      191 : }
-	;***      192 : uint8_t saltWaterTankFullCheck_nonstop(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 192
+	;***      193 : }
+	;***      194 : uint8_t saltWaterTankFullCheck_nonstop(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 194
 	push hl
-	;***      193 : 	if (I_SALT_H_PIN == ON) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 193
+	;***      195 : 	if (I_SALT_H_PIN == ON) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 195
 	mov a, 0xFFF05
-	bt a.3, $.BB@LABEL@8_2
+	bt a.3, $.BB@LABEL@8_3
 .BB@LABEL@8_1:	; if_else_bb
-	;***      194 : 		if (ns_delay_ms(&g_Tick.tickSaltFullCheck,
-	;***      195 : 				g_timerSetting.t18_fullSaltWaterMonitoringStart_h * 60 * 60
-	;***      196 : 						* 1000)) {
-	;***      197 : 			sendToRasPi_f(H_ALARM, SALT_WATER_FULL_ERROR, 1);
-	;***      198 : 			g_Tick.tickElectrolyticOff = g_systemTime;
-	;***      199 : 			g_machine_state.electrolyteOFF =
-	;***      200 : 					g_machine_state.electrolyteOFF == 0 ?
-	;***      201 : 							1 : g_machine_state.electrolyteOFF;
-	;***      202 : 			g_alarm.refined.salt_full = 1;
-	;***      203 : 			;
-	;***      204 : 			return 1;
-	;***      205 : 		}
-	;***      206 : 	} else
-	;***      207 : 		g_Tick.tickSaltFullCheck = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 207
+	;***      196 : 		if (g_timerSetting.t18_fullSaltWaterMonitoringStart_h != 0
+	;***      197 : 				&& ns_delay_ms(&g_Tick.tickSaltFullCheck,
+	;***      198 : 						g_timerSetting.t18_fullSaltWaterMonitoringStart_h * 60
+	;***      199 : 								* 60 * 1000)) {
+	;***      200 : //			sendToRasPi_f(H_ALARM, SALT_WATER_FULL_ERROR, 1);
+	;***      201 : 			g_Tick.tickElectrolyticOff = g_systemTime;
+	;***      202 : 			g_machine_state.electrolyteOFF =
+	;***      203 : 					g_machine_state.electrolyteOFF == 0 ?
+	;***      204 : 							1 : g_machine_state.electrolyteOFF;
+	;***      205 : 			g_alarm.refined.salt_full = 1;
+	;***      206 : 			;
+	;***      207 : 			return 1;
+	;***      208 : 		}
+	;***      209 : 	} else
+	;***      210 : 		g_Tick.tickSaltFullCheck = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 210
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x00046), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00044), ax
-	br $.BB@LABEL@8_3
-.BB@LABEL@8_2:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 194
+.BB@LABEL@8_2:	; bb46
+	clrb a
+	pop hl
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 212
+	ret
+.BB@LABEL@8_3:	; if_then_bb
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 196
+	movw bc, !LOWW(_g_timerSetting+0x00046)
+	pop ax
+	push bc
 	movw ax, !LOWW(_g_timerSetting+0x00044)
-	movw hl, ax
+	movw de, ax
+	addw ax, bc
+	sknz
+.BB@LABEL@8_4:	; if_then_bb
+	bnc $.BB@LABEL@8_2
+.BB@LABEL@8_5:	; bb
+	movw ax, de
 	movw bc, #0x0036
 	mulh
-	movw de, ax
-	movw ax, !LOWW(_g_timerSetting+0x00046)
+	movw hl, ax
+	movw ax, [sp+0x00]
 	movw bc, #0xEE80
 	mulh
 	movw [sp+0x00], ax
-	movw ax, hl
+	movw ax, de
 	movw bc, #0xEE80
 	mulhu
 	push bc
-	pop hl
+	pop de
 	movw bc, ax
 	movw ax, [sp+0x00]
-	addw ax, de
 	addw ax, hl
+	addw ax, de
 	movw de, ax
 	movw ax, #LOWW(_g_Tick+0x00044)
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bnz $.BB@LABEL@8_4
-.BB@LABEL@8_3:	; bb35
-	clrb a
-	pop hl
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 209
-	ret
-.BB@LABEL@8_4:	; if_then_bb15
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 197
-	movw de, #0x3F80
-	movw ax, #0x410C
-	call !!_sendToRasPi_f
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 198
+	bz $.BB@LABEL@8_2
+.BB@LABEL@8_6:	; if_then_bb24
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 201
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0004E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0004C), ax
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 199
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 202
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@8_5:	; if_then_bb15.bb24_crit_edge
+.BB@LABEL@8_7:	; if_then_bb24.bb35_crit_edge
 	oneb a
-.BB@LABEL@8_6:	; bb24
+.BB@LABEL@8_8:	; bb35
 	mov !LOWW(_g_machine_state+0x00008), a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 202
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 205
 	set1 !LOWW(_g_alarm+0x00001).0
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 204
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 207
 	oneb a
 	pop hl
 	ret
 _saltWaterTankEmptyCheck:
 	.STACK _saltWaterTankEmptyCheck = 4
-	;***      208 : 	return 0;
-	;***      209 : }
-	;***      210 : 
-	;***      211 : uint8_t saltWaterTankEmptyCheck(void) {
-	;***      212 : 	if (I_SALT_L_PIN == 0) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 212
+	;***      211 : 	return 0;
+	;***      212 : }
+	;***      213 : 
+	;***      214 : uint8_t saltWaterTankEmptyCheck(void) {
+	;***      215 : 	if (I_SALT_L_PIN == 0) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 215
 	mov a, 0xFFF05
 	bt a.4, $.BB@LABEL@9_4
 .BB@LABEL@9_1:	; if_then_bb
-	;***      213 : 		sendToRasPi_f(H_ALARM, SALT_WATER_EMPTY_ERROR, 1);
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 213
-	movw de, #0x3F80
-	clrw bc
-	movw ax, #0x410D
-	call !!_sendToRasPi_f
-	;***      214 : 		g_Tick.tickElectrolyticOff = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 214
+	;***      216 : //		sendToRasPi_f(H_ALARM, SALT_WATER_EMPTY_ERROR, 1);
+	;***      217 : 		g_Tick.tickElectrolyticOff = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 217
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0004E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0004C), ax
-	;***      215 : 		g_machine_state.electrolyteOFF =
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 215
+	;***      218 : 		g_machine_state.electrolyteOFF =
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 218
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
@@ -1234,30 +1162,30 @@ _saltWaterTankEmptyCheck:
 	oneb a
 .BB@LABEL@9_3:	; bb15
 	mov !LOWW(_g_machine_state+0x00008), a
-	;***      216 : 				g_machine_state.electrolyteOFF == 0 ?
-	;***      217 : 						1 : g_machine_state.electrolyteOFF;
-	;***      218 : 		g_alarm.refined.salt_empty = 1;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 218
-	set1 !LOWW(_g_alarm+0x00001).1
-	;***      219 : 		//TODO: Control Off
-	;***      220 : 
-	;***      221 : 		return 1;
+	;***      219 : 				g_machine_state.electrolyteOFF == 0 ?
+	;***      220 : 						1 : g_machine_state.electrolyteOFF;
+	;***      221 : 		g_alarm.refined.salt_empty = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 221
+	set1 !LOWW(_g_alarm+0x00001).1
+	;***      222 : 		//TODO: Control Off
+	;***      223 : 
+	;***      224 : 		return 1;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 224
 	oneb a
 	ret
 .BB@LABEL@9_4:	; bb24
-	;***      222 : 	}
-	;***      223 : 	return 0;
-	;***      224 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 224
+	;***      225 : 	}
+	;***      226 : 	return 0;
+	;***      227 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 227
 	clrb a
 	ret
 _acidSkipErrorCheck_nonstop:
 	.STACK _acidSkipErrorCheck_nonstop = 4
-	;***      225 : 
-	;***      226 : uint8_t acidSkipErrorCheck_nonstop(void) {
-	;***      227 : 	if (((I_ACID_L_PIN_FL1 == I_OFF)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 227
+	;***      228 : 
+	;***      229 : uint8_t acidSkipErrorCheck_nonstop(void) {
+	;***      230 : 	if (((I_ACID_L_PIN_FL1 == I_OFF)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 230
 	mov a, 0xFFF07
 	bf a.1, $.BB@LABEL@10_3
 .BB@LABEL@10_1:	; bb
@@ -1273,35 +1201,30 @@ _acidSkipErrorCheck_nonstop:
 	mov a, 0xFFF07
 	bf a.3, $.BB@LABEL@10_6
 .BB@LABEL@10_5:	; bb67
-	;***      228 : 			&& ((I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON)))
-	;***      229 : 			|| (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)) {
-	;***      230 : 		sendToRasPi_f(H_ALARM, ACID_SKIP_ERROR, 1);
-	;***      231 : 		g_alarm.refined.acid_skip = 1;
-	;***      232 : 		//TODO: Control OFF
-	;***      233 : 		return 1;
-	;***      234 : 	}
-	;***      235 : 	return 0;
-	;***      236 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 236
+	;***      231 : 			&& ((I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON)))
+	;***      232 : 			|| (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)) {
+	;***      233 : //		sendToRasPi_f(H_ALARM, ACID_SKIP_ERROR, 1);
+	;***      234 : 		g_alarm.refined.acid_skip = 1;
+	;***      235 : 		//TODO: Control OFF
+	;***      236 : 		return 1;
+	;***      237 : 	}
+	;***      238 : 	return 0;
+	;***      239 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 239
 	clrb a
 	ret
 .BB@LABEL@10_6:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 230
-	movw de, #0x3F80
-	clrw bc
-	movw ax, #0x410E
-	call !!_sendToRasPi_f
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 231
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 234
 	set1 !LOWW(_g_alarm+0x00001).2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 233
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 236
 	oneb a
 	ret
 _alkalineSkipErrorCheck:
 	.STACK _alkalineSkipErrorCheck = 4
-	;***      237 : 
-	;***      238 : uint8_t alkalineSkipErrorCheck(void) {
-	;***      239 : 	if (((I_ALKALI_L_PIN_FL4 == I_OFF)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 239
+	;***      240 : 
+	;***      241 : uint8_t alkalineSkipErrorCheck(void) {
+	;***      242 : 	if (((I_ALKALI_L_PIN_FL4 == I_OFF)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 242
 	mov a, 0xFFF00
 	bf a.5, $.BB@LABEL@11_3
 .BB@LABEL@11_1:	; bb
@@ -1317,37 +1240,32 @@ _alkalineSkipErrorCheck:
 	mov a, 0xFFF07
 	bf a.0, $.BB@LABEL@11_6
 .BB@LABEL@11_5:	; bb67
-	;***      240 : 			&& ((I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON)))
-	;***      241 : 			|| (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)) {
-	;***      242 : 		sendToRasPi_f(H_ALARM, ALKALINE_SKIP_ERROR, 1);
-	;***      243 : 		g_alarm.refined.acid_skip = 1;
-	;***      244 : 		//TODO: Control OFF
-	;***      245 : 		return 1;
-	;***      246 : 	}
-	;***      247 : 	return 0;
-	;***      248 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 248
+	;***      243 : 			&& ((I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON)))
+	;***      244 : 			|| (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)) {
+	;***      245 : //		sendToRasPi_f(H_ALARM, ALKALINE_SKIP_ERROR, 1);
+	;***      246 : 		g_alarm.refined.acid_skip = 1;
+	;***      247 : 		//TODO: Control OFF
+	;***      248 : 		return 1;
+	;***      249 : 	}
+	;***      250 : 	return 0;
+	;***      251 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 251
 	clrb a
 	ret
 .BB@LABEL@11_6:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 242
-	movw de, #0x3F80
-	clrw bc
-	movw ax, #0x410F
-	call !!_sendToRasPi_f
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 243
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 246
 	set1 !LOWW(_g_alarm+0x00001).2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 245
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 248
 	oneb a
 	ret
 _waterFullErrorCheck:
 	.STACK _waterFullErrorCheck = 4
-	;***      249 : 
-	;***      250 : uint8_t waterFullErrorCheck(void) {
-	;***      251 : 
-	;***      252 : 	//Check g_color == BLACK for x hours
-	;***      253 : 	if (g_machine_state.mode != HAND_WASHING
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 253
+	;***      252 : 
+	;***      253 : uint8_t waterFullErrorCheck(void) {
+	;***      254 : 
+	;***      255 : 	//Check g_color == BLACK for x hours
+	;***      256 : 	if (g_machine_state.mode != HAND_WASHING
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 256
 	mov a, !LOWW(_g_machine_state+0x0000E)
 	mov x, a
 	dec a
@@ -1361,24 +1279,24 @@ _waterFullErrorCheck:
 	cmp a, #0x04
 	bnz $.BB@LABEL@12_4
 .BB@LABEL@12_3:	; if_else_bb
-	;***      254 : 			&& g_machine_state.mode != WATER_WASHING
-	;***      255 : 			&& g_machine_state.mode != ACID_WASHING
-	;***      256 : 			&& g_machine_state.mode != ALKALINE_WASHING) {
-	;***      257 : 		if(ns_delay_ms(&g_Tick.tickWaterFull, (uint32_t)20*60*1000)){
-	;***      258 : 			sendToRasPi_f(H_ALARM, WATER_FULL_ERROR, 1);
-	;***      259 : 			//TODO: Control OFF
-	;***      260 : 			return 1;
-	;***      261 : 		}
-	;***      262 : 	}else
-	;***      263 : 		g_Tick.tickWaterFull = g_systemTime;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 263
+	;***      257 : 			&& g_machine_state.mode != WATER_WASHING
+	;***      258 : 			&& g_machine_state.mode != ACID_WASHING
+	;***      259 : 			&& g_machine_state.mode != ALKALINE_WASHING) {
+	;***      260 : 		if (ns_delay_ms(&g_Tick.tickWaterFull, (uint32_t) 20 * 60 * 1000)) {
+	;***      261 : 			sendToRasPi_f(H_ALARM, WATER_FULL_ERROR, 1);
+	;***      262 : 			//TODO: Control OFF
+	;***      263 : 			return 1;
+	;***      264 : 		}
+	;***      265 : 	} else
+	;***      266 : 		g_Tick.tickWaterFull = g_systemTime;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 266
 	movw ax, !LOWW(_g_systemTime+0x00002)
 	movw !LOWW(_g_Tick+0x0006E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0006C), ax
 	br $.BB@LABEL@12_5
 .BB@LABEL@12_4:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 257
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 260
 	movw de, #0x0012
 	movw bc, #0x4F80
 	movw ax, #LOWW(_g_Tick+0x0006C)
@@ -1388,27 +1306,27 @@ _waterFullErrorCheck:
 	bnz $.BB@LABEL@12_6
 .BB@LABEL@12_5:	; bb48
 	clrb a
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 265
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 268
 	ret
 .BB@LABEL@12_6:	; if_then_bb43
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 258
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 261
 	movw de, #0x3F80
 	movw ax, #0x4110
 	call !!_sendToRasPi_f
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 260
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 263
 	oneb a
 	ret
 _filterReplacementErrorCheck:
 	.STACK _filterReplacementErrorCheck = 4
-	;***      264 : 	return 0;
-	;***      265 : }
-	;***      266 : 
-	;***      267 : uint8_t filterReplacementErrorCheck(void) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 267
+	;***      267 : 	return 0;
+	;***      268 : }
+	;***      269 : 
+	;***      270 : uint8_t filterReplacementErrorCheck(void) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 270
 	clrw ax
 	movw de, ax
-	;***      268 : 	if (g_TimeKeeper.SV1SV2OnTime_h
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 268
+	;***      271 : 	if (g_TimeKeeper.SV1SV2OnTime_h
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 271
 	cmpw ax, !LOWW(_g_timerSetting+0x0004E)
 	movw ax, !LOWW(_g_TimeKeeper@1+0x00004)
 	movw bc, ax
@@ -1419,15 +1337,15 @@ _filterReplacementErrorCheck:
 	bnc $.BB@LABEL@13_8
 .BB@LABEL@13_3:	; if_else_bb
 	movw ax, de
-	;***      269 : 			>= g_timerSetting.t20_waterFilterAlarmIgnore_h) {
-	;***      270 : 		g_alarm.refined.filter = FILTER_REPLACEMENT_E2;
-	;***      271 : 		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E2,
-	;***      272 : 				g_TimeKeeper.SV1SV2OnTime_h);
-	;***      273 : 		//TODO: Control OFF
-	;***      274 : 		return 2;
-	;***      275 : 
-	;***      276 : 	} else if (g_TimeKeeper.SV1SV2OnTime_h
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 276
+	;***      272 : 			>= g_timerSetting.t20_waterFilterAlarmIgnore_h) {
+	;***      273 : 		g_alarm.refined.filter = FILTER_REPLACEMENT_E2;
+	;***      274 : 		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E2,
+	;***      275 : 				g_TimeKeeper.SV1SV2OnTime_h);
+	;***      276 : 		//TODO: Control OFF
+	;***      277 : 		return 2;
+	;***      278 : 
+	;***      279 : 	} else if (g_TimeKeeper.SV1SV2OnTime_h
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 279
 	cmpw ax, !LOWW(_g_timerSetting+0x0004A)
 	movw ax, bc
 	sknz
@@ -1436,46 +1354,46 @@ _filterReplacementErrorCheck:
 .BB@LABEL@13_5:	; if_else_bb
 	bnc $.BB@LABEL@13_7
 .BB@LABEL@13_6:	; bb26
-	;***      277 : 			>= g_timerSetting.t19_waterFilterAlarm_h) {
-	;***      278 : 		g_alarm.refined.filter = FILTER_REPLACEMENT_E1;
-	;***      279 : 		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E1,
-	;***      280 : 				g_TimeKeeper.SV1SV2OnTime_h);
-	;***      281 : 		return 1;
-	;***      282 : 	}
-	;***      283 : 	return 0;
-	;***      284 : }
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 284
+	;***      280 : 			>= g_timerSetting.t19_waterFilterAlarm_h) {
+	;***      281 : 		g_alarm.refined.filter = FILTER_REPLACEMENT_E1;
+	;***      282 : 		sendToRasPi_u32(H_ALARM, FILTER_REPLACEMENT_E1,
+	;***      283 : 				g_TimeKeeper.SV1SV2OnTime_h);
+	;***      284 : 		return 1;
+	;***      285 : 	}
+	;***      286 : 	return 0;
+	;***      287 : }
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 287
 	clrb a
 	ret
 .BB@LABEL@13_7:	; if_then_bb17
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 278
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 281
 	clr1 !LOWW(_g_alarm+0x00001).5
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 279
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 282
 	movw bc, ax
 	clrw ax
 	movw de, ax
 	movw ax, #0x4124
 	call !!_sendToRasPi_u32
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 281
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 284
 	oneb a
 	ret
 .BB@LABEL@13_8:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 270
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 273
 	set1 !LOWW(_g_alarm+0x00001).5
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 271
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 274
 	clrw ax
 	movw de, ax
 	movw ax, #0x4125
 	call !!_sendToRasPi_u32
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 274
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 277
 	mov a, #0x02
 	ret
 _levelSkipErrorCheck:
 	.STACK _levelSkipErrorCheck = 4
-	;***      285 : 
-	;***      286 : uint8_t levelSkipErrorCheck(void){
-	;***      287 : 	if(I_ACID_L_PIN_FL1 == I_OFF && (I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON))
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 287
+	;***      288 : 
+	;***      289 : uint8_t levelSkipErrorCheck(void) {
+	;***      290 : 	if (I_ACID_L_PIN_FL1 == I_OFF
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 290
 	mov a, 0xFFF07
 	bf a.1, $.BB@LABEL@14_3
 .BB@LABEL@14_1:	; bb
@@ -1485,9 +1403,10 @@ _levelSkipErrorCheck:
 	mov a, 0xFFF07
 	bf a.3, $.BB@LABEL@14_5
 .BB@LABEL@14_3:	; if_else_bb
-	;***      288 : 		g_alarm.refined.acid_skip = ON;
-	;***      289 : 	else if (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 289
+	;***      291 : 			&& (I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON))
+	;***      292 : 		g_alarm.refined.acid_skip = ON;
+	;***      293 : 	else if (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 293
 	mov a, 0xFFF07
 	bf a.2, $.BB@LABEL@14_6
 .BB@LABEL@14_4:	; bb42
@@ -1502,12 +1421,12 @@ _levelSkipErrorCheck:
 	and a, !LOWW(_g_alarm+0x00001)
 .BB@LABEL@14_7:	; bb52.thread
 	mov x, a
-	;***      290 : 		g_alarm.refined.acid_skip = ON;
-	;***      291 : 	else
-	;***      292 : 		g_alarm.refined.acid_skip = OFF;
-	;***      293 : 
-	;***      294 : 	if(I_ALKALI_L_PIN_FL4 == I_OFF && (I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON))
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 294
+	;***      294 : 		g_alarm.refined.acid_skip = ON;
+	;***      295 : 	else
+	;***      296 : 		g_alarm.refined.acid_skip = OFF;
+	;***      297 : 
+	;***      298 : 	if (I_ALKALI_L_PIN_FL4 == I_OFF
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 298
 	mov a, 0xFFF00
 	bf a.5, $.BB@LABEL@14_10
 .BB@LABEL@14_8:	; bb72
@@ -1517,9 +1436,10 @@ _levelSkipErrorCheck:
 	mov a, 0xFFF07
 	bf a.0, $.BB@LABEL@14_12
 .BB@LABEL@14_10:	; if_else_bb105
-	;***      295 : 		g_alarm.refined.alkaline_skip = ON;
-	;***      296 : 	else if(I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 296
+	;***      299 : 			&& (I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON))
+	;***      300 : 		g_alarm.refined.alkaline_skip = ON;
+	;***      301 : 	else if (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 301
 	mov a, 0xFFF00
 	bf a.6, $.BB@LABEL@14_13
 .BB@LABEL@14_11:	; bb112
@@ -1534,12 +1454,12 @@ _levelSkipErrorCheck:
 	clr1 a.3
 .BB@LABEL@14_14:	; if_break_bb136
 	mov !LOWW(_g_alarm+0x00001), a
-	;***      297 : 		g_alarm.refined.alkaline_skip = ON;
-	;***      298 : 	else
-	;***      299 : 		g_alarm.refined.alkaline_skip = OFF;
-	;***      300 : 
-	;***      301 : 	return g_alarm.refined.acid_skip == ON || g_alarm.refined.alkaline_skip == ON ? 1 : 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 301
+	;***      302 : 		g_alarm.refined.alkaline_skip = ON;
+	;***      303 : 	else
+	;***      304 : 		g_alarm.refined.alkaline_skip = OFF;
+	;***      305 : 
+	;***      306 : 	return g_alarm.refined.acid_skip == ON
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 306
 	and a, #0x0C
 	oneb a
 	sknz
@@ -1547,7 +1467,8 @@ _levelSkipErrorCheck:
 	clrb a
 .BB@LABEL@14_16:	; if_break_bb136
 	ret
-	;***      302 : }
+	;***      307 : 			|| g_alarm.refined.alkaline_skip == ON ? 1 : 0;
+	;***      308 : }
 	.SECTION .bss,BSS
 	.ALIGN 2
 _g_TimeKeeper@1:

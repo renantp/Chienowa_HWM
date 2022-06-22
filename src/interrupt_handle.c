@@ -13,8 +13,14 @@
 #include "r_cg_adc.h"
 #include "r_cg_timer.h"
 uint16_t g_adc_value[2];
-
+struct Raspberry_state_s g_rasp_state;
 uint8_t isCommandNeedResponse(uint8_t *data);
+struct Flag_counter{
+	uint8_t time_setting;
+	uint8_t number_setting;
+	uint8_t mode_setting;
+	uint8_t alarm_setting;
+}flag_counter;
 
 void adc_int_handle(void){
 	//TODO: Change ratio to calculate ADC when change to new resistor.
@@ -64,15 +70,18 @@ void Raspberry_uart2_handle(void){
 					g_commnunication_flag.next_animation_flag = 1;
 					break;
 				case READ_TIME:
+					flag_counter.time_setting++;
 					g_commnunication_flag.send_response_time_flag = 1;
 					break;
 				case MACHINE_IO_DATA:
 					g_commnunication_flag.send_response_status_flag = 1;
 					break;
 				case READ_NUMBER:
+					flag_counter.number_setting++;
 					g_commnunication_flag.send_response_number_flag = 1;
 					break;
 				case WASHING_MODE:
+					flag_counter.mode_setting++;
 					g_commnunication_flag.send_response_mode_flag = 1;
 					g_commnunication_flag.send_response_flag = 0;
 					break;
@@ -80,24 +89,33 @@ void Raspberry_uart2_handle(void){
 					g_machine_state.isMidNight = g_rx_data[5];
 					break;
 				case DRAINAGE_MODE_SET:
-					g_commnunication_flag.control_test_flag = DRAINAGE_MODE_SET;
+					g_commnunication_flag.control_setting_flag = DRAINAGE_MODE_SET;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
 				case POWER_ON_TEST_SET:
-					g_commnunication_flag.control_test_flag = POWER_ON_TEST_SET;
+					g_commnunication_flag.control_setting_flag = POWER_ON_TEST_SET;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
 				case WATER_FILTER_SET:
-					g_commnunication_flag.control_test_flag = WATER_FILTER_SET;
+					g_commnunication_flag.control_setting_flag = WATER_FILTER_SET;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
-				case BIOMECTRIC_SET:
-					g_commnunication_flag.control_test_flag = BIOMECTRIC_SET;
+				case BIOMETRIC_SET:
+					g_commnunication_flag.control_setting_flag = BIOMETRIC_SET;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
 				case CONTROL_SETTING:
-					g_commnunication_flag.control_test_flag = CONTROL_SETTING;
+					g_commnunication_flag.control_setting_flag = CONTROL_SETTING;
+					g_commnunication_flag.send_response_flag = 0;
+					break;
+				case ALARM_STATUS:
+					flag_counter.alarm_setting++;
+					g_commnunication_flag.alarm_response_flag = 1U;
 					break;
 				default:
 					break;
 			}
-			if(g_commnunication_flag.control_test_flag != 0){
+			if(g_commnunication_flag.control_setting_flag != 0){
 				g_commnunication_flag.send_response_flag = 0;
 			}
 		}else if(g_rx_data[0] == H_SET){
@@ -120,10 +138,13 @@ void Raspberry_uart2_handle(void){
 					break;
 				case TESTING_MODE_START:
 					g_commnunication_flag.test_flag = TESTING_MODE_START;
-					g_commnunication_flag.send_response_flag = 0;
+					g_commnunication_flag.test_enable_flag = 1U;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
 				case TESTING_MODE_STOP:
 					g_commnunication_flag.test_flag = TESTING_MODE_STOP;
+					g_commnunication_flag.test_enable_flag = 0U;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
 				case TEST_POWER_ON:
 					g_commnunication_flag.test_flag = TEST_POWER_ON;
@@ -135,9 +156,9 @@ void Raspberry_uart2_handle(void){
 					g_commnunication_flag.test_flag = TEST_CURRENT;
 					break;
 				case TEST_INDIVIDUAL:
-					g_commnunication_flag.test_flag = TEST_INDIVIDUAL;
 					g_commnunication_flag.recieve_status_flag = 1;
-					R_UART2_Receive(g_rx_data, 4);
+					g_commnunication_flag.test_individual_flag = 1;
+					R_UART2_Receive(g_rx_data, 3);
 					break;
 				case TEST_ELECTROLYTIC:
 					g_commnunication_flag.test_flag = TEST_ELECTROLYTIC;
@@ -147,31 +168,53 @@ void Raspberry_uart2_handle(void){
 					break;
 				case OK_USER:
 					g_machine_state.user = 2;
+					g_commnunication_flag.send_response_flag = 0U;
 					break;
+				//----------------Control Setting--------------------
 				case DRAINAGE_MODE_SET:
-					g_commnunication_flag.control_test_save_flag = 1;
-					g_test_control.raw.drain = g_rx_data[5];
+					g_commnunication_flag.control_setting_flag = DRAINAGE_MODE_SET;
+					g_commnunication_flag.control_setting_save_flag = 1;
+					g_control_setting.raw.drain = g_rx_data[5];
+					g_commnunication_flag.send_response_flag = 0;
 					break;
 				case POWER_ON_TEST_SET:
-					g_commnunication_flag.control_test_save_flag = 1;
-					g_test_control.raw.power_on = g_rx_data[5];
+					g_commnunication_flag.control_setting_flag = POWER_ON_TEST_SET;
+					g_commnunication_flag.control_setting_save_flag = 1;
+					g_control_setting.raw.power_on = g_rx_data[5];
+					g_commnunication_flag.send_response_flag = 0;
 					break;
 				case WATER_FILTER_SET:
-					g_commnunication_flag.control_test_save_flag = 1;
-					g_test_control.raw.filter = g_rx_data[5];
+					g_commnunication_flag.control_setting_flag = WATER_FILTER_SET;
+					g_commnunication_flag.control_setting_save_flag = 1;
+					g_control_setting.raw.filter = g_rx_data[5];
+					g_commnunication_flag.send_response_flag = 0;
 					break;
-				case BIOMECTRIC_SET:
-					g_commnunication_flag.control_test_save_flag = 1;
-					g_test_control.raw.biomectric = g_rx_data[5];
+				case BIOMETRIC_SET:
+					g_commnunication_flag.control_setting_flag = BIOMETRIC_SET;
+					g_commnunication_flag.control_setting_save_flag = 1;
+					g_control_setting.raw.biomectric = g_rx_data[5];
+					g_commnunication_flag.send_response_flag = 0;
 					break;
+				//----------------End Control Setting--------------------
 				case START_WASHING:
 					g_commnunication_flag.send_response_flag = 0;
+					break;
+				case MONITOR_START:
+					g_rasp_state.isMonitorScreen = 1U;
+					g_commnunication_flag.test_enable_flag = 0U;
+					g_commnunication_flag.monitor_enable_flag = 1U;
+					break;
+				case MONITOR_STOP:
+					g_rasp_state.isMonitorScreen = 0U;
+					g_commnunication_flag.monitor_enable_flag = 0U;
+					g_commnunication_flag.test_enable_flag = 0U;
 					break;
 				default:
 					break;
 			}
 		}else if ((g_rx_data[0] == H_CLEAR)){
 			g_commnunication_flag.alarm_clear_flag = g_rx_data[1];
+			g_commnunication_flag.send_response_flag = 0;
 		}
 	} else if (g_commnunication_flag.recived_time_setting_flag != 0
 			|| g_commnunication_flag.recived_number_setting_flag != 0) {

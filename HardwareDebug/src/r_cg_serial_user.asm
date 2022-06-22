@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_serial_user.obj
 #@   ../src/r_cg_serial_user.c
-#@  compiled at Thu May 05 10:01:40 2022
+#@  compiled at Wed Jun 22 12:09:09 2022
 
 	.PUBLIC _g_uart3_rx_data
 	.EXTERN _gp_uart1_tx_address
@@ -1187,7 +1187,7 @@ _r_uart3_callback_receiveend@1:
 .BB@LABEL@21_3:	; if_then_bb25
 	;***      532 : 			g_commnunication_flag.rs485_send_to_watersolfner_response_flag = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 532
-	oneb !LOWW(_g_commnunication_flag+0x0000D)
+	oneb !LOWW(_g_commnunication_flag+0x00011)
 	ret
 .BB@LABEL@21_4:	; bb32
 	;***      533 : 		} else if ((rs485_rx_p[0] == 82) && (rs485_rx_p[1] == 24)) {
@@ -1197,7 +1197,7 @@ _r_uart3_callback_receiveend@1:
 .BB@LABEL@21_5:	; if_then_bb47
 	;***      534 : 			g_commnunication_flag.rs485_send_to_watersolfner_SV1_flag = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 534
-	oneb !LOWW(_g_commnunication_flag+0x0000E)
+	oneb !LOWW(_g_commnunication_flag+0x00012)
 .BB@LABEL@21_6:	; if_else_bb.if_else_bb48_crit_edge.critedge
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 551
 	ret
@@ -1221,7 +1221,7 @@ _r_uart3_callback_receiveend@1:
 .BB@LABEL@21_9:	; if_then_bb111
 	;***      543 : 			g_commnunication_flag.rs485_send_to_valve_response_flag = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 543
-	oneb !LOWW(_g_commnunication_flag+0x0000F)
+	oneb !LOWW(_g_commnunication_flag+0x00013)
 	ret
 .BB@LABEL@21_10:	; if_else_bb112
 	;***      544 : 		} else if ((rs485_rx_p[0] == 12)) {
@@ -1231,7 +1231,7 @@ _r_uart3_callback_receiveend@1:
 .BB@LABEL@21_11:	; if_then_bb120
 	;***      545 : 			g_commnunication_flag.rs485_get_valve_gesture_flag = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 545
-	oneb !LOWW(_g_commnunication_flag+0x00010)
+	oneb !LOWW(_g_commnunication_flag+0x00014)
 	ret
 .BB@LABEL@21_12:	; if_else_bb123
 	;***      546 : 		}
@@ -1242,7 +1242,7 @@ _r_uart3_callback_receiveend@1:
 .BB@LABEL@21_13:	; if_then_bb129
 	;***      548 : 		g_commnunication_flag.rs485_fault = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 548
-	oneb !LOWW(_g_commnunication_flag+0x00011)
+	oneb !LOWW(_g_commnunication_flag+0x00015)
 .BB@LABEL@21_14:	; return
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_serial_user.c", 551
 	ret
@@ -1323,7 +1323,7 @@ _send_respone_status_flag:
 _recived_number_setting_flag:
 	.DS (1)
 _g_commnunication_flag:
-	.DS (21)
+	.DS (25)
 _g_csi_count:
 	.DS (1)
 _g_csi_err:

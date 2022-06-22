@@ -10,28 +10,28 @@
 
 #include "hwm_main.h"
 
-extern union Alarm_Flag_u{
-	struct{
-		uint8_t over_voltage_1 : 1;
-		uint8_t over_voltage_2 : 1;
-		uint8_t over_voltage_3 : 1;
-		uint8_t underVoltage : 1;
-		uint8_t abnormal_flow : 1;
-		uint8_t abnormal_current : 1;
-		uint8_t over_curent : 1;
+extern union Alarm_Flag_u {
+	struct {
+		uint8_t over_voltage_1 :1;
+		uint8_t over_voltage_2 :1;
+		uint8_t over_voltage_3 :1;
+		uint8_t underVoltage :1;
+		uint8_t abnormal_flow :1;
+		uint8_t abnormal_current :1;
+		uint8_t over_curent :1;
 
-		uint8_t solenoid : 1;
-		uint8_t salt_full : 1;
-		uint8_t salt_empty : 1;
-		uint8_t acid_skip : 1;
-		uint8_t alkaline_skip: 1;
-		uint8_t water_full: 1;
-		uint8_t filter: 1;
-		uint8_t cvcc : 1;
+		uint8_t solenoid :1;
+		uint8_t salt_full :1;
+		uint8_t salt_empty :1;
+		uint8_t acid_skip :1;
+		uint8_t alkaline_skip :1;
+		uint8_t water_full :1;
+		uint8_t filter :1;
+		uint8_t cvcc :1;
 
-		uint8_t rsvd : 8;
-	}refined;
-}g_alarm;
+		uint8_t rsvd :8;
+	} refined;
+} g_alarm;
 
 uint8_t Voltage1Check_waitReset(void);
 void Voltage2Check_nostop(void);
@@ -45,4 +45,5 @@ uint8_t saltWaterTankEmptyCheck(void);
 
 uint8_t filterReplacementErrorCheck(void);
 uint8_t levelSkipErrorCheck(void);
+uint8_t acidSkipErrorCheck_nonstop(void);
 #endif /* HWM_ERROR_CHECK_H_ */

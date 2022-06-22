@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/hand_sensor_interface.obj
 #@   ../src/hwm/hand_sensor_interface.c
-#@  compiled at Thu May 05 10:01:46 2022
+#@  compiled at Wed Jun 22 12:09:15 2022
 
 	.EXTERN _g_Tick
 	.EXTERN _g_color
@@ -148,8 +148,8 @@ _handSensorLEDBlink:
 _HandSensorLEDEndBlink:
 	.STACK _HandSensorLEDEndBlink = 4
 	;***       43 : 
-	;***       44 : void HandSensorLEDEndBlink(void){
-	;***       45 : 	if(bink_reset_flag){
+	;***       44 : void HandSensorLEDEndBlink(void) {
+	;***       45 : 	if (bink_reset_flag) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hand_sensor_interface.c", 45
 	cmp0 !LOWW(_bink_reset_flag)
 	sknz

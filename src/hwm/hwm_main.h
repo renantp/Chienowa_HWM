@@ -42,13 +42,9 @@ union Control_u {
 	struct Cotrol_s raw;
 	uint8_t data;
 };
-extern union Control_u g_test_control;
+extern union Control_u g_control_setting;
 //void electrolyticOperationON(void);
 //void electrolyticOperationOFF(void);
-
-static const uint8_t io_statusSize = 5 + 13;
-static const uint8_t timeSettingSize = 141 + 8;
-static const uint8_t numberSettingSize = 40 + 1;
 
 void UpdateMachineStatus(void);
 uint8_t DrainageAcidAndAlkalineTankStart_nostop(void);

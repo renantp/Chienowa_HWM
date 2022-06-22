@@ -132,21 +132,26 @@ extern struct Timer_Setting_s{
 	uint32_t t30_offDelayEmptyLevel_s;
 	uint32_t t31_saltLowLevelDelay_s;
 	uint32_t t32_saltHighLevelDelay_s;
+	uint32_t t33_neutralizationStartTime_h;
+	uint32_t t34_neutralizationOpenTime_s;
 	uint32_t t51_alkalineWaterSpoutingTime_s;
 	uint32_t t52_acidWaterSpoutingTime_s;
 	uint32_t t53_washingWaterSpoutingTime_s;
 	uint32_t t54_overLapTime_ms;
-	uint32_t t60_waterDischargeDelay_s;
+	uint32_t t55_waterDischargeDelay_s;
 	uint32_t t56_acidWaterDownTime_s;
 	uint32_t t57_alkalineWaterDownTime_s;
-	uint32_t t61_curranCleaningIntervalTime_h;
-	uint32_t t62_callanWashSpoutingTime_s;
-	uint32_t t33_t63_neutralizationStartTime_h;
-	uint32_t t34_t64_neutralizationOpenTime_s;
-//	uint32_t t55_waterOverlay_s;
+	uint32_t t58;
+	uint32_t t59;
+	uint32_t t60_washDischargeDelay_s;
+	uint32_t t61_cleaningIntervalTime_h;
+	uint32_t t62_washSpoutingTime_s;
 
 	char crc;
 }g_timerSetting;
+static const uint8_t io_statusSize = 4 + 12;
+static const uint8_t timeSettingSize = sizeof(struct Timer_Setting_s) - 1;
+static const uint8_t numberSettingSize = 40 + 1;
 extern struct Number_Setting_s{
 	float upperVoltage1;
 	float upperVoltage2;
@@ -190,8 +195,6 @@ extern struct IO_Struct{
 	uint8_t SaltPump: 1;
 	uint8_t CVCC_ON: 1;
 	uint8_t RSVD1: 4; // Reserved
-
-	uint8_t MachineMode_RSVD; //1 byte
 }g_io_response;
 /**
  * IO_Status Union content:
@@ -207,7 +210,6 @@ extern union IO_Status_u{
 		float CVCCCurrent; // 4 bytes
 	}refined;
 }g_io_status, g_mean_io_status, g_res_io_status;
-
 
 enum Machine_Mode_e{
 	INDIE, HAND_WASHING, WATER_WASHING, ACID_WASHING, ALKALINE_WASHING,
@@ -245,8 +247,8 @@ extern struct Tick_s{
 	uint32_t tickDrainage;
 	uint32_t tickTestOperation;
 	uint32_t tickWaterFull;
-	uint32_t tickAcidLevel[4];
-	uint32_t tickAlkalineLevel[4];
+	uint32_t tickAcidLevel[5];
+	uint32_t tickAlkalineLevel[5];
 	uint32_t tickHandSensor[2];
 	uint32_t tickCustom[8]; //Use: 6,7 in Callan
 	uint32_t tickUartTimeout;
@@ -280,11 +282,15 @@ enum Control_status{
 	FILTER_REPLACEMENT_E1, FILTER_REPLACEMENT_E2,
 	CALLAN_MODE_SET = 0x26,
 	DRAINAGE_MODE_SET = 0x27,
-	BIOMECTRIC_SET = 0x28,
+	BIOMETRIC_SET = 0x28,
 	POWER_ON_TEST_SET = 0x29,
 	WATER_FILTER_SET = 0x2A,
 	START_WASHING = 0x2B,
 	CONTROL_SETTING = 0x2C,
+	ALARM_STATUS = 0x2D,
+	MONITOR_START = 0x2E,
+	MONITOR_STOP = 0x2F,
+	BUSY_USER
 };
 extern struct Machine_State_u{
 	uint8_t akaline;
@@ -298,7 +304,7 @@ extern struct Machine_State_u{
 	uint8_t electrolyteOFF;
 	uint8_t drainage;
 	uint8_t isMidNight;
-	uint8_t test;
+	uint8_t test_operation;
 	uint8_t neutrlization;
 //	uint8_t waitAnimationRes;
 	/**
@@ -321,6 +327,7 @@ extern struct Machine_State_u{
 	 * 8 - Electrolytic Water Generation (Control OFF)
 	 */
 	uint8_t mode;
+	uint8_t electrolyte;
 }g_machine_state;
 static uint8_t pre_machine_washing_mode;
 
@@ -347,6 +354,10 @@ enum UART_header_e{
 	 H_CLEAR = 	67
 };
 
+extern struct Raspberry_state_s{
+	uint8_t isMonitorScreen;
+}g_rasp_state;
+
 extern volatile struct Communicaition_flag_s{
 	volatile uint8_t send_response_flag,
 	send_response_time_flag,
@@ -359,12 +370,16 @@ extern volatile struct Communicaition_flag_s{
 	alarm_response_flag,
 	recieve_status_flag,
 	test_flag,
+	test_individual_flag,
+	monitor_enable_flag,
+	test_enable_flag,
 	next_animation_flag,
-	save_confirm_flag;
+	save_confirm_flag,
+	send_handsensor_flag;
 	volatile uint8_t rs485_send_to_watersolfner_response_flag, rs485_send_to_watersolfner_SV1_flag,
 	rs485_send_to_valve_response_flag, rs485_get_valve_gesture_flag,
 	rs485_fault;
-	volatile uint8_t control_test_flag, control_test_save_flag;
+	volatile uint8_t control_setting_flag, control_setting_save_flag;
 	uint8_t uart2_timeout_flag;
 }g_commnunication_flag;
 //static struct Timer_Setting_s _settingTime;

@@ -121,9 +121,9 @@ uint8_t OverCurrentCheck_waitReset(void) {
 			if ((g_alarm.refined.abnormal_current == 0)
 					&& (g_alarm.refined.over_curent == 0)
 					&& (g_io_status.refined.CVCCCurrent
-							<= g_numberSetting.lowerCurrent)) {
-				sendToRasPi_f(H_ALARM, CURRENT_ABNORMAL,
-						g_io_status.refined.CVCCCurrent);
+							< g_numberSetting.lowerCurrent)) {
+//				sendToRasPi_f(H_ALARM, CURRENT_ABNORMAL,
+//						g_io_status.refined.CVCCCurrent);
 			}
 			g_alarm.refined.abnormal_current =
 					g_io_status.refined.CVCCCurrent
@@ -158,14 +158,16 @@ uint8_t OverCurrentCheck_waitReset(void) {
  * @return 1 - Invalid, 0 - OK
  */
 uint8_t FlowSensorCheck_nonstop(void) {
-	if(g_alarm.refined.abnormal_flow == 1)
-		return 0;
+//	if(g_alarm.refined.abnormal_flow == 1)
+//		return 0;
 	if ((g_io_status.refined.FlowValue < g_numberSetting.lowerFlow)
 			|| (g_io_status.refined.FlowValue > g_numberSetting.upperFlow)) {
-		if(O_SUPPLY_WATER_PIN_SV1 == ON){
-			sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
-					g_io_status.refined.FlowValue);
+		if (O_SUPPLY_WATER_PIN_SV1 == ON) {
+//			sendToRasPi_f(H_ALARM, FLOW_SENSOR_ERROR,
+//					g_io_status.refined.FlowValue);
 			g_alarm.refined.abnormal_flow = 1;
+			waitAlarmConfirm_stop(FLOW_SENSOR_ERROR, 0);
+			g_alarm.refined.abnormal_flow = 0;
 			return 1;
 		}
 		g_alarm.refined.abnormal_flow = 0;
@@ -191,10 +193,11 @@ uint8_t solenoidCheck_nonstop(void) {
 }
 uint8_t saltWaterTankFullCheck_nonstop(void) {
 	if (I_SALT_H_PIN == ON) {
-		if (ns_delay_ms(&g_Tick.tickSaltFullCheck,
-				g_timerSetting.t18_fullSaltWaterMonitoringStart_h * 60 * 60
-						* 1000)) {
-			sendToRasPi_f(H_ALARM, SALT_WATER_FULL_ERROR, 1);
+		if (g_timerSetting.t18_fullSaltWaterMonitoringStart_h != 0
+				&& ns_delay_ms(&g_Tick.tickSaltFullCheck,
+						g_timerSetting.t18_fullSaltWaterMonitoringStart_h * 60
+								* 60 * 1000)) {
+//			sendToRasPi_f(H_ALARM, SALT_WATER_FULL_ERROR, 1);
 			g_Tick.tickElectrolyticOff = g_systemTime;
 			g_machine_state.electrolyteOFF =
 					g_machine_state.electrolyteOFF == 0 ?
@@ -210,7 +213,7 @@ uint8_t saltWaterTankFullCheck_nonstop(void) {
 
 uint8_t saltWaterTankEmptyCheck(void) {
 	if (I_SALT_L_PIN == 0) {
-		sendToRasPi_f(H_ALARM, SALT_WATER_EMPTY_ERROR, 1);
+//		sendToRasPi_f(H_ALARM, SALT_WATER_EMPTY_ERROR, 1);
 		g_Tick.tickElectrolyticOff = g_systemTime;
 		g_machine_state.electrolyteOFF =
 				g_machine_state.electrolyteOFF == 0 ?
@@ -227,7 +230,7 @@ uint8_t acidSkipErrorCheck_nonstop(void) {
 	if (((I_ACID_L_PIN_FL1 == I_OFF)
 			&& ((I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON)))
 			|| (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)) {
-		sendToRasPi_f(H_ALARM, ACID_SKIP_ERROR, 1);
+//		sendToRasPi_f(H_ALARM, ACID_SKIP_ERROR, 1);
 		g_alarm.refined.acid_skip = 1;
 		//TODO: Control OFF
 		return 1;
@@ -239,7 +242,7 @@ uint8_t alkalineSkipErrorCheck(void) {
 	if (((I_ALKALI_L_PIN_FL4 == I_OFF)
 			&& ((I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON)))
 			|| (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)) {
-		sendToRasPi_f(H_ALARM, ALKALINE_SKIP_ERROR, 1);
+//		sendToRasPi_f(H_ALARM, ALKALINE_SKIP_ERROR, 1);
 		g_alarm.refined.acid_skip = 1;
 		//TODO: Control OFF
 		return 1;
@@ -254,12 +257,12 @@ uint8_t waterFullErrorCheck(void) {
 			&& g_machine_state.mode != WATER_WASHING
 			&& g_machine_state.mode != ACID_WASHING
 			&& g_machine_state.mode != ALKALINE_WASHING) {
-		if(ns_delay_ms(&g_Tick.tickWaterFull, (uint32_t)20*60*1000)){
+		if (ns_delay_ms(&g_Tick.tickWaterFull, (uint32_t) 20 * 60 * 1000)) {
 			sendToRasPi_f(H_ALARM, WATER_FULL_ERROR, 1);
 			//TODO: Control OFF
 			return 1;
 		}
-	}else
+	} else
 		g_Tick.tickWaterFull = g_systemTime;
 	return 0;
 }
@@ -283,20 +286,23 @@ uint8_t filterReplacementErrorCheck(void) {
 	return 0;
 }
 
-uint8_t levelSkipErrorCheck(void){
-	if(I_ACID_L_PIN_FL1 == I_OFF && (I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON))
+uint8_t levelSkipErrorCheck(void) {
+	if (I_ACID_L_PIN_FL1 == I_OFF
+			&& (I_ACID_M_PIN_FL2 == I_ON || I_ACID_H_PIN_FL3 == I_ON))
 		g_alarm.refined.acid_skip = ON;
 	else if (I_ACID_M_PIN_FL2 == I_OFF && I_ACID_H_PIN_FL3 == I_ON)
 		g_alarm.refined.acid_skip = ON;
 	else
 		g_alarm.refined.acid_skip = OFF;
 
-	if(I_ALKALI_L_PIN_FL4 == I_OFF && (I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON))
+	if (I_ALKALI_L_PIN_FL4 == I_OFF
+			&& (I_ALKALI_M_PIN_FL5 == I_ON || I_ALKALI_H_PIN_FL6 == I_ON))
 		g_alarm.refined.alkaline_skip = ON;
-	else if(I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)
+	else if (I_ALKALI_M_PIN_FL5 == I_OFF && I_ALKALI_H_PIN_FL6 == I_ON)
 		g_alarm.refined.alkaline_skip = ON;
 	else
 		g_alarm.refined.alkaline_skip = OFF;
 
-	return g_alarm.refined.acid_skip == ON || g_alarm.refined.alkaline_skip == ON ? 1 : 0;
+	return g_alarm.refined.acid_skip == ON
+			|| g_alarm.refined.alkaline_skip == ON ? 1 : 0;
 }

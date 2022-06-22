@@ -18,14 +18,14 @@ void OutputIO(struct IO_Struct *io) {
 	O_OPTION_2_PIN_SV8 = io->Valve.SV8;
 	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
 
-	if(O_SPOUT_ACID_PIN_SV3 == OFF && O_DRAIN_ACID_PIN_SV5 == OFF){
+	if (O_SPOUT_ACID_PIN_SV3 == OFF && O_DRAIN_ACID_PIN_SV5 == OFF) {
 		O_ACID_PUMP_PIN_P1 = OFF;
-	}else{
+	} else {
 		O_ACID_PUMP_PIN_P1 = io->Pump1;
 	}
-	if(O_DRAIN_ALK_PIN_SV6 == OFF && O_SPOUT_ALK_PIN_SV4 == OFF){
+	if (O_DRAIN_ALK_PIN_SV6 == OFF && O_SPOUT_ALK_PIN_SV4 == OFF) {
 		O_ALK_PUMP_PIN_P2 = OFF;
-	}else{
+	} else {
 		O_ALK_PUMP_PIN_P2 = io->Pump2;
 	}
 	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
@@ -60,6 +60,7 @@ uint8_t isAcidTankAlmostFull(void) {
 	}
 	return 0;
 }
+
 uint8_t isAcidTankHasSomething(void) {
 	if (I_ACID_L_PIN_FL1 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[2],
@@ -71,6 +72,21 @@ uint8_t isAcidTankHasSomething(void) {
 	} else {
 		g_Tick.tickAcidLevel[2] = g_systemTime;
 		isAcidTankEmpty();
+	}
+	return 0;
+}
+uint8_t isAcidTankAlmostEmpty(void) {
+	if (!levelSkipErrorCheck() && isAcidTankHasSomething()) {
+		if (I_ACID_M_PIN_FL2 == I_OFF) {
+			if (ns_delay_ms(&g_Tick.tickAcidLevel[4],
+					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+				g_mean_io_status.refined.io.AcidLowLevel = 0;
+				return 1;
+			}
+		} else {
+			g_Tick.tickAcidLevel[4] = g_systemTime;
+			isAcidTankHasSomething();
+		}
 	}
 	return 0;
 }
@@ -130,6 +146,21 @@ uint8_t isAlkalineTankHasSomething_nonstop(void) {
 	}
 	return 0;
 }
+uint8_t isAlkalineTankAlmostEmpty(void) {
+	if (!levelSkipErrorCheck() && isAlkalineTankHasSomething_nonstop()) {
+		if (I_ALKALI_M_PIN_FL5 == I_OFF) {
+			if (ns_delay_ms(&g_Tick.tickAlkalineLevel[4],
+					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+				g_mean_io_status.refined.io.AlkalineLowLevel = 0;
+				return 1;
+			}
+		} else {
+			g_Tick.tickAlkalineLevel[4] = g_systemTime;
+			isAcidTankHasSomething();
+		}
+	}
+	return 0;
+}
 uint8_t isAlkalineTankEmpty_nonstop(void) {
 	if (I_ALKALI_L_PIN_FL4 == I_OFF) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[3],
@@ -145,11 +176,11 @@ uint8_t isAlkalineTankEmpty_nonstop(void) {
 	return 0;
 }
 //TODO: Water flow measurement
-inline float measureFlowSensor(uint32_t *s) {
+inline float measureFlowSensor(uint32_t s) {
 	uint32_t stamp_flow_sensor = g_systemTime;
 	float flow_pluse = 0.0;
 	uint8_t flow_pulse_state = I_OFF;
-	while (!ns_delay_ms(&stamp_flow_sensor, (*s) * 1000)) {
+	while (!ns_delay_ms(&stamp_flow_sensor, s * 1000)) {
 		if (I_FLOW_PLUSE_PIN != flow_pulse_state) {
 			if (I_FLOW_PLUSE_PIN == 0)
 				flow_pluse++;
@@ -158,7 +189,7 @@ inline float measureFlowSensor(uint32_t *s) {
 		R_WDT_Restart();
 		realTimeResponse();
 	}
-	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (*s); // L/minutes
+	g_io_status.refined.FlowValue = (flow_pluse * 0.7 * 60 / 1000) / (s); // L/minutes
 	return g_io_status.refined.FlowValue;
 }
 
@@ -169,9 +200,10 @@ float measureFlowSensor_nostop(void) {
 	uint32_t *tick = &g_Tick.tickFlowMeasurment;
 	switch (*state) {
 	case 0:
-		if (ns_delay_ms(tick, g_timerSetting.t2_flowSensorStartTime_s * 1000)) {
-			(*state)++;
-		}
+//		if (ns_delay_ms(tick, g_timerSetting.t2_flowSensorStartTime_s * 1000)) {
+//			(*state)++;
+//		}
+		(*state)++;
 		break;
 	case 1:
 		if (_pre_flow_state != I_FLOW_PLUSE_PIN) {

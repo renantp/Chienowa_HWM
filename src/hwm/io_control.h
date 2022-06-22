@@ -12,17 +12,19 @@
 
 struct IO_Struct;
 
-float measureFlowSensor(uint32_t *t);
+float measureFlowSensor(uint32_t s);
 float measureFlowSensor_nostop(void);
 
 uint8_t isAcidTankFull(void);
 uint8_t isAcidTankAlmostFull(void);
 uint8_t isAcidTankHasSomething(void);
+uint8_t isAcidTankAlmostEmpty(void);
 uint8_t isAcidTankEmpty(void);
 
 uint8_t isAlkalineTankFull(void);
 uint8_t isAlkalineTankAlmostFull(void);
 uint8_t isAlkalineTankHasSomething_nonstop(void);
+uint8_t isAlkalineTankAlmostEmpty(void);
 uint8_t isAlkalineTankEmpty_nonstop(void);
 
 void OutputIO(struct IO_Struct *io);
