@@ -137,7 +137,7 @@ uint8_t WaterSupplyStart_nostop(void) {
 		break;
 	case 2:
 		O_SUPPLY_WATER_PIN_SV1 = ON;
-		if (ns_delay_ms(tick, 5000)) { //5000
+		if (ns_delay_ms(tick, 500)) { //5000
 			(*state)++;
 			g_Tick.tickFlowMeasurment = g_systemTime;
 		}
@@ -145,7 +145,7 @@ uint8_t WaterSupplyStart_nostop(void) {
 	case 3:
 		O_SPOUT_WATER_PIN_SV2 = OFF;
 		O_SUPPLY_WATER_PIN_SV1 = ON;
-		if (ns_delay_ms(tick, 1500)) { //1500
+		if (ns_delay_ms(tick, 15000)) { //1500
 			(*state)++;
 			g_machine_state.flowSensor = 0;
 		}
@@ -283,11 +283,11 @@ void main_init_20211111(void) {
 
 void userAuthHandler_nostop(void) {
 	if ((g_control_setting.raw.biomectric == OFF)) {
-		if (DETECT_U() == I_ON && g_machine_state.user == 0) {
+		if (isHandSensorON() && g_machine_state.user == 0) {
 			if (g_commnunication_flag.send_response_flag != 1
 					&& g_rasp_state.isMonitorScreen == 0) {
 //				sendToRasPi_u32(H_SET, START_WASHING, 0U);
-				g_io_status.refined.io.HandSensorON = 1U;
+//				g_io_status.refined.io.HandSensorON = 1U;
 			}
 			g_machine_state.user = 1;
 		}

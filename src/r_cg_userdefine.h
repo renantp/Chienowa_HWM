@@ -308,6 +308,7 @@ extern struct Machine_State_u{
 	uint8_t isMidNight;
 	uint8_t test_operation;
 	uint8_t neutrlization;
+	uint8_t handsensor;
 //	uint8_t waitAnimationRes;
 	/**
 	 * 0 - Non user

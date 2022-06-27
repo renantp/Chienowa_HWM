@@ -16,6 +16,9 @@ void WaterWashingMode_nostop(void) {
 	uint32_t *tick = &g_Tick.tickWater;
 	switch (*state) {
 	case 0:
+		if(g_control_setting.raw.biomectric == 1U){
+			setHandSensorON();
+		}
 		g_machine_state.mode = WATER_WASHING;
 		O_SPOUT_WATER_PIN_SV2 = ON;
 		g_color = WHITE;
@@ -31,16 +34,14 @@ void WaterWashingMode_nostop(void) {
 		}
 		break;
 	case 2:
-		if (ns_delay_ms(tick, g_timerSetting.t55_waterDischargeDelay_s * 1000)
-				|| DETECT_D() == I_ON) {
+		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t55_waterDischargeDelay_s * 1000)) {
+			setHandSensorOFF();
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 			g_color = BLACK;
 			(*state) = 0;
 			g_machine_state.mode = BUSY;
 			handSensorLED(g_color);
 			g_animation_queue++;
-			if(DETECT_D() == I_ON)
-				g_io_status.refined.io.HandSensorOFF = 1;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x00);
 		}
 		break;
@@ -147,6 +148,7 @@ void HandWashingMode_nostop(void) {
 	case 8:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t53_washingWaterSpoutingTime_s * 1000)) {
+			setHandSensorOFF();
 			O_SPOUT_WATER_PIN_SV2 = OFF;
 			handSensorLED(BLACK);
 			(*state) = 0;
@@ -171,6 +173,9 @@ void AcidWaterMode_nostop(void) {
 	switch (*state) {
 	case 0:
 //		*state = DETECT_U == I_ON ? 1 : 0;
+		if(g_control_setting.raw.biomectric == 1U){
+			setHandSensorON();
+		}
 		g_machine_state.mode = ACID_WASHING;
 		O_SPOUT_ACID_PIN_SV3 = ON;
 		g_color = RED;
@@ -193,8 +198,8 @@ void AcidWaterMode_nostop(void) {
 			(*state)++;
 		}
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-				|| (DETECT_D() == I_ON)) {
+		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)) {
+			setHandSensorOFF();
 			g_animation_queue++;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
 			O_ACID_PUMP_PIN_P1 = OFF;
@@ -203,11 +208,9 @@ void AcidWaterMode_nostop(void) {
 		break;
 	case 3:
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)
-				|| (DETECT_D() == I_ON)) {
+		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t56_acidWaterDownTime_s * 1000)) {
+			setHandSensorOFF();
 			O_ACID_PUMP_PIN_P1 = OFF;
-			if(DETECT_D() == I_ON)
-				g_io_status.refined.io.HandSensorOFF = 1;
 			(*state)++;
 		}
 		break;
@@ -236,6 +239,9 @@ void AlkalineWaterMode_nostop(void) {
 	const uint32_t delayPump_ms = 50;
 	switch (*state) {
 	case 0:
+		if(g_control_setting.raw.biomectric == 1U){
+			setHandSensorON();
+		}
 //		*state = DETECT_U == I_ON ? 1 : 0;
 		g_machine_state.mode = ALKALINE_WASHING;
 		*state = 1;
@@ -259,8 +265,8 @@ void AlkalineWaterMode_nostop(void) {
 			(*state)++;
 		}
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-				|| (DETECT_D() == I_ON)) {
+		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)) {
+			setHandSensorOFF();
 			O_ALK_PUMP_PIN_P2 = OFF;
 			g_animation_queue++;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -269,19 +275,16 @@ void AlkalineWaterMode_nostop(void) {
 		break;
 	case 3:
 		//TODO: Change turn OFF signal here
-		if (ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)
-				|| (DETECT_D() == I_ON)) {
+		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t57_alkalineWaterDownTime_s * 1000)) {
+			setHandSensorOFF();
 			O_ALK_PUMP_PIN_P2 = OFF;
-			if(DETECT_D() == I_ON)
-				g_io_status.refined.io.HandSensorOFF = 1;
 			(*state)++;
 		}
 		break;
 	case 4:
 		if (ns_delay_ms(tick, WATER_HAMER_TIME_MS)) {
 			O_SPOUT_ALK_PIN_SV4 = OFF;
-			g_color = BLACK;
-			handSensorLED(g_color);
+			handSensorLED(BLACK);
 			(*state)++;
 		}
 		break;

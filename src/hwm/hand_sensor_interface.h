@@ -22,4 +22,8 @@ void handSensorLED(enum HS_COLOR color);
 void handSensorLEDBlink(enum HS_COLOR color, uint32_t ms);
 void HandSensorLEDEndBlink(void);
 
+uint8_t isHandSensorON(void);
+void setHandSensorOFF(void);
+void setHandSensorON(void);
+
 #endif /* HWM_HAND_SENSOR_INTERFACE_H_ */

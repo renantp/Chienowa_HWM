@@ -18,8 +18,8 @@ uint8_t Voltage1Check_waitReset(void) {
 		if (ns_delay_ms(&g_Tick.tickVoltage1Check,
 				g_timerSetting.t11_overVoltage1Time_s * 1000)) {
 			resetAlarm();
-			sendToRasPi_f(H_ALARM, OVER_VOLTAGE_1,
-					g_io_status.refined.CVCCVoltage);
+//			sendToRasPi_f(H_ALARM, OVER_VOLTAGE_1,
+//					g_io_status.refined.CVCCVoltage);
 			g_alarm.refined.over_voltage_1 = 1;
 			electrolyticOperationOFF();
 			waitAlarmConfirm_stop(OVER_VOLTAGE_1, 0);
@@ -43,8 +43,8 @@ void Voltage2Check_nostop(void) {
 					>= g_numberSetting.upperVoltage1)) {
 				resetAlarm();
 				g_alarm.refined.over_voltage_2 = 1;
-				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
-						g_io_status.refined.CVCCVoltage);
+//				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
+//						g_io_status.refined.CVCCVoltage);
 			}
 		}
 	} else {
@@ -70,8 +70,8 @@ uint8_t Voltage3Check_waitReset(void) {
 //						g_machine_state.electrolyteOFF == 0 ?
 //								1 : g_machine_state.electrolyteOFF;
 				electrolyticOperationOFF();
-				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
-						g_io_status.refined.CVCCVoltage);
+//				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
+//						g_io_status.refined.CVCCVoltage);
 				waitAlarmConfirm_stop(OVER_VOLTAGE_3, 0);
 				g_alarm.refined.over_voltage_3 = 0;
 				return 1;
@@ -99,8 +99,8 @@ uint8_t LowVoltageCheck_waitReset(void) {
 //						g_machine_state.electrolyteOFF == 0 ?
 //								1 : g_machine_state.electrolyteOFF;
 				electrolyticOperationOFF();
-				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
-						g_io_status.refined.CVCCVoltage);
+//				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
+//						g_io_status.refined.CVCCVoltage);
 				waitAlarmConfirm_stop(UNDER_VOLTAGE, 0);
 				g_alarm.refined.underVoltage = 0;
 				return 1;
@@ -139,8 +139,8 @@ uint8_t OverCurrentCheck_waitReset(void) {
 //							g_machine_state.electrolyteOFF == 0 ?
 //									1 : g_machine_state.electrolyteOFF;
 					electrolyticOperationOFF();
-					sendToRasPi_f(H_ALARM, OVER_CURRENT,
-							g_io_status.refined.CVCCCurrent);
+//					sendToRasPi_f(H_ALARM, OVER_CURRENT,
+//							g_io_status.refined.CVCCCurrent);
 					waitAlarmConfirm_stop(OVER_CURRENT, 10);
 					g_alarm.refined.over_curent = 0;
 					return 1;

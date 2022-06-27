@@ -44,18 +44,16 @@ void isElectrolyticOperationOFF_nostop(void) {
 		break;
 	case 1:
 		g_TimeKeeper.neutralization = 0;
-		if (g_rasp_state.isMonitorScreen == 0) {
-			O_CVCC_ON_PIN = OFF;
-			O_PUMP_SALT_PIN_SP1 = OFF; //SP1
-		}
+		O_CVCC_ON_PIN = OFF;
+		O_PUMP_SALT_PIN_SP1 = OFF; //SP1
+
 		(*state)++;
 		break;
 	case 2:
 		if (ns_delay_ms(tick,
 				g_timerSetting.t5_electrolysisStopDelay_s * 1000)) {
 			(*state) = 0;
-			if (g_rasp_state.isMonitorScreen == 0)
-				O_SUPPLY_WATER_PIN_SV1 = OFF;
+			O_SUPPLY_WATER_PIN_SV1 = OFF;
 			//TODO: Change this
 //			g_machine_state.electrolyteOperation--;
 		}
