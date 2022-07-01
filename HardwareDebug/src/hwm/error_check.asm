@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/error_check.obj
 #@   ../src/hwm/error_check.c
-#@  compiled at Wed Jun 22 15:37:24 2022
+#@  compiled at Thu Jun 30 14:37:30 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -27,7 +27,6 @@
 	.PUBLIC _Voltage1Check_waitReset
 	.EXTERN _ns_delay_ms
 	.EXTERN _resetAlarm
-	.EXTERN _sendToRasPi_f
 	.EXTERN _waitAlarmConfirm_stop
 	.PUBLIC _Voltage2Check_nostop
 	.PUBLIC _Voltage3Check_waitReset
@@ -35,6 +34,7 @@
 	.PUBLIC _OverCurrentCheck_waitReset
 	.PUBLIC _FlowSensorCheck_nonstop
 	.PUBLIC _solenoidCheck_nonstop
+	.EXTERN _sendToRasPi_f
 	.PUBLIC _saltWaterTankFullCheck_nonstop
 	.PUBLIC _saltWaterTankEmptyCheck
 	.PUBLIC _acidSkipErrorCheck_nonstop
@@ -127,9 +127,9 @@ _Voltage1Check_waitReset:
 	clrw bc
 	cmpw ax, bc
 	bnz $.BB@LABEL@1_8
-.BB@LABEL@1_6:	; bb34
+.BB@LABEL@1_6:	; bb33
 	clrb a
-.BB@LABEL@1_7:	; bb34
+.BB@LABEL@1_7:	; bb33
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 32
 	ret
@@ -138,13 +138,8 @@ _Voltage1Check_waitReset:
 	;***       20 : 			resetAlarm();
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 20
 	call !!_resetAlarm
-	;***       21 : 			sendToRasPi_f(H_ALARM, OVER_VOLTAGE_1,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 21
-	movw bc, !LOWW(_g_io_status+0x00008)
-	movw de, !LOWW(_g_io_status+0x0000A)
-	movw ax, #0x4105
-	call !!_sendToRasPi_f
-	;***       22 : 					g_io_status.refined.CVCCVoltage);
+	;***       21 : //			sendToRasPi_f(H_ALARM, OVER_VOLTAGE_1,
+	;***       22 : //					g_io_status.refined.CVCCVoltage);
 	;***       23 : 			g_alarm.refined.over_voltage_1 = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 23
 	set1 !LOWW(_g_alarm).0
@@ -153,9 +148,9 @@ _Voltage1Check_waitReset:
 	mov a, !LOWW(_g_machine_state+0x00008)
 	cmp0 a
 	sknz
-.BB@LABEL@1_9:	; if_then_bb11.bb23_crit_edge
+.BB@LABEL@1_9:	; if_then_bb11.bb22_crit_edge
 	oneb a
-.BB@LABEL@1_10:	; bb23
+.BB@LABEL@1_10:	; bb22
 	mov !LOWW(_g_machine_state+0x00008), a
 	;***       25 : 			waitAlarmConfirm_stop(OVER_VOLTAGE_1, 0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 25
@@ -230,7 +225,7 @@ _Voltage2Check_nostop:
 	clrb x
 .BB@LABEL@2_4:	; entry
 	or x, a
-	bnz $.BB@LABEL@2_8
+	bnz $.BB@LABEL@2_9
 .BB@LABEL@2_5:	; if_then_bb
 	;***       40 : 		if (ns_delay_ms(&g_Tick.tickVoltage2Check,
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 40
@@ -251,7 +246,7 @@ _Voltage2Check_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@2_9
+	bz $.BB@LABEL@2_8
 .BB@LABEL@2_6:	; if_then_bb10
 	;***       41 : 				g_timerSetting.t12_overVoltage2Time_s * 1000)) {
 	;***       42 : 			if (!(g_io_status.refined.CVCCVoltage
@@ -265,7 +260,7 @@ _Voltage2Check_nostop:
 	call !!__COM_fge
 	addw sp, #0x04
 	cmp0 a
-	bnz $.BB@LABEL@2_9
+	bnz $.BB@LABEL@2_8
 .BB@LABEL@2_7:	; if_then_bb20
 	;***       43 : 					>= g_numberSetting.upperVoltage1)) {
 	;***       44 : 				resetAlarm();
@@ -274,15 +269,13 @@ _Voltage2Check_nostop:
 	;***       45 : 				g_alarm.refined.over_voltage_2 = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 45
 	set1 !LOWW(_g_alarm).1
-	;***       46 : 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 46
-	movw bc, !LOWW(_g_io_status+0x00008)
-	movw de, !LOWW(_g_io_status+0x0000A)
-	movw ax, #0x4106
+.BB@LABEL@2_8:	; return
 	addw sp, #0x0A
-	br !!_sendToRasPi_f
-.BB@LABEL@2_8:	; if_else_bb
-	;***       47 : 						g_io_status.refined.CVCCVoltage);
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 54
+	ret
+.BB@LABEL@2_9:	; if_else_bb
+	;***       46 : //				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
+	;***       47 : //						g_io_status.refined.CVCCVoltage);
 	;***       48 : 			}
 	;***       49 : 		}
 	;***       50 : 	} else {
@@ -295,10 +288,7 @@ _Voltage2Check_nostop:
 	;***       52 : 		g_alarm.refined.over_voltage_2 = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 52
 	clr1 !LOWW(_g_alarm).1
-.BB@LABEL@2_9:	; return
-	addw sp, #0x0A
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 54
-	ret
+	br $.BB@LABEL@2_8
 _Voltage3Check_waitReset:
 	.STACK _Voltage3Check_waitReset = 18
 	;***       53 : 	}
@@ -413,13 +403,8 @@ _Voltage3Check_waitReset:
 	oneb a
 .BB@LABEL@3_9:	; bb35
 	mov !LOWW(_g_machine_state+0x00008), a
-	;***       73 : 				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 73
-	movw bc, !LOWW(_g_io_status+0x00008)
-	movw de, !LOWW(_g_io_status+0x0000A)
-	movw ax, #0x4107
-	call !!_sendToRasPi_f
-	;***       74 : 						g_io_status.refined.CVCCVoltage);
+	;***       73 : //				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_3,
+	;***       74 : //						g_io_status.refined.CVCCVoltage);
 	;***       75 : 				waitAlarmConfirm_stop(OVER_VOLTAGE_3, 0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 75
 	movw ax, #0x0700
@@ -441,9 +426,9 @@ _Voltage3Check_waitReset:
 	movw !LOWW(_g_Tick+0x00036), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x00034), ax
-.BB@LABEL@3_11:	; bb48
+.BB@LABEL@3_11:	; bb47
 	clrb a
-.BB@LABEL@3_12:	; bb48
+.BB@LABEL@3_12:	; bb47
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 84
 	ret
@@ -554,9 +539,9 @@ _LowVoltageCheck_waitReset:
 	clrw bc
 	cmpw ax, bc
 	bnz $.BB@LABEL@4_13
-.BB@LABEL@4_11:	; bb47
+.BB@LABEL@4_11:	; bb46
 	clrb a
-.BB@LABEL@4_12:	; bb47
+.BB@LABEL@4_12:	; bb46
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 113
 	ret
@@ -586,13 +571,8 @@ _LowVoltageCheck_waitReset:
 	oneb a
 .BB@LABEL@4_15:	; bb32
 	mov !LOWW(_g_machine_state+0x00008), a
-	;***      102 : 				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 102
-	movw bc, !LOWW(_g_io_status+0x00008)
-	movw de, !LOWW(_g_io_status+0x0000A)
-	movw ax, #0x4108
-	call !!_sendToRasPi_f
-	;***      103 : 						g_io_status.refined.CVCCVoltage);
+	;***      102 : //				sendToRasPi_f(H_ALARM, UNDER_VOLTAGE,
+	;***      103 : //						g_io_status.refined.CVCCVoltage);
 	;***      104 : 				waitAlarmConfirm_stop(UNDER_VOLTAGE, 0);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 104
 	movw ax, #0x0800
@@ -824,13 +804,8 @@ _OverCurrentCheck_waitReset:
 	oneb a
 .BB@LABEL@5_24:	; bb101
 	mov !LOWW(_g_machine_state+0x00008), a
-	;***      142 : 					sendToRasPi_f(H_ALARM, OVER_CURRENT,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 142
-	movw bc, !LOWW(_g_io_status+0x0000C)
-	movw de, !LOWW(_g_io_status+0x0000E)
-	movw ax, #0x410A
-	call !!_sendToRasPi_f
-	;***      143 : 							g_io_status.refined.CVCCCurrent);
+	;***      142 : //					sendToRasPi_f(H_ALARM, OVER_CURRENT,
+	;***      143 : //							g_io_status.refined.CVCCCurrent);
 	;***      144 : 					waitAlarmConfirm_stop(OVER_CURRENT, 10);
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 144
 	movw ax, #0x0A0A
@@ -851,9 +826,9 @@ _OverCurrentCheck_waitReset:
 	movw !LOWW(_g_Tick+0x0003E), ax
 	movw ax, !LOWW(_g_systemTime)
 	movw !LOWW(_g_Tick+0x0003C), ax
-.BB@LABEL@5_26:	; bb116
+.BB@LABEL@5_26:	; bb115
 	clrb a
-.BB@LABEL@5_27:	; bb116
+.BB@LABEL@5_27:	; bb115
 	addw sp, #0x0A
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 154
 	ret
@@ -1266,7 +1241,7 @@ _waterFullErrorCheck:
 	;***      255 : 	//Check g_color == BLACK for x hours
 	;***      256 : 	if (g_machine_state.mode != HAND_WASHING
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/error_check.c", 256
-	mov a, !LOWW(_g_machine_state+0x0000E)
+	mov a, !LOWW(_g_machine_state+0x0000F)
 	mov x, a
 	dec a
 	cmp a, #0x02

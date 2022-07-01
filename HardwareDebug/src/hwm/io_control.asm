@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/io_control.obj
 #@   ../src/hwm/io_control.c
-#@  compiled at Wed Jun 22 15:37:26 2022
+#@  compiled at Thu Jun 30 14:37:32 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_io_status
@@ -222,7 +222,7 @@ _isAcidTankFull:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 48
 	ret
 .BB@LABEL@2_4:	; if_then_bb25
-	;***       38 : 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+	;***       38 : 				g_timerSetting.t23_onDelayHighLevel_s * 1000)
 	;***       39 : 				|| (g_mean_io_status.refined.io.AcidHighLevel == 1)) {
 	;***       40 : 			g_mean_io_status.refined.io.AcidHighLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 40
@@ -283,7 +283,7 @@ _isAcidTankAlmostFull:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 62
 	ret
 .BB@LABEL@3_4:	; if_then_bb25
-	;***       52 : 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+	;***       52 : 				g_timerSetting.t22_onDelayLowLevel_s * 1000)
 	;***       53 : 				|| (g_mean_io_status.refined.io.AcidLowLevel == 1)) {
 	;***       54 : 			g_mean_io_status.refined.io.AcidLowLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 54
@@ -345,7 +345,7 @@ _isAcidTankHasSomething:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 77
 	ret
 .BB@LABEL@4_4:	; if_then_bb25
-	;***       67 : 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+	;***       67 : 				g_timerSetting.t21_onDelayEmptyLevel_s * 1000)
 	;***       68 : 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 1)) {
 	;***       69 : 			g_mean_io_status.refined.io.AcidEmptyLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 69
@@ -389,7 +389,7 @@ _isAcidTankAlmostEmpty:
 	bt a.2, $.BB@LABEL@5_5
 .BB@LABEL@5_3:	; if_else_bb
 	;***       81 : 			if (ns_delay_ms(&g_Tick.tickAcidLevel[4],
-	;***       82 : 					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+	;***       82 : 					g_timerSetting.t24_offDelayEmptyLevel_s * 1000)) {
 	;***       83 : 				g_mean_io_status.refined.io.AcidLowLevel = 0;
 	;***       84 : 				return 1;
 	;***       85 : 			}
@@ -446,7 +446,7 @@ _isAcidTankEmpty:
 	bt a.1, $.BB@LABEL@6_2
 .BB@LABEL@6_1:	; if_else_bb
 	;***       95 : 		if (ns_delay_ms(&g_Tick.tickAcidLevel[3],
-	;***       96 : 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+	;***       96 : 				g_timerSetting.t24_offDelayEmptyLevel_s * 1000)
 	;***       97 : 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 0)) {
 	;***       98 : 			g_mean_io_status.refined.io.AcidEmptyLevel = 0;
 	;***       99 : 			return 1;
@@ -534,7 +534,7 @@ _isAlkalineTankFull:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 120
 	ret
 .BB@LABEL@7_4:	; if_then_bb25
-	;***      110 : 				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+	;***      110 : 				g_timerSetting.t23_onDelayHighLevel_s * 1000)
 	;***      111 : 				|| (g_mean_io_status.refined.io.AlkalineHighLevel == 1)) {
 	;***      112 : 			g_mean_io_status.refined.io.AlkalineHighLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 112
@@ -595,7 +595,7 @@ _isAlkalineTankAlmostFull:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 134
 	ret
 .BB@LABEL@8_4:	; if_then_bb25
-	;***      124 : 				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+	;***      124 : 				g_timerSetting.t22_onDelayLowLevel_s * 1000)
 	;***      125 : 				|| (g_mean_io_status.refined.io.AlkalineLowLevel == 1)) {
 	;***      126 : 			g_mean_io_status.refined.io.AlkalineLowLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 126
@@ -656,7 +656,7 @@ _isAlkalineTankHasSomething_nonstop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 148
 	ret
 .BB@LABEL@9_4:	; if_then_bb25
-	;***      138 : 				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+	;***      138 : 				g_timerSetting.t21_onDelayEmptyLevel_s * 1000)
 	;***      139 : 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 1)) {
 	;***      140 : 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 140
@@ -700,7 +700,7 @@ _isAlkalineTankAlmostEmpty:
 	bt a.6, $.BB@LABEL@10_5
 .BB@LABEL@10_3:	; if_else_bb
 	;***      152 : 			if (ns_delay_ms(&g_Tick.tickAlkalineLevel[4],
-	;***      153 : 					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+	;***      153 : 					g_timerSetting.t24_offDelayEmptyLevel_s * 1000)) {
 	;***      154 : 				g_mean_io_status.refined.io.AlkalineLowLevel = 0;
 	;***      155 : 				return 1;
 	;***      156 : 			}
@@ -757,7 +757,7 @@ _isAlkalineTankEmpty_nonstop:
 	bt a.5, $.BB@LABEL@11_2
 .BB@LABEL@11_1:	; if_else_bb
 	;***      166 : 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[3],
-	;***      167 : 				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+	;***      167 : 				g_timerSetting.t24_offDelayEmptyLevel_s * 1000)
 	;***      168 : 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 0)) {
 	;***      169 : 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 0;
 	;***      170 : 			return 1;

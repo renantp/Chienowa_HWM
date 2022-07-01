@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/raspberry_pi_interface.obj
 00000000                       17  #@   ../src/hwm/raspberry_pi_interface.c
-00000000                       18  #@  compiled at Wed Jun 22 15:37:29 2022
+00000000                       18  #@  compiled at Thu Jun 30 14:37:33 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_numberSetting
@@ -603,7 +603,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001B4                      599  	;***      187 : uint8_t userAuthResponse(void) {
 000001B4                      600  	;***      188 : 	if (g_machine_state.user == 2 && g_commnunication_flag.send_response_flag == 0U) {
 000001B4                      601  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 188
-000001B4 40000002             602  	cmp !LOWW(_g_machine_state+0x0000D), #0x02
+000001B4 40000002             602  	cmp !LOWW(_g_machine_state+0x0000E), #0x02
 000001B8 DF00                 603  	bnz $.BB@LABEL@12_6
 000001BA                      604  .BB@LABEL@12_1:	; bb
 000001BA D50000               605  	cmp0 !LOWW(_g_commnunication_flag)
@@ -624,7 +624,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001BF                      620  	;***      201 : 
 000001BF                      621  	;***      202 : 		if (g_machine_state.mode != WASHING_MODE){
 000001BF                      622  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 202
-000001BF 40000018             623  	cmp !LOWW(_g_machine_state+0x0000E), #0x18
+000001BF 40000018             623  	cmp !LOWW(_g_machine_state+0x0000F), #0x18
 000001C3 DF00                 624  	bnz $.BB@LABEL@12_5
 000001C5                      625  .BB@LABEL@12_3:	; if_else_bb
 000001C5                      626  	;***      203 : 			g_machine_state.user = 1;
@@ -632,7 +632,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001C5                      628  	;***      205 : 		}else{
 000001C5                      629  	;***      206 : 			g_machine_state.user = 0;
 000001C5                      630  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 206
-000001C5 F50000               631  	clrb !LOWW(_g_machine_state+0x0000D)
+000001C5 F50000               631  	clrb !LOWW(_g_machine_state+0x0000E)
 000001C8                      632  	;***      207 : 			sendToRasPi_u32(H_SET, OK_USER, (uint32_t) 0x00 << (8 * 3));
 000001C8                      633  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 207
 000001C8 F6                   634  	clrw ax
@@ -646,7 +646,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000001D2 D7                   642  	ret
 000001D3                      643  .BB@LABEL@12_5:	; if_then_bb20
 000001D3                      644  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 203
-000001D3 E50000               645  	oneb !LOWW(_g_machine_state+0x0000D)
+000001D3 E50000               645  	oneb !LOWW(_g_machine_state+0x0000E)
 000001D6                      646  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 204
 000001D6 340001               647  	movw de, #0x0100
 000001D9 EF00                 648  	br $.BB@LABEL@12_4

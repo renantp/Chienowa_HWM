@@ -15,12 +15,11 @@
 #@   -pass_source
 #@   -o src/hwm/operation.obj
 #@   ../src/hwm/operation.c
-#@  compiled at Wed Jun 22 15:37:27 2022
+#@  compiled at Thu Jun 30 14:37:32 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick
 	.EXTERN _g_machine_state
-	.EXTERN _g_rasp_state
 	.EXTERN _g_commnunication_flag
 	.EXTERN _g_systemTime
 	.PUBLIC _electrolyticOperationON
@@ -94,11 +93,11 @@ _isElectrolyticOperationOFF_nostop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 30
 	mov a, !LOWW(_g_machine_state+0x00008)
 	dec a
-	bz $.BB@LABEL@2_6
+	bz $.BB@LABEL@2_5
 .BB@LABEL@2_1:	; entry
 	dec a
-	bnz $.BB@LABEL@2_5
-.BB@LABEL@2_2:	; switch_clause_bb13
+	bnz $.BB@LABEL@2_4
+.BB@LABEL@2_2:	; switch_clause_bb9
 	;***       31 : 	case 0:
 	;***       32 : 		// Set g_machine_state.electrolyteOFF = 1 to start OFF
 	;***       33 : 		// This case run when electrolyte is ON or already OFF
@@ -115,15 +114,14 @@ _isElectrolyticOperationOFF_nostop:
 	;***       44 : 		break;
 	;***       45 : 	case 1:
 	;***       46 : 		g_TimeKeeper.neutralization = 0;
-	;***       47 : 		if (g_rasp_state.isMonitorScreen == 0) {
-	;***       48 : 			O_CVCC_ON_PIN = OFF;
-	;***       49 : 			O_PUMP_SALT_PIN_SP1 = OFF; //SP1
-	;***       50 : 		}
-	;***       51 : 		(*state)++;
-	;***       52 : 		break;
-	;***       53 : 	case 2:
-	;***       54 : 		if (ns_delay_ms(tick,
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 54
+	;***       47 : 		O_CVCC_ON_PIN = OFF;
+	;***       48 : 		O_PUMP_SALT_PIN_SP1 = OFF; //SP1
+	;***       49 : 
+	;***       50 : 		(*state)++;
+	;***       51 : 		break;
+	;***       52 : 	case 2:
+	;***       53 : 		if (ns_delay_ms(tick,
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 53
 	movw ax, !LOWW(_g_timerSetting+0x00010)
 	movw bc, #0x03E8
 	mulhu
@@ -141,64 +139,54 @@ _isElectrolyticOperationOFF_nostop:
 	call !!_ns_delay_ms
 	clrw bc
 	cmpw ax, bc
-	bz $.BB@LABEL@2_5
-.BB@LABEL@2_3:	; if_then_bb21
-	;***       55 : 				g_timerSetting.t5_electrolysisStopDelay_s * 1000)) {
-	;***       56 : 			(*state) = 0;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 56
+	bz $.BB@LABEL@2_4
+.BB@LABEL@2_3:	; if_then_bb
+	;***       54 : 				g_timerSetting.t5_electrolysisStopDelay_s * 1000)) {
+	;***       55 : 			(*state) = 0;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 55
 	clrb !LOWW(_g_machine_state+0x00008)
-	;***       57 : 			if (g_rasp_state.isMonitorScreen == 0)
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 57
-	cmp0 !LOWW(_g_rasp_state)
-	sknz
-.BB@LABEL@2_4:	; if_then_bb28
-	;***       58 : 				O_SUPPLY_WATER_PIN_SV1 = OFF;
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 58
+	;***       56 : 			O_SUPPLY_WATER_PIN_SV1 = OFF;
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 56
 	clr1 0xFFF01.7
-.BB@LABEL@2_5:	; return
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 66
+.BB@LABEL@2_4:	; return
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 64
 	ret
-.BB@LABEL@2_6:	; switch_clause_bb5
+.BB@LABEL@2_5:	; switch_clause_bb5
 	clrw ax
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 46
 	movw !LOWW(_g_TimeKeeper@1+0x00008), ax
 	movw !LOWW(_g_TimeKeeper@1+0x00006), ax
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 47
-	cmp0 !LOWW(_g_rasp_state)
-	bnz $.BB@LABEL@2_8
-.BB@LABEL@2_7:	; if_then_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 48
 	clr1 0xFFF0E.2
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 49
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 48
 	clr1 0xFFF06.0
-.BB@LABEL@2_8:	; if_break_bb
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 51
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 50
 	inc !LOWW(_g_machine_state+0x00008)
 	ret
 _TestModeOperation:
 	.STACK _TestModeOperation = 4
-	;***       59 : 			//TODO: Change this
-	;***       60 : //			g_machine_state.electrolyteOperation--;
-	;***       61 : 		}
+	;***       57 : 			//TODO: Change this
+	;***       58 : //			g_machine_state.electrolyteOperation--;
+	;***       59 : 		}
+	;***       60 : 		break;
+	;***       61 : 	default:
 	;***       62 : 		break;
-	;***       63 : 	default:
-	;***       64 : 		break;
-	;***       65 : 	}
-	;***       66 : }
-	;***       67 : 
-	;***       68 : void TestModeOperation(void) {
-	;***       69 : 	if (g_commnunication_flag.test_flag) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 69
+	;***       63 : 	}
+	;***       64 : }
+	;***       65 : 
+	;***       66 : void TestModeOperation(void) {
+	;***       67 : 	if (g_commnunication_flag.test_flag) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 67
 	mov a, !LOWW(_g_commnunication_flag+0x0000A)
-	;***       70 : 
-	;***       71 : 	}
-	;***       72 : 	if (g_machine_state.test_operation == TEST_INDIVIDUAL) {
-	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 72
+	;***       68 : 
+	;***       69 : 	}
+	;***       70 : 	if (g_machine_state.test_operation == TEST_INDIVIDUAL) {
+	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 70
 	ret
-	;***       73 : 		//TODO: Pause other operation
-	;***       74 : 
-	;***       75 : 	}
-	;***       76 : }
+	;***       71 : 		//TODO: Pause other operation
+	;***       72 : 
+	;***       73 : 	}
+	;***       74 : }
 	.SECTION .bss,BSS
 	.ALIGN 2
 _g_TimeKeeper@1:

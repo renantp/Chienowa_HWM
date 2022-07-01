@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/raspberry_pi_interface.obj
 #@   ../src/hwm/raspberry_pi_interface.c
-#@  compiled at Wed Jun 22 15:37:29 2022
+#@  compiled at Thu Jun 30 14:37:33 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_numberSetting
@@ -599,7 +599,7 @@ _userAuthResponse:
 	;***      187 : uint8_t userAuthResponse(void) {
 	;***      188 : 	if (g_machine_state.user == 2 && g_commnunication_flag.send_response_flag == 0U) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 188
-	cmp !LOWW(_g_machine_state+0x0000D), #0x02
+	cmp !LOWW(_g_machine_state+0x0000E), #0x02
 	bnz $.BB@LABEL@12_6
 .BB@LABEL@12_1:	; bb
 	cmp0 !LOWW(_g_commnunication_flag)
@@ -620,7 +620,7 @@ _userAuthResponse:
 	;***      201 : 
 	;***      202 : 		if (g_machine_state.mode != WASHING_MODE){
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 202
-	cmp !LOWW(_g_machine_state+0x0000E), #0x18
+	cmp !LOWW(_g_machine_state+0x0000F), #0x18
 	bnz $.BB@LABEL@12_5
 .BB@LABEL@12_3:	; if_else_bb
 	;***      203 : 			g_machine_state.user = 1;
@@ -628,7 +628,7 @@ _userAuthResponse:
 	;***      205 : 		}else{
 	;***      206 : 			g_machine_state.user = 0;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 206
-	clrb !LOWW(_g_machine_state+0x0000D)
+	clrb !LOWW(_g_machine_state+0x0000E)
 	;***      207 : 			sendToRasPi_u32(H_SET, OK_USER, (uint32_t) 0x00 << (8 * 3));
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 207
 	clrw ax
@@ -642,7 +642,7 @@ _userAuthResponse:
 	ret
 .BB@LABEL@12_5:	; if_then_bb20
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 203
-	oneb !LOWW(_g_machine_state+0x0000D)
+	oneb !LOWW(_g_machine_state+0x0000E)
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/raspberry_pi_interface.c", 204
 	movw de, #0x0100
 	br $.BB@LABEL@12_4

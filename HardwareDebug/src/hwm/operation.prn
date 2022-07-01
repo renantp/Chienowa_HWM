@@ -19,203 +19,191 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/operation.obj
 00000000                       17  #@   ../src/hwm/operation.c
-00000000                       18  #@  compiled at Wed Jun 22 15:37:27 2022
+00000000                       18  #@  compiled at Thu Jun 30 14:37:32 2022
 00000000                       19  
 00000000                       20  	.EXTERN _g_timerSetting
 00000000                       21  	.EXTERN _g_Tick
 00000000                       22  	.EXTERN _g_machine_state
-00000000                       23  	.EXTERN _g_rasp_state
-00000000                       24  	.EXTERN _g_commnunication_flag
-00000000                       25  	.EXTERN _g_systemTime
-00000000                       26  	.PUBLIC _electrolyticOperationON
-00000000                       27  	.PUBLIC _isElectrolyticOperationOFF_nostop
-00000000                       28  	.EXTERN _ns_delay_ms
-00000000                       29  	.PUBLIC _TestModeOperation
-00000000                       30  
-00000000                       31  	.SECTION .textf,TEXTF
-00000000                       32  _electrolyticOperationON:
-00000000                       33  	.STACK _electrolyticOperationON = 4
-00000000                       34  	;***        1 : /*
-00000000                       35  	;***        2 :  * operation.c
-00000000                       36  	;***        3 :  *
-00000000                       37  	;***        4 :  *  Created on: 11 Jan 2022
-00000000                       38  	;***        5 :  *      Author: Hung
-00000000                       39  	;***        6 :  */
-00000000                       40  	;***        7 : 
-00000000                       41  	;***        8 : #include "operation.h"
-00000000                       42  	;***        9 : 
-00000000                       43  	;***       10 : /**
-00000000                       44  	;***       11 :  * 30/11/2021: Checked by An
-00000000                       45  	;***       12 :  */
-00000000                       46  	;***       13 : void electrolyticOperationON(void) {
-00000000                       47  	;***       14 : 	//Electrolytic operation ON
-00000000                       48  	;***       15 : 	O_SUPPLY_WATER_PIN_SV1 = ON;
-00000000                       49  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 15
-00000000 717201                50  	set1 0xFFF01.7
-00000003                       51  	;***       16 : 	O_CVCC_ON_PIN = ON;
-00000003                       52  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 16
-00000003 71220E                53  	set1 0xFFF0E.2
-00000006                       54  	;***       17 : 	O_PUMP_SALT_PIN_SP1 = ON; //SP1
-00000006                       55  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 17
-00000006 710206                56  	set1 0xFFF06.0
-00000009                       57  	;***       18 : 	g_machine_state.electrolyteOperation = 1;
-00000009                       58  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 18
-00000009 E50000                59  	oneb !LOWW(_g_machine_state+0x00007)
-0000000C                       60  	;***       19 : 	g_TimeKeeper.electrolyteOff_h = 0;
-0000000C                       61  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 19
-0000000C F50000                62  	clrb !LOWW(_g_TimeKeeper@1)
-0000000F                       63  	;***       20 : 	g_TimeKeeper.neutralization =
-0000000F                       64  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 20
-0000000F DB0000                65  	movw bc, !LOWW(_g_TimeKeeper@1+0x00008)
-00000012 AF0000                66  	movw ax, !LOWW(_g_TimeKeeper@1+0x00006)
-00000015 14                    67  	movw de, ax
-00000016 03                    68  	addw ax, bc
-00000017 DF00                  69  	bnz $.BB@LABEL@1_3
-00000019                       70  .BB@LABEL@1_1:	; entry
-00000019 DC00                  71  	bc $.BB@LABEL@1_3
-0000001B                       72  .BB@LABEL@1_2:	; bb
-0000001B DB0000                73  	movw bc, !LOWW(_g_systemTime+0x00002)
-0000001E EB0000                74  	movw de, !LOWW(_g_systemTime)
-00000021                       75  .BB@LABEL@1_3:	; bb6
-00000021 15                    76  	movw ax, de
-00000022 BF0000                77  	movw !LOWW(_g_TimeKeeper@1+0x00006), ax
-00000025 13                    78  	movw ax, bc
-00000026 BF0000                79  	movw !LOWW(_g_TimeKeeper@1+0x00008), ax
-00000029                       80  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 23
-00000029 D7                    81  	ret
-0000002A                       82  _isElectrolyticOperationOFF_nostop:
-0000002A                       83  	.STACK _isElectrolyticOperationOFF_nostop = 6
-0000002A                       84  	;***       21 : 			g_TimeKeeper.neutralization == 0 ?
-0000002A                       85  	;***       22 : 					g_systemTime : g_TimeKeeper.neutralization;
-0000002A                       86  	;***       23 : }
-0000002A                       87  	;***       24 : /**
-0000002A                       88  	;***       25 :  *
-0000002A                       89  	;***       26 :  */
-0000002A                       90  	;***       27 : void isElectrolyticOperationOFF_nostop(void) {
-0000002A                       91  	;***       28 : 	uint8_t *state = &g_machine_state.electrolyteOFF;
-0000002A                       92  	;***       29 : 	uint32_t *tick = &g_Tick.tickElectrolyticOff;
-0000002A                       93  	;***       30 : 	switch (*state) {
-0000002A                       94  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 30
-0000002A 8F0000                95  	mov a, !LOWW(_g_machine_state+0x00008)
-0000002D 91                    96  	dec a
-0000002E DD00                  97  	bz $.BB@LABEL@2_6
-00000030                       98  .BB@LABEL@2_1:	; entry
-00000030 91                    99  	dec a
-00000031 DF00                 100  	bnz $.BB@LABEL@2_5
-00000033                      101  .BB@LABEL@2_2:	; switch_clause_bb13
-00000033                      102  	;***       31 : 	case 0:
-00000033                      103  	;***       32 : 		// Set g_machine_state.electrolyteOFF = 1 to start OFF
-00000033                      104  	;***       33 : 		// This case run when electrolyte is ON or already OFF
-00000033                      105  	;***       34 : //		if (ns_delay_ms(tick, (uint32_t) 60000 * 60)
-00000033                      106  	;***       35 : //				&& g_machine_state.electrolyteOperation == 0) {
-00000033                      107  	;***       36 : //			sendToRasPi_u32(H_READ, MID_NIGHT, 0x00);
-00000033                      108  	;***       37 : //			g_TimeKeeper.electrolyteOff_h++;
-00000033                      109  	;***       38 : //		} else if (g_machine_state.electrolyteOperation == 1) {
-00000033                      110  	;***       39 : //			if (ns_delay_ms(&g_TimeKeeper.neutralization, 1000)) {
-00000033                      111  	;***       40 : //				g_neutralization_time_s++;
-00000033                      112  	;***       41 : //			}
-00000033                      113  	;***       42 : //			(*tick) = g_systemTime;
-00000033                      114  	;***       43 : //		}
-00000033                      115  	;***       44 : 		break;
-00000033                      116  	;***       45 : 	case 1:
-00000033                      117  	;***       46 : 		g_TimeKeeper.neutralization = 0;
-00000033                      118  	;***       47 : 		if (g_rasp_state.isMonitorScreen == 0) {
-00000033                      119  	;***       48 : 			O_CVCC_ON_PIN = OFF;
-00000033                      120  	;***       49 : 			O_PUMP_SALT_PIN_SP1 = OFF; //SP1
-00000033                      121  	;***       50 : 		}
-00000033                      122  	;***       51 : 		(*state)++;
-00000033                      123  	;***       52 : 		break;
-00000033                      124  	;***       53 : 	case 2:
-00000033                      125  	;***       54 : 		if (ns_delay_ms(tick,
-00000033                      126  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 54
-00000033 AF0000               127  	movw ax, !LOWW(_g_timerSetting+0x00010)
-00000036 32E803               128  	movw bc, #0x03E8
-00000039 CEFB01               129  	mulhu
-0000003C 14                   130  	movw de, ax
-0000003D C3                   131  	push bc
-0000003E C6                   132  	pop hl
-0000003F AF0000               133  	movw ax, !LOWW(_g_timerSetting+0x00012)
-00000042 32E803               134  	movw bc, #0x03E8
-00000045 CEFB02               135  	mulh
-00000048 C5                   136  	push de
-00000049 C2                   137  	pop bc
-0000004A 07                   138  	addw ax, hl
-0000004B 14                   139  	movw de, ax
-0000004C 300000               140  	movw ax, #LOWW(_g_Tick+0x0004C)
-0000004F FC000000             141  	call !!_ns_delay_ms
-00000053 F7                   142  	clrw bc
-00000054 43                   143  	cmpw ax, bc
-00000055 DD00                 144  	bz $.BB@LABEL@2_5
-00000057                      145  .BB@LABEL@2_3:	; if_then_bb21
-00000057                      146  	;***       55 : 				g_timerSetting.t5_electrolysisStopDelay_s * 1000)) {
-00000057                      147  	;***       56 : 			(*state) = 0;
-00000057                      148  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 56
-00000057 F50000               149  	clrb !LOWW(_g_machine_state+0x00008)
-0000005A                      150  	;***       57 : 			if (g_rasp_state.isMonitorScreen == 0)
-0000005A                      151  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 57
-0000005A D50000               152  	cmp0 !LOWW(_g_rasp_state)
-0000005D 61F8                 153  	sknz
-0000005F                      154  .BB@LABEL@2_4:	; if_then_bb28
-0000005F                      155  	;***       58 : 				O_SUPPLY_WATER_PIN_SV1 = OFF;
-0000005F                      156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 58
-0000005F 717301               157  	clr1 0xFFF01.7
-00000062                      158  .BB@LABEL@2_5:	; return
-00000062                      159  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 66
-00000062 D7                   160  	ret
-00000063                      161  .BB@LABEL@2_6:	; switch_clause_bb5
-00000063 F6                   162  	clrw ax
-00000064                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 46
-00000064 BF0000               164  	movw !LOWW(_g_TimeKeeper@1+0x00008), ax
-00000067 BF0000               165  	movw !LOWW(_g_TimeKeeper@1+0x00006), ax
-0000006A                      166  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 47
-0000006A D50000               167  	cmp0 !LOWW(_g_rasp_state)
-0000006D DF00                 168  	bnz $.BB@LABEL@2_8
-0000006F                      169  .BB@LABEL@2_7:	; if_then_bb
-0000006F                      170  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 48
-0000006F 71230E               171  	clr1 0xFFF0E.2
-00000072                      172  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 49
-00000072 710306               173  	clr1 0xFFF06.0
-00000075                      174  .BB@LABEL@2_8:	; if_break_bb
-00000075                      175  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 51
-00000075 A00000               176  	inc !LOWW(_g_machine_state+0x00008)
-00000078 D7                   177  	ret
-00000079                      178  _TestModeOperation:
-00000079                      179  	.STACK _TestModeOperation = 4
-00000079                      180  	;***       59 : 			//TODO: Change this
-00000079                      181  	;***       60 : //			g_machine_state.electrolyteOperation--;
-00000079                      182  	;***       61 : 		}
-00000079                      183  	;***       62 : 		break;
-00000079                      184  	;***       63 : 	default:
-00000079                      185  	;***       64 : 		break;
-00000079                      186  	;***       65 : 	}
-00000079                      187  	;***       66 : }
-00000079                      188  	;***       67 : 
-00000079                      189  	;***       68 : void TestModeOperation(void) {
-00000079                      190  	;***       69 : 	if (g_commnunication_flag.test_flag) {
-00000079                      191  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 69
-00000079 8F0000               192  	mov a, !LOWW(_g_commnunication_flag+0x0000A)
-0000007C                      193  	;***       70 : 
-0000007C                      194  	;***       71 : 	}
-0000007C                      195  	;***       72 : 	if (g_machine_state.test_operation == TEST_INDIVIDUAL) {
-0000007C                      196  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 72
-0000007C D7                   197  	ret
-0000007D                      198  	;***       73 : 		//TODO: Pause other operation
-0000007D                      199  	;***       74 : 
-0000007D                      200  	;***       75 : 	}
-0000007D                      201  	;***       76 : }
-00000000                      202  	.SECTION .bss,BSS
-00000000                      203  	.ALIGN 2
-00000000                      204  _g_TimeKeeper@1:
-00000000                      205  	.DS (10)
+00000000                       23  	.EXTERN _g_commnunication_flag
+00000000                       24  	.EXTERN _g_systemTime
+00000000                       25  	.PUBLIC _electrolyticOperationON
+00000000                       26  	.PUBLIC _isElectrolyticOperationOFF_nostop
+00000000                       27  	.EXTERN _ns_delay_ms
+00000000                       28  	.PUBLIC _TestModeOperation
+00000000                       29  
+00000000                       30  	.SECTION .textf,TEXTF
+00000000                       31  _electrolyticOperationON:
+00000000                       32  	.STACK _electrolyticOperationON = 4
+00000000                       33  	;***        1 : /*
+00000000                       34  	;***        2 :  * operation.c
+00000000                       35  	;***        3 :  *
+00000000                       36  	;***        4 :  *  Created on: 11 Jan 2022
+00000000                       37  	;***        5 :  *      Author: Hung
+00000000                       38  	;***        6 :  */
+00000000                       39  	;***        7 : 
+00000000                       40  	;***        8 : #include "operation.h"
+00000000                       41  	;***        9 : 
+00000000                       42  	;***       10 : /**
+00000000                       43  	;***       11 :  * 30/11/2021: Checked by An
+00000000                       44  	;***       12 :  */
+00000000                       45  	;***       13 : void electrolyticOperationON(void) {
+00000000                       46  	;***       14 : 	//Electrolytic operation ON
+00000000                       47  	;***       15 : 	O_SUPPLY_WATER_PIN_SV1 = ON;
+00000000                       48  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 15
+00000000 717201                49  	set1 0xFFF01.7
+00000003                       50  	;***       16 : 	O_CVCC_ON_PIN = ON;
+00000003                       51  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 16
+00000003 71220E                52  	set1 0xFFF0E.2
+00000006                       53  	;***       17 : 	O_PUMP_SALT_PIN_SP1 = ON; //SP1
+00000006                       54  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 17
+00000006 710206                55  	set1 0xFFF06.0
+00000009                       56  	;***       18 : 	g_machine_state.electrolyteOperation = 1;
+00000009                       57  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 18
+00000009 E50000                58  	oneb !LOWW(_g_machine_state+0x00007)
+0000000C                       59  	;***       19 : 	g_TimeKeeper.electrolyteOff_h = 0;
+0000000C                       60  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 19
+0000000C F50000                61  	clrb !LOWW(_g_TimeKeeper@1)
+0000000F                       62  	;***       20 : 	g_TimeKeeper.neutralization =
+0000000F                       63  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 20
+0000000F DB0000                64  	movw bc, !LOWW(_g_TimeKeeper@1+0x00008)
+00000012 AF0000                65  	movw ax, !LOWW(_g_TimeKeeper@1+0x00006)
+00000015 14                    66  	movw de, ax
+00000016 03                    67  	addw ax, bc
+00000017 DF00                  68  	bnz $.BB@LABEL@1_3
+00000019                       69  .BB@LABEL@1_1:	; entry
+00000019 DC00                  70  	bc $.BB@LABEL@1_3
+0000001B                       71  .BB@LABEL@1_2:	; bb
+0000001B DB0000                72  	movw bc, !LOWW(_g_systemTime+0x00002)
+0000001E EB0000                73  	movw de, !LOWW(_g_systemTime)
+00000021                       74  .BB@LABEL@1_3:	; bb6
+00000021 15                    75  	movw ax, de
+00000022 BF0000                76  	movw !LOWW(_g_TimeKeeper@1+0x00006), ax
+00000025 13                    77  	movw ax, bc
+00000026 BF0000                78  	movw !LOWW(_g_TimeKeeper@1+0x00008), ax
+00000029                       79  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 23
+00000029 D7                    80  	ret
+0000002A                       81  _isElectrolyticOperationOFF_nostop:
+0000002A                       82  	.STACK _isElectrolyticOperationOFF_nostop = 6
+0000002A                       83  	;***       21 : 			g_TimeKeeper.neutralization == 0 ?
+0000002A                       84  	;***       22 : 					g_systemTime : g_TimeKeeper.neutralization;
+0000002A                       85  	;***       23 : }
+0000002A                       86  	;***       24 : /**
+0000002A                       87  	;***       25 :  *
+0000002A                       88  	;***       26 :  */
+0000002A                       89  	;***       27 : void isElectrolyticOperationOFF_nostop(void) {
+0000002A                       90  	;***       28 : 	uint8_t *state = &g_machine_state.electrolyteOFF;
+0000002A                       91  	;***       29 : 	uint32_t *tick = &g_Tick.tickElectrolyticOff;
+0000002A                       92  	;***       30 : 	switch (*state) {
+0000002A                       93  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 30
+0000002A 8F0000                94  	mov a, !LOWW(_g_machine_state+0x00008)
+0000002D 91                    95  	dec a
+0000002E DD00                  96  	bz $.BB@LABEL@2_5
+00000030                       97  .BB@LABEL@2_1:	; entry
+00000030 91                    98  	dec a
+00000031 DF00                  99  	bnz $.BB@LABEL@2_4
+00000033                      100  .BB@LABEL@2_2:	; switch_clause_bb9
+00000033                      101  	;***       31 : 	case 0:
+00000033                      102  	;***       32 : 		// Set g_machine_state.electrolyteOFF = 1 to start OFF
+00000033                      103  	;***       33 : 		// This case run when electrolyte is ON or already OFF
+00000033                      104  	;***       34 : //		if (ns_delay_ms(tick, (uint32_t) 60000 * 60)
+00000033                      105  	;***       35 : //				&& g_machine_state.electrolyteOperation == 0) {
+00000033                      106  	;***       36 : //			sendToRasPi_u32(H_READ, MID_NIGHT, 0x00);
+00000033                      107  	;***       37 : //			g_TimeKeeper.electrolyteOff_h++;
+00000033                      108  	;***       38 : //		} else if (g_machine_state.electrolyteOperation == 1) {
+00000033                      109  	;***       39 : //			if (ns_delay_ms(&g_TimeKeeper.neutralization, 1000)) {
+00000033                      110  	;***       40 : //				g_neutralization_time_s++;
+00000033                      111  	;***       41 : //			}
+00000033                      112  	;***       42 : //			(*tick) = g_systemTime;
+00000033                      113  	;***       43 : //		}
+00000033                      114  	;***       44 : 		break;
+00000033                      115  	;***       45 : 	case 1:
+00000033                      116  	;***       46 : 		g_TimeKeeper.neutralization = 0;
+00000033                      117  	;***       47 : 		O_CVCC_ON_PIN = OFF;
+00000033                      118  	;***       48 : 		O_PUMP_SALT_PIN_SP1 = OFF; //SP1
+00000033                      119  	;***       49 : 
+00000033                      120  	;***       50 : 		(*state)++;
+00000033                      121  	;***       51 : 		break;
+00000033                      122  	;***       52 : 	case 2:
+00000033                      123  	;***       53 : 		if (ns_delay_ms(tick,
+00000033                      124  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 53
+00000033 AF0000               125  	movw ax, !LOWW(_g_timerSetting+0x00010)
+00000036 32E803               126  	movw bc, #0x03E8
+00000039 CEFB01               127  	mulhu
+0000003C 14                   128  	movw de, ax
+0000003D C3                   129  	push bc
+0000003E C6                   130  	pop hl
+0000003F AF0000               131  	movw ax, !LOWW(_g_timerSetting+0x00012)
+00000042 32E803               132  	movw bc, #0x03E8
+00000045 CEFB02               133  	mulh
+00000048 C5                   134  	push de
+00000049 C2                   135  	pop bc
+0000004A 07                   136  	addw ax, hl
+0000004B 14                   137  	movw de, ax
+0000004C 300000               138  	movw ax, #LOWW(_g_Tick+0x0004C)
+0000004F FC000000             139  	call !!_ns_delay_ms
+00000053 F7                   140  	clrw bc
+00000054 43                   141  	cmpw ax, bc
+00000055 DD00                 142  	bz $.BB@LABEL@2_4
+00000057                      143  .BB@LABEL@2_3:	; if_then_bb
+00000057                      144  	;***       54 : 				g_timerSetting.t5_electrolysisStopDelay_s * 1000)) {
+00000057                      145  	;***       55 : 			(*state) = 0;
+00000057                      146  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 55
+00000057 F50000               147  	clrb !LOWW(_g_machine_state+0x00008)
+0000005A                      148  	;***       56 : 			O_SUPPLY_WATER_PIN_SV1 = OFF;
+0000005A                      149  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 56
+0000005A 717301               150  	clr1 0xFFF01.7
+0000005D                      151  .BB@LABEL@2_4:	; return
+0000005D                      152  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 64
+0000005D D7                   153  	ret
+0000005E                      154  .BB@LABEL@2_5:	; switch_clause_bb5
+0000005E F6                   155  	clrw ax
+0000005F                      156  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 46
+0000005F BF0000               157  	movw !LOWW(_g_TimeKeeper@1+0x00008), ax
+00000062 BF0000               158  	movw !LOWW(_g_TimeKeeper@1+0x00006), ax
+00000065                      159  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 47
+00000065 71230E               160  	clr1 0xFFF0E.2
+00000068                      161  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 48
+00000068 710306               162  	clr1 0xFFF06.0
+0000006B                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 50
+0000006B A00000               164  	inc !LOWW(_g_machine_state+0x00008)
+0000006E D7                   165  	ret
+0000006F                      166  _TestModeOperation:
+0000006F                      167  	.STACK _TestModeOperation = 4
+0000006F                      168  	;***       57 : 			//TODO: Change this
+0000006F                      169  	;***       58 : //			g_machine_state.electrolyteOperation--;
+0000006F                      170  	;***       59 : 		}
+0000006F                      171  	;***       60 : 		break;
+0000006F                      172  	;***       61 : 	default:
+0000006F                      173  	;***       62 : 		break;
+0000006F                      174  	;***       63 : 	}
+0000006F                      175  	;***       64 : }
+0000006F                      176  	;***       65 : 
+0000006F                      177  	;***       66 : void TestModeOperation(void) {
+0000006F                      178  	;***       67 : 	if (g_commnunication_flag.test_flag) {
+0000006F                      179  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 67
+0000006F 8F0000               180  	mov a, !LOWW(_g_commnunication_flag+0x0000A)
+00000072                      181  	;***       68 : 
+00000072                      182  	;***       69 : 	}
+00000072                      183  	;***       70 : 	if (g_machine_state.test_operation == TEST_INDIVIDUAL) {
+00000072                      184  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 70
+00000072 D7                   185  	ret
+00000073                      186  	;***       71 : 		//TODO: Pause other operation
+00000073                      187  	;***       72 : 
+00000073                      188  	;***       73 : 	}
+00000073                      189  	;***       74 : }
+00000000                      190  	.SECTION .bss,BSS
+00000000                      191  	.ALIGN 2
+00000000                      192  _g_TimeKeeper@1:
+00000000                      193  	.DS (10)
 
 Section List
 Attr     Size                Name
 
-TEXTF               125 (0000007D) .textf
+TEXTF               115 (00000073) .textf
 BSS                  10 (0000000A) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\operation.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\operation.asm.cmd 
 
 Command File Parameter
 -cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\operation.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\operation.asm 
