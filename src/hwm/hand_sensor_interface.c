@@ -77,7 +77,8 @@ uint8_t isHandSensorON(void){
 
 void setHandSensorOFF(void){
 	g_machine_state.handsensor = 0U;
-	g_io_status.refined.io.HandSensorOFF = 1U;
+	if(g_machine_state.mode != HAND_WASHING)
+		g_io_status.refined.io.HandSensorOFF = 1U;
 }
 
 void setHandSensorON(void){

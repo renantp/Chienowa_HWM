@@ -50,9 +50,9 @@ void setting_default(void) {
 	g_timerSetting.t14_lowVoltageStartTime_s = 5000; //60000
 	g_timerSetting.t15_lowVoltageDelayTime_s = 2000;
 	g_timerSetting.t17_solenoidLeakageStartTime_s = 5000;
-	g_timerSetting.t51_alkalineWaterSpoutingTime_s = 1;
-	g_timerSetting.t52_acidWaterSpoutingTime_s = 2;
-	g_timerSetting.t53_washingWaterSpoutingTime_s = 3;
+	g_timerSetting.t29_alkalineWaterSpoutingTime_s = 1;
+	g_timerSetting.t30_acidWaterSpoutingTime_s = 2;
+	g_timerSetting.t31_washingWaterSpoutingTime_s = 3;
 }
 
 struct UART3_Buffer_s {
@@ -374,7 +374,7 @@ void ElectrolyzeWaterGeneration_nostop(void) {
 uint8_t isSV1andSV2Off8h(void) {
 	if (O_SUPPLY_WATER_PIN_SV1 == OFF && O_SPOUT_WATER_PIN_SV2 == OFF) {
 		if (ns_delay_ms(&g_Tick.tickSV1SV2,
-				(uint32_t) g_timerSetting.t61_cleaningIntervalTime_h * 60 * 60
+				(uint32_t) g_timerSetting.t39_cleaningIntervalTime_h * 60 * 60
 						* 1000)) {
 			return 1;
 		}
@@ -400,7 +400,7 @@ void CallanCleaningMode_nostop(void) {
 		case 1:
 			handSensorLEDBlink(WHITE, 500);
 			if (ns_delay_ms(tick,
-					g_timerSetting.t62_washSpoutingTime_s * 1000)) {
+					g_timerSetting.t40_washSpoutingTime_s * 1000)) {
 				(*state)++;
 				O_SPOUT_WATER_PIN_SV2 = OFF;
 				handSensorLED(BLACK);
@@ -481,7 +481,7 @@ void NormalMode_nostop(void) {
 		g_Tick.tickDebouceHandSensor = g_systemTime;
 	} else if (g_machine_state.mode == BUSY) {
 		if (ns_delay_ms(&g_Tick.tickDebouceHandSensor,
-				g_timerSetting.t60_washDischargeDelay_s * 1000)) {
+				g_timerSetting.t38_washDischargeDelay_s * 1000)) {
 			g_machine_state.mode = INDIE;
 			g_machine_state.user = 0;
 		}
@@ -633,12 +633,12 @@ void TestOperation_nostop(void) {
 }
 void NeutralizationTreatment(uint32_t *tick) {
 	if (g_neutralization_time_s
-			>= g_timerSetting.t33_neutralizationStartTime_h * 60 * 60) {
+			>= g_timerSetting.t27_neutralizationStartTime_h * 60 * 60) {
 		g_machine_state.neutrlization = 1;
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_neutralization_time_s = 0;
 	}
-	if (ns_delay_ms(tick, g_timerSetting.t34_neutralizationOpenTime_s * 1000)
+	if (ns_delay_ms(tick, g_timerSetting.t28_neutralizationOpenTime_s * 1000)
 			&& (g_machine_state.neutrlization != 0)) {
 		O_NEUTRALIZE_PIN_SV7 = ON;
 		g_machine_state.neutrlization = 0;
@@ -763,26 +763,26 @@ void manufactureReset(void) {
 	g_timerSetting.t19_waterFilterAlarm_h = 4000;
 
 	g_timerSetting.t20_waterFilterAlarmIgnore_h = 4800;
-	g_timerSetting.t26_onDelayEmptyLevel_s = 5;
-	g_timerSetting.t27_onDelayLowLevel_s = 5;
-	g_timerSetting.t28_onDelayHighLevel_s = 5;
+	g_timerSetting.t21_onDelayEmptyLevel_s = 5;
+	g_timerSetting.t22_onDelayLowLevel_s = 5;
+	g_timerSetting.t23_onDelayHighLevel_s = 5;
 
-	g_timerSetting.t30_offDelayEmptyLevel_s = 10;
-	g_timerSetting.t31_saltLowLevelDelay_s = 5;
-	g_timerSetting.t32_saltHighLevelDelay_s = 5;
-	g_timerSetting.t33_neutralizationStartTime_h = 1;
-	g_timerSetting.t34_neutralizationOpenTime_s = 300;
+	g_timerSetting.t24_offDelayEmptyLevel_s = 10;
+	g_timerSetting.t25_saltLowLevelDelay_s = 5;
+	g_timerSetting.t26_saltHighLevelDelay_s = 5;
+	g_timerSetting.t27_neutralizationStartTime_h = 1;
+	g_timerSetting.t28_neutralizationOpenTime_s = 300;
 
-	g_timerSetting.t51_alkalineWaterSpoutingTime_s = 15;
-	g_timerSetting.t52_acidWaterSpoutingTime_s = 15;
-	g_timerSetting.t53_washingWaterSpoutingTime_s = 15;
-	g_timerSetting.t54_overLapTime_ms = 0.5;
-	g_timerSetting.t60_washDischargeDelay_s = 5;
-	g_timerSetting.t56_acidWaterDownTime_s = 300;
-	g_timerSetting.t57_alkalineWaterDownTime_s = 300;
+	g_timerSetting.t29_alkalineWaterSpoutingTime_s = 15;
+	g_timerSetting.t30_acidWaterSpoutingTime_s = 15;
+	g_timerSetting.t31_washingWaterSpoutingTime_s = 15;
+	g_timerSetting.t32_overLapTime_ms = 0.5;
+	g_timerSetting.t38_washDischargeDelay_s = 5;
+	g_timerSetting.t34_acidWaterDownTime_s = 300;
+	g_timerSetting.t35_alkalineWaterDownTime_s = 300;
 
-	g_timerSetting.t61_cleaningIntervalTime_h = 8;
-	g_timerSetting.t62_washSpoutingTime_s = 30;
+	g_timerSetting.t39_cleaningIntervalTime_h = 8;
+	g_timerSetting.t40_washSpoutingTime_s = 30;
 
 	g_numberSetting.upperVoltage1 = 0.0f;
 	g_numberSetting.upperVoltage2 = 0.0f;

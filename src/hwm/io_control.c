@@ -35,7 +35,7 @@ void OutputIO(struct IO_Struct *io) {
 uint8_t isAcidTankFull(void) {
 	if (I_ACID_H_PIN_FL3 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[0],
-				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+				g_timerSetting.t23_onDelayHighLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AcidHighLevel == 1)) {
 			g_mean_io_status.refined.io.AcidHighLevel = 1;
 			return 1;
@@ -49,7 +49,7 @@ uint8_t isAcidTankFull(void) {
 uint8_t isAcidTankAlmostFull(void) {
 	if (I_ACID_M_PIN_FL2 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[1],
-				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+				g_timerSetting.t22_onDelayLowLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AcidLowLevel == 1)) {
 			g_mean_io_status.refined.io.AcidLowLevel = 1;
 			return 1;
@@ -64,7 +64,7 @@ uint8_t isAcidTankAlmostFull(void) {
 uint8_t isAcidTankHasSomething(void) {
 	if (I_ACID_L_PIN_FL1 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[2],
-				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+				g_timerSetting.t21_onDelayEmptyLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 1)) {
 			g_mean_io_status.refined.io.AcidEmptyLevel = 1;
 			return 1;
@@ -79,7 +79,7 @@ uint8_t isAcidTankAlmostEmpty(void) {
 	if (!levelSkipErrorCheck() && isAcidTankHasSomething()) {
 		if (I_ACID_M_PIN_FL2 == I_OFF) {
 			if (ns_delay_ms(&g_Tick.tickAcidLevel[4],
-					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+					g_timerSetting.t24_offDelayEmptyLevel_s * 1000)) {
 				g_mean_io_status.refined.io.AcidLowLevel = 0;
 				return 1;
 			}
@@ -93,7 +93,7 @@ uint8_t isAcidTankAlmostEmpty(void) {
 uint8_t isAcidTankEmpty(void) {
 	if (I_ACID_L_PIN_FL1 == I_OFF) {
 		if (ns_delay_ms(&g_Tick.tickAcidLevel[3],
-				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+				g_timerSetting.t24_offDelayEmptyLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AcidEmptyLevel == 0)) {
 			g_mean_io_status.refined.io.AcidEmptyLevel = 0;
 			return 1;
@@ -107,7 +107,7 @@ uint8_t isAcidTankEmpty(void) {
 uint8_t isAlkalineTankFull(void) {
 	if (I_ALKALI_H_PIN_FL6 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[0],
-				g_timerSetting.t28_onDelayHighLevel_s * 1000)
+				g_timerSetting.t23_onDelayHighLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AlkalineHighLevel == 1)) {
 			g_mean_io_status.refined.io.AlkalineHighLevel = 1;
 			return 1;
@@ -121,7 +121,7 @@ uint8_t isAlkalineTankFull(void) {
 uint8_t isAlkalineTankAlmostFull(void) {
 	if (I_ALKALI_M_PIN_FL5 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[1],
-				g_timerSetting.t27_onDelayLowLevel_s * 1000)
+				g_timerSetting.t22_onDelayLowLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AlkalineLowLevel == 1)) {
 			g_mean_io_status.refined.io.AlkalineLowLevel = 1;
 			return 1;
@@ -135,7 +135,7 @@ uint8_t isAlkalineTankAlmostFull(void) {
 uint8_t isAlkalineTankHasSomething_nonstop(void) {
 	if (I_ALKALI_L_PIN_FL4 == I_ON) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[2],
-				g_timerSetting.t26_onDelayEmptyLevel_s * 1000)
+				g_timerSetting.t21_onDelayEmptyLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 1)) {
 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 1;
 			return 1;
@@ -150,7 +150,7 @@ uint8_t isAlkalineTankAlmostEmpty(void) {
 	if (!levelSkipErrorCheck() && isAlkalineTankHasSomething_nonstop()) {
 		if (I_ALKALI_M_PIN_FL5 == I_OFF) {
 			if (ns_delay_ms(&g_Tick.tickAlkalineLevel[4],
-					g_timerSetting.t30_offDelayEmptyLevel_s * 1000)) {
+					g_timerSetting.t24_offDelayEmptyLevel_s * 1000)) {
 				g_mean_io_status.refined.io.AlkalineLowLevel = 0;
 				return 1;
 			}
@@ -164,7 +164,7 @@ uint8_t isAlkalineTankAlmostEmpty(void) {
 uint8_t isAlkalineTankEmpty_nonstop(void) {
 	if (I_ALKALI_L_PIN_FL4 == I_OFF) {
 		if (ns_delay_ms(&g_Tick.tickAlkalineLevel[3],
-				g_timerSetting.t30_offDelayEmptyLevel_s * 1000)
+				g_timerSetting.t24_offDelayEmptyLevel_s * 1000)
 				|| (g_mean_io_status.refined.io.AlkalineEmptyLevel == 0)) {
 			g_mean_io_status.refined.io.AlkalineEmptyLevel = 0;
 			return 1;
