@@ -7,7 +7,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                        3  #@  Commmand :
 00000000                        4  #@   -cpu=S3
 00000000                        5  #@   -c
-00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1223251604/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
 00000000                        7  #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src
 00000000                        8  #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
 00000000                        9  #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/r_cg_port.obj
 00000000                       17  #@   ../src/r_cg_port.c
-00000000                       18  #@  compiled at Thu Jun 30 14:37:24 2022
+00000000                       18  #@  compiled at Tue Aug 23 10:01:00 2022
 00000000                       19  
 00000000                       20  	.PUBLIC _R_PORT_Create
 00000000                       21  
@@ -42,16 +42,16 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       38  	;***       14 : * following link:
 00000000                       39  	;***       15 : * http://www.renesas.com/disclaimer
 00000000                       40  	;***       16 : *
-00000000                       41  	;***       17 : * Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+00000000                       41  	;***       17 : * Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
 00000000                       42  	;***       18 : ***********************************************************************************************************************/
 00000000                       43  	;***       19 : 
 00000000                       44  	;***       20 : /***********************************************************************************************************************
 00000000                       45  	;***       21 : * File Name    : r_cg_port.c
-00000000                       46  	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+00000000                       46  	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.06.02 [08 Nov 2021]
 00000000                       47  	;***       23 : * Device(s)    : R5F104ML
 00000000                       48  	;***       24 : * Tool-Chain   : CCRL
 00000000                       49  	;***       25 : * Description  : This file implements device driver for PORT module.
-00000000                       50  	;***       26 : * Creation Date: 19/04/2022
+00000000                       50  	;***       26 : * Creation Date: 8/23/2022
 00000000                       51  	;***       27 : ***********************************************************************************************************************/
 00000000                       52  	;***       28 : 
 00000000                       53  	;***       29 : /***********************************************************************************************************************
@@ -97,93 +97,93 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000009                       93  	;***       61 :     P5 = _00_Pn5_OUTPUT_0;
 00000009                       94  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 61
 00000009 F405                  95  	clrb 0xFFF05
-0000000B                       96  	;***       62 :     P6 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0 | _00_Pn2_OUTPUT_0 | _00_Pn3_OUTPUT_0 | _00_Pn4_OUTPUT_0 |
+0000000B                       96  	;***       62 :     P6 = _01_Pn0_OUTPUT_1 | _02_Pn1_OUTPUT_1 | _04_Pn2_OUTPUT_1 | _00_Pn3_OUTPUT_0 | _00_Pn4_OUTPUT_0 |
 0000000B                       97  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 62
-0000000B F406                  98  	clrb 0xFFF06
-0000000D                       99  	;***       63 :          _00_Pn5_OUTPUT_0 | _00_Pn6_OUTPUT_0 | _00_Pn7_OUTPUT_0;
-0000000D                      100  	;***       64 :     P7 = _00_Pn6_OUTPUT_0 | _00_Pn7_OUTPUT_0;
-0000000D                      101  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 64
-0000000D F407                 102  	clrb 0xFFF07
-0000000F                      103  	;***       65 :     P11 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0;
-0000000F                      104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 65
-0000000F F40B                 105  	clrb 0xFFF0B
-00000011                      106  	;***       66 :     P12 = _00_Pn0_OUTPUT_0;
-00000011                      107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 66
-00000011 F40C                 108  	clrb 0xFFF0C
-00000013                      109  	;***       67 :     P13 = _00_Pn0_OUTPUT_0;
-00000013                      110  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 67
-00000013 F40D                 111  	clrb 0xFFF0D
-00000015                      112  	;***       68 :     P14 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0 | _00_Pn2_OUTPUT_0 | _00_Pn6_OUTPUT_0;
-00000015                      113  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 68
-00000015 F40E                 114  	clrb 0xFFF0E
-00000017                      115  	;***       69 :     PMC1 = _04_PMCn2_NOT_USE | _08_PMCn3_NOT_USE | _00_PMCn6_DI_ON | _00_PMCn7_DI_ON;
-00000017                      116  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 69
-00000017 CA000C               117  	mov [de+0x00], #0x0C
-0000001A                      118  	;***       70 :     PMC10 = _00_PMCn0_DI_ON | _FE_PMC10_DEFAULT;
-0000001A                      119  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 70
-0000001A CA09FE               120  	mov [de+0x09], #0xFE
-0000001D                      121  	;***       71 :     PMC12 = _00_PMCn0_DI_ON | _FE_PMC12_DEFAULT;
-0000001D                      122  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 71
-0000001D CA0BFE               123  	mov [de+0x0B], #0xFE
-00000020                      124  	;***       72 :     PMC14 = _00_PMCn7_DI_ON | _7F_PMC14_DEFAULT;
-00000020                      125  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 72
-00000020 CA0D7F               126  	mov [de+0x0D], #0x7F
-00000023                      127  	;***       73 :     ADPC = _0C_ADPC_DI_ON;
-00000023                      128  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 73
-00000023 CA150C               129  	mov [de+0x15], #0x0C
-00000026                      130  	;***       74 :     PM0 = _00_PMn0_MODE_OUTPUT | _02_PMn1_MODE_INPUT | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_MODE_INPUT |
-00000026                      131  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 74
-00000026 CE20FE               132  	mov 0xFFF20, #0xFE
-00000029                      133  	;***       75 :           _20_PMn5_MODE_INPUT | _40_PMn6_MODE_INPUT | _80_PM0_DEFAULT;
-00000029                      134  	;***       76 :     PM1 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
-00000029                      135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 76
-00000029 CE211F               136  	mov 0xFFF21, #0x1F
-0000002C                      137  	;***       77 :           _00_PMn5_MODE_OUTPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
-0000002C                      138  	;***       78 :     PM3 = _01_PMn0_NOT_USE | _00_PMn1_MODE_OUTPUT | _FC_PM3_DEFAULT;
-0000002C                      139  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 78
-0000002C CE23FD               140  	mov 0xFFF23, #0xFD
-0000002F                      141  	;***       79 :     PM5 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_MODE_INPUT | _08_PMn3_MODE_INPUT | _10_PMn4_MODE_INPUT |
-0000002F                      142  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 79
-0000002F CE25DF               143  	mov 0xFFF25, #0xDF
-00000032                      144  	;***       80 :           _00_PMn5_MODE_OUTPUT | _C0_PM5_DEFAULT;
-00000032                      145  	;***       81 :     PM6 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _00_PMn2_MODE_OUTPUT | _00_PMn3_MODE_OUTPUT |
-00000032                      146  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 81
-00000032 CE2600               147  	mov 0xFFF26, #0x00
-00000035                      148  	;***       82 :           _00_PMn4_MODE_OUTPUT | _00_PMn5_MODE_OUTPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
-00000035                      149  	;***       83 :     PM7 = _01_PMn0_MODE_INPUT | _02_PMn1_MODE_INPUT | _04_PMn2_MODE_INPUT | _08_PMn3_MODE_INPUT | _10_PMn4_MODE_INPUT |
-00000035                      150  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 83
-00000035 CE273F               151  	mov 0xFFF27, #0x3F
-00000038                      152  	;***       84 :           _20_PMn5_MODE_INPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
-00000038                      153  	;***       85 :     PM10 = _01_PMn0_MODE_INPUT | _FE_PM10_DEFAULT;
-00000038                      154  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 85
-00000038 CE2AFF               155  	mov 0xFFF2A, #0xFF
-0000003B                      156  	;***       86 :     PM11 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _FC_PM11_DEFAULT;
-0000003B                      157  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 86
-0000003B CE2BFC               158  	mov 0xFFF2B, #0xFC
-0000003E                      159  	;***       87 :     PM12 = _00_PMn0_MODE_OUTPUT | _FE_PM12_DEFAULT;
-0000003E                      160  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 87
-0000003E CE2CFE               161  	mov 0xFFF2C, #0xFE
-00000041                      162  	;***       88 :     PM14 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _00_PMn2_MODE_OUTPUT | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
-00000041                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 88
-00000041 CE2EB8               164  	mov 0xFFF2E, #0xB8
-00000044                      165  	;***       89 :            _00_PMn6_MODE_OUTPUT | _80_PMn7_MODE_INPUT | _20_PM14_DEFAULT;
-00000044                      166  	;***       90 :     PM15 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_MODE_INPUT | _F0_PM15_DEFAULT;
-00000044                      167  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 90
-00000044 CE2FFF               168  	mov 0xFFF2F, #0xFF
-00000047 D7                   169  	ret
-00000048                      170  	;***       91 : }
-00000048                      171  	;***       92 : 
-00000048                      172  	;***       93 : /* Start user code for adding. Do not edit comment generated here */
-00000048                      173  	;***       94 : /* End user code. Do not edit comment generated here */
+0000000B CD0607                98  	mov 0xFFF06, #0x07
+0000000E                       99  	;***       63 :          _00_Pn5_OUTPUT_0 | _00_Pn6_OUTPUT_0 | _00_Pn7_OUTPUT_0;
+0000000E                      100  	;***       64 :     P7 = _00_Pn6_OUTPUT_0 | _00_Pn7_OUTPUT_0;
+0000000E                      101  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 64
+0000000E F407                 102  	clrb 0xFFF07
+00000010                      103  	;***       65 :     P11 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0;
+00000010                      104  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 65
+00000010 F40B                 105  	clrb 0xFFF0B
+00000012                      106  	;***       66 :     P12 = _00_Pn0_OUTPUT_0;
+00000012                      107  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 66
+00000012 F40C                 108  	clrb 0xFFF0C
+00000014                      109  	;***       67 :     P13 = _00_Pn0_OUTPUT_0;
+00000014                      110  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 67
+00000014 F40D                 111  	clrb 0xFFF0D
+00000016                      112  	;***       68 :     P14 = _00_Pn0_OUTPUT_0 | _00_Pn1_OUTPUT_0 | _00_Pn2_OUTPUT_0 | _00_Pn6_OUTPUT_0;
+00000016                      113  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 68
+00000016 F40E                 114  	clrb 0xFFF0E
+00000018                      115  	;***       69 :     PMC1 = _04_PMCn2_NOT_USE | _08_PMCn3_NOT_USE | _00_PMCn6_DI_ON | _00_PMCn7_DI_ON;
+00000018                      116  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 69
+00000018 CA000C               117  	mov [de+0x00], #0x0C
+0000001B                      118  	;***       70 :     PMC10 = _00_PMCn0_DI_ON | _FE_PMC10_DEFAULT;
+0000001B                      119  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 70
+0000001B CA09FE               120  	mov [de+0x09], #0xFE
+0000001E                      121  	;***       71 :     PMC12 = _00_PMCn0_DI_ON | _FE_PMC12_DEFAULT;
+0000001E                      122  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 71
+0000001E CA0BFE               123  	mov [de+0x0B], #0xFE
+00000021                      124  	;***       72 :     PMC14 = _00_PMCn7_DI_ON | _7F_PMC14_DEFAULT;
+00000021                      125  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 72
+00000021 CA0D7F               126  	mov [de+0x0D], #0x7F
+00000024                      127  	;***       73 :     ADPC = _0C_ADPC_DI_ON;
+00000024                      128  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 73
+00000024 CA150C               129  	mov [de+0x15], #0x0C
+00000027                      130  	;***       74 :     PM0 = _00_PMn0_MODE_OUTPUT | _02_PMn1_MODE_INPUT | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_MODE_INPUT |
+00000027                      131  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 74
+00000027 CE20FE               132  	mov 0xFFF20, #0xFE
+0000002A                      133  	;***       75 :           _20_PMn5_MODE_INPUT | _40_PMn6_MODE_INPUT | _80_PM0_DEFAULT;
+0000002A                      134  	;***       76 :     PM1 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
+0000002A                      135  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 76
+0000002A CE211F               136  	mov 0xFFF21, #0x1F
+0000002D                      137  	;***       77 :           _00_PMn5_MODE_OUTPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
+0000002D                      138  	;***       78 :     PM3 = _01_PMn0_NOT_USE | _00_PMn1_MODE_OUTPUT | _FC_PM3_DEFAULT;
+0000002D                      139  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 78
+0000002D CE23FD               140  	mov 0xFFF23, #0xFD
+00000030                      141  	;***       79 :     PM5 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_MODE_INPUT | _08_PMn3_MODE_INPUT | _10_PMn4_MODE_INPUT |
+00000030                      142  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 79
+00000030 CE25DF               143  	mov 0xFFF25, #0xDF
+00000033                      144  	;***       80 :           _00_PMn5_MODE_OUTPUT | _C0_PM5_DEFAULT;
+00000033                      145  	;***       81 :     PM6 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _00_PMn2_MODE_OUTPUT | _00_PMn3_MODE_OUTPUT |
+00000033                      146  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 81
+00000033 CE2600               147  	mov 0xFFF26, #0x00
+00000036                      148  	;***       82 :           _00_PMn4_MODE_OUTPUT | _00_PMn5_MODE_OUTPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
+00000036                      149  	;***       83 :     PM7 = _01_PMn0_MODE_INPUT | _02_PMn1_MODE_INPUT | _04_PMn2_MODE_INPUT | _08_PMn3_MODE_INPUT | _10_PMn4_MODE_INPUT |
+00000036                      150  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 83
+00000036 CE273F               151  	mov 0xFFF27, #0x3F
+00000039                      152  	;***       84 :           _20_PMn5_MODE_INPUT | _00_PMn6_MODE_OUTPUT | _00_PMn7_MODE_OUTPUT;
+00000039                      153  	;***       85 :     PM10 = _01_PMn0_MODE_INPUT | _FE_PM10_DEFAULT;
+00000039                      154  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 85
+00000039 CE2AFF               155  	mov 0xFFF2A, #0xFF
+0000003C                      156  	;***       86 :     PM11 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _FC_PM11_DEFAULT;
+0000003C                      157  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 86
+0000003C CE2BFC               158  	mov 0xFFF2B, #0xFC
+0000003F                      159  	;***       87 :     PM12 = _00_PMn0_MODE_OUTPUT | _FE_PM12_DEFAULT;
+0000003F                      160  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 87
+0000003F CE2CFE               161  	mov 0xFFF2C, #0xFE
+00000042                      162  	;***       88 :     PM14 = _00_PMn0_MODE_OUTPUT | _00_PMn1_MODE_OUTPUT | _00_PMn2_MODE_OUTPUT | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE |
+00000042                      163  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 88
+00000042 CE2EB8               164  	mov 0xFFF2E, #0xB8
+00000045                      165  	;***       89 :            _00_PMn6_MODE_OUTPUT | _80_PMn7_MODE_INPUT | _20_PM14_DEFAULT;
+00000045                      166  	;***       90 :     PM15 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_MODE_INPUT | _F0_PM15_DEFAULT;
+00000045                      167  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/r_cg_port.c", 90
+00000045 CE2FFF               168  	mov 0xFFF2F, #0xFF
+00000048 D7                   169  	ret
+00000049                      170  	;***       91 : }
+00000049                      171  	;***       92 : 
+00000049                      172  	;***       93 : /* Start user code for adding. Do not edit comment generated here */
+00000049                      173  	;***       94 : /* End user code. Do not edit comment generated here */
 
 Section List
 Attr     Size                Name
 
-TEXTF                72 (00000048) .textf
+TEXTF                73 (00000049) .textf
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\r_cg_port.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl000\r_cg_port.asm.cmd 
 
 Command File Parameter
--cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_port.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_port.asm 
+-cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1223251604\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_port.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\r_cg_port.asm 
 

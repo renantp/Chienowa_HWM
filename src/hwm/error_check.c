@@ -42,7 +42,8 @@ void Voltage2Check_nostop(void) {
 			if (!(g_io_status.refined.CVCCVoltage
 					>= g_numberSetting.upperVoltage1)) {
 				resetAlarm();
-				g_alarm.refined.over_voltage_2 = 1;
+				//TODO: Bypass voltage 2
+//				g_alarm.refined.over_voltage_2 = 1;
 //				sendToRasPi_f(H_ALARM, OVER_VOLTAGE_2,
 //						g_io_status.refined.CVCCVoltage);
 			}
@@ -141,7 +142,7 @@ uint8_t OverCurrentCheck_waitReset(void) {
 					electrolyticOperationOFF();
 //					sendToRasPi_f(H_ALARM, OVER_CURRENT,
 //							g_io_status.refined.CVCCCurrent);
-					waitAlarmConfirm_stop(OVER_CURRENT, 10);
+					waitAlarmConfirm_stop(OVER_CURRENT, 0);
 					g_alarm.refined.over_curent = 0;
 					return 1;
 				}

@@ -3,7 +3,7 @@
 #@  Commmand :
 #@   -cpu=S3
 #@   -c
-#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1223251604/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
 #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src
 #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
 #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/r_cg_wdt.obj
 #@   ../src/r_cg_wdt.c
-#@  compiled at Thu Jun 30 14:37:28 2022
+#@  compiled at Tue Aug 23 10:01:03 2022
 
 	.PUBLIC _R_WDT_Create
 	.PUBLIC _R_WDT_Restart
@@ -39,16 +39,16 @@ _R_WDT_Create:
 	;***       14 : * following link:
 	;***       15 : * http://www.renesas.com/disclaimer
 	;***       16 : *
-	;***       17 : * Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+	;***       17 : * Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
 	;***       18 : ***********************************************************************************************************************/
 	;***       19 : 
 	;***       20 : /***********************************************************************************************************************
 	;***       21 : * File Name    : r_cg_wdt.c
-	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+	;***       22 : * Version      : CodeGenerator for RL78/G14 V2.05.06.02 [08 Nov 2021]
 	;***       23 : * Device(s)    : R5F104ML
 	;***       24 : * Tool-Chain   : CCRL
 	;***       25 : * Description  : This file implements device driver for WDT module.
-	;***       26 : * Creation Date: 19/04/2022
+	;***       26 : * Creation Date: 8/23/2022
 	;***       27 : ***********************************************************************************************************************/
 	;***       28 : 
 	;***       29 : /***********************************************************************************************************************

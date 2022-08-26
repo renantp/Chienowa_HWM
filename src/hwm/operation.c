@@ -14,7 +14,7 @@ void electrolyticOperationON(void) {
 	//Electrolytic operation ON
 	O_SUPPLY_WATER_PIN_SV1 = ON;
 	O_CVCC_ON_PIN = ON;
-	O_PUMP_SALT_PIN_SP1 = ON; //SP1
+	O_PUMP_SALT_PIN_SP1 = 0U; //SP1
 	g_machine_state.electrolyteOperation = 1;
 	g_TimeKeeper.electrolyteOff_h = 0;
 	g_TimeKeeper.neutralization =
@@ -45,7 +45,7 @@ void isElectrolyticOperationOFF_nostop(void) {
 	case 1:
 		g_TimeKeeper.neutralization = 0;
 		O_CVCC_ON_PIN = OFF;
-		O_PUMP_SALT_PIN_SP1 = OFF; //SP1
+		O_PUMP_SALT_PIN_SP1 = 1U; //SP1
 
 		(*state)++;
 		break;

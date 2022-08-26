@@ -14,16 +14,16 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 * File Name    : r_systeminit.c
-* Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+* Version      : CodeGenerator for RL78/G14 V2.05.06.02 [08 Nov 2021]
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements system initializing function.
-* Creation Date: 19/04/2022
+* Creation Date: 8/23/2022
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************

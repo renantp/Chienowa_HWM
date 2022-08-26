@@ -87,7 +87,7 @@ void HandWashingMode_nostop(void) {
 			break;
 		}
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_ALK_PUMP_PIN_P2 = ON;
+			O_ALK_PUMP_PIN_P2 = 0U;
 			handSensorLED(BLUE);
 			g_animation_queue++;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -106,14 +106,14 @@ void HandWashingMode_nostop(void) {
 		if (ns_delay_ms(tick,
 				g_timerSetting.t29_alkalineWaterSpoutingTime_s * 1000
 						- g_timerSetting.t32_overLapTime_ms)) {
-			O_ALK_PUMP_PIN_P2 = OFF;
+			O_ALK_PUMP_PIN_P2 = 1U;
 			O_SPOUT_ACID_PIN_SV3 = ON;
 			(*state)++;
 		}
 		break;
 	case 4:
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_ACID_PUMP_PIN_P1 = ON;
+			O_ACID_PUMP_PIN_P1 = 0U;
 			handSensorLED(RED);
 			g_animation_queue++;
 //			sendToRasPi_f(H_SET, NEXT_ANIMATION, 0x0);
@@ -131,7 +131,7 @@ void HandWashingMode_nostop(void) {
 		if (ns_delay_ms(tick,
 				g_timerSetting.t30_acidWaterSpoutingTime_s * 1000
 						- g_timerSetting.t32_overLapTime_ms)) {
-			O_ACID_PUMP_PIN_P1 = OFF;
+			O_ACID_PUMP_PIN_P1 = 1U;
 			handSensorLED(WHITE);
 			O_SPOUT_WATER_PIN_SV2 = ON;
 			g_animation_queue++;
@@ -185,7 +185,7 @@ void AcidWaterMode_nostop(void) {
 		break;
 	case 1:
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_ACID_PUMP_PIN_P1 = ON;
+			O_ACID_PUMP_PIN_P1 = 0U;
 			(*state)++;
 			g_Tick.tickAnimation = g_systemTime;
 		}
@@ -211,7 +211,7 @@ void AcidWaterMode_nostop(void) {
 		//TODO: Change turn OFF signal here
 		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t34_acidWaterDownTime_s * 1000)) {
 			setHandSensorOFF();
-			O_ACID_PUMP_PIN_P1 = OFF;
+			O_ACID_PUMP_PIN_P1 = 1U;
 			(*state)++;
 		}
 		break;
@@ -253,7 +253,7 @@ void AlkalineWaterMode_nostop(void) {
 		g_color = BLUE;
 		handSensorLED(g_color);
 		if (ns_delay_ms(tick, delayPump_ms)) {
-			O_ALK_PUMP_PIN_P2 = ON;
+			O_ALK_PUMP_PIN_P2 = 0U;
 			g_Tick.tickAnimation = g_systemTime;
 			(*state)++;
 		}
@@ -279,7 +279,7 @@ void AlkalineWaterMode_nostop(void) {
 		//TODO: Change turn OFF signal here
 		if (!isHandSensorON() || ns_delay_ms(tick, g_timerSetting.t35_alkalineWaterDownTime_s * 1000)) {
 			setHandSensorOFF();
-			O_ALK_PUMP_PIN_P2 = OFF;
+			O_ALK_PUMP_PIN_P2 = 1U;
 			(*state)++;
 		}
 		break;

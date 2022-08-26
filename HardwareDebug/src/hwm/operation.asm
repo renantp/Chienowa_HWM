@@ -3,7 +3,7 @@
 #@  Commmand :
 #@   -cpu=S3
 #@   -c
-#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1223251604/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
 #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm
 #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
 #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/operation.obj
 #@   ../src/hwm/operation.c
-#@  compiled at Thu Jun 30 14:37:32 2022
+#@  compiled at Tue Aug 23 10:01:07 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_Tick
@@ -50,9 +50,9 @@ _electrolyticOperationON:
 	;***       16 : 	O_CVCC_ON_PIN = ON;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 16
 	set1 0xFFF0E.2
-	;***       17 : 	O_PUMP_SALT_PIN_SP1 = ON; //SP1
+	;***       17 : 	O_PUMP_SALT_PIN_SP1 = 0U; //SP1
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 17
-	set1 0xFFF06.0
+	clr1 0xFFF06.0
 	;***       18 : 	g_machine_state.electrolyteOperation = 1;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 18
 	oneb !LOWW(_g_machine_state+0x00007)
@@ -115,7 +115,7 @@ _isElectrolyticOperationOFF_nostop:
 	;***       45 : 	case 1:
 	;***       46 : 		g_TimeKeeper.neutralization = 0;
 	;***       47 : 		O_CVCC_ON_PIN = OFF;
-	;***       48 : 		O_PUMP_SALT_PIN_SP1 = OFF; //SP1
+	;***       48 : 		O_PUMP_SALT_PIN_SP1 = 1U; //SP1
 	;***       49 : 
 	;***       50 : 		(*state)++;
 	;***       51 : 		break;
@@ -159,7 +159,7 @@ _isElectrolyticOperationOFF_nostop:
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 47
 	clr1 0xFFF0E.2
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 48
-	clr1 0xFFF06.0
+	set1 0xFFF06.0
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/operation.c", 50
 	inc !LOWW(_g_machine_state+0x00008)
 	ret

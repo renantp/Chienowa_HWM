@@ -19,16 +19,16 @@ void OutputIO(struct IO_Struct *io) {
 	O_OPTION_3_PIN_SV9 = io->Valve.SV9;
 
 	if (O_SPOUT_ACID_PIN_SV3 == OFF && O_DRAIN_ACID_PIN_SV5 == OFF) {
-		O_ACID_PUMP_PIN_P1 = OFF;
+		O_ACID_PUMP_PIN_P1 = 1U;
 	} else {
-		O_ACID_PUMP_PIN_P1 = io->Pump1;
+		O_ACID_PUMP_PIN_P1 = io->Pump1 == 1U? 0U : 1U;
 	}
 	if (O_DRAIN_ALK_PIN_SV6 == OFF && O_SPOUT_ALK_PIN_SV4 == OFF) {
-		O_ALK_PUMP_PIN_P2 = OFF;
+		O_ALK_PUMP_PIN_P2 = 1U;
 	} else {
-		O_ALK_PUMP_PIN_P2 = io->Pump2;
+		O_ALK_PUMP_PIN_P2 = io->Pump2 == 1U? 0U : 1U;
 	}
-	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
+	O_PUMP_SALT_PIN_SP1 = io->SaltPump == 1U? 0U : 1U;
 	O_CVCC_ON_PIN = io->CVCC_ON;
 }
 /********************** Check Input *******************/

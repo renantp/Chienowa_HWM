@@ -7,7 +7,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                        3  #@  Commmand :
 00000000                        4  #@   -cpu=S3
 00000000                        5  #@   -c
-00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+00000000                        6  #@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1223251604/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
 00000000                        7  #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm
 00000000                        8  #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
 00000000                        9  #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
@@ -19,7 +19,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       15  #@   -pass_source
 00000000                       16  #@   -o src/hwm/hwm_main.obj
 00000000                       17  #@   ../src/hwm/hwm_main.c
-00000000                       18  #@  compiled at Thu Jun 30 14:37:32 2022
+00000000                       18  #@  compiled at Tue Aug 23 10:01:07 2022
 00000000                       19  
 00000000                       20  	.EXTERN _rx_count
 00000000                       21  	.EXTERN _g_commnunication_flag
@@ -72,35 +72,35 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000000                       68  	.PUBLIC _alkalineWaterTankSkipCheck
 00000000                       69  	.PUBLIC _FilterReplacementCheck
 00000000                       70  	.PUBLIC _main_init_20211111
-00000000                       71  	.EXTERN _RaspberryCommunication_nostop
-00000000                       72  	.EXTERN _R_WDT_Restart
-00000000                       73  	.PUBLIC _userAuthHandler_nostop
-00000000                       74  	.EXTERN _isHandSensorON
-00000000                       75  	.EXTERN _HandWashingMode_nostop
-00000000                       76  	.EXTERN _WaterWashingMode_nostop
-00000000                       77  	.EXTERN _AcidWaterMode_nostop
-00000000                       78  	.EXTERN _AlkalineWaterMode_nostop
-00000000                       79  	.PUBLIC _ElectrolyzeWaterGeneration_nostop
-00000000                       80  	.EXTERN _isAcidTankAlmostEmpty
-00000000                       81  	.EXTERN _isAlkalineTankAlmostEmpty
-00000000                       82  	.PUBLIC _isSV1andSV2Off8h
-00000000                       83  	.PUBLIC _CallanCleaningMode_nostop
-00000000                       84  	.EXTERN _handSensorLEDBlink
-00000000                       85  	.EXTERN _handSensorLED
-00000000                       86  	.PUBLIC _DrainageMode_nostop
-00000000                       87  	.PUBLIC _NormalMode_nostop
-00000000                       88  	.PUBLIC _TestPowerOn_nostop_keepstate
-00000000                       89  	.PUBLIC _FlowRateAdjustmentMode_nostop_keepstate
-00000000                       90  	.PUBLIC _CurrentAdjustmentMode_nostop_keepstate
-00000000                       91  	.PUBLIC _ElectrolyteAdjustmentOperation
-00000000                       92  	.PUBLIC _TestOperation_nostop
-00000000                       93  	.PUBLIC _NeutralizationTreatment
-00000000                       94  	.PUBLIC _main_loop_20211111
-00000000                       95  	.PUBLIC _realTimeResponse
-00000000                       96  	.PUBLIC _UpdateMachineStatus
-00000000                       97  	.EXTERN _isAcidTankEmpty
-00000000                       98  	.EXTERN _isAlkalineTankEmpty_nonstop
-00000000                       99  	.EXTERN _HandSensorLEDEndBlink
+00000000                       71  	.PUBLIC _userAuthHandler_nostop
+00000000                       72  	.EXTERN _isHandSensorON
+00000000                       73  	.EXTERN _HandWashingMode_nostop
+00000000                       74  	.EXTERN _WaterWashingMode_nostop
+00000000                       75  	.EXTERN _AcidWaterMode_nostop
+00000000                       76  	.EXTERN _AlkalineWaterMode_nostop
+00000000                       77  	.PUBLIC _ElectrolyzeWaterGeneration_nostop
+00000000                       78  	.EXTERN _isAcidTankAlmostEmpty
+00000000                       79  	.EXTERN _isAlkalineTankAlmostEmpty
+00000000                       80  	.PUBLIC _isSV1andSV2Off8h
+00000000                       81  	.PUBLIC _CallanCleaningMode_nostop
+00000000                       82  	.EXTERN _handSensorLEDBlink
+00000000                       83  	.EXTERN _handSensorLED
+00000000                       84  	.PUBLIC _DrainageMode_nostop
+00000000                       85  	.PUBLIC _NormalMode_nostop
+00000000                       86  	.PUBLIC _TestPowerOn_nostop_keepstate
+00000000                       87  	.PUBLIC _FlowRateAdjustmentMode_nostop_keepstate
+00000000                       88  	.PUBLIC _CurrentAdjustmentMode_nostop_keepstate
+00000000                       89  	.PUBLIC _ElectrolyteAdjustmentOperation
+00000000                       90  	.PUBLIC _TestOperation_nostop
+00000000                       91  	.PUBLIC _NeutralizationTreatment
+00000000                       92  	.PUBLIC _main_loop_20211111
+00000000                       93  	.PUBLIC _realTimeResponse
+00000000                       94  	.PUBLIC _UpdateMachineStatus
+00000000                       95  	.EXTERN _isAcidTankEmpty
+00000000                       96  	.EXTERN _isAlkalineTankEmpty_nonstop
+00000000                       97  	.EXTERN _HandSensorLEDEndBlink
+00000000                       98  	.EXTERN _RaspberryCommunication_nostop
+00000000                       99  	.EXTERN _R_WDT_Restart
 00000000                      100  	.PUBLIC _manufactureReset
 00000000                      101  	.EXTERN _EE_SPI_Write
 00000000                      102  
@@ -1058,11 +1058,11 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000003E7                     1044  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 260
 000003E7 FE0000              1045  	call $!_UpdateMachineStatus
 000003EA                     1046  	;***      261 : 	//Skip
-000003EA                     1047  	;***      262 : 	while (DrainageAcidAndAlkalineTankStart_nostop()) {
-000003EA                     1048  	;***      263 : 		RaspberryCommunication_nostop();
-000003EA                     1049  	;***      264 : 		UpdateMachineStatus();
-000003EA                     1050  	;***      265 : 		R_WDT_Restart();
-000003EA                     1051  	;***      266 : 	}
+000003EA                     1047  	;***      262 : //	while (DrainageAcidAndAlkalineTankStart_nostop()) {
+000003EA                     1048  	;***      263 : //		RaspberryCommunication_nostop();
+000003EA                     1049  	;***      264 : //		UpdateMachineStatus();
+000003EA                     1050  	;***      265 : //		R_WDT_Restart();
+000003EA                     1051  	;***      266 : //	}
 000003EA                     1052  	;***      267 : 
 000003EA                     1053  	;***      268 : 	UpdateMachineStatus();
 000003EA                     1054  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 268
@@ -1071,18 +1071,18 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000003ED                     1057  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 269
 000003ED 360000              1058  	movw hl, #LOWW(_g_control_setting)
 000003F0 319500              1059  	bf [hl].1, $.BB@LABEL@11_3
-000003F3                     1060  .BB@LABEL@11_1:	; bb14
+000003F3                     1060  .BB@LABEL@11_1:	; bb6
 000003F3                     1061  	;***      270 : 		while (WaterSupplyStart_nostop()) {
 000003F3                     1062  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 270
 000003F3 FE0000              1063  	call $!_WaterSupplyStart_nostop
 000003F6 D1                  1064  	cmp0 a
 000003F7 DD00                1065  	bz $.BB@LABEL@11_3
-000003F9                     1066  .BB@LABEL@11_2:	; bb13
+000003F9                     1066  .BB@LABEL@11_2:	; bb
 000003F9                     1067  	;***      271 : 			realTimeResponse();
 000003F9                     1068  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 271
 000003F9 FE0000              1069  	call $!_realTimeResponse
 000003FC EF00                1070  	br $.BB@LABEL@11_1
-000003FE                     1071  .BB@LABEL@11_3:	; bb29
+000003FE                     1071  .BB@LABEL@11_3:	; bb21
 000003FE                     1072  	;***      272 : 		}
 000003FE                     1073  	;***      273 : 	}
 000003FE                     1074  	;***      274 : 	if (g_io_status.refined.FlowValue < g_numberSetting.lowerFlow) {
@@ -1094,7 +1094,7 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000003FE FE0000              1080  	call $!_ElectrolyticOperation_nostop
 00000401 D1                  1081  	cmp0 a
 00000402 DF00                1082  	bnz $.BB@LABEL@11_5
-00000404                     1083  .BB@LABEL@11_4:	; bb28
+00000404                     1083  .BB@LABEL@11_4:	; bb20
 00000404                     1084  	;***      279 : 		realTimeResponse();
 00000404                     1085  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 279
 00000404 FE0000              1086  	call $!_realTimeResponse
@@ -1846,9 +1846,9 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 000006EB                     1826  	;***      510 : 			O_DRAIN_ALK_PIN_SV6 =
 000006EB                     1827  	;***      511 : 			O_DRAIN_ALK_PIN_SV6 = O_OPTION_2_PIN_SV8 =
 000006EB                     1828  	;***      512 : 			O_OPTION_3_PIN_SV9 = OFF;
-000006EB                     1829  	;***      513 : 			O_PUMP_SALT_PIN_SP1 = OFF;
+000006EB                     1829  	;***      513 : 			O_PUMP_SALT_PIN_SP1 = 1U;
 000006EB                     1830  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 513
-000006EB 7183                1831  	clr1 [hl].0
+000006EB 7182                1831  	set1 [hl].0
 000006ED C6                  1832  	pop hl
 000006EE C7                  1833  	push hl
 000006EF                     1834  	;***      514 : 			(*state)++;
@@ -2734,414 +2734,437 @@ OFFSET   CODE                  NO  SOURCE STATEMENT
 00000A6E 60                  2714  	mov a, x
 00000A6F 71E9                2715  	mov1 a.6, CY
 00000A71 9F0000              2716  	mov !LOWW(_g_io_status+0x00001), a
-00000A74 51F8                2717  	mov a, #0xF8
-00000A76                     2718  	;***      737 : 
-00000A76                     2719  	;***      738 : 	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1;
-00000A76                     2720  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 738
-00000A76 5F0000              2721  	and a, !LOWW(_g_io_status+0x00003)
-00000A79 70                  2722  	mov x, a
-00000A7A 89                  2723  	mov a, [de]
-00000A7B 71AC                2724  	mov1 CY, a.2
-00000A7D 60                  2725  	mov a, x
-00000A7E                     2726  	;***      739 : 	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2;
-00000A7E                     2727  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 739
-00000A7E 7189                2728  	mov1 a.0, CY
-00000A80 70                  2729  	mov x, a
-00000A81 89                  2730  	mov a, [de]
-00000A82 719C                2731  	mov1 CY, a.1
-00000A84 60                  2732  	mov a, x
-00000A85                     2733  	;***      740 : 	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1;
-00000A85                     2734  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 740
-00000A85 7199                2735  	mov1 a.1, CY
-00000A87 70                  2736  	mov x, a
-00000A88 89                  2737  	mov a, [de]
-00000A89 718C                2738  	mov1 CY, a.0
-00000A8B 60                  2739  	mov a, x
-00000A8C 71A9                2740  	mov1 a.2, CY
-00000A8E 9F0000              2741  	mov !LOWW(_g_io_status+0x00003), a
-00000A91 C6                  2742  	pop hl
-00000A92 D7                  2743  	ret
-00000A93                     2744  _manufactureReset:
-00000A93                     2745  	.STACK _manufactureReset = 8
-00000A93                     2746  	;***      741 : }
-00000A93                     2747  	;***      742 : 
-00000A93                     2748  	;***      743 : void manufactureReset(void) {
-00000A93                     2749  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 743
-00000A93 F6                  2750  	clrw ax
-00000A94                     2751  	;***      744 : 	g_timerSetting.t1_initialWaterDrainageOperation_s = 60;
-00000A94                     2752  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 744
-00000A94 BF0000              2753  	movw !LOWW(_g_timerSetting+0x00002), ax
-00000A97                     2754  	;***      745 : 	g_timerSetting.t2_flowSensorStartTime_s = 10;
-00000A97                     2755  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 745
-00000A97 BF0000              2756  	movw !LOWW(_g_timerSetting+0x00006), ax
-00000A9A                     2757  	;***      746 : 	g_timerSetting.t3_flowSensorMonitorTime_s = 5;
-00000A9A                     2758  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 746
-00000A9A BF0000              2759  	movw !LOWW(_g_timerSetting+0x0000A), ax
-00000A9D                     2760  	;***      747 : 	g_timerSetting.t4_electrolysisOperationStart_s = 10;
-00000A9D                     2761  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 747
-00000A9D BF0000              2762  	movw !LOWW(_g_timerSetting+0x0000E), ax
-00000AA0                     2763  	;***      748 : 	g_timerSetting.t5_electrolysisStopDelay_s = 5;
-00000AA0                     2764  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 748
-00000AA0 BF0000              2765  	movw !LOWW(_g_timerSetting+0x00012), ax
-00000AA3                     2766  	;***      749 : 	g_timerSetting.t6_drainageOffTime_h = 168;
-00000AA3                     2767  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 749
-00000AA3 BF0000              2768  	movw !LOWW(_g_timerSetting+0x00016), ax
-00000AA6                     2769  	;***      750 : 	g_timerSetting.t7_powerOnPreparation_s = 600;
-00000AA6                     2770  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 750
-00000AA6 BF0000              2771  	movw !LOWW(_g_timerSetting+0x0001A), ax
-00000AA9                     2772  	;***      751 : 	g_timerSetting.t8_flowRateAdjustmentRelease_s = 600;
-00000AA9                     2773  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 751
-00000AA9 BF0000              2774  	movw !LOWW(_g_timerSetting+0x0001E), ax
-00000AAC                     2775  	;***      752 : 	g_timerSetting.t9_currentAdjustmentRelease_s = 600;
-00000AAC                     2776  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 752
-00000AAC BF0000              2777  	movw !LOWW(_g_timerSetting+0x00022), ax
-00000AAF                     2778  	;***      753 : 
-00000AAF                     2779  	;***      754 : 	g_timerSetting.t10_electrolysisCurrentAlarmSpecified_s = 60;
-00000AAF                     2780  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 754
-00000AAF BF0000              2781  	movw !LOWW(_g_timerSetting+0x00026), ax
-00000AB2                     2782  	;***      755 : 	g_timerSetting.t11_overVoltage1Time_s = 5;
-00000AB2                     2783  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 755
-00000AB2 BF0000              2784  	movw !LOWW(_g_timerSetting+0x0002A), ax
-00000AB5                     2785  	;***      756 : 	g_timerSetting.t12_overVoltage2Time_s = 10;
-00000AB5                     2786  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 756
-00000AB5 BF0000              2787  	movw !LOWW(_g_timerSetting+0x0002E), ax
-00000AB8                     2788  	;***      757 : 	g_timerSetting.t13_overVoltage3Time_s = 20;
-00000AB8                     2789  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 757
-00000AB8 BF0000              2790  	movw !LOWW(_g_timerSetting+0x00032), ax
-00000ABB                     2791  	;***      758 : 	g_timerSetting.t14_lowVoltageStartTime_s = 60;
-00000ABB                     2792  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 758
-00000ABB BF0000              2793  	movw !LOWW(_g_timerSetting+0x00036), ax
-00000ABE                     2794  	;***      759 : 	g_timerSetting.t15_lowVoltageDelayTime_s = 10;
-00000ABE                     2795  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 759
-00000ABE BF0000              2796  	movw !LOWW(_g_timerSetting+0x0003A), ax
-00000AC1                     2797  	;***      760 : 	g_timerSetting.t16_currentMonitoringStart_s = 5;
-00000AC1                     2798  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 760
-00000AC1 BF0000              2799  	movw !LOWW(_g_timerSetting+0x0003E), ax
-00000AC4                     2800  	;***      761 : 	g_timerSetting.t17_solenoidLeakageStartTime_s = 10;
-00000AC4                     2801  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 761
-00000AC4 BF0000              2802  	movw !LOWW(_g_timerSetting+0x00042), ax
-00000AC7                     2803  	;***      762 : 	g_timerSetting.t18_fullSaltWaterMonitoringStart_h = 3;
-00000AC7                     2804  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 762
-00000AC7 BF0000              2805  	movw !LOWW(_g_timerSetting+0x00046), ax
-00000ACA                     2806  	;***      763 : 	g_timerSetting.t19_waterFilterAlarm_h = 4000;
-00000ACA                     2807  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 763
-00000ACA BF0000              2808  	movw !LOWW(_g_timerSetting+0x0004A), ax
-00000ACD                     2809  	;***      764 : 
-00000ACD                     2810  	;***      765 : 	g_timerSetting.t20_waterFilterAlarmIgnore_h = 4800;
-00000ACD                     2811  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 765
-00000ACD BF0000              2812  	movw !LOWW(_g_timerSetting+0x0004E), ax
-00000AD0                     2813  	;***      766 : 	g_timerSetting.t21_onDelayEmptyLevel_s = 5;
-00000AD0                     2814  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 766
-00000AD0 BF0000              2815  	movw !LOWW(_g_timerSetting+0x00052), ax
-00000AD3                     2816  	;***      767 : 	g_timerSetting.t22_onDelayLowLevel_s = 5;
-00000AD3                     2817  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 767
-00000AD3 BF0000              2818  	movw !LOWW(_g_timerSetting+0x00056), ax
-00000AD6                     2819  	;***      768 : 	g_timerSetting.t23_onDelayHighLevel_s = 5;
-00000AD6                     2820  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 768
-00000AD6 BF0000              2821  	movw !LOWW(_g_timerSetting+0x0005A), ax
-00000AD9                     2822  	;***      769 : 
-00000AD9                     2823  	;***      770 : 	g_timerSetting.t24_offDelayEmptyLevel_s = 10;
-00000AD9                     2824  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 770
-00000AD9 BF0000              2825  	movw !LOWW(_g_timerSetting+0x0005E), ax
-00000ADC                     2826  	;***      771 : 	g_timerSetting.t25_saltLowLevelDelay_s = 5;
-00000ADC                     2827  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 771
-00000ADC BF0000              2828  	movw !LOWW(_g_timerSetting+0x00062), ax
-00000ADF                     2829  	;***      772 : 	g_timerSetting.t26_saltHighLevelDelay_s = 5;
-00000ADF                     2830  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 772
-00000ADF BF0000              2831  	movw !LOWW(_g_timerSetting+0x00066), ax
-00000AE2                     2832  	;***      773 : 	g_timerSetting.t27_neutralizationStartTime_h = 1;
-00000AE2                     2833  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 773
-00000AE2 BF0000              2834  	movw !LOWW(_g_timerSetting+0x0006A), ax
-00000AE5                     2835  	;***      774 : 	g_timerSetting.t28_neutralizationOpenTime_s = 300;
-00000AE5                     2836  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 774
-00000AE5 BF0000              2837  	movw !LOWW(_g_timerSetting+0x0006E), ax
-00000AE8                     2838  	;***      775 : 
-00000AE8                     2839  	;***      776 : 	g_timerSetting.t29_alkalineWaterSpoutingTime_s = 15;
-00000AE8                     2840  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 776
-00000AE8 BF0000              2841  	movw !LOWW(_g_timerSetting+0x00072), ax
-00000AEB                     2842  	;***      777 : 	g_timerSetting.t30_acidWaterSpoutingTime_s = 15;
-00000AEB                     2843  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 777
-00000AEB BF0000              2844  	movw !LOWW(_g_timerSetting+0x00076), ax
-00000AEE                     2845  	;***      778 : 	g_timerSetting.t31_washingWaterSpoutingTime_s = 15;
-00000AEE                     2846  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 778
-00000AEE BF0000              2847  	movw !LOWW(_g_timerSetting+0x0007A), ax
-00000AF1                     2848  	;***      779 : 	g_timerSetting.t32_overLapTime_ms = 0.5;
-00000AF1                     2849  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 779
-00000AF1 BF0000              2850  	movw !LOWW(_g_timerSetting+0x0007E), ax
-00000AF4 BF0000              2851  	movw !LOWW(_g_timerSetting+0x0007C), ax
-00000AF7                     2852  	;***      780 : 	g_timerSetting.t38_washDischargeDelay_s = 5;
-00000AF7                     2853  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 780
-00000AF7 BF0000              2854  	movw !LOWW(_g_timerSetting+0x00096), ax
-00000AFA                     2855  	;***      781 : 	g_timerSetting.t34_acidWaterDownTime_s = 300;
-00000AFA                     2856  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 781
-00000AFA BF0000              2857  	movw !LOWW(_g_timerSetting+0x00086), ax
-00000AFD                     2858  	;***      782 : 	g_timerSetting.t35_alkalineWaterDownTime_s = 300;
-00000AFD                     2859  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 782
-00000AFD BF0000              2860  	movw !LOWW(_g_timerSetting+0x0008A), ax
-00000B00                     2861  	;***      783 : 
-00000B00                     2862  	;***      784 : 	g_timerSetting.t39_cleaningIntervalTime_h = 8;
-00000B00                     2863  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 784
-00000B00 BF0000              2864  	movw !LOWW(_g_timerSetting+0x0009A), ax
-00000B03                     2865  	;***      785 : 	g_timerSetting.t40_washSpoutingTime_s = 30;
-00000B03                     2866  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 785
-00000B03 BF0000              2867  	movw !LOWW(_g_timerSetting+0x0009E), ax
-00000B06                     2868  	;***      786 : 
-00000B06                     2869  	;***      787 : 	g_numberSetting.upperVoltage1 = 0.0f;
-00000B06                     2870  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 787
-00000B06 BF0000              2871  	movw !LOWW(_g_numberSetting+0x00002), ax
-00000B09 BF0000              2872  	movw !LOWW(_g_numberSetting), ax
-00000B0C                     2873  	;***      788 : 	g_numberSetting.upperVoltage2 = 0.0f;
-00000B0C                     2874  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 788
-00000B0C BF0000              2875  	movw !LOWW(_g_numberSetting+0x00006), ax
-00000B0F BF0000              2876  	movw !LOWW(_g_numberSetting+0x00004), ax
-00000B12                     2877  	;***      789 : 	g_numberSetting.upperVoltage3 = 0.0f;
-00000B12                     2878  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 789
-00000B12 BF0000              2879  	movw !LOWW(_g_numberSetting+0x0000A), ax
-00000B15 BF0000              2880  	movw !LOWW(_g_numberSetting+0x00008), ax
-00000B18                     2881  	;***      790 : 	g_numberSetting.upperFlow = 0.0f;
-00000B18                     2882  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 790
-00000B18 BF0000              2883  	movw !LOWW(_g_numberSetting+0x0001A), ax
-00000B1B BF0000              2884  	movw !LOWW(_g_numberSetting+0x00018), ax
-00000B1E                     2885  	;***      791 : 	g_numberSetting.upperCurrent = 0.0f;
-00000B1E                     2886  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 791
-00000B1E BF0000              2887  	movw !LOWW(_g_numberSetting+0x00012), ax
-00000B21 BF0000              2888  	movw !LOWW(_g_numberSetting+0x00010), ax
-00000B24                     2889  	;***      792 : 	g_numberSetting.saltPumpVoltage = 1.0f;
-00000B24                     2890  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 792
-00000B24 BF0000              2891  	movw !LOWW(_g_numberSetting+0x00024), ax
-00000B27                     2892  	;***      793 : 	g_numberSetting.lowerVoltage = 0.0f;
-00000B27                     2893  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 793
-00000B27 BF0000              2894  	movw !LOWW(_g_numberSetting+0x0000E), ax
-00000B2A BF0000              2895  	movw !LOWW(_g_numberSetting+0x0000C), ax
-00000B2D                     2896  	;***      794 : 	g_numberSetting.lowerFlow = 0.0f;
-00000B2D                     2897  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 794
-00000B2D BF0000              2898  	movw !LOWW(_g_numberSetting+0x0001E), ax
-00000B30 BF0000              2899  	movw !LOWW(_g_numberSetting+0x0001C), ax
-00000B33                     2900  	;***      795 : 	g_numberSetting.lowerCurrent = 0.0f;
-00000B33                     2901  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 795
-00000B33 BF0000              2902  	movw !LOWW(_g_numberSetting+0x00016), ax
-00000B36 BF0000              2903  	movw !LOWW(_g_numberSetting+0x00014), ax
-00000B39                     2904  	;***      796 : 	g_numberSetting.cvccCurrent = 1.0;
-00000B39                     2905  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 796
-00000B39 BF0000              2906  	movw !LOWW(_g_numberSetting+0x00020), ax
-00000B3C 503C                2907  	mov x, #0x3C
-00000B3E                     2908  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 744
-00000B3E BF0000              2909  	movw !LOWW(_g_timerSetting), ax
-00000B41                     2910  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 754
-00000B41 BF0000              2911  	movw !LOWW(_g_timerSetting+0x00024), ax
-00000B44                     2912  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 758
-00000B44 BF0000              2913  	movw !LOWW(_g_timerSetting+0x00034), ax
-00000B47 500A                2914  	mov x, #0x0A
-00000B49                     2915  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 745
-00000B49 BF0000              2916  	movw !LOWW(_g_timerSetting+0x00004), ax
-00000B4C                     2917  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 747
-00000B4C BF0000              2918  	movw !LOWW(_g_timerSetting+0x0000C), ax
-00000B4F                     2919  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 756
-00000B4F BF0000              2920  	movw !LOWW(_g_timerSetting+0x0002C), ax
-00000B52                     2921  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 759
-00000B52 BF0000              2922  	movw !LOWW(_g_timerSetting+0x00038), ax
-00000B55                     2923  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 761
-00000B55 BF0000              2924  	movw !LOWW(_g_timerSetting+0x00040), ax
-00000B58                     2925  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 770
-00000B58 BF0000              2926  	movw !LOWW(_g_timerSetting+0x0005C), ax
-00000B5B 5005                2927  	mov x, #0x05
-00000B5D                     2928  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 746
-00000B5D BF0000              2929  	movw !LOWW(_g_timerSetting+0x00008), ax
-00000B60                     2930  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 748
-00000B60 BF0000              2931  	movw !LOWW(_g_timerSetting+0x00010), ax
-00000B63                     2932  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 755
-00000B63 BF0000              2933  	movw !LOWW(_g_timerSetting+0x00028), ax
-00000B66                     2934  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 760
-00000B66 BF0000              2935  	movw !LOWW(_g_timerSetting+0x0003C), ax
-00000B69                     2936  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 766
-00000B69 BF0000              2937  	movw !LOWW(_g_timerSetting+0x00050), ax
-00000B6C                     2938  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 767
-00000B6C BF0000              2939  	movw !LOWW(_g_timerSetting+0x00054), ax
-00000B6F                     2940  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 768
-00000B6F BF0000              2941  	movw !LOWW(_g_timerSetting+0x00058), ax
-00000B72                     2942  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 771
-00000B72 BF0000              2943  	movw !LOWW(_g_timerSetting+0x00060), ax
-00000B75                     2944  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 772
-00000B75 BF0000              2945  	movw !LOWW(_g_timerSetting+0x00064), ax
-00000B78                     2946  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 780
-00000B78 BF0000              2947  	movw !LOWW(_g_timerSetting+0x00094), ax
-00000B7B 50A8                2948  	mov x, #0xA8
-00000B7D                     2949  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 749
-00000B7D BF0000              2950  	movw !LOWW(_g_timerSetting+0x00014), ax
-00000B80 305802              2951  	movw ax, #0x0258
-00000B83                     2952  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 750
-00000B83 BF0000              2953  	movw !LOWW(_g_timerSetting+0x00018), ax
-00000B86                     2954  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 751
-00000B86 BF0000              2955  	movw !LOWW(_g_timerSetting+0x0001C), ax
-00000B89                     2956  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 752
-00000B89 BF0000              2957  	movw !LOWW(_g_timerSetting+0x00020), ax
-00000B8C 301400              2958  	movw ax, #0x0014
-00000B8F                     2959  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 757
-00000B8F BF0000              2960  	movw !LOWW(_g_timerSetting+0x00030), ax
-00000B92 5003                2961  	mov x, #0x03
-00000B94                     2962  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 762
-00000B94 BF0000              2963  	movw !LOWW(_g_timerSetting+0x00044), ax
-00000B97 30A00F              2964  	movw ax, #0x0FA0
-00000B9A                     2965  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 763
-00000B9A BF0000              2966  	movw !LOWW(_g_timerSetting+0x00048), ax
-00000B9D 30C012              2967  	movw ax, #0x12C0
-00000BA0                     2968  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 765
-00000BA0 BF0000              2969  	movw !LOWW(_g_timerSetting+0x0004C), ax
-00000BA3 E6                  2970  	onew ax
-00000BA4                     2971  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 773
-00000BA4 BF0000              2972  	movw !LOWW(_g_timerSetting+0x00068), ax
-00000BA7 302C01              2973  	movw ax, #0x012C
-00000BAA                     2974  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 774
-00000BAA BF0000              2975  	movw !LOWW(_g_timerSetting+0x0006C), ax
-00000BAD                     2976  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 781
-00000BAD BF0000              2977  	movw !LOWW(_g_timerSetting+0x00084), ax
-00000BB0                     2978  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 782
-00000BB0 BF0000              2979  	movw !LOWW(_g_timerSetting+0x00088), ax
-00000BB3 300F00              2980  	movw ax, #0x000F
-00000BB6                     2981  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 776
-00000BB6 BF0000              2982  	movw !LOWW(_g_timerSetting+0x00070), ax
-00000BB9                     2983  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 777
-00000BB9 BF0000              2984  	movw !LOWW(_g_timerSetting+0x00074), ax
-00000BBC                     2985  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 778
-00000BBC BF0000              2986  	movw !LOWW(_g_timerSetting+0x00078), ax
-00000BBF 5008                2987  	mov x, #0x08
-00000BC1                     2988  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 784
-00000BC1 BF0000              2989  	movw !LOWW(_g_timerSetting+0x00098), ax
-00000BC4 501E                2990  	mov x, #0x1E
-00000BC6                     2991  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 785
-00000BC6 BF0000              2992  	movw !LOWW(_g_timerSetting+0x0009C), ax
-00000BC9 30803F              2993  	movw ax, #0x3F80
-00000BCC                     2994  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 792
-00000BCC BF0000              2995  	movw !LOWW(_g_numberSetting+0x00026), ax
-00000BCF                     2996  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 796
-00000BCF BF0000              2997  	movw !LOWW(_g_numberSetting+0x00022), ax
-00000BD2 F6                  2998  	clrw ax
-00000BD3                     2999  	;***      797 : 	EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
-00000BD3                     3000  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 797
-00000BD3 C1                  3001  	push ax
-00000BD4 50A1                3002  	mov x, #0xA1
-00000BD6 C1                  3003  	push ax
-00000BD7 320008              3004  	movw bc, #0x0800
-00000BDA 300000              3005  	movw ax, #LOWW(_g_timerSetting)
-00000BDD FC000000            3006  	call !!_EE_SPI_Write
-00000BE1 1004                3007  	addw sp, #0x04
-00000BE3 F6                  3008  	clrw ax
-00000BE4                     3009  	;***      798 : 			timeSettingSize);
-00000BE4                     3010  	;***      799 : 	EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
-00000BE4                     3011  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 799
-00000BE4 C1                  3012  	push ax
-00000BE5 5029                3013  	mov x, #0x29
-00000BE7 C1                  3014  	push ax
-00000BE8 F7                  3015  	clrw bc
-00000BE9 300000              3016  	movw ax, #LOWW(_g_numberSetting)
-00000BEC FC000000            3017  	call !!_EE_SPI_Write
-00000BF0 1004                3018  	addw sp, #0x04
-00000BF2 D7                  3019  	ret
-00000BF3                     3020  	;***      800 : 			numberSettingSize);
-00000BF3                     3021  	;***      801 : 
-00000BF3                     3022  	;***      802 : }
-00000000                     3023  	.SECTION .bss,BSS
-00000000                     3024  	.ALIGN 2
-00000000                     3025  _g_TimeKeeper@3:
-00000000                     3026  	.DS (10)
-0000000A                     3027  	.ALIGN 2
-0000000A                     3028  _g_numberSetting:
-0000000A                     3029  	.DS (42)
-00000034                     3030  	.ALIGN 2
-00000034                     3031  _g_neutralization_time_s:
-00000034                     3032  	.DS (4)
-00000038                     3033  _g_color:
-00000038                     3034  	.DS (1)
-00000039                     3035  _g_pre_color:
-00000039                     3036  	.DS (1)
-0000003A                     3037  	.ALIGN 2
-0000003A                     3038  _g_flow_value:
-0000003A                     3039  	.DS (4)
-0000003E                     3040  _g_machine_state:
-0000003E                     3041  	.DS (17)
-0000004F 00                  3042  	.ALIGN 2
-00000050                     3043  _g_io_status:
-00000050                     3044  	.DS (16)
-00000060                     3045  	.ALIGN 2
-00000060                     3046  _g_mean_io_status:
-00000060                     3047  	.DS (16)
-00000070                     3048  	.ALIGN 2
-00000070                     3049  _g_res_io_status:
-00000070                     3050  	.DS (16)
-00000080                     3051  	.ALIGN 2
-00000080                     3052  __settingTime:
-00000080                     3053  	.DS (162)
-00000122                     3054  	.ALIGN 2
-00000122                     3055  __settingNumber:
-00000122                     3056  	.DS (42)
-0000014C                     3057  _g_machine_mode:
-0000014C                     3058  	.DS (1)
-0000014D                     3059  _g_machine_test_mode:
-0000014D                     3060  	.DS (1)
-0000014E                     3061  	.ALIGN 2
-0000014E                     3062  _btod:
-0000014E                     3063  	.DS (4)
-00000152                     3064  	.ALIGN 2
-00000152                     3065  _g_Tick:
-00000152                     3066  	.DS (196)
-00000216                     3067  _water_solfner_buf:
-00000216                     3068  	.DS (7)
-00000000                     3069  	.SECTION .data,DATA
-00000000                     3070  	.ALIGN 2
-00000000                     3071  _g_timerSetting:
-00000000 E8030000            3072  	.DB4 0x000003E8
-00000004 0F000000            3073  	.DB4 0x0000000F
-00000008 00000000            3074  	.DS (4)
-0000000C 00000000            3075  	.DS (4)
-00000010 00000000            3076  	.DS (4)
-00000014 00000000            3077  	.DS (4)
-00000018 00000000            3078  	.DS (4)
-0000001C 00000000            3079  	.DS (4)
-00000020 00000000            3080  	.DS (4)
-00000024 00000000            3081  	.DS (4)
-00000028 00000000            3082  	.DS (4)
-0000002C 00000000            3083  	.DS (4)
-00000030 00000000            3084  	.DS (4)
-00000034 00000000            3085  	.DS (4)
-00000038 00000000            3086  	.DS (4)
-0000003C 00000000            3087  	.DS (4)
-00000040 00000000            3088  	.DS (4)
-00000044 00000000            3089  	.DS (4)
-00000048 00000000            3090  	.DS (4)
-0000004C 00000000            3091  	.DS (4)
-00000050 00000000            3092  	.DS (4)
-00000054 00000000            3093  	.DS (4)
-00000058 00000000            3094  	.DS (4)
-0000005C 00000000            3095  	.DS (4)
-00000060 00000000            3096  	.DS (4)
-00000064 00000000            3097  	.DS (4)
-00000068 00000000            3098  	.DS (4)
-0000006C 00000000            3099  	.DS (4)
-00000070 00000000            3100  	.DS (4)
-00000074 00000000            3101  	.DS (4)
-00000078 00000000            3102  	.DS (4)
-0000007C 00000000            3103  	.DS (4)
-00000080 00000000            3104  	.DS (4)
-00000084 00000000            3105  	.DS (4)
-00000088 00000000            3106  	.DS (4)
-0000008C 00000000            3107  	.DS (4)
-00000090 00000000            3108  	.DS (4)
-00000094 00000000            3109  	.DS (4)
-00000098 00000000            3110  	.DS (4)
-0000009C 00000000            3111  	.DS (4)
-000000A0 00                  3112  	.DS (1)
-000000A1 00                  3113  	.DS (1)
+00000A74                     2717  	;***      737 : 
+00000A74                     2718  	;***      738 : 	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1 == 1U? 0U : 1U;
+00000A74                     2719  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 738
+00000A74 89                  2720  	mov a, [de]
+00000A75 F0                  2721  	clrb x
+00000A76 312300              2722  	bt a.2, $.BB@LABEL@26_22
+00000A79                     2723  .BB@LABEL@26_21:	; bb264
+00000A79 E0                  2724  	oneb x
+00000A7A                     2725  .BB@LABEL@26_22:	; bb266
+00000A7A 51F8                2726  	mov a, #0xF8
+00000A7C 5F0000              2727  	and a, !LOWW(_g_io_status+0x00003)
+00000A7F 72                  2728  	mov c, a
+00000A80                     2729  	;***      739 : 	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2 == 1U? 0U : 1U;
+00000A80                     2730  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 739
+00000A80 8D06                2731  	mov a, 0xFFF06
+00000A82 F3                  2732  	clrb b
+00000A83 311300              2733  	bt a.1, $.BB@LABEL@26_24
+00000A86                     2734  .BB@LABEL@26_23:	; bb281
+00000A86 5302                2735  	mov b, #0x02
+00000A88                     2736  .BB@LABEL@26_24:	; bb283
+00000A88 62                  2737  	mov a, c
+00000A89 6168                2738  	or a, x
+00000A8B 72                  2739  	mov c, a
+00000A8C                     2740  	;***      740 : 	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1 == 1U? 0U : 1U;
+00000A8C                     2741  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 740
+00000A8C 8D06                2742  	mov a, 0xFFF06
+00000A8E F0                  2743  	clrb x
+00000A8F 310300              2744  	bt a.0, $.BB@LABEL@26_26
+00000A92                     2745  .BB@LABEL@26_25:	; bb299
+00000A92 5004                2746  	mov x, #0x04
+00000A94                     2747  .BB@LABEL@26_26:	; bb301
+00000A94 62                  2748  	mov a, c
+00000A95 616B                2749  	or a, b
+00000A97 6168                2750  	or a, x
+00000A99 9F0000              2751  	mov !LOWW(_g_io_status+0x00003), a
+00000A9C C6                  2752  	pop hl
+00000A9D                     2753  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 741
+00000A9D D7                  2754  	ret
+00000A9E                     2755  _manufactureReset:
+00000A9E                     2756  	.STACK _manufactureReset = 8
+00000A9E                     2757  	;***      741 : }
+00000A9E                     2758  	;***      742 : 
+00000A9E                     2759  	;***      743 : void manufactureReset(void) {
+00000A9E                     2760  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 743
+00000A9E F6                  2761  	clrw ax
+00000A9F                     2762  	;***      744 : 	g_timerSetting.t1_initialWaterDrainageOperation_s = 60;
+00000A9F                     2763  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 744
+00000A9F BF0000              2764  	movw !LOWW(_g_timerSetting+0x00002), ax
+00000AA2                     2765  	;***      745 : 	g_timerSetting.t2_flowSensorStartTime_s = 10;
+00000AA2                     2766  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 745
+00000AA2 BF0000              2767  	movw !LOWW(_g_timerSetting+0x00006), ax
+00000AA5                     2768  	;***      746 : 	g_timerSetting.t3_flowSensorMonitorTime_s = 5;
+00000AA5                     2769  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 746
+00000AA5 BF0000              2770  	movw !LOWW(_g_timerSetting+0x0000A), ax
+00000AA8                     2771  	;***      747 : 	g_timerSetting.t4_electrolysisOperationStart_s = 10;
+00000AA8                     2772  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 747
+00000AA8 BF0000              2773  	movw !LOWW(_g_timerSetting+0x0000E), ax
+00000AAB                     2774  	;***      748 : 	g_timerSetting.t5_electrolysisStopDelay_s = 5;
+00000AAB                     2775  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 748
+00000AAB BF0000              2776  	movw !LOWW(_g_timerSetting+0x00012), ax
+00000AAE                     2777  	;***      749 : 	g_timerSetting.t6_drainageOffTime_h = 168;
+00000AAE                     2778  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 749
+00000AAE BF0000              2779  	movw !LOWW(_g_timerSetting+0x00016), ax
+00000AB1                     2780  	;***      750 : 	g_timerSetting.t7_powerOnPreparation_s = 600;
+00000AB1                     2781  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 750
+00000AB1 BF0000              2782  	movw !LOWW(_g_timerSetting+0x0001A), ax
+00000AB4                     2783  	;***      751 : 	g_timerSetting.t8_flowRateAdjustmentRelease_s = 600;
+00000AB4                     2784  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 751
+00000AB4 BF0000              2785  	movw !LOWW(_g_timerSetting+0x0001E), ax
+00000AB7                     2786  	;***      752 : 	g_timerSetting.t9_currentAdjustmentRelease_s = 600;
+00000AB7                     2787  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 752
+00000AB7 BF0000              2788  	movw !LOWW(_g_timerSetting+0x00022), ax
+00000ABA                     2789  	;***      753 : 
+00000ABA                     2790  	;***      754 : 	g_timerSetting.t10_electrolysisCurrentAlarmSpecified_s = 60;
+00000ABA                     2791  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 754
+00000ABA BF0000              2792  	movw !LOWW(_g_timerSetting+0x00026), ax
+00000ABD                     2793  	;***      755 : 	g_timerSetting.t11_overVoltage1Time_s = 5;
+00000ABD                     2794  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 755
+00000ABD BF0000              2795  	movw !LOWW(_g_timerSetting+0x0002A), ax
+00000AC0                     2796  	;***      756 : 	g_timerSetting.t12_overVoltage2Time_s = 10;
+00000AC0                     2797  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 756
+00000AC0 BF0000              2798  	movw !LOWW(_g_timerSetting+0x0002E), ax
+00000AC3                     2799  	;***      757 : 	g_timerSetting.t13_overVoltage3Time_s = 20;
+00000AC3                     2800  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 757
+00000AC3 BF0000              2801  	movw !LOWW(_g_timerSetting+0x00032), ax
+00000AC6                     2802  	;***      758 : 	g_timerSetting.t14_lowVoltageStartTime_s = 60;
+00000AC6                     2803  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 758
+00000AC6 BF0000              2804  	movw !LOWW(_g_timerSetting+0x00036), ax
+00000AC9                     2805  	;***      759 : 	g_timerSetting.t15_lowVoltageDelayTime_s = 10;
+00000AC9                     2806  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 759
+00000AC9 BF0000              2807  	movw !LOWW(_g_timerSetting+0x0003A), ax
+00000ACC                     2808  	;***      760 : 	g_timerSetting.t16_currentMonitoringStart_s = 5;
+00000ACC                     2809  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 760
+00000ACC BF0000              2810  	movw !LOWW(_g_timerSetting+0x0003E), ax
+00000ACF                     2811  	;***      761 : 	g_timerSetting.t17_solenoidLeakageStartTime_s = 10;
+00000ACF                     2812  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 761
+00000ACF BF0000              2813  	movw !LOWW(_g_timerSetting+0x00042), ax
+00000AD2                     2814  	;***      762 : 	g_timerSetting.t18_fullSaltWaterMonitoringStart_h = 3;
+00000AD2                     2815  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 762
+00000AD2 BF0000              2816  	movw !LOWW(_g_timerSetting+0x00046), ax
+00000AD5                     2817  	;***      763 : 	g_timerSetting.t19_waterFilterAlarm_h = 4000;
+00000AD5                     2818  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 763
+00000AD5 BF0000              2819  	movw !LOWW(_g_timerSetting+0x0004A), ax
+00000AD8                     2820  	;***      764 : 
+00000AD8                     2821  	;***      765 : 	g_timerSetting.t20_waterFilterAlarmIgnore_h = 4800;
+00000AD8                     2822  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 765
+00000AD8 BF0000              2823  	movw !LOWW(_g_timerSetting+0x0004E), ax
+00000ADB                     2824  	;***      766 : 	g_timerSetting.t21_onDelayEmptyLevel_s = 5;
+00000ADB                     2825  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 766
+00000ADB BF0000              2826  	movw !LOWW(_g_timerSetting+0x00052), ax
+00000ADE                     2827  	;***      767 : 	g_timerSetting.t22_onDelayLowLevel_s = 5;
+00000ADE                     2828  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 767
+00000ADE BF0000              2829  	movw !LOWW(_g_timerSetting+0x00056), ax
+00000AE1                     2830  	;***      768 : 	g_timerSetting.t23_onDelayHighLevel_s = 5;
+00000AE1                     2831  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 768
+00000AE1 BF0000              2832  	movw !LOWW(_g_timerSetting+0x0005A), ax
+00000AE4                     2833  	;***      769 : 
+00000AE4                     2834  	;***      770 : 	g_timerSetting.t24_offDelayEmptyLevel_s = 10;
+00000AE4                     2835  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 770
+00000AE4 BF0000              2836  	movw !LOWW(_g_timerSetting+0x0005E), ax
+00000AE7                     2837  	;***      771 : 	g_timerSetting.t25_saltLowLevelDelay_s = 5;
+00000AE7                     2838  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 771
+00000AE7 BF0000              2839  	movw !LOWW(_g_timerSetting+0x00062), ax
+00000AEA                     2840  	;***      772 : 	g_timerSetting.t26_saltHighLevelDelay_s = 5;
+00000AEA                     2841  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 772
+00000AEA BF0000              2842  	movw !LOWW(_g_timerSetting+0x00066), ax
+00000AED                     2843  	;***      773 : 	g_timerSetting.t27_neutralizationStartTime_h = 1;
+00000AED                     2844  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 773
+00000AED BF0000              2845  	movw !LOWW(_g_timerSetting+0x0006A), ax
+00000AF0                     2846  	;***      774 : 	g_timerSetting.t28_neutralizationOpenTime_s = 300;
+00000AF0                     2847  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 774
+00000AF0 BF0000              2848  	movw !LOWW(_g_timerSetting+0x0006E), ax
+00000AF3                     2849  	;***      775 : 
+00000AF3                     2850  	;***      776 : 	g_timerSetting.t29_alkalineWaterSpoutingTime_s = 15;
+00000AF3                     2851  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 776
+00000AF3 BF0000              2852  	movw !LOWW(_g_timerSetting+0x00072), ax
+00000AF6                     2853  	;***      777 : 	g_timerSetting.t30_acidWaterSpoutingTime_s = 15;
+00000AF6                     2854  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 777
+00000AF6 BF0000              2855  	movw !LOWW(_g_timerSetting+0x00076), ax
+00000AF9                     2856  	;***      778 : 	g_timerSetting.t31_washingWaterSpoutingTime_s = 15;
+00000AF9                     2857  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 778
+00000AF9 BF0000              2858  	movw !LOWW(_g_timerSetting+0x0007A), ax
+00000AFC                     2859  	;***      779 : 	g_timerSetting.t32_overLapTime_ms = 0.5;
+00000AFC                     2860  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 779
+00000AFC BF0000              2861  	movw !LOWW(_g_timerSetting+0x0007E), ax
+00000AFF BF0000              2862  	movw !LOWW(_g_timerSetting+0x0007C), ax
+00000B02                     2863  	;***      780 : 	g_timerSetting.t38_washDischargeDelay_s = 5;
+00000B02                     2864  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 780
+00000B02 BF0000              2865  	movw !LOWW(_g_timerSetting+0x00096), ax
+00000B05                     2866  	;***      781 : 	g_timerSetting.t34_acidWaterDownTime_s = 300;
+00000B05                     2867  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 781
+00000B05 BF0000              2868  	movw !LOWW(_g_timerSetting+0x00086), ax
+00000B08                     2869  	;***      782 : 	g_timerSetting.t35_alkalineWaterDownTime_s = 300;
+00000B08                     2870  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 782
+00000B08 BF0000              2871  	movw !LOWW(_g_timerSetting+0x0008A), ax
+00000B0B                     2872  	;***      783 : 
+00000B0B                     2873  	;***      784 : 	g_timerSetting.t39_cleaningIntervalTime_h = 8;
+00000B0B                     2874  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 784
+00000B0B BF0000              2875  	movw !LOWW(_g_timerSetting+0x0009A), ax
+00000B0E                     2876  	;***      785 : 	g_timerSetting.t40_washSpoutingTime_s = 30;
+00000B0E                     2877  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 785
+00000B0E BF0000              2878  	movw !LOWW(_g_timerSetting+0x0009E), ax
+00000B11                     2879  	;***      786 : 
+00000B11                     2880  	;***      787 : 	g_numberSetting.upperVoltage1 = 4.0f;
+00000B11                     2881  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 787
+00000B11 BF0000              2882  	movw !LOWW(_g_numberSetting), ax
+00000B14                     2883  	;***      788 : 	g_numberSetting.upperVoltage2 = 3.0f;
+00000B14                     2884  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 788
+00000B14 BF0000              2885  	movw !LOWW(_g_numberSetting+0x00004), ax
+00000B17                     2886  	;***      789 : 	g_numberSetting.upperVoltage3 = 2.5f;
+00000B17                     2887  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 789
+00000B17 BF0000              2888  	movw !LOWW(_g_numberSetting+0x00008), ax
+00000B1A                     2889  	;***      790 : 	g_numberSetting.upperFlow = 50.0f;
+00000B1A                     2890  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 790
+00000B1A BF0000              2891  	movw !LOWW(_g_numberSetting+0x00018), ax
+00000B1D                     2892  	;***      791 : 	g_numberSetting.upperCurrent = 3.0f;
+00000B1D                     2893  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 791
+00000B1D BF0000              2894  	movw !LOWW(_g_numberSetting+0x00010), ax
+00000B20                     2895  	;***      792 : 	g_numberSetting.saltPumpVoltage = 1.0f;
+00000B20                     2896  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 792
+00000B20 BF0000              2897  	movw !LOWW(_g_numberSetting+0x00024), ax
+00000B23                     2898  	;***      793 : 	g_numberSetting.lowerVoltage = 1.0f;
+00000B23                     2899  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 793
+00000B23 BF0000              2900  	movw !LOWW(_g_numberSetting+0x0000C), ax
+00000B26                     2901  	;***      794 : 	g_numberSetting.lowerFlow = 2.0f;
+00000B26                     2902  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 794
+00000B26 BF0000              2903  	movw !LOWW(_g_numberSetting+0x0001C), ax
+00000B29                     2904  	;***      795 : 	g_numberSetting.lowerCurrent = 0.0f;
+00000B29                     2905  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 795
+00000B29 BF0000              2906  	movw !LOWW(_g_numberSetting+0x00016), ax
+00000B2C BF0000              2907  	movw !LOWW(_g_numberSetting+0x00014), ax
+00000B2F                     2908  	;***      796 : 	g_numberSetting.cvccCurrent = 1.0;
+00000B2F                     2909  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 796
+00000B2F BF0000              2910  	movw !LOWW(_g_numberSetting+0x00020), ax
+00000B32 503C                2911  	mov x, #0x3C
+00000B34                     2912  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 744
+00000B34 BF0000              2913  	movw !LOWW(_g_timerSetting), ax
+00000B37                     2914  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 754
+00000B37 BF0000              2915  	movw !LOWW(_g_timerSetting+0x00024), ax
+00000B3A                     2916  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 758
+00000B3A BF0000              2917  	movw !LOWW(_g_timerSetting+0x00034), ax
+00000B3D 500A                2918  	mov x, #0x0A
+00000B3F                     2919  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 745
+00000B3F BF0000              2920  	movw !LOWW(_g_timerSetting+0x00004), ax
+00000B42                     2921  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 747
+00000B42 BF0000              2922  	movw !LOWW(_g_timerSetting+0x0000C), ax
+00000B45                     2923  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 756
+00000B45 BF0000              2924  	movw !LOWW(_g_timerSetting+0x0002C), ax
+00000B48                     2925  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 759
+00000B48 BF0000              2926  	movw !LOWW(_g_timerSetting+0x00038), ax
+00000B4B                     2927  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 761
+00000B4B BF0000              2928  	movw !LOWW(_g_timerSetting+0x00040), ax
+00000B4E                     2929  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 770
+00000B4E BF0000              2930  	movw !LOWW(_g_timerSetting+0x0005C), ax
+00000B51 5005                2931  	mov x, #0x05
+00000B53                     2932  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 746
+00000B53 BF0000              2933  	movw !LOWW(_g_timerSetting+0x00008), ax
+00000B56                     2934  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 748
+00000B56 BF0000              2935  	movw !LOWW(_g_timerSetting+0x00010), ax
+00000B59                     2936  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 755
+00000B59 BF0000              2937  	movw !LOWW(_g_timerSetting+0x00028), ax
+00000B5C                     2938  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 760
+00000B5C BF0000              2939  	movw !LOWW(_g_timerSetting+0x0003C), ax
+00000B5F                     2940  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 766
+00000B5F BF0000              2941  	movw !LOWW(_g_timerSetting+0x00050), ax
+00000B62                     2942  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 767
+00000B62 BF0000              2943  	movw !LOWW(_g_timerSetting+0x00054), ax
+00000B65                     2944  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 768
+00000B65 BF0000              2945  	movw !LOWW(_g_timerSetting+0x00058), ax
+00000B68                     2946  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 771
+00000B68 BF0000              2947  	movw !LOWW(_g_timerSetting+0x00060), ax
+00000B6B                     2948  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 772
+00000B6B BF0000              2949  	movw !LOWW(_g_timerSetting+0x00064), ax
+00000B6E                     2950  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 780
+00000B6E BF0000              2951  	movw !LOWW(_g_timerSetting+0x00094), ax
+00000B71 50A8                2952  	mov x, #0xA8
+00000B73                     2953  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 749
+00000B73 BF0000              2954  	movw !LOWW(_g_timerSetting+0x00014), ax
+00000B76 305802              2955  	movw ax, #0x0258
+00000B79                     2956  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 750
+00000B79 BF0000              2957  	movw !LOWW(_g_timerSetting+0x00018), ax
+00000B7C                     2958  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 751
+00000B7C BF0000              2959  	movw !LOWW(_g_timerSetting+0x0001C), ax
+00000B7F                     2960  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 752
+00000B7F BF0000              2961  	movw !LOWW(_g_timerSetting+0x00020), ax
+00000B82 301400              2962  	movw ax, #0x0014
+00000B85                     2963  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 757
+00000B85 BF0000              2964  	movw !LOWW(_g_timerSetting+0x00030), ax
+00000B88 5003                2965  	mov x, #0x03
+00000B8A                     2966  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 762
+00000B8A BF0000              2967  	movw !LOWW(_g_timerSetting+0x00044), ax
+00000B8D 30A00F              2968  	movw ax, #0x0FA0
+00000B90                     2969  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 763
+00000B90 BF0000              2970  	movw !LOWW(_g_timerSetting+0x00048), ax
+00000B93 30C012              2971  	movw ax, #0x12C0
+00000B96                     2972  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 765
+00000B96 BF0000              2973  	movw !LOWW(_g_timerSetting+0x0004C), ax
+00000B99 E6                  2974  	onew ax
+00000B9A                     2975  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 773
+00000B9A BF0000              2976  	movw !LOWW(_g_timerSetting+0x00068), ax
+00000B9D 302C01              2977  	movw ax, #0x012C
+00000BA0                     2978  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 774
+00000BA0 BF0000              2979  	movw !LOWW(_g_timerSetting+0x0006C), ax
+00000BA3                     2980  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 781
+00000BA3 BF0000              2981  	movw !LOWW(_g_timerSetting+0x00084), ax
+00000BA6                     2982  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 782
+00000BA6 BF0000              2983  	movw !LOWW(_g_timerSetting+0x00088), ax
+00000BA9 300F00              2984  	movw ax, #0x000F
+00000BAC                     2985  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 776
+00000BAC BF0000              2986  	movw !LOWW(_g_timerSetting+0x00070), ax
+00000BAF                     2987  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 777
+00000BAF BF0000              2988  	movw !LOWW(_g_timerSetting+0x00074), ax
+00000BB2                     2989  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 778
+00000BB2 BF0000              2990  	movw !LOWW(_g_timerSetting+0x00078), ax
+00000BB5 5008                2991  	mov x, #0x08
+00000BB7                     2992  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 784
+00000BB7 BF0000              2993  	movw !LOWW(_g_timerSetting+0x00098), ax
+00000BBA 501E                2994  	mov x, #0x1E
+00000BBC                     2995  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 785
+00000BBC BF0000              2996  	movw !LOWW(_g_timerSetting+0x0009C), ax
+00000BBF 308040              2997  	movw ax, #0x4080
+00000BC2                     2998  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 787
+00000BC2 BF0000              2999  	movw !LOWW(_g_numberSetting+0x00002), ax
+00000BC5 5040                3000  	mov x, #0x40
+00000BC7                     3001  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 788
+00000BC7 BF0000              3002  	movw !LOWW(_g_numberSetting+0x00006), ax
+00000BCA                     3003  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 791
+00000BCA BF0000              3004  	movw !LOWW(_g_numberSetting+0x00012), ax
+00000BCD 5020                3005  	mov x, #0x20
+00000BCF                     3006  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 789
+00000BCF BF0000              3007  	movw !LOWW(_g_numberSetting+0x0000A), ax
+00000BD2 304842              3008  	movw ax, #0x4248
+00000BD5                     3009  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 790
+00000BD5 BF0000              3010  	movw !LOWW(_g_numberSetting+0x0001A), ax
+00000BD8 30803F              3011  	movw ax, #0x3F80
+00000BDB                     3012  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 792
+00000BDB BF0000              3013  	movw !LOWW(_g_numberSetting+0x00026), ax
+00000BDE                     3014  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 793
+00000BDE BF0000              3015  	movw !LOWW(_g_numberSetting+0x0000E), ax
+00000BE1                     3016  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 796
+00000BE1 BF0000              3017  	movw !LOWW(_g_numberSetting+0x00022), ax
+00000BE4 300040              3018  	movw ax, #0x4000
+00000BE7                     3019  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 794
+00000BE7 BF0000              3020  	movw !LOWW(_g_numberSetting+0x0001E), ax
+00000BEA F1                  3021  	clrb a
+00000BEB                     3022  	;***      797 : 	EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
+00000BEB                     3023  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 797
+00000BEB C1                  3024  	push ax
+00000BEC 50A1                3025  	mov x, #0xA1
+00000BEE C1                  3026  	push ax
+00000BEF 320008              3027  	movw bc, #0x0800
+00000BF2 300000              3028  	movw ax, #LOWW(_g_timerSetting)
+00000BF5 FC000000            3029  	call !!_EE_SPI_Write
+00000BF9 1004                3030  	addw sp, #0x04
+00000BFB F6                  3031  	clrw ax
+00000BFC                     3032  	;***      798 : 			timeSettingSize);
+00000BFC                     3033  	;***      799 : 	EE_SPI_Write((uint8_t*) &g_numberSetting, NUMBER_SETTING_ADDRESS,
+00000BFC                     3034  	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/hwm_main.c", 799
+00000BFC C1                  3035  	push ax
+00000BFD 5029                3036  	mov x, #0x29
+00000BFF C1                  3037  	push ax
+00000C00 F7                  3038  	clrw bc
+00000C01 300000              3039  	movw ax, #LOWW(_g_numberSetting)
+00000C04 FC000000            3040  	call !!_EE_SPI_Write
+00000C08 1004                3041  	addw sp, #0x04
+00000C0A D7                  3042  	ret
+00000C0B                     3043  	;***      800 : 			numberSettingSize);
+00000C0B                     3044  	;***      801 : 
+00000C0B                     3045  	;***      802 : }
+00000000                     3046  	.SECTION .bss,BSS
+00000000                     3047  	.ALIGN 2
+00000000                     3048  _g_TimeKeeper@3:
+00000000                     3049  	.DS (10)
+0000000A                     3050  	.ALIGN 2
+0000000A                     3051  _g_numberSetting:
+0000000A                     3052  	.DS (42)
+00000034                     3053  	.ALIGN 2
+00000034                     3054  _g_neutralization_time_s:
+00000034                     3055  	.DS (4)
+00000038                     3056  _g_color:
+00000038                     3057  	.DS (1)
+00000039                     3058  _g_pre_color:
+00000039                     3059  	.DS (1)
+0000003A                     3060  	.ALIGN 2
+0000003A                     3061  _g_flow_value:
+0000003A                     3062  	.DS (4)
+0000003E                     3063  _g_machine_state:
+0000003E                     3064  	.DS (17)
+0000004F 00                  3065  	.ALIGN 2
+00000050                     3066  _g_io_status:
+00000050                     3067  	.DS (16)
+00000060                     3068  	.ALIGN 2
+00000060                     3069  _g_mean_io_status:
+00000060                     3070  	.DS (16)
+00000070                     3071  	.ALIGN 2
+00000070                     3072  _g_res_io_status:
+00000070                     3073  	.DS (16)
+00000080                     3074  	.ALIGN 2
+00000080                     3075  __settingTime:
+00000080                     3076  	.DS (162)
+00000122                     3077  	.ALIGN 2
+00000122                     3078  __settingNumber:
+00000122                     3079  	.DS (42)
+0000014C                     3080  _g_machine_mode:
+0000014C                     3081  	.DS (1)
+0000014D                     3082  _g_machine_test_mode:
+0000014D                     3083  	.DS (1)
+0000014E                     3084  	.ALIGN 2
+0000014E                     3085  _btod:
+0000014E                     3086  	.DS (4)
+00000152                     3087  	.ALIGN 2
+00000152                     3088  _g_Tick:
+00000152                     3089  	.DS (196)
+00000216                     3090  _water_solfner_buf:
+00000216                     3091  	.DS (7)
+00000000                     3092  	.SECTION .data,DATA
+00000000                     3093  	.ALIGN 2
+00000000                     3094  _g_timerSetting:
+00000000 E8030000            3095  	.DB4 0x000003E8
+00000004 0F000000            3096  	.DB4 0x0000000F
+00000008 00000000            3097  	.DS (4)
+0000000C 00000000            3098  	.DS (4)
+00000010 00000000            3099  	.DS (4)
+00000014 00000000            3100  	.DS (4)
+00000018 00000000            3101  	.DS (4)
+0000001C 00000000            3102  	.DS (4)
+00000020 00000000            3103  	.DS (4)
+00000024 00000000            3104  	.DS (4)
+00000028 00000000            3105  	.DS (4)
+0000002C 00000000            3106  	.DS (4)
+00000030 00000000            3107  	.DS (4)
+00000034 00000000            3108  	.DS (4)
+00000038 00000000            3109  	.DS (4)
+0000003C 00000000            3110  	.DS (4)
+00000040 00000000            3111  	.DS (4)
+00000044 00000000            3112  	.DS (4)
+00000048 00000000            3113  	.DS (4)
+0000004C 00000000            3114  	.DS (4)
+00000050 00000000            3115  	.DS (4)
+00000054 00000000            3116  	.DS (4)
+00000058 00000000            3117  	.DS (4)
+0000005C 00000000            3118  	.DS (4)
+00000060 00000000            3119  	.DS (4)
+00000064 00000000            3120  	.DS (4)
+00000068 00000000            3121  	.DS (4)
+0000006C 00000000            3122  	.DS (4)
+00000070 00000000            3123  	.DS (4)
+00000074 00000000            3124  	.DS (4)
+00000078 00000000            3125  	.DS (4)
+0000007C 00000000            3126  	.DS (4)
+00000080 00000000            3127  	.DS (4)
+00000084 00000000            3128  	.DS (4)
+00000088 00000000            3129  	.DS (4)
+0000008C 00000000            3130  	.DS (4)
+00000090 00000000            3131  	.DS (4)
+00000094 00000000            3132  	.DS (4)
+00000098 00000000            3133  	.DS (4)
+0000009C 00000000            3134  	.DS (4)
+000000A0 00                  3135  	.DS (1)
+000000A1 00                  3136  	.DS (1)
 
 Section List
 Attr     Size                Name
 
-TEXTF              3059 (00000BF3) .textf
+TEXTF              3083 (00000C0B) .textf
 DATA                162 (000000A2) .data
 BSS                 541 (0000021D) .bss
 
 Command Line Parameter
-Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl002\hwm_main.asm.cmd 
+Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\bin\asrl.exe" @C:\Users\CODEP~1\AppData\Local\Temp\$ccrl001\hwm_main.asm.cmd 
 
 Command File Parameter
--cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1435879475\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hwm_main.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hwm_main.asm 
+-cpu=S3 -dev=D:\Chieniwa\E2_Studio\.eclipse\com.renesas.platform_1223251604\DebugComp\RL78\RL78\Common\DR5F104ML.DVF -define=__RENESAS_VERSION__=0x01100000 -include="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc" -include=D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate -character_set=utf8 -prn_path=src/hwm -output=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hwm_main.obj D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm\hwm_main.asm 
 

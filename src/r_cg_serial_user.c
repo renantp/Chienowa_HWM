@@ -14,16 +14,16 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 * File Name    : r_cg_serial_user.c
-* Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+* Version      : CodeGenerator for RL78/G14 V2.05.06.02 [08 Nov 2021]
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements device driver for Serial module.
-* Creation Date: 19/04/2022
+* Creation Date: 8/23/2022
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -101,7 +101,7 @@ volatile uint8_t g_uart3_sendend;
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart1_interrupt_receive(void) // @suppress("Unused static function")
+static void __near r_uart1_interrupt_receive(void)
 {
     volatile uint8_t rx_data;
     volatile uint8_t err_type;
@@ -139,7 +139,7 @@ static void __near r_uart1_interrupt_receive(void) // @suppress("Unused static f
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart1_interrupt_send(void) // @suppress("Unused static function")
+static void __near r_uart1_interrupt_send(void)
 {
     if (g_uart1_tx_count > 0U)
     {
@@ -354,7 +354,7 @@ static void r_csi01_callback_sendend(void)
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart2_interrupt_receive(void) // @suppress("Unused static function")
+static void __near r_uart2_interrupt_receive(void)
 {
     volatile uint8_t rx_data;
     volatile uint8_t err_type;
@@ -392,7 +392,7 @@ static void __near r_uart2_interrupt_receive(void) // @suppress("Unused static f
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart2_interrupt_send(void) // @suppress("Unused static function")
+static void __near r_uart2_interrupt_send(void)
 {
     if (g_uart2_tx_count > 0U)
     {
@@ -464,7 +464,7 @@ static void r_uart2_callback_error(uint8_t err_type)
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart3_interrupt_receive(void) // @suppress("Unused static function")
+static void __near r_uart3_interrupt_receive(void)
 {
     volatile uint8_t rx_data;
     volatile uint8_t err_type;
@@ -502,7 +502,7 @@ static void __near r_uart3_interrupt_receive(void) // @suppress("Unused static f
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-static void __near r_uart3_interrupt_send(void) // @suppress("Unused static function")
+static void __near r_uart3_interrupt_send(void)
 {
     if (g_uart3_tx_count > 0U)
     {

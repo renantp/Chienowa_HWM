@@ -14,16 +14,16 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2011, 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 * File Name    : r_main.c
-* Version      : CodeGenerator for RL78/G14 V2.05.05.01 [25 Nov 2020]
+* Version      : CodeGenerator for RL78/G14 V2.05.06.02 [08 Nov 2021]
 * Device(s)    : R5F104ML
 * Tool-Chain   : CCRL
 * Description  : This file implements main function.
-* Creation Date: 19/04/2022
+* Creation Date: 8/23/2022
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -46,13 +46,6 @@ Includes
 #include "hwm/hwm_main.h"
 #include "r_cg_userdefine.h"
 #include <math.h>
-
-/***********************************************************************************************************************
- Pragma directive
- ***********************************************************************************************************************/
-/* Start user code for pragma. Do not edit comment generated here */
-
-//#define TESTING_FIRMWARE
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 

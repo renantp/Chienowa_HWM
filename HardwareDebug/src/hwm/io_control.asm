@@ -3,7 +3,7 @@
 #@  Commmand :
 #@   -cpu=S3
 #@   -c
-#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1435879475/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
+#@   -dev=D:/Chieniwa/E2_Studio/.eclipse/com.renesas.platform_1223251604/DebugComp/RL78/RL78/Common/DR5F104ML.DVF
 #@   -MAKEUD=D:\Chieniwa\E2_Studio\ControlPCB_HWM\HardwareDebug\src\hwm
 #@   -I C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.10.00\inc
 #@   -I D:\Chieniwa\E2_Studio\ControlPCB_HWM\generate
@@ -15,7 +15,7 @@
 #@   -pass_source
 #@   -o src/hwm/io_control.obj
 #@   ../src/hwm/io_control.c
-#@  compiled at Thu Jun 30 14:37:32 2022
+#@  compiled at Tue Aug 23 10:01:06 2022
 
 	.EXTERN _g_timerSetting
 	.EXTERN _g_io_status
@@ -131,50 +131,71 @@ _OutputIO:
 	mov a, 0xFFF06
 	bt a.7, $.BB@LABEL@1_3
 .BB@LABEL@1_2:	; if_then_bb
-	;***       22 : 		O_ACID_PUMP_PIN_P1 = OFF;
+	;***       22 : 		O_ACID_PUMP_PIN_P1 = 1U;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 22
-	clr1 0xFFF06.2
-	br $.BB@LABEL@1_4
+	set1 0xFFF06.2
+	br $.BB@LABEL@1_6
 .BB@LABEL@1_3:	; if_else_bb
 	;***       23 : 	} else {
-	;***       24 : 		O_ACID_PUMP_PIN_P1 = io->Pump1;
+	;***       24 : 		O_ACID_PUMP_PIN_P1 = io->Pump1 == 1U? 0U : 1U;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 24
-	mov a, [de+0x03]
-	mov1 CY, a.0
-	mov a, 0xFFF06
-	mov1 a.2, CY
+	movw ax, de
+	addw ax, #0x0003
+	movw hl, ax
+	clrb x
+	bt [hl].0, $.BB@LABEL@1_5
+.BB@LABEL@1_4:	; bb136
+	mov x, #0x04
+.BB@LABEL@1_5:	; bb138
+	mov a, #0xFB
+	and a, 0xFFF06
+	or a, x
 	mov 0xFFF06, a
-.BB@LABEL@1_4:	; if_break_bb
+.BB@LABEL@1_6:	; if_break_bb
 	;***       25 : 	}
 	;***       26 : 	if (O_DRAIN_ALK_PIN_SV6 == OFF && O_SPOUT_ALK_PIN_SV4 == OFF) {
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 26
 	mov a, 0xFFF06
-	bt a.6, $.BB@LABEL@1_7
-.BB@LABEL@1_5:	; bb143
+	bt a.6, $.BB@LABEL@1_9
+.BB@LABEL@1_7:	; bb153
 	mov a, 0xFFF07
-	bt a.7, $.BB@LABEL@1_7
-.BB@LABEL@1_6:	; if_then_bb157
-	;***       27 : 		O_ALK_PUMP_PIN_P2 = OFF;
+	bt a.7, $.BB@LABEL@1_9
+.BB@LABEL@1_8:	; if_then_bb167
+	;***       27 : 		O_ALK_PUMP_PIN_P2 = 1U;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 27
-	clr1 0xFFF06.1
-	br $.BB@LABEL@1_8
-.BB@LABEL@1_7:	; if_else_bb158
+	set1 0xFFF06.1
+	br $.BB@LABEL@1_12
+.BB@LABEL@1_9:	; if_else_bb168
 	;***       28 : 	} else {
-	;***       29 : 		O_ALK_PUMP_PIN_P2 = io->Pump2;
+	;***       29 : 		O_ALK_PUMP_PIN_P2 = io->Pump2 == 1U? 0U : 1U;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 29
-	mov a, [de+0x03]
-	mov1 CY, a.1
-	mov a, 0xFFF06
-	mov1 a.1, CY
+	movw ax, de
+	addw ax, #0x0003
+	movw hl, ax
+	clrb x
+	bt [hl].1, $.BB@LABEL@1_11
+.BB@LABEL@1_10:	; bb179
+	mov x, #0x02
+.BB@LABEL@1_11:	; bb181
+	mov a, #0xFD
+	and a, 0xFFF06
+	or a, x
 	mov 0xFFF06, a
-.BB@LABEL@1_8:	; if_break_bb170
+.BB@LABEL@1_12:	; if_break_bb190
 	;***       30 : 	}
-	;***       31 : 	O_PUMP_SALT_PIN_SP1 = io->SaltPump;
+	;***       31 : 	O_PUMP_SALT_PIN_SP1 = io->SaltPump == 1U? 0U : 1U;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 31
-	mov a, [de+0x03]
-	mov1 CY, a.2
-	mov a, 0xFFF06
-	mov1 a.0, CY
+	movw ax, de
+	addw ax, #0x0003
+	movw hl, ax
+	clrb x
+	bt [hl].2, $.BB@LABEL@1_14
+.BB@LABEL@1_13:	; bb201
+	oneb x
+.BB@LABEL@1_14:	; bb203
+	mov a, #0xFE
+	and a, 0xFFF06
+	add a, x
 	mov 0xFFF06, a
 	;***       32 : 	O_CVCC_ON_PIN = io->CVCC_ON;
 	.LINE "D:/Chieniwa/E2_Studio/ControlPCB_HWM/src/hwm/io_control.c", 32

@@ -203,7 +203,7 @@
     <HasRRMRam Name="HasRRMRam" Text="7FE00" />
     <HasTraceRam Name="HasTraceRam" Text="F4300" />
     <PrjVersion Name="PrjVersion" Text="1.2.0.1" />
-    <ProductVersion Name="ProductVersion" Text="2.18.00.01" />
+    <ProductVersion Name="ProductVersion" Text="2.19.00.01" />
     <LinkFileName Name="LinkFileName" Text="" />
     <TO02_PWM Name="TO02_PWM" Text="false" />
     <TO03_PWM Name="TO03_PWM" Text="false" />
@@ -1747,7 +1747,6 @@
     <TAG>
       <GlobleUserTag>
         <clock_option Name="clock_option" Value="F8" />
-        <cg_security7 Name="cg_security7" Value="00" />
         <cg_security5 Name="cg_security5" Value="00" />
         <wdt_option Name="wdt_option" Value="FF" />
         <cg_security8 Name="cg_security8" Value="00" />
@@ -1755,19 +1754,20 @@
         <pior1_value Name="pior1_value" Value="00" />
         <cg_security1 Name="cg_security1" Value="00" />
         <cg_security9 Name="cg_security9" Value="00" />
+        <rrm Name="rrm" Value="7FE00" />
         <lvi_option Name="lvi_option" Value="FF" />
         <cg_security6 Name="cg_security6" Value="00" />
         <cg_crc_area Name="cg_crc_area" Value="00" />
         <cg_iawctl_value Name="cg_iawctl_value" Value="00" />
         <cg_security0 Name="cg_security0" Value="00" />
-        <cg_security3 Name="cg_security3" Value="00" />
+        <cg_security7 Name="cg_security7" Value="00" />
         <ocdstart Name="ocdstart" Value="7FE00" />
-        <cg_pms_value Name="cg_pms_value" Value="00" />
-        <rrm Name="rrm" Value="7FE00" />
         <cg_security4 Name="cg_security4" Value="00" />
+        <cg_pms_value Name="cg_pms_value" Value="00" />
+        <cg_security3 Name="cg_security3" Value="00" />
+        <cg_onchip Name="cg_onchip" Value="" />
         <pior_value Name="pior_value" Value="00" />
         <cg_ocd_ram_size Name="cg_ocd_ram_size" Value="512" />
-        <cg_onchip Name="cg_onchip" Value="" />
         <cg_option Name="cg_option" Value="84" />
         <gtraceused Name="gtraceused" Value="" />
       </GlobleUserTag>
@@ -2178,21 +2178,21 @@
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />
-          <setting name="Output_value" value="0" />
+          <setting name="Output_value" value="1" />
         </P60>
         <P61>
           <setting name="Operation" value="output" />
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />
-          <setting name="Output_value" value="0" />
+          <setting name="Output_value" value="1" />
         </P61>
         <P62>
           <setting name="Operation" value="output" />
           <setting name="Pull_up" value="unused" />
           <setting name="TTL_buffer" value="unused" />
           <setting name="N-ch_open-drain" value="unused" />
-          <setting name="Output_value" value="0" />
+          <setting name="Output_value" value="1" />
         </P62>
         <P63>
           <setting name="Operation" value="output" />
@@ -3094,18 +3094,6 @@
       <DTCBA>
         <setting name="BaseAddress" value="0xffd00" />
       </DTCBA>
-      <DTCITEM0>
-        <setting name="Mode" value="Normal" />
-        <setting name="TransferByteCount" value="1" />
-        <setting name="SourceAddress" value="" />
-        <setting name="DestinationAddress" value="" />
-        <setting name="AREA" value="Destination" />
-        <setting name="SourceAddressStyle" value="0" />
-        <setting name="DestinationAddressStyle" value="0" />
-        <setting name="BlockSize" value="1" />
-        <setting name="INT" value="Disable" />
-        <setting name="DATA" value="8bits" />
-      </DTCITEM0>
       <DTCD0>
         <setting name="DTCChannel" value="false" />
         <setting name="ChainTransfer" value="false" />

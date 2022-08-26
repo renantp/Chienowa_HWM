@@ -10,6 +10,7 @@
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="com.renesas.cdt.managedbuild.renesas.core.RenesasCompilerAssemblerErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="com.renesas.cdt.managedbuild.core.buildRunnerErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="com.renesas.cdt.managedbuild.core.toolchainInfo">
@@ -124,6 +125,7 @@
 								<option id="com.renesas.cdt.managedbuild.renesas.ccrl.converter.option.form.1547218036" name="Output file format (-form)" superClass="com.renesas.cdt.managedbuild.renesas.ccrl.converter.option.form" useByScannerDiscovery="false" value="com.renesas.cdt.managedbuild.renesas.ccrl.converter.option.form.stype" valueType="enumerated"/>
 								<option id="com.renesas.cdt.managedbuild.renesas.ccrl.converter.option.outputFilePath.1826952314" name="Output file directory (-output)" superClass="com.renesas.cdt.managedbuild.renesas.ccrl.converter.option.outputFilePath" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}/${ConfigName}/${ArtifactName}}.mot" valueType="string"/>
 							</tool>
+							<tool id="com.renesas.cdt.managedbuild.renesas.ccrl.base.faa.297723738" name="FAA Assembler" superClass="com.renesas.cdt.managedbuild.renesas.ccrl.base.faa"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
@@ -144,6 +146,7 @@
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="com.renesas.cdt.managedbuild.renesas.core.RenesasCompilerAssemblerErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="com.renesas.cdt.managedbuild.core.buildRunnerErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="com.renesas.cdt.managedbuild.core.toolchainInfo">
@@ -230,6 +233,7 @@
 									<listOptionValue builtIn="false" value=""/>
 								</option>
 							</tool>
+							<tool id="com.renesas.cdt.managedbuild.renesas.ccrl.base.faa.2006870012" name="FAA Assembler" superClass="com.renesas.cdt.managedbuild.renesas.ccrl.base.faa"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>

@@ -259,11 +259,11 @@ uint8_t FilterReplacementCheck(void) {
 void main_init_20211111(void) {
 	UpdateMachineStatus();
 	//Skip
-	while (DrainageAcidAndAlkalineTankStart_nostop()) {
-		RaspberryCommunication_nostop();
-		UpdateMachineStatus();
-		R_WDT_Restart();
-	}
+//	while (DrainageAcidAndAlkalineTankStart_nostop()) {
+//		RaspberryCommunication_nostop();
+//		UpdateMachineStatus();
+//		R_WDT_Restart();
+//	}
 
 	UpdateMachineStatus();
 	if (g_control_setting.raw.power_on) {
@@ -510,7 +510,7 @@ uint8_t TestPowerOn_nostop_keepstate(uint8_t *state, uint32_t *tick) {
 			O_DRAIN_ALK_PIN_SV6 =
 			O_DRAIN_ALK_PIN_SV6 = O_OPTION_2_PIN_SV8 =
 			O_OPTION_3_PIN_SV9 = OFF;
-			O_PUMP_SALT_PIN_SP1 = OFF;
+			O_PUMP_SALT_PIN_SP1 = 1U;
 			(*state)++;
 		}
 		break;
@@ -735,9 +735,9 @@ void UpdateMachineStatus(void) {
 	O_DRAIN_ALK_PIN_SV6;
 	g_io_status.refined.io.Valve.SV7 = O_NEUTRALIZE_PIN_SV7;
 
-	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1;
-	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2;
-	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1;
+	g_io_status.refined.io.Pump1 = O_ACID_PUMP_PIN_P1 == 1U? 0U : 1U;
+	g_io_status.refined.io.Pump2 = O_ALK_PUMP_PIN_P2 == 1U? 0U : 1U;
+	g_io_status.refined.io.SaltPump = O_PUMP_SALT_PIN_SP1 == 1U? 0U : 1U;
 }
 
 void manufactureReset(void) {
@@ -784,14 +784,14 @@ void manufactureReset(void) {
 	g_timerSetting.t39_cleaningIntervalTime_h = 8;
 	g_timerSetting.t40_washSpoutingTime_s = 30;
 
-	g_numberSetting.upperVoltage1 = 0.0f;
-	g_numberSetting.upperVoltage2 = 0.0f;
-	g_numberSetting.upperVoltage3 = 0.0f;
-	g_numberSetting.upperFlow = 0.0f;
-	g_numberSetting.upperCurrent = 0.0f;
+	g_numberSetting.upperVoltage1 = 4.0f;
+	g_numberSetting.upperVoltage2 = 3.0f;
+	g_numberSetting.upperVoltage3 = 2.5f;
+	g_numberSetting.upperFlow = 50.0f;
+	g_numberSetting.upperCurrent = 3.0f;
 	g_numberSetting.saltPumpVoltage = 1.0f;
-	g_numberSetting.lowerVoltage = 0.0f;
-	g_numberSetting.lowerFlow = 0.0f;
+	g_numberSetting.lowerVoltage = 1.0f;
+	g_numberSetting.lowerFlow = 2.0f;
 	g_numberSetting.lowerCurrent = 0.0f;
 	g_numberSetting.cvccCurrent = 1.0;
 	EE_SPI_Write((uint8_t*) &g_timerSetting, TIME_SETTING_ADDRESS,
